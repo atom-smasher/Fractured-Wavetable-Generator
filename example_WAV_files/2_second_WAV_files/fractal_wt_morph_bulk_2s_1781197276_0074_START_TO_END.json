@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197276,
+    "requested_iterations": 100,
+    "serial_number": 74
+  },
+  "created_epoch": 1781197507,
+  "created_local_time": "2026-06-12 05:05:07 +1200",
+  "direction": "START_TO_END",
+  "end_patch": {
+    "am": 134,
+    "core_seed": 1058,
+    "fm": 203,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 655,
+    "growth_9_step": 3649,
+    "legacy_internal": {
+      "after_end": 1365,
+      "after_start": 59,
+      "before_end": 1209,
+      "before_start": 2095,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 1058,
+      "pot2": 655,
+      "pot3": 3649
+    },
+    "pwm": 58,
+    "result_end": 1209,
+    "result_start": 2095,
+    "source_end": 1365,
+    "source_start": 59,
+    "wavetable_type": 39,
+    "wavetable_type_info": {
+      "description": "Flat-topped clipped source sum with strong harmonics",
+      "id": 39,
+      "name": "Hard Clip Sum",
+      "option_label": "39 - Hard Clip Sum - Flat-topped clipped source sum with strong harmonics"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_2s",
+    "json": "fractal_wt_morph_bulk_2s_1781197276_0074_START_TO_END.json",
+    "json_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0074_START_TO_END.json",
+    "wav": "fractal_wt_morph_bulk_2s_1781197276_0074_START_TO_END.wav",
+    "wav_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0074_START_TO_END.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 134,
+      "core_seed": 1058,
+      "fm": 203,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 655,
+      "growth_9_step": 3649,
+      "legacy_internal": {
+        "after_end": 1365,
+        "after_start": 59,
+        "before_end": 1209,
+        "before_start": 2095,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 1058,
+        "pot2": 655,
+        "pot3": 3649
+      },
+      "pwm": 58,
+      "result_end": 1209,
+      "result_start": 2095,
+      "source_end": 1365,
+      "source_start": 59,
+      "wavetable_type": 39,
+      "wavetable_type_info": {
+        "description": "Flat-topped clipped source sum with strong harmonics",
+        "id": 39,
+        "name": "Hard Clip Sum",
+        "option_label": "39 - Hard Clip Sum - Flat-topped clipped source sum with strong harmonics"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 134,
+      "core_seed": 1058,
+      "fm": 203,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 655,
+      "growth_9_step": 3649,
+      "legacy_internal": {
+        "after_end": 1365,
+        "after_start": 59,
+        "before_end": 1209,
+        "before_start": 2095,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 1058,
+        "pot2": 655,
+        "pot3": 3649
+      },
+      "pwm": 58,
+      "result_end": 1209,
+      "result_start": 2095,
+      "source_end": 1365,
+      "source_start": 59,
+      "wavetable_type": 14,
+      "wavetable_type_info": {
+        "description": "Rectified source difference; buzzy and octave-like",
+        "id": 14,
+        "name": "Abs Difference",
+        "option_label": "14 - Abs Difference - Rectified source difference; buzzy and octave-like"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 216,
+      "core_seed": 2434,
+      "fm": 172,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1362,
+      "growth_9_step": 2823,
+      "legacy_internal": {
+        "after_end": 3590,
+        "after_start": 3766,
+        "before_end": 2132,
+        "before_start": 2607,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2434,
+        "pot2": 1362,
+        "pot3": 2823
+      },
+      "pwm": 192,
+      "result_end": 2132,
+      "result_start": 2607,
+      "source_end": 3590,
+      "source_start": 3766,
+      "wavetable_type": 39,
+      "wavetable_type_info": {
+        "description": "Flat-topped clipped source sum with strong harmonics",
+        "id": 39,
+        "name": "Hard Clip Sum",
+        "option_label": "39 - Hard Clip Sum - Flat-topped clipped source sum with strong harmonics"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 216,
+      "core_seed": 2434,
+      "fm": 172,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1362,
+      "growth_9_step": 2823,
+      "legacy_internal": {
+        "after_end": 3590,
+        "after_start": 3766,
+        "before_end": 2132,
+        "before_start": 2607,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2434,
+        "pot2": 1362,
+        "pot3": 2823
+      },
+      "pwm": 192,
+      "result_end": 2132,
+      "result_start": 2607,
+      "source_end": 3590,
+      "source_start": 3766,
+      "wavetable_type": 8,
+      "wavetable_type_info": {
+        "description": "8-bit source collision using bitwise OR",
+        "id": 8,
+        "name": "Bit OR",
+        "option_label": "8 - Bit OR - 8-bit source collision using bitwise OR"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "after start>end; wrapped/clamped 3343\u21923336",
+    "after start>end; wrapped/clamped 3360\u21923346",
+    "after start>end; wrapped/clamped 3377\u21923356",
+    "after start>end; wrapped/clamped 3394\u21923366",
+    "after start>end; wrapped/clamped 3411\u21923377",
+    "after start>end; wrapped/clamped 3427\u21923387",
+    "after start>end; wrapped/clamped 3444\u21923397",
+    "after start>end; wrapped/clamped 3461\u21923407",
+    "after start>end; wrapped/clamped 3478\u21923417",
+    "after start>end; wrapped/clamped 3495\u21923427",
+    "after start>end; wrapped/clamped 3512\u21923438",
+    "after start>end; wrapped/clamped 3529\u21923448",
+    "after start>end; wrapped/clamped 3546\u21923458",
+    "after start>end; wrapped/clamped 3563\u21923468",
+    "after start>end; wrapped/clamped 3580\u21923478",
+    "after start>end; wrapped/clamped 3597\u21923488",
+    "after start>end; wrapped/clamped 3614\u21923499",
+    "after start>end; wrapped/clamped 3631\u21923509",
+    "after start>end; wrapped/clamped 3648\u21923519",
+    "after start>end; wrapped/clamped 3664\u21923529"
+  ],
+  "reverse": false,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 216,
+    "core_seed": 2434,
+    "fm": 172,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 1362,
+    "growth_9_step": 2823,
+    "legacy_internal": {
+      "after_end": 3590,
+      "after_start": 3766,
+      "before_end": 2132,
+      "before_start": 2607,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 2434,
+      "pot2": 1362,
+      "pot3": 2823
+    },
+    "pwm": 192,
+    "result_end": 2132,
+    "result_start": 2607,
+    "source_end": 3590,
+    "source_start": 3766,
+    "wavetable_type": 39,
+    "wavetable_type_info": {
+      "description": "Flat-topped clipped source sum with strong harmonics",
+      "id": 39,
+      "name": "Hard Clip Sum",
+      "option_label": "39 - Hard Clip Sum - Flat-topped clipped source sum with strong harmonics"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 2.0,
+    "frequency": 110.0,
+    "nominal_cycles": 220.0,
+    "requested_mode": "Seconds",
+    "requested_value": 2.0,
+    "sample_count": 88200,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}
