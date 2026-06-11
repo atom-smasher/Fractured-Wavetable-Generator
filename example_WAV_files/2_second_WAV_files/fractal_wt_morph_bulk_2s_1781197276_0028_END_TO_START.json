@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197276,
+    "requested_iterations": 100,
+    "serial_number": 28
+  },
+  "created_epoch": 1781197360,
+  "created_local_time": "2026-06-12 05:02:40 +1200",
+  "direction": "END_TO_START",
+  "end_patch": {
+    "am": 41,
+    "core_seed": 443,
+    "fm": 141,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 3080,
+    "growth_9_step": 1005,
+    "legacy_internal": {
+      "after_end": 2872,
+      "after_start": 1167,
+      "before_end": 3290,
+      "before_start": 4037,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 443,
+      "pot2": 3080,
+      "pot3": 1005
+    },
+    "pwm": 28,
+    "result_end": 3290,
+    "result_start": 4037,
+    "source_end": 2872,
+    "source_start": 1167,
+    "wavetable_type": 3,
+    "wavetable_type_info": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_2s",
+    "json": "fractal_wt_morph_bulk_2s_1781197276_0028_END_TO_START.json",
+    "json_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0028_END_TO_START.json",
+    "wav": "fractal_wt_morph_bulk_2s_1781197276_0028_END_TO_START.wav",
+    "wav_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0028_END_TO_START.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 41,
+      "core_seed": 443,
+      "fm": 141,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3080,
+      "growth_9_step": 1005,
+      "legacy_internal": {
+        "after_end": 2872,
+        "after_start": 1167,
+        "before_end": 3290,
+        "before_start": 4037,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 443,
+        "pot2": 3080,
+        "pot3": 1005
+      },
+      "pwm": 28,
+      "result_end": 3290,
+      "result_start": 4037,
+      "source_end": 2872,
+      "source_start": 1167,
+      "wavetable_type": 3,
+      "wavetable_type_info": {
+        "description": "First half 3-step source, second half 9-step source",
+        "id": 3,
+        "name": "3\u21929 Splice",
+        "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 41,
+      "core_seed": 443,
+      "fm": 141,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3080,
+      "growth_9_step": 1005,
+      "legacy_internal": {
+        "after_end": 2872,
+        "after_start": 1167,
+        "before_end": 3290,
+        "before_start": 4037,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 443,
+        "pot2": 3080,
+        "pot3": 1005
+      },
+      "pwm": 28,
+      "result_end": 3290,
+      "result_start": 4037,
+      "source_end": 2872,
+      "source_start": 1167,
+      "wavetable_type": 12,
+      "wavetable_type_info": {
+        "description": "Takes the lower of the two sources at each sample",
+        "id": 12,
+        "name": "Min",
+        "option_label": "12 - Min - Takes the lower of the two sources at each sample"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 197,
+      "core_seed": 3853,
+      "fm": 139,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 2498,
+      "growth_9_step": 814,
+      "legacy_internal": {
+        "after_end": 2742,
+        "after_start": 708,
+        "before_end": 559,
+        "before_start": 724,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3853,
+        "pot2": 2498,
+        "pot3": 814
+      },
+      "pwm": 83,
+      "result_end": 559,
+      "result_start": 724,
+      "source_end": 2742,
+      "source_start": 708,
+      "wavetable_type": 3,
+      "wavetable_type_info": {
+        "description": "First half 3-step source, second half 9-step source",
+        "id": 3,
+        "name": "3\u21929 Splice",
+        "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 197,
+      "core_seed": 3853,
+      "fm": 139,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 2498,
+      "growth_9_step": 814,
+      "legacy_internal": {
+        "after_end": 2742,
+        "after_start": 708,
+        "before_end": 559,
+        "before_start": 724,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3853,
+        "pot2": 2498,
+        "pot3": 814
+      },
+      "pwm": 83,
+      "result_end": 559,
+      "result_start": 724,
+      "source_end": 2742,
+      "source_start": 708,
+      "wavetable_type": 34,
+      "wavetable_type_info": {
+        "description": "Symmetric odd-harmonic leaning soft blend",
+        "id": 34,
+        "name": "Odd Soft",
+        "option_label": "34 - Odd Soft - Symmetric odd-harmonic leaning soft blend"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "before start>end; wrapped/clamped 1011\u2192796",
+    "before start>end; wrapped/clamped 1027\u2192808",
+    "before start>end; wrapped/clamped 1042\u2192821",
+    "before start>end; wrapped/clamped 1057\u2192833",
+    "before start>end; wrapped/clamped 1072\u2192846",
+    "before start>end; wrapped/clamped 1087\u2192858",
+    "before start>end; wrapped/clamped 1102\u2192871",
+    "before start>end; wrapped/clamped 1117\u2192883",
+    "before start>end; wrapped/clamped 1132\u2192896",
+    "before start>end; wrapped/clamped 1148\u2192908",
+    "before start>end; wrapped/clamped 1163\u2192921",
+    "before start>end; wrapped/clamped 1178\u2192933",
+    "before start>end; wrapped/clamped 1193\u2192946",
+    "before start>end; wrapped/clamped 1208\u2192958",
+    "before start>end; wrapped/clamped 1223\u2192971",
+    "before start>end; wrapped/clamped 1238\u2192983",
+    "before start>end; wrapped/clamped 1253\u2192995",
+    "before start>end; wrapped/clamped 1269\u21921008",
+    "before start>end; wrapped/clamped 1284\u21921020",
+    "before start>end; wrapped/clamped 1299\u21921033"
+  ],
+  "reverse": true,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 197,
+    "core_seed": 3853,
+    "fm": 139,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 2498,
+    "growth_9_step": 814,
+    "legacy_internal": {
+      "after_end": 2742,
+      "after_start": 708,
+      "before_end": 559,
+      "before_start": 724,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 3853,
+      "pot2": 2498,
+      "pot3": 814
+    },
+    "pwm": 83,
+    "result_end": 559,
+    "result_start": 724,
+    "source_end": 2742,
+    "source_start": 708,
+    "wavetable_type": 3,
+    "wavetable_type_info": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 2.0,
+    "frequency": 110.0,
+    "nominal_cycles": 220.0,
+    "requested_mode": "Seconds",
+    "requested_value": 2.0,
+    "sample_count": 88200,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}
