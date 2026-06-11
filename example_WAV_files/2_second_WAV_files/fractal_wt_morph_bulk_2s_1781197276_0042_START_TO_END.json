@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197276,
+    "requested_iterations": 100,
+    "serial_number": 42
+  },
+  "created_epoch": 1781197402,
+  "created_local_time": "2026-06-12 05:03:22 +1200",
+  "direction": "START_TO_END",
+  "end_patch": {
+    "am": 65,
+    "core_seed": 1656,
+    "fm": 220,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 3166,
+    "growth_9_step": 404,
+    "legacy_internal": {
+      "after_end": 3807,
+      "after_start": 2674,
+      "before_end": 1163,
+      "before_start": 2510,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 1656,
+      "pot2": 3166,
+      "pot3": 404
+    },
+    "pwm": 190,
+    "result_end": 1163,
+    "result_start": 2510,
+    "source_end": 3807,
+    "source_start": 2674,
+    "wavetable_type": 9,
+    "wavetable_type_info": {
+      "description": "8-bit source collision using bitwise XOR",
+      "id": 9,
+      "name": "Bit XOR",
+      "option_label": "9 - Bit XOR - 8-bit source collision using bitwise XOR"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_2s",
+    "json": "fractal_wt_morph_bulk_2s_1781197276_0042_START_TO_END.json",
+    "json_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0042_START_TO_END.json",
+    "wav": "fractal_wt_morph_bulk_2s_1781197276_0042_START_TO_END.wav",
+    "wav_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0042_START_TO_END.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 65,
+      "core_seed": 1656,
+      "fm": 220,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3166,
+      "growth_9_step": 404,
+      "legacy_internal": {
+        "after_end": 3807,
+        "after_start": 2674,
+        "before_end": 1163,
+        "before_start": 2510,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 1656,
+        "pot2": 3166,
+        "pot3": 404
+      },
+      "pwm": 190,
+      "result_end": 1163,
+      "result_start": 2510,
+      "source_end": 3807,
+      "source_start": 2674,
+      "wavetable_type": 9,
+      "wavetable_type_info": {
+        "description": "8-bit source collision using bitwise XOR",
+        "id": 9,
+        "name": "Bit XOR",
+        "option_label": "9 - Bit XOR - 8-bit source collision using bitwise XOR"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 65,
+      "core_seed": 1656,
+      "fm": 220,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3166,
+      "growth_9_step": 404,
+      "legacy_internal": {
+        "after_end": 3807,
+        "after_start": 2674,
+        "before_end": 1163,
+        "before_start": 2510,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 1656,
+        "pot2": 3166,
+        "pot3": 404
+      },
+      "pwm": 190,
+      "result_end": 1163,
+      "result_start": 2510,
+      "source_end": 3807,
+      "source_start": 2674,
+      "wavetable_type": 20,
+      "wavetable_type_info": {
+        "description": "Balanced average of the two sources",
+        "id": 20,
+        "name": "Average",
+        "option_label": "20 - Average - Balanced average of the two sources"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 87,
+      "core_seed": 534,
+      "fm": 6,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3226,
+      "growth_9_step": 81,
+      "legacy_internal": {
+        "after_end": 3467,
+        "after_start": 2721,
+        "before_end": 1675,
+        "before_start": 3023,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 534,
+        "pot2": 3226,
+        "pot3": 81
+      },
+      "pwm": 80,
+      "result_end": 1675,
+      "result_start": 3023,
+      "source_end": 3467,
+      "source_start": 2721,
+      "wavetable_type": 9,
+      "wavetable_type_info": {
+        "description": "8-bit source collision using bitwise XOR",
+        "id": 9,
+        "name": "Bit XOR",
+        "option_label": "9 - Bit XOR - 8-bit source collision using bitwise XOR"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 87,
+      "core_seed": 534,
+      "fm": 6,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3226,
+      "growth_9_step": 81,
+      "legacy_internal": {
+        "after_end": 3467,
+        "after_start": 2721,
+        "before_end": 1675,
+        "before_start": 3023,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 534,
+        "pot2": 3226,
+        "pot3": 81
+      },
+      "pwm": 80,
+      "result_end": 1675,
+      "result_start": 3023,
+      "source_end": 3467,
+      "source_start": 2721,
+      "wavetable_type": 33,
+      "wavetable_type_info": {
+        "description": "Chorus-like internal smoothing inside one cycle",
+        "id": 33,
+        "name": "Phase Blur",
+        "option_label": "33 - Phase Blur - Chorus-like internal smoothing inside one cycle"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "before start>end; wrapped/clamped 2510\u21921163",
+    "before start>end; wrapped/clamped 2512\u21921165",
+    "before start>end; wrapped/clamped 2515\u21921168",
+    "before start>end; wrapped/clamped 2517\u21921170",
+    "before start>end; wrapped/clamped 2519\u21921172",
+    "before start>end; wrapped/clamped 2522\u21921175",
+    "before start>end; wrapped/clamped 2524\u21921177",
+    "before start>end; wrapped/clamped 2526\u21921179",
+    "before start>end; wrapped/clamped 2529\u21921182",
+    "before start>end; wrapped/clamped 2531\u21921184",
+    "before start>end; wrapped/clamped 2533\u21921186",
+    "before start>end; wrapped/clamped 2536\u21921189",
+    "before start>end; wrapped/clamped 2538\u21921191",
+    "before start>end; wrapped/clamped 2540\u21921193",
+    "before start>end; wrapped/clamped 2543\u21921196",
+    "before start>end; wrapped/clamped 2545\u21921198",
+    "before start>end; wrapped/clamped 2547\u21921200",
+    "before start>end; wrapped/clamped 2550\u21921203",
+    "before start>end; wrapped/clamped 2552\u21921205",
+    "before start>end; wrapped/clamped 2555\u21921207"
+  ],
+  "reverse": false,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 87,
+    "core_seed": 534,
+    "fm": 6,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 3226,
+    "growth_9_step": 81,
+    "legacy_internal": {
+      "after_end": 3467,
+      "after_start": 2721,
+      "before_end": 1675,
+      "before_start": 3023,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 534,
+      "pot2": 3226,
+      "pot3": 81
+    },
+    "pwm": 80,
+    "result_end": 1675,
+    "result_start": 3023,
+    "source_end": 3467,
+    "source_start": 2721,
+    "wavetable_type": 9,
+    "wavetable_type_info": {
+      "description": "8-bit source collision using bitwise XOR",
+      "id": 9,
+      "name": "Bit XOR",
+      "option_label": "9 - Bit XOR - 8-bit source collision using bitwise XOR"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 2.0,
+    "frequency": 110.0,
+    "nominal_cycles": 220.0,
+    "requested_mode": "Seconds",
+    "requested_value": 2.0,
+    "sample_count": 88200,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}

@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197276,
+    "requested_iterations": 100,
+    "serial_number": 56
+  },
+  "created_epoch": 1781197448,
+  "created_local_time": "2026-06-12 05:04:08 +1200",
+  "direction": "START_TO_END",
+  "end_patch": {
+    "am": 44,
+    "core_seed": 3265,
+    "fm": 117,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 1430,
+    "growth_9_step": 1937,
+    "legacy_internal": {
+      "after_end": 2009,
+      "after_start": 1573,
+      "before_end": 683,
+      "before_start": 4077,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 3265,
+      "pot2": 1430,
+      "pot3": 1937
+    },
+    "pwm": 68,
+    "result_end": 683,
+    "result_start": 4077,
+    "source_end": 2009,
+    "source_start": 1573,
+    "wavetable_type": 33,
+    "wavetable_type_info": {
+      "description": "Chorus-like internal smoothing inside one cycle",
+      "id": 33,
+      "name": "Phase Blur",
+      "option_label": "33 - Phase Blur - Chorus-like internal smoothing inside one cycle"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_2s",
+    "json": "fractal_wt_morph_bulk_2s_1781197276_0056_START_TO_END.json",
+    "json_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0056_START_TO_END.json",
+    "wav": "fractal_wt_morph_bulk_2s_1781197276_0056_START_TO_END.wav",
+    "wav_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0056_START_TO_END.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 44,
+      "core_seed": 3265,
+      "fm": 117,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1430,
+      "growth_9_step": 1937,
+      "legacy_internal": {
+        "after_end": 2009,
+        "after_start": 1573,
+        "before_end": 683,
+        "before_start": 4077,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3265,
+        "pot2": 1430,
+        "pot3": 1937
+      },
+      "pwm": 68,
+      "result_end": 683,
+      "result_start": 4077,
+      "source_end": 2009,
+      "source_start": 1573,
+      "wavetable_type": 33,
+      "wavetable_type_info": {
+        "description": "Chorus-like internal smoothing inside one cycle",
+        "id": 33,
+        "name": "Phase Blur",
+        "option_label": "33 - Phase Blur - Chorus-like internal smoothing inside one cycle"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 44,
+      "core_seed": 3265,
+      "fm": 117,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1430,
+      "growth_9_step": 1937,
+      "legacy_internal": {
+        "after_end": 2009,
+        "after_start": 1573,
+        "before_end": 683,
+        "before_start": 4077,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3265,
+        "pot2": 1430,
+        "pot3": 1937
+      },
+      "pwm": 68,
+      "result_end": 683,
+      "result_start": 4077,
+      "source_end": 2009,
+      "source_start": 1573,
+      "wavetable_type": 30,
+      "wavetable_type_info": {
+        "description": "Darker shaping that suppresses mid-level detail",
+        "id": 30,
+        "name": "Power Shape",
+        "option_label": "30 - Power Shape - Darker shaping that suppresses mid-level detail"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 33,
+      "core_seed": 2985,
+      "fm": 84,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3382,
+      "growth_9_step": 1694,
+      "legacy_internal": {
+        "after_end": 3969,
+        "after_start": 3469,
+        "before_end": 3253,
+        "before_start": 936,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2985,
+        "pot2": 3382,
+        "pot3": 1694
+      },
+      "pwm": 216,
+      "result_end": 3253,
+      "result_start": 936,
+      "source_end": 3969,
+      "source_start": 3469,
+      "wavetable_type": 33,
+      "wavetable_type_info": {
+        "description": "Chorus-like internal smoothing inside one cycle",
+        "id": 33,
+        "name": "Phase Blur",
+        "option_label": "33 - Phase Blur - Chorus-like internal smoothing inside one cycle"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 33,
+      "core_seed": 2985,
+      "fm": 84,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3382,
+      "growth_9_step": 1694,
+      "legacy_internal": {
+        "after_end": 3969,
+        "after_start": 3469,
+        "before_end": 3253,
+        "before_start": 936,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2985,
+        "pot2": 3382,
+        "pot3": 1694
+      },
+      "pwm": 216,
+      "result_end": 3253,
+      "result_start": 936,
+      "source_end": 3969,
+      "source_start": 3469,
+      "wavetable_type": 3,
+      "wavetable_type_info": {
+        "description": "First half 3-step source, second half 9-step source",
+        "id": 3,
+        "name": "3\u21929 Splice",
+        "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "before start>end; wrapped/clamped 2212\u21922209",
+    "before start>end; wrapped/clamped 2227\u21922197",
+    "before start>end; wrapped/clamped 2241\u21922185",
+    "before start>end; wrapped/clamped 2256\u21922173",
+    "before start>end; wrapped/clamped 2270\u21922162",
+    "before start>end; wrapped/clamped 2284\u21922150",
+    "before start>end; wrapped/clamped 2299\u21922138",
+    "before start>end; wrapped/clamped 2313\u21922126",
+    "before start>end; wrapped/clamped 2327\u21922115",
+    "before start>end; wrapped/clamped 2342\u21922103",
+    "before start>end; wrapped/clamped 2356\u21922091",
+    "before start>end; wrapped/clamped 2370\u21922079",
+    "before start>end; wrapped/clamped 2385\u21922068",
+    "before start>end; wrapped/clamped 2399\u21922056",
+    "before start>end; wrapped/clamped 2413\u21922044",
+    "before start>end; wrapped/clamped 2428\u21922033",
+    "before start>end; wrapped/clamped 2442\u21922021",
+    "before start>end; wrapped/clamped 2456\u21922009",
+    "before start>end; wrapped/clamped 2471\u21921997",
+    "before start>end; wrapped/clamped 2485\u21921986"
+  ],
+  "reverse": false,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 33,
+    "core_seed": 2985,
+    "fm": 84,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 3382,
+    "growth_9_step": 1694,
+    "legacy_internal": {
+      "after_end": 3969,
+      "after_start": 3469,
+      "before_end": 3253,
+      "before_start": 936,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 2985,
+      "pot2": 3382,
+      "pot3": 1694
+    },
+    "pwm": 216,
+    "result_end": 3253,
+    "result_start": 936,
+    "source_end": 3969,
+    "source_start": 3469,
+    "wavetable_type": 33,
+    "wavetable_type_info": {
+      "description": "Chorus-like internal smoothing inside one cycle",
+      "id": 33,
+      "name": "Phase Blur",
+      "option_label": "33 - Phase Blur - Chorus-like internal smoothing inside one cycle"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 2.0,
+    "frequency": 110.0,
+    "nominal_cycles": 220.0,
+    "requested_mode": "Seconds",
+    "requested_value": 2.0,
+    "sample_count": 88200,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}

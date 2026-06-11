@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197276,
+    "requested_iterations": 100,
+    "serial_number": 48
+  },
+  "created_epoch": 1781197424,
+  "created_local_time": "2026-06-12 05:03:44 +1200",
+  "direction": "END_TO_START",
+  "end_patch": {
+    "am": 60,
+    "core_seed": 2728,
+    "fm": 243,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 543,
+    "growth_9_step": 904,
+    "legacy_internal": {
+      "after_end": 3581,
+      "after_start": 1197,
+      "before_end": 300,
+      "before_start": 2612,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 2728,
+      "pot2": 543,
+      "pot3": 904
+    },
+    "pwm": 57,
+    "result_end": 300,
+    "result_start": 2612,
+    "source_end": 3581,
+    "source_start": 1197,
+    "wavetable_type": 32,
+    "wavetable_type_info": {
+      "description": "Raised-cosine cycle window that softens boundary bite",
+      "id": 32,
+      "name": "Hann Windowed",
+      "option_label": "32 - Hann Windowed - Raised-cosine cycle window that softens boundary bite"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_2s",
+    "json": "fractal_wt_morph_bulk_2s_1781197276_0048_END_TO_START.json",
+    "json_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0048_END_TO_START.json",
+    "wav": "fractal_wt_morph_bulk_2s_1781197276_0048_END_TO_START.wav",
+    "wav_path": "/tmp/fractal/2-seconds/fractal_wt_morph_bulk_2s_1781197276_0048_END_TO_START.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 60,
+      "core_seed": 2728,
+      "fm": 243,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 543,
+      "growth_9_step": 904,
+      "legacy_internal": {
+        "after_end": 3581,
+        "after_start": 1197,
+        "before_end": 300,
+        "before_start": 2612,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2728,
+        "pot2": 543,
+        "pot3": 904
+      },
+      "pwm": 57,
+      "result_end": 300,
+      "result_start": 2612,
+      "source_end": 3581,
+      "source_start": 1197,
+      "wavetable_type": 32,
+      "wavetable_type_info": {
+        "description": "Raised-cosine cycle window that softens boundary bite",
+        "id": 32,
+        "name": "Hann Windowed",
+        "option_label": "32 - Hann Windowed - Raised-cosine cycle window that softens boundary bite"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 60,
+      "core_seed": 2728,
+      "fm": 243,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 543,
+      "growth_9_step": 904,
+      "legacy_internal": {
+        "after_end": 3581,
+        "after_start": 1197,
+        "before_end": 300,
+        "before_start": 2612,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2728,
+        "pot2": 543,
+        "pot3": 904
+      },
+      "pwm": 57,
+      "result_end": 300,
+      "result_start": 2612,
+      "source_end": 3581,
+      "source_start": 1197,
+      "wavetable_type": 28,
+      "wavetable_type_info": {
+        "description": "Gentle triangular folding with rounded edges",
+        "id": 28,
+        "name": "Triangle Fold Soft",
+        "option_label": "28 - Triangle Fold Soft - Gentle triangular folding with rounded edges"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 178,
+      "core_seed": 323,
+      "fm": 99,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1641,
+      "growth_9_step": 3249,
+      "legacy_internal": {
+        "after_end": 3641,
+        "after_start": 1446,
+        "before_end": 3235,
+        "before_start": 3975,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 323,
+        "pot2": 1641,
+        "pot3": 3249
+      },
+      "pwm": 12,
+      "result_end": 3235,
+      "result_start": 3975,
+      "source_end": 3641,
+      "source_start": 1446,
+      "wavetable_type": 32,
+      "wavetable_type_info": {
+        "description": "Raised-cosine cycle window that softens boundary bite",
+        "id": 32,
+        "name": "Hann Windowed",
+        "option_label": "32 - Hann Windowed - Raised-cosine cycle window that softens boundary bite"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 178,
+      "core_seed": 323,
+      "fm": 99,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1641,
+      "growth_9_step": 3249,
+      "legacy_internal": {
+        "after_end": 3641,
+        "after_start": 1446,
+        "before_end": 3235,
+        "before_start": 3975,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 323,
+        "pot2": 1641,
+        "pot3": 3249
+      },
+      "pwm": 12,
+      "result_end": 3235,
+      "result_start": 3975,
+      "source_end": 3641,
+      "source_start": 1446,
+      "wavetable_type": 6,
+      "wavetable_type_info": {
+        "description": "Sources multiplied sample-by-sample",
+        "id": 6,
+        "name": "Multiply",
+        "option_label": "6 - Multiply - Sources multiplied sample-by-sample"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "before start>end; wrapped/clamped 2612\u2192300",
+    "before start>end; wrapped/clamped 2618\u2192313",
+    "before start>end; wrapped/clamped 2624\u2192327",
+    "before start>end; wrapped/clamped 2631\u2192340",
+    "before start>end; wrapped/clamped 2637\u2192354",
+    "before start>end; wrapped/clamped 2643\u2192367",
+    "before start>end; wrapped/clamped 2649\u2192380",
+    "before start>end; wrapped/clamped 2656\u2192394",
+    "before start>end; wrapped/clamped 2662\u2192407",
+    "before start>end; wrapped/clamped 2668\u2192421",
+    "before start>end; wrapped/clamped 2674\u2192434",
+    "before start>end; wrapped/clamped 2680\u2192447",
+    "before start>end; wrapped/clamped 2687\u2192461",
+    "before start>end; wrapped/clamped 2693\u2192474",
+    "before start>end; wrapped/clamped 2699\u2192488",
+    "before start>end; wrapped/clamped 2705\u2192501",
+    "before start>end; wrapped/clamped 2712\u2192514",
+    "before start>end; wrapped/clamped 2718\u2192528",
+    "before start>end; wrapped/clamped 2724\u2192541",
+    "before start>end; wrapped/clamped 2730\u2192555"
+  ],
+  "reverse": true,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 178,
+    "core_seed": 323,
+    "fm": 99,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 1641,
+    "growth_9_step": 3249,
+    "legacy_internal": {
+      "after_end": 3641,
+      "after_start": 1446,
+      "before_end": 3235,
+      "before_start": 3975,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 323,
+      "pot2": 1641,
+      "pot3": 3249
+    },
+    "pwm": 12,
+    "result_end": 3235,
+    "result_start": 3975,
+    "source_end": 3641,
+    "source_start": 1446,
+    "wavetable_type": 32,
+    "wavetable_type_info": {
+      "description": "Raised-cosine cycle window that softens boundary bite",
+      "id": 32,
+      "name": "Hann Windowed",
+      "option_label": "32 - Hann Windowed - Raised-cosine cycle window that softens boundary bite"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 2.0,
+    "frequency": 110.0,
+    "nominal_cycles": 220.0,
+    "requested_mode": "Seconds",
+    "requested_value": 2.0,
+    "sample_count": 88200,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}
