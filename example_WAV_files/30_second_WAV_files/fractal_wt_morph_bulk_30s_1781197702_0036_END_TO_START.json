@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197702,
+    "requested_iterations": 100,
+    "serial_number": 36
+  },
+  "created_epoch": 1781199558,
+  "created_local_time": "2026-06-12 05:39:18 +1200",
+  "direction": "END_TO_START",
+  "end_patch": {
+    "am": 229,
+    "core_seed": 2468,
+    "fm": 165,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 2520,
+    "growth_9_step": 986,
+    "legacy_internal": {
+      "after_end": 631,
+      "after_start": 200,
+      "before_end": 45,
+      "before_start": 397,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 2468,
+      "pot2": 2520,
+      "pot3": 986
+    },
+    "pwm": 139,
+    "result_end": 45,
+    "result_start": 397,
+    "source_end": 631,
+    "source_start": 200,
+    "wavetable_type": 35,
+    "wavetable_type_info": {
+      "description": "Symmetric even-harmonic leaning soft blend",
+      "id": 35,
+      "name": "Even Soft",
+      "option_label": "35 - Even Soft - Symmetric even-harmonic leaning soft blend"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_30s",
+    "json": "fractal_wt_morph_bulk_30s_1781197702_0036_END_TO_START.json",
+    "json_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0036_END_TO_START.json",
+    "wav": "fractal_wt_morph_bulk_30s_1781197702_0036_END_TO_START.wav",
+    "wav_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0036_END_TO_START.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 229,
+      "core_seed": 2468,
+      "fm": 165,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 2520,
+      "growth_9_step": 986,
+      "legacy_internal": {
+        "after_end": 631,
+        "after_start": 200,
+        "before_end": 45,
+        "before_start": 397,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2468,
+        "pot2": 2520,
+        "pot3": 986
+      },
+      "pwm": 139,
+      "result_end": 45,
+      "result_start": 397,
+      "source_end": 631,
+      "source_start": 200,
+      "wavetable_type": 35,
+      "wavetable_type_info": {
+        "description": "Symmetric even-harmonic leaning soft blend",
+        "id": 35,
+        "name": "Even Soft",
+        "option_label": "35 - Even Soft - Symmetric even-harmonic leaning soft blend"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 229,
+      "core_seed": 2468,
+      "fm": 165,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 2520,
+      "growth_9_step": 986,
+      "legacy_internal": {
+        "after_end": 631,
+        "after_start": 200,
+        "before_end": 45,
+        "before_start": 397,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2468,
+        "pot2": 2520,
+        "pot3": 986
+      },
+      "pwm": 139,
+      "result_end": 45,
+      "result_start": 397,
+      "source_end": 631,
+      "source_start": 200,
+      "wavetable_type": 29,
+      "wavetable_type_info": {
+        "description": "Lifts quiet detail while rounding the extremes",
+        "id": 29,
+        "name": "Root Shape",
+        "option_label": "29 - Root Shape - Lifts quiet detail while rounding the extremes"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 154,
+      "core_seed": 2794,
+      "fm": 86,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 84,
+      "growth_9_step": 3322,
+      "legacy_internal": {
+        "after_end": 702,
+        "after_start": 3967,
+        "before_end": 1480,
+        "before_start": 1726,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2794,
+        "pot2": 84,
+        "pot3": 3322
+      },
+      "pwm": 207,
+      "result_end": 1480,
+      "result_start": 1726,
+      "source_end": 702,
+      "source_start": 3967,
+      "wavetable_type": 35,
+      "wavetable_type_info": {
+        "description": "Symmetric even-harmonic leaning soft blend",
+        "id": 35,
+        "name": "Even Soft",
+        "option_label": "35 - Even Soft - Symmetric even-harmonic leaning soft blend"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 154,
+      "core_seed": 2794,
+      "fm": 86,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 84,
+      "growth_9_step": 3322,
+      "legacy_internal": {
+        "after_end": 702,
+        "after_start": 3967,
+        "before_end": 1480,
+        "before_start": 1726,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2794,
+        "pot2": 84,
+        "pot3": 3322
+      },
+      "pwm": 207,
+      "result_end": 1480,
+      "result_start": 1726,
+      "source_end": 702,
+      "source_start": 3967,
+      "wavetable_type": 37,
+      "wavetable_type_info": {
+        "description": "9-step source polarity-flipped by the 3-step source",
+        "id": 37,
+        "name": "Sign Multiply",
+        "option_label": "37 - Sign Multiply - 9-step source polarity-flipped by the 3-step source"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "after start>end; wrapped/clamped 1000\u2192646",
+    "after start>end; wrapped/clamped 1002\u2192646",
+    "after start>end; wrapped/clamped 1003\u2192646",
+    "after start>end; wrapped/clamped 1004\u2192646",
+    "after start>end; wrapped/clamped 1005\u2192646",
+    "after start>end; wrapped/clamped 1006\u2192646",
+    "after start>end; wrapped/clamped 1007\u2192646",
+    "after start>end; wrapped/clamped 1008\u2192646",
+    "after start>end; wrapped/clamped 1010\u2192646",
+    "after start>end; wrapped/clamped 1011\u2192646",
+    "after start>end; wrapped/clamped 1012\u2192646",
+    "after start>end; wrapped/clamped 1013\u2192646",
+    "after start>end; wrapped/clamped 1014\u2192646",
+    "after start>end; wrapped/clamped 1015\u2192646",
+    "after start>end; wrapped/clamped 1016\u2192646",
+    "after start>end; wrapped/clamped 1018\u2192646",
+    "after start>end; wrapped/clamped 1019\u2192646",
+    "after start>end; wrapped/clamped 1020\u2192646",
+    "after start>end; wrapped/clamped 1021\u2192646",
+    "after start>end; wrapped/clamped 1022\u2192646"
+  ],
+  "reverse": true,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 154,
+    "core_seed": 2794,
+    "fm": 86,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 84,
+    "growth_9_step": 3322,
+    "legacy_internal": {
+      "after_end": 702,
+      "after_start": 3967,
+      "before_end": 1480,
+      "before_start": 1726,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 2794,
+      "pot2": 84,
+      "pot3": 3322
+    },
+    "pwm": 207,
+    "result_end": 1480,
+    "result_start": 1726,
+    "source_end": 702,
+    "source_start": 3967,
+    "wavetable_type": 35,
+    "wavetable_type_info": {
+      "description": "Symmetric even-harmonic leaning soft blend",
+      "id": 35,
+      "name": "Even Soft",
+      "option_label": "35 - Even Soft - Symmetric even-harmonic leaning soft blend"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 30.0,
+    "frequency": 110.0,
+    "nominal_cycles": 3300.0,
+    "requested_mode": "Seconds",
+    "requested_value": 30.0,
+    "sample_count": 1323000,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}
