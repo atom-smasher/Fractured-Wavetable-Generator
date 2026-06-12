@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197702,
+    "requested_iterations": 100,
+    "serial_number": 54
+  },
+  "created_epoch": 1781200254,
+  "created_local_time": "2026-06-12 05:50:54 +1200",
+  "direction": "START_TO_END",
+  "end_patch": {
+    "am": 208,
+    "core_seed": 3860,
+    "fm": 68,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 3004,
+    "growth_9_step": 3335,
+    "legacy_internal": {
+      "after_end": 3329,
+      "after_start": 3475,
+      "before_end": 222,
+      "before_start": 163,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 3860,
+      "pot2": 3004,
+      "pot3": 3335
+    },
+    "pwm": 240,
+    "result_end": 222,
+    "result_start": 163,
+    "source_end": 3329,
+    "source_start": 3475,
+    "wavetable_type": 31,
+    "wavetable_type_info": {
+      "description": "Blends toward a sine-like curve near zero crossings",
+      "id": 31,
+      "name": "Zero-Cross Blend",
+      "option_label": "31 - Zero-Cross Blend - Blends toward a sine-like curve near zero crossings"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_30s",
+    "json": "fractal_wt_morph_bulk_30s_1781197702_0054_START_TO_END.json",
+    "json_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0054_START_TO_END.json",
+    "wav": "fractal_wt_morph_bulk_30s_1781197702_0054_START_TO_END.wav",
+    "wav_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0054_START_TO_END.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 208,
+      "core_seed": 3860,
+      "fm": 68,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3004,
+      "growth_9_step": 3335,
+      "legacy_internal": {
+        "after_end": 3329,
+        "after_start": 3475,
+        "before_end": 222,
+        "before_start": 163,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3860,
+        "pot2": 3004,
+        "pot3": 3335
+      },
+      "pwm": 240,
+      "result_end": 222,
+      "result_start": 163,
+      "source_end": 3329,
+      "source_start": 3475,
+      "wavetable_type": 31,
+      "wavetable_type_info": {
+        "description": "Blends toward a sine-like curve near zero crossings",
+        "id": 31,
+        "name": "Zero-Cross Blend",
+        "option_label": "31 - Zero-Cross Blend - Blends toward a sine-like curve near zero crossings"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 208,
+      "core_seed": 3860,
+      "fm": 68,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3004,
+      "growth_9_step": 3335,
+      "legacy_internal": {
+        "after_end": 3329,
+        "after_start": 3475,
+        "before_end": 222,
+        "before_start": 163,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3860,
+        "pot2": 3004,
+        "pot3": 3335
+      },
+      "pwm": 240,
+      "result_end": 222,
+      "result_start": 163,
+      "source_end": 3329,
+      "source_start": 3475,
+      "wavetable_type": 3,
+      "wavetable_type_info": {
+        "description": "First half 3-step source, second half 9-step source",
+        "id": 3,
+        "name": "3\u21929 Splice",
+        "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 172,
+      "core_seed": 2505,
+      "fm": 94,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3363,
+      "growth_9_step": 3278,
+      "legacy_internal": {
+        "after_end": 2267,
+        "after_start": 2351,
+        "before_end": 2536,
+        "before_start": 2548,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2505,
+        "pot2": 3363,
+        "pot3": 3278
+      },
+      "pwm": 41,
+      "result_end": 2536,
+      "result_start": 2548,
+      "source_end": 2267,
+      "source_start": 2351,
+      "wavetable_type": 31,
+      "wavetable_type_info": {
+        "description": "Blends toward a sine-like curve near zero crossings",
+        "id": 31,
+        "name": "Zero-Cross Blend",
+        "option_label": "31 - Zero-Cross Blend - Blends toward a sine-like curve near zero crossings"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 172,
+      "core_seed": 2505,
+      "fm": 94,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 3363,
+      "growth_9_step": 3278,
+      "legacy_internal": {
+        "after_end": 2267,
+        "after_start": 2351,
+        "before_end": 2536,
+        "before_start": 2548,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2505,
+        "pot2": 3363,
+        "pot3": 3278
+      },
+      "pwm": 41,
+      "result_end": 2536,
+      "result_start": 2548,
+      "source_end": 2267,
+      "source_start": 2351,
+      "wavetable_type": 25,
+      "wavetable_type_info": {
+        "description": "Rounded version of the difference mode",
+        "id": 25,
+        "name": "Smooth Difference",
+        "option_label": "25 - Smooth Difference - Rounded version of the difference mode"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "after start>end; wrapped/clamped 2351\u21922267",
+    "after start>end; wrapped/clamped 2352\u21922268",
+    "after start>end; wrapped/clamped 2353\u21922269",
+    "after start>end; wrapped/clamped 2354\u21922270",
+    "after start>end; wrapped/clamped 2355\u21922271",
+    "after start>end; wrapped/clamped 2356\u21922272",
+    "after start>end; wrapped/clamped 2357\u21922272",
+    "after start>end; wrapped/clamped 2357\u21922273",
+    "after start>end; wrapped/clamped 2358\u21922273",
+    "after start>end; wrapped/clamped 2358\u21922274",
+    "after start>end; wrapped/clamped 2359\u21922274",
+    "after start>end; wrapped/clamped 2359\u21922275",
+    "after start>end; wrapped/clamped 2360\u21922275",
+    "after start>end; wrapped/clamped 2360\u21922276",
+    "after start>end; wrapped/clamped 2361\u21922276",
+    "after start>end; wrapped/clamped 2361\u21922277",
+    "after start>end; wrapped/clamped 2362\u21922277",
+    "after start>end; wrapped/clamped 2362\u21922278",
+    "after start>end; wrapped/clamped 2363\u21922278",
+    "after start>end; wrapped/clamped 2363\u21922279"
+  ],
+  "reverse": false,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 172,
+    "core_seed": 2505,
+    "fm": 94,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 3363,
+    "growth_9_step": 3278,
+    "legacy_internal": {
+      "after_end": 2267,
+      "after_start": 2351,
+      "before_end": 2536,
+      "before_start": 2548,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 2505,
+      "pot2": 3363,
+      "pot3": 3278
+    },
+    "pwm": 41,
+    "result_end": 2536,
+    "result_start": 2548,
+    "source_end": 2267,
+    "source_start": 2351,
+    "wavetable_type": 31,
+    "wavetable_type_info": {
+      "description": "Blends toward a sine-like curve near zero crossings",
+      "id": 31,
+      "name": "Zero-Cross Blend",
+      "option_label": "31 - Zero-Cross Blend - Blends toward a sine-like curve near zero crossings"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 30.0,
+    "frequency": 110.0,
+    "nominal_cycles": 3300.0,
+    "requested_mode": "Seconds",
+    "requested_value": 30.0,
+    "sample_count": 1323000,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}
