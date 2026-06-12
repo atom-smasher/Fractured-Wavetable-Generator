@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197702,
+    "requested_iterations": 100,
+    "serial_number": 33
+  },
+  "created_epoch": 1781199432,
+  "created_local_time": "2026-06-12 05:37:12 +1200",
+  "direction": "END_TO_START",
+  "end_patch": {
+    "am": 67,
+    "core_seed": 337,
+    "fm": 107,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 2986,
+    "growth_9_step": 718,
+    "legacy_internal": {
+      "after_end": 390,
+      "after_start": 2431,
+      "before_end": 2492,
+      "before_start": 4000,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 337,
+      "pot2": 2986,
+      "pot3": 718
+    },
+    "pwm": 21,
+    "result_end": 2492,
+    "result_start": 4000,
+    "source_end": 390,
+    "source_start": 2431,
+    "wavetable_type": 28,
+    "wavetable_type_info": {
+      "description": "Gentle triangular folding with rounded edges",
+      "id": 28,
+      "name": "Triangle Fold Soft",
+      "option_label": "28 - Triangle Fold Soft - Gentle triangular folding with rounded edges"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_30s",
+    "json": "fractal_wt_morph_bulk_30s_1781197702_0033_END_TO_START.json",
+    "json_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0033_END_TO_START.json",
+    "wav": "fractal_wt_morph_bulk_30s_1781197702_0033_END_TO_START.wav",
+    "wav_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0033_END_TO_START.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 67,
+      "core_seed": 337,
+      "fm": 107,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 2986,
+      "growth_9_step": 718,
+      "legacy_internal": {
+        "after_end": 390,
+        "after_start": 2431,
+        "before_end": 2492,
+        "before_start": 4000,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 337,
+        "pot2": 2986,
+        "pot3": 718
+      },
+      "pwm": 21,
+      "result_end": 2492,
+      "result_start": 4000,
+      "source_end": 390,
+      "source_start": 2431,
+      "wavetable_type": 28,
+      "wavetable_type_info": {
+        "description": "Gentle triangular folding with rounded edges",
+        "id": 28,
+        "name": "Triangle Fold Soft",
+        "option_label": "28 - Triangle Fold Soft - Gentle triangular folding with rounded edges"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 67,
+      "core_seed": 337,
+      "fm": 107,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 2986,
+      "growth_9_step": 718,
+      "legacy_internal": {
+        "after_end": 390,
+        "after_start": 2431,
+        "before_end": 2492,
+        "before_start": 4000,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 337,
+        "pot2": 2986,
+        "pot3": 718
+      },
+      "pwm": 21,
+      "result_end": 2492,
+      "result_start": 4000,
+      "source_end": 390,
+      "source_start": 2431,
+      "wavetable_type": 22,
+      "wavetable_type_info": {
+        "description": "Weighted blend biased toward the 9-step source",
+        "id": 22,
+        "name": "Mostly 9-Step",
+        "option_label": "22 - Mostly 9-Step - Weighted blend biased toward the 9-step source"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 3,
+      "core_seed": 1703,
+      "fm": 167,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1866,
+      "growth_9_step": 735,
+      "legacy_internal": {
+        "after_end": 2099,
+        "after_start": 550,
+        "before_end": 3518,
+        "before_start": 1756,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 1703,
+        "pot2": 1866,
+        "pot3": 735
+      },
+      "pwm": 244,
+      "result_end": 3518,
+      "result_start": 1756,
+      "source_end": 2099,
+      "source_start": 550,
+      "wavetable_type": 28,
+      "wavetable_type_info": {
+        "description": "Gentle triangular folding with rounded edges",
+        "id": 28,
+        "name": "Triangle Fold Soft",
+        "option_label": "28 - Triangle Fold Soft - Gentle triangular folding with rounded edges"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 3,
+      "core_seed": 1703,
+      "fm": 167,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 1866,
+      "growth_9_step": 735,
+      "legacy_internal": {
+        "after_end": 2099,
+        "after_start": 550,
+        "before_end": 3518,
+        "before_start": 1756,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 1703,
+        "pot2": 1866,
+        "pot3": 735
+      },
+      "pwm": 244,
+      "result_end": 3518,
+      "result_start": 1756,
+      "source_end": 2099,
+      "source_start": 550,
+      "wavetable_type": 8,
+      "wavetable_type_info": {
+        "description": "8-bit source collision using bitwise OR",
+        "id": 8,
+        "name": "Bit OR",
+        "option_label": "8 - Bit OR - 8-bit source collision using bitwise OR"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "after start>end; wrapped/clamped 1362\u21921361",
+    "after start>end; wrapped/clamped 1363\u21921360",
+    "after start>end; wrapped/clamped 1364\u21921359",
+    "after start>end; wrapped/clamped 1364\u21921360",
+    "after start>end; wrapped/clamped 1365\u21921358",
+    "after start>end; wrapped/clamped 1365\u21921359",
+    "after start>end; wrapped/clamped 1366\u21921357",
+    "after start>end; wrapped/clamped 1366\u21921358",
+    "after start>end; wrapped/clamped 1367\u21921357",
+    "after start>end; wrapped/clamped 1368\u21921356",
+    "after start>end; wrapped/clamped 1369\u21921355",
+    "after start>end; wrapped/clamped 1370\u21921354",
+    "after start>end; wrapped/clamped 1371\u21921353",
+    "after start>end; wrapped/clamped 1372\u21921352",
+    "after start>end; wrapped/clamped 1372\u21921353",
+    "after start>end; wrapped/clamped 1373\u21921351",
+    "after start>end; wrapped/clamped 1374\u21921350",
+    "after start>end; wrapped/clamped 1375\u21921349",
+    "after start>end; wrapped/clamped 1376\u21921348",
+    "after start>end; wrapped/clamped 1376\u21921349"
+  ],
+  "reverse": true,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 3,
+    "core_seed": 1703,
+    "fm": 167,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 1866,
+    "growth_9_step": 735,
+    "legacy_internal": {
+      "after_end": 2099,
+      "after_start": 550,
+      "before_end": 3518,
+      "before_start": 1756,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 1703,
+      "pot2": 1866,
+      "pot3": 735
+    },
+    "pwm": 244,
+    "result_end": 3518,
+    "result_start": 1756,
+    "source_end": 2099,
+    "source_start": 550,
+    "wavetable_type": 28,
+    "wavetable_type_info": {
+      "description": "Gentle triangular folding with rounded edges",
+      "id": 28,
+      "name": "Triangle Fold Soft",
+      "option_label": "28 - Triangle Fold Soft - Gentle triangular folding with rounded edges"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 30.0,
+    "frequency": 110.0,
+    "nominal_cycles": 3300.0,
+    "requested_mode": "Seconds",
+    "requested_value": 30.0,
+    "sample_count": 1323000,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}
