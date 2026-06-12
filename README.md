@@ -1,5 +1,7 @@
 # Fractal Wavetable
 
+**A tool for sound designers, sound explorers, and synthesizer programmers.**
+
 **A real-time fractal wavetable instrument for strange waveforms, performable noise, and learnable code.**
 
 Fractal Wavetable is an experimental Python/Tkinter synthesizer and wavetable laboratory. It began as a live, Linux-friendly adaptation of the Carl Hudson / tonysnail Fractal Wavetable Generator idea, then grew into a hands-on sound-design tool for exploring recursive waveform generation in real time.
