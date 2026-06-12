@@ -1,0 +1,394 @@
+{
+  "app": "Fractal Wavetable START-END Morph Export",
+  "app_file": "fractal_wt_start_end_morph_tabs_v6.py",
+  "bulk_generation": {
+    "directions": [
+      "START_TO_END",
+      "END_TO_START"
+    ],
+    "enabled": true,
+    "epoch": 1781197702,
+    "requested_iterations": 100,
+    "serial_number": 72
+  },
+  "created_epoch": 1781200941,
+  "created_local_time": "2026-06-12 06:02:21 +1200",
+  "direction": "START_TO_END",
+  "end_patch": {
+    "am": 211,
+    "core_seed": 2070,
+    "fm": 153,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 124,
+    "growth_9_step": 6,
+    "legacy_internal": {
+      "after_end": 3725,
+      "after_start": 1220,
+      "before_end": 1685,
+      "before_start": 2995,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 2070,
+      "pot2": 124,
+      "pot3": 6
+    },
+    "pwm": 59,
+    "result_end": 1685,
+    "result_start": 2995,
+    "source_end": 3725,
+    "source_start": 1220,
+    "wavetable_type": 29,
+    "wavetable_type_info": {
+      "description": "Lifts quiet detail while rounding the extremes",
+      "id": 29,
+      "name": "Root Shape",
+      "option_label": "29 - Root Shape - Lifts quiet detail while rounding the extremes"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "files": {
+    "filename_prefix": "fractal_wt_morph_bulk_30s",
+    "json": "fractal_wt_morph_bulk_30s_1781197702_0072_START_TO_END.json",
+    "json_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0072_START_TO_END.json",
+    "wav": "fractal_wt_morph_bulk_30s_1781197702_0072_START_TO_END.wav",
+    "wav_path": "/tmp/fractal/30-seconds/fractal_wt_morph_bulk_30s_1781197702_0072_START_TO_END.wav"
+  },
+  "output_processing": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "dc_removal": "Per cycle",
+    "headroom_db": -0.1,
+    "normalise": "Per cycle peak",
+    "sample_rate": 44100
+  },
+  "patches": {
+    "end_effective": {
+      "am": 211,
+      "core_seed": 2070,
+      "fm": 153,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 124,
+      "growth_9_step": 6,
+      "legacy_internal": {
+        "after_end": 3725,
+        "after_start": 1220,
+        "before_end": 1685,
+        "before_start": 2995,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2070,
+        "pot2": 124,
+        "pot3": 6
+      },
+      "pwm": 59,
+      "result_end": 1685,
+      "result_start": 2995,
+      "source_end": 3725,
+      "source_start": 1220,
+      "wavetable_type": 29,
+      "wavetable_type_info": {
+        "description": "Lifts quiet detail while rounding the extremes",
+        "id": 29,
+        "name": "Root Shape",
+        "option_label": "29 - Root Shape - Lifts quiet detail while rounding the extremes"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "end_raw": {
+      "am": 211,
+      "core_seed": 2070,
+      "fm": 153,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 124,
+      "growth_9_step": 6,
+      "legacy_internal": {
+        "after_end": 3725,
+        "after_start": 1220,
+        "before_end": 1685,
+        "before_start": 2995,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 2070,
+        "pot2": 124,
+        "pot3": 6
+      },
+      "pwm": 59,
+      "result_end": 1685,
+      "result_start": 2995,
+      "source_end": 3725,
+      "source_start": 1220,
+      "wavetable_type": 14,
+      "wavetable_type_info": {
+        "description": "Rectified source difference; buzzy and octave-like",
+        "id": 14,
+        "name": "Abs Difference",
+        "option_label": "14 - Abs Difference - Rectified source difference; buzzy and octave-like"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_effective": {
+      "am": 215,
+      "core_seed": 3674,
+      "fm": 114,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 376,
+      "growth_9_step": 150,
+      "legacy_internal": {
+        "after_end": 1026,
+        "after_start": 3639,
+        "before_end": 810,
+        "before_start": 522,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3674,
+        "pot2": 376,
+        "pot3": 150
+      },
+      "pwm": 130,
+      "result_end": 810,
+      "result_start": 522,
+      "source_end": 1026,
+      "source_start": 3639,
+      "wavetable_type": 29,
+      "wavetable_type_info": {
+        "description": "Lifts quiet detail while rounding the extremes",
+        "id": 29,
+        "name": "Root Shape",
+        "option_label": "29 - Root Shape - Lifts quiet detail while rounding the extremes"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    },
+    "start_raw": {
+      "am": 215,
+      "core_seed": 3674,
+      "fm": 114,
+      "fm_range": {
+        "cents": 1200.0,
+        "label": "\u00b11200 cents (1 octave)",
+        "octaves": 1.0
+      },
+      "fm_range_cents": 1200.0,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "growth_3_step": 376,
+      "growth_9_step": 150,
+      "legacy_internal": {
+        "after_end": 1026,
+        "after_start": 3639,
+        "before_end": 810,
+        "before_start": 522,
+        "fm_range_label": "\u00b11200 cents (1 octave)",
+        "pot1": 3674,
+        "pot2": 376,
+        "pot3": 150
+      },
+      "pwm": 130,
+      "result_end": 810,
+      "result_start": 522,
+      "source_end": 1026,
+      "source_start": 3639,
+      "wavetable_type": 39,
+      "wavetable_type_info": {
+        "description": "Flat-topped clipped source sum with strong harmonics",
+        "id": 39,
+        "name": "Hard Clip Sum",
+        "option_label": "39 - Hard Clip Sum - Flat-topped clipped source sum with strong harmonics"
+      },
+      "window_scale": {
+        "max": 4096,
+        "min": 0
+      }
+    }
+  },
+  "render_notes": [
+    "after start>end; wrapped/clamped 2405\u21922403",
+    "after start>end; wrapped/clamped 2406\u21922401",
+    "after start>end; wrapped/clamped 2406\u21922402",
+    "after start>end; wrapped/clamped 2407\u21922400",
+    "after start>end; wrapped/clamped 2408\u21922400",
+    "after start>end; wrapped/clamped 2409\u21922398",
+    "after start>end; wrapped/clamped 2409\u21922399",
+    "after start>end; wrapped/clamped 2410\u21922397",
+    "after start>end; wrapped/clamped 2411\u21922396",
+    "after start>end; wrapped/clamped 2412\u21922395",
+    "after start>end; wrapped/clamped 2412\u21922396",
+    "after start>end; wrapped/clamped 2413\u21922394",
+    "after start>end; wrapped/clamped 2414\u21922392",
+    "after start>end; wrapped/clamped 2414\u21922393",
+    "after start>end; wrapped/clamped 2415\u21922391",
+    "after start>end; wrapped/clamped 2416\u21922391",
+    "after start>end; wrapped/clamped 2417\u21922389",
+    "after start>end; wrapped/clamped 2417\u21922390",
+    "after start>end; wrapped/clamped 2418\u21922388",
+    "after start>end; wrapped/clamped 2419\u21922387"
+  ],
+  "reverse": false,
+  "schema": {
+    "compatibility": {
+      "introduced_in": "fractal_wt_start_end_morph_tabs_v6.py",
+      "legacy_internal_fields_preserved": true
+    },
+    "curve_amount": {
+      "high_values": "Fast start, slower finish.",
+      "linear": 127,
+      "low_values": "Slow start, faster finish.",
+      "range": [
+        1,
+        255
+      ]
+    },
+    "description": "Sidecar metadata for a Fractal Wavetable START/END morph WAV export.",
+    "direction_codes": {
+      "END_TO_START": "Render morph position from END to START.",
+      "START_TO_END": "Render morph position from START to END."
+    },
+    "name": "fractal_wavetable_morph_sidecar",
+    "patch_field_notes": {
+      "core_seed": "User-facing 12-bit Core Seed control, internally pot1.",
+      "fm_range.cents": "Machine-readable FM pitch range in cents.",
+      "growth_3_step": "User-facing 3-Step Growth control, internally pot2.",
+      "growth_9_step": "User-facing 9-Step Growth control, internally pot3.",
+      "legacy_internal": "Original internal field names retained to make future importers backwards-compatible with the generator code.",
+      "result_start/result_end": "User-facing Result Window values on the 0..4096 window scale. Export v6 maps these from the internal before_start/before_end fields, per current JSON naming convention.",
+      "source_start/source_end": "User-facing Source Window values on the 0..4096 window scale. Export v6 maps these from the internal after_start/after_end fields, per current JSON naming convention.",
+      "wavetable_type": "Integer wavetable mode ID."
+    },
+    "version": 3
+  },
+  "schema_version": 3,
+  "shared_settings": {
+    "fm_pitch_range_is_shared": true,
+    "frequency_hz": 110.0,
+    "shared_fm_pitch_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "shared_wavetable_type": {
+      "description": "First half 3-step source, second half 9-step source",
+      "id": 3,
+      "name": "3\u21929 Splice",
+      "option_label": "3 - 3\u21929 Splice - First half 3-step source, second half 9-step source"
+    },
+    "volume": 0.2,
+    "wavetable_type_is_shared": true
+  },
+  "start_patch": {
+    "am": 215,
+    "core_seed": 3674,
+    "fm": 114,
+    "fm_range": {
+      "cents": 1200.0,
+      "label": "\u00b11200 cents (1 octave)",
+      "octaves": 1.0
+    },
+    "fm_range_cents": 1200.0,
+    "fm_range_label": "\u00b11200 cents (1 octave)",
+    "growth_3_step": 376,
+    "growth_9_step": 150,
+    "legacy_internal": {
+      "after_end": 1026,
+      "after_start": 3639,
+      "before_end": 810,
+      "before_start": 522,
+      "fm_range_label": "\u00b11200 cents (1 octave)",
+      "pot1": 3674,
+      "pot2": 376,
+      "pot3": 150
+    },
+    "pwm": 130,
+    "result_end": 810,
+    "result_start": 522,
+    "source_end": 1026,
+    "source_start": 3639,
+    "wavetable_type": 29,
+    "wavetable_type_info": {
+      "description": "Lifts quiet detail while rounding the extremes",
+      "id": 29,
+      "name": "Root Shape",
+      "option_label": "29 - Root Shape - Lifts quiet detail while rounding the extremes"
+    },
+    "window_scale": {
+      "max": 4096,
+      "min": 0
+    }
+  },
+  "summary": {
+    "bit_depth": "16-bit PCM",
+    "bit_depth_info": {
+      "bits": 16,
+      "label": "16-bit PCM",
+      "sample_format": "pcm_s16",
+      "wav_container_bits": 16
+    },
+    "duration_mode_code": "seconds",
+    "duration_seconds": 30.0,
+    "frequency": 110.0,
+    "nominal_cycles": 3300.0,
+    "requested_mode": "Seconds",
+    "requested_value": 30.0,
+    "sample_count": 1323000,
+    "sample_rate": 44100,
+    "samples_per_cycle": 400.90909090909093,
+    "suggestions": [
+      "172.266 Hz gives exactly 256 samples/cycle at 44100 Hz",
+      "86.1328 Hz gives exactly 512 samples/cycle at 44100 Hz",
+      "43.0664 Hz gives exactly 1024 samples/cycle at 44100 Hz"
+    ],
+    "warnings": []
+  },
+  "transition": {
+    "curve_amount": 127,
+    "curve_amount_linear": 127,
+    "curve_amount_range": [
+      1,
+      255
+    ],
+    "curve_mode": "Bend",
+    "cycle_stepped": true,
+    "different_fm_pitch_ranges": false,
+    "different_wavetable_types": false,
+    "wavetable_type_transition": "shared_type"
+  }
+}
