@@ -2,6 +2,8 @@
 
 Live online GPL v2 build is available here: https://atom-smasher.github.io/Fractal-Wavetable-Generator/
 
+<img width="416" height="263" alt="image" src="https://github.com/user-attachments/assets/c7ae4db5-d0d6-4e71-9669-983b323d027f" />
+
 ---
 
 ## Outputs are yours
