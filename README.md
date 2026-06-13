@@ -89,6 +89,9 @@ Possible uses:
 - bass growls
 - metallic clangs
 - FM-like snarls
+- sync-like rips
+- formant-ish growls
+- bitcrushed and folded source tones
 - digital scrape tones
 - synthetic impacts
 - glitch percussion
@@ -115,13 +118,14 @@ The tool exposes waveform generation, modulation, filtering, visualisation, play
 - how waveform shape relates to tone
 - why sharp edges create brighter harmonic content
 - how FM, AM, and phase-width modulation affect sound
+- how phase distortion, sync, folding, pulse-width shaping, and formant-style shaping can be baked into a wavetable
 - why filtering changes both the sound and the spectrum
 - why a WAV file can be a finished sound or oscillator material
 - why cycle count matters when exporting sound-design source files
 
 ### Learning to code
 
-The project is also a code-learning object. It was developed through fast, conversational, AI-assisted iteration. The current files are heavily commented so a reader can follow the path from controls to state, generation, audio, visualisation, export, WAV writing, ZIP packaging, and JSON metadata.
+The project is also a code-learning object. It was developed through fast, conversational, AI-assisted iteration. The current files are heavily commented so a reader can follow the path from controls to state, generation, audio, visualisation, export, WAV writing, ZIP packaging, persistent settings, and JSON metadata.
 
 The code should not be treated as ideal architecture. It is a prototype, a lab notebook, and a tutorial. That is part of its value.
 
@@ -135,11 +139,11 @@ The generator is allowed to be strange, but the audio path should stay alive. Ex
 
 ### Visible signal flow
 
-The visualiser should help explain what the tool is doing. Base-table, phase-locked, time-domain, animated, and spectrum views answer different questions.
+The visualiser should help explain what the tool is doing. Base-table, phase-locked, time-domain, animated, and spectrum views answer different questions. Visual mode and animation FPS are global visualiser preferences shared across tabs.
 
 ### Meaningful labels
 
-The project has moved away from anonymous “pots” toward labels such as Primary Phase, Shape 1, Shape 2, Source Window, Result Window, and Wavetable Type.
+The project has moved away from anonymous “pots” toward family-specific labels. Internally, the three generator controls are still stored as `pot1`, `pot2`, and `pot3` for patch and JSON stability, but the UI presents labels such as `FM Index`, `Modulator Ratio`, `Carrier Colour`, `Sync Intensity`, `Source A Shape`, `Source B Shape`, `Formant Spacing`, `Vowel Position`, and `Bandwidth / Grit`.
 
 ### Randomisation with restraint
 
@@ -149,20 +153,20 @@ Randomisation should help find new sounds without destroying the whole context. 
 
 The WAV file can be the endpoint or the starting point. It can become a finished drone, a one-shot, a sampler source, a wavetable frame, a vector corner, or raw material for later mangling.
 
-### Honesty about AI assistance
+### Honest provenance and AI assistance
 
 This project is openly vibe-coded. AI assistance was used heavily, under human direction, through iterative listening, testing, renaming, fixing, and expansion. That does not remove the need for review, testing, cleanup, and licensing discipline.
 
 ---
 
-**A browser-native wavetable generator, morphing lab, and sound-design source tool.**
+## Project lineage
 
 Fractal Wavetable began as an exploration of the Fractal Wavetable Generator idea attributed to Carl Hudson / tonysnail. It now contains two related but legally and technically distinct paths:
 
 1. **The older Python/Tkinter version** — a live desktop prototype derived from, adapted around, or closely based on the earlier Fractal Wavetable Generator lineage.
-2. **The newer HTML/JavaScript browser version** — a browser-native, single-file wavetable generator inspired by that lineage, but rebuilt as clean-room DSP experiments using ordinary waveforms, phase warping, folding, smoothing, saturation, bitwise/quantised collision, filtering, morphing, and spectral table reconstruction.
+2. **The newer HTML/JavaScript browser version** — a browser-native, single-file wavetable generator inspired by that lineage, but rebuilt as clean-room DSP experiments using ordinary waveforms, FM-style phase modulation, Pulse Warp duty-cycle shaping, sync-style resets, formant-inspired harmonic peaks, folding, bitcrushing, additive harmonic clusters, modal spacing, feedback sine bending, non-linear phase-distortion remapping, phase warping, smoothing, saturation, bitwise/quantised collision, filtering, morphing, and spectral table reconstruction.
 
-A local/offline version using Carl Hudson's code is:
+A local/offline version using Carl Hudson’s code is:
 https://github.com/atom-smasher/Fractal-Wavetable-Generator/blob/master/fractal_wt_start_end_morph_tabs_v9_streaming_export.py
 
 A live online GPL v2 build is available here:
@@ -178,7 +182,7 @@ This repository may contain files with different provenance and different reuse 
 
 | File / area | Status |
 | --- | --- |
-| `fractal_wavetable_clean_chaos_lab_v14.03.html` | Current browser version. Copyright © 2026 Atom Smasher. Released under GPL-2.0-only. |
+| `fractal_wavetable_clean_chaos_lab_v14.15.html` | Current browser version. Copyright © 2026 Atom Smasher. Released under GPL-2.0-only. |
 | `fractal_wt_start_end_morph_tabs_v9_streaming_export.py` | Older Python/Tkinter desktop prototype. Useful historically and technically, but treat as provenance-sensitive because it descends from the earlier Fractal Wavetable Generator line. |
 | `main.c` or other original/upstream files | Historical/original Fractal Wavetable Generator material attributed to Carl Hudson / tonysnail. Not relicensed by the browser GPL notice. |
 | `example_WAV_files/` | Example outputs and sound-design material. |
@@ -202,6 +206,10 @@ If this project is redistributed as a repository or release package, include the
 
 The browser implementation is inspired by Carl Hudson’s Fractal Wavetable Generator concept. Carl Hudson’s original C implementation is separately copyrighted and is **not** relicensed by the browser version’s GPL notice.
 
+### Phase distortion provenance
+
+The Phase Distortion engines are clean-room DSP experiments based on general non-linear phase remapping and ordinary waveform lookup. They do **not** include Casio CZ ROM waveforms, proprietary source code, or a claim of CZ compatibility.
+
 ### Python and original-code lineage
 
 The older Python/Tkinter version was developed as a live, Linux-friendly exploration of the Carl Hudson / tonysnail Fractal Wavetable Generator idea. Because it is closer to the older implementation and algorithmic lineage, treat that file as **source-available for study and personal experimentation unless the original rights status is resolved**.
@@ -214,46 +222,72 @@ This README is not legal advice. It is a practical disclosure so the project doe
 
 ## What the browser version is
 
-Fractal Wavetable v14.03 is a single-file browser instrument and export tool with four main tabs:
+Fractal Wavetable v14.15 is a single-file browser instrument and export tool with four main tabs:
 
 | Tab | Purpose |
 | --- | --- |
 | **Single Engine / Playground** | Build and audition one generated wavetable patch. |
 | **START→END Morph Export** | Design two endpoint patches, audition the morph, and export forward/reverse WAV+JSON files. |
 | **Bulk Random Export** | Generate batches of random START/END pairs for later auditioning and pruning. |
-| **Notes** | Built-in usage, license, provenance, and export notes. |
+| **Notes** | Built-in usage, license, provenance, persistence, and export notes. |
 
 The browser version is meant to sit somewhere between instrument, laboratory, sample generator, and tutorial. It is not trying to be a conventional subtractive synth or a polished commercial plugin. It is for making waveforms that feel discovered rather than selected: harsh, folded, glitching, metallic, unstable, mellowed, blurred, bitten down, or oddly alive.
 
 ---
 
-## Browser v14.03 feature summary
+## Browser v14.15 feature summary
 
-### Generator engines
+### Generator families and variants
 
-The current browser version uses clean-room DSP engines rather than directly porting the original recurrence:
+The current browser version uses clean-room DSP engines rather than directly porting the original recurrence. Generator selection is split into a **Family** selector and adjacent **Smooth** / **Crunchy** checkboxes. Internally, patches and JSON still save full explicit engine names such as `Pulse Warp Crunchy`.
 
-- **Clean Chaos Smooth**
-- **Clean Chaos Crunchy**
-- **Phase Lattice Smooth**
-- **Phase Lattice Crunchy**
+Current generator families:
 
-The controls are intentionally learnable:
-
-| Control | Meaning |
+| Family | Smooth / Crunchy role |
 | --- | --- |
-| **Primary Phase** | Main phase/seed position. |
-| **Shape 1** | First source-wave shape and warp control. |
-| **Shape 2** | Second source-wave shape and warp control. |
-| **Wavetable Type** | Collision/combine stage for the two internal source waves. |
-| **Source Window Start/End** | Reframes source material before wavetable-type math. |
-| **Result Window Start/End** | Reframes the result after wavetable-type math. |
+| **Clean Chaos** | Rounded or grittier source-wave chaos. |
+| **Phase Lattice** | Phase-warp/lattice harmonic motion, from root-stable to sharper folds. |
+| **Phase Distortion** | Clean-room non-linear phase remapping, from rounded knees to harder edge motion. |
+| **FM** | FM-style phase modulation baked into the generated table. |
+| **Pulse Warp** | PWM-style duty-cycle, edge, notch, and offset shaping baked into the table. |
+| **Sync** | Hard-sync-style reset shaping with constrained ratios and A/B waveshape controls. |
+| **Formant** | Vowel-ish/formant-inspired harmonic ridges and nasal/growl movement. |
+| **Fold** | Wavefolder-style drive, symmetry, and bias. |
+| **Bitcrush** | Table-generation quantisation, sample-hold, dither/error bias, and foldback. |
+| **Harmonic Cluster** | Additive harmonic density, rolloff, odd/even bias, and inharmonic clustering. |
+| **Modal** | Bell, glass, metal, and resonator-style modal spacing. |
+| **Feedback Sine** | Self-phase sine bending, feedback, saturation, and folding. |
+
+Smooth variants generally favour rounded movement and stronger fundamental stability. Crunchy variants push harder phase warp, folding, quantisation, reset edges, feedback, or digital grit.
+
+### Family-specific generator controls
+
+The three main generator controls keep their internal names as `pot1`, `pot2`, and `pot3`, but the UI relabels them by generator family and updates those labels when the family changes.
+
+| Family | Knob 1 | Knob 2 | Knob 3 |
+| --- | --- | --- | --- |
+| Clean Chaos | Seed / Phase | Source A Shape | Source B Shape |
+| Phase Lattice | Phase Warp | Lattice A | Lattice B |
+| Phase Distortion | Distortion Depth | Breakpoint / Knee | Wave Colour / Warp |
+| FM | FM Index | Modulator Ratio | Carrier Colour |
+| Pulse Warp | Duty Warp | Edge Slope | Notch / Offset |
+| Sync | Sync Intensity | Source A Shape | Source B Shape |
+| Formant | Formant Spacing | Vowel Position | Bandwidth / Grit |
+| Fold | Fold Drive | Fold Symmetry | Source / Bias |
+| Bitcrush | Bit Depth Loss | Sample Hold | Dither / Error Bias |
+| Harmonic Cluster | Harmonic Density | Rolloff / Brightness | Odd / Inharmonic Bias |
+| Modal | Modal Spacing | Brightness Weight | Metalness / Inharmonicity |
+| Feedback Sine | Feedback Depth | Feedback Phase | Saturation / Folding |
+
+The Sync family uses bounded bidirectional A↔B cross-coupling. Source A can shape Source B, and Source B can shape Source A, without using unstable recursive feedback.
 
 ### Wavetable modes
 
-v14.03 includes 40 wavetable type modes, including:
+v14.15 includes 42 wavetable type modes. Wavetable Type is the combine/collision stage for the two internal source waves.
 
-- source A / source B
+Modes include:
+
+- Source A / Source B
 - A/B splices
 - sum, difference, multiply, divide
 - quantised OR, XOR, AND, XNOR
@@ -261,16 +295,17 @@ v14.03 includes 40 wavetable type modes, including:
 - fold sum and fold difference
 - comparator and interleave
 - average, mostly-A, mostly-B
+- primary-phase crossfade
 - smooth average and smooth difference
-- sine shaping, soft saturation, clipping
+- sine shaping, soft saturation, soft clip, hard clip
 - triangle folding, root/power shaping
 - zero-cross blending
 - Hann-windowed shaping
 - phase blur
-- odd/even soft modes
+- Odd Soft, Even Soft, Odd Hard, and Even Hard
 - gated and sign-multiply modes
 
-The goal is not one perfect oscillator. The goal is a wide field of sound-design source material, from mellow and rounded to harsh and damaged.
+The JSON metadata stores an internal wavetable `id` separately from the visible UI number. They currently match, but they are intentionally decoupled so the menu can be regrouped later without redefining old internal mode IDs.
 
 ### Modulation
 
@@ -285,7 +320,7 @@ The FM range is bounded so the oscillator stays musically controllable instead o
 
 ### Filter
 
-v14.03 adds a simple subtractive output filter stage:
+The browser version includes a simple subtractive output filter stage:
 
 - Off
 - Low-pass
@@ -316,7 +351,32 @@ The visualiser can show:
 - time-domain FM/PWM/AM
 - spectrum analyser
 
+Visual Mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value.
+
 FM/PWM/AM views and the spectrum analyser show a **post-filter preview**. The base table shows the generated table before oscillator modulation and filtering. The spectrum analyser is a cyclic single-cycle analyser, not a room or microphone analyser.
+
+### Persistent global settings
+
+The hosted browser version saves common global preferences in a browser cookie, with `localStorage` as a fallback for local-file testing or stricter cookie contexts.
+
+Saved settings include:
+
+- frequency
+- volume
+- MIDI channel
+- render unit and render length
+- visual mode
+- animation FPS
+- sample rate
+- bit depth
+- Morph Render Mode
+- FFT anchor count
+- ZIP/separate download mode
+- DC removal
+- normalisation
+- headroom dB
+
+Patch-specific sound-design parameters are not treated as global cookie settings.
 
 ### Morphing
 
@@ -362,11 +422,30 @@ Export controls include:
   - Per Cycle Peak
 - headroom in dB
 - JSON sidecar metadata
-- schema version 3 metadata
+- schema version 4 metadata
 
 Very long renders are allowed, but browser export is still memory-bound. WAV files are generated in browser memory before download. Large renders can stress RAM, CPU time, browser Blob/download limits, storage writes, filesystem limits, and classic RIFF/WAV size limits.
 
 Press **ESC** to stop audio and cancel active rendering. Leaving a tab also mutes the current audition.
+
+---
+
+## Recent browser-version changes
+
+The v14 line has moved quickly. Important recent additions include:
+
+- GPL-2.0-only notices and clearer output/provenance notes.
+- Verbose tutorial comments in the browser JavaScript.
+- Phase Distortion Smooth/Crunchy engines with clean-room provenance notes.
+- Wavetable mode internal IDs decoupled from visible UI numbering.
+- Odd/Even Soft and Odd/Even Hard wavetable modes.
+- Cookie-backed global settings persistence, with `localStorage` fallback.
+- Shared Visual Mode and Animation FPS across Playground and Morph.
+- Family + Smooth/Crunchy variant selection instead of one long engine dropdown.
+- FM, Pulse Warp, Sync, Formant, Fold, Bitcrush, Harmonic Cluster, Modal, and Feedback Sine engine families.
+- Family-specific knob labels that update when the engine family changes.
+- Sync engine retuning so knobs behave more like waveshape controls than pitch controls, with bounded bidirectional A↔B cross-coupling.
+- Formant and FM refinements so Source A/B and Shape 2 controls are more meaningful.
 
 ---
 
@@ -387,10 +466,10 @@ This is the easiest way to try the browser version without downloading anything.
 Download or clone the repository, then open the HTML file in a modern browser:
 
 ```text
-fractal_wavetable_clean_chaos_lab_v14.03.html
+fractal_wavetable_clean_chaos_lab_v14.15.html
 ```
 
-No build step is required. The browser version is a single-file HTML/JavaScript tool, so the local file and the hosted page should behave the same when the same build is deployed.
+No build step is required. The browser version is a single-file HTML/JavaScript tool, so the local file and the hosted page should behave the same when the same build is deployed, except that cookie behaviour may differ for local `file://` testing. Local testing can use the `localStorage` fallback.
 
 Notes:
 
@@ -434,10 +513,10 @@ Near-term priorities:
 - include `COPYING` with the GPL v2 license text
 - keep provenance notes visible
 - avoid applying the browser GPL notice to older/inherited code
-- add screenshots and short demo audio
-- document the wavetable modes more completely
-- improve examples and export recipes
 - keep the live online tool current with the recommended browser build
+- add screenshots and short demo audio
+- document the wavetable modes and generator families more completely
+- improve examples and export recipes
 - add browser compatibility notes
 - split historical/provenance-sensitive code from current browser code more clearly
 - consider a cleaner directory layout, such as `browser/`, `legacy-python/`, `original/`, and `example_WAV_files/`
