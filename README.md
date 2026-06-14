@@ -1,8 +1,8 @@
-# Fractal Wavetable
+# Fractured Wavetable
 
 **A tool for sound designers, sound explorers, and synthesizer programmers.**
 
-Live online GPL v2 build is available here: https://atom-smasher.github.io/Fractal-Wavetable-Generator/
+Live online GPL v2 build is available here: https://atom-smasher.github.io/Fractured-Wavetable-Generator/
 
 <img width="416" height="263" alt="image" src="https://github.com/user-attachments/assets/c7ae4db5-d0d6-4e71-9669-983b323d027f" />
 
@@ -18,7 +18,7 @@ The program’s GPL notice applies to the program itself; it does **not**, by it
 
 ## Intended use cases
 
-Fractal Wavetable can be used in several different ways.
+Fractured Wavetable can be used in several different ways.
 
 ### Wavetable synthesis
 
@@ -45,7 +45,7 @@ Possible uses:
 
 ### Subtractive synthesis source material
 
-Instead of starting a subtractive patch with a saw, square, or triangle, Fractal Wavetable can provide a more complex oscillator source before the filter even starts working.
+Instead of starting a subtractive patch with a saw, square, or triangle, Fractured Wavetable can provide a more complex oscillator source before the filter even starts working.
 
 Possible uses:
 
@@ -82,7 +82,7 @@ Possible uses:
 
 ### Growls, clangs, and hostile digital sounds
 
-Fractal Wavetable is good at sounds that feel like they are misbehaving: folded, bitten, unstable, almost broken, or harmonically overcrowded.
+Fractured Wavetable is good at sounds that feel like they are misbehaving: folded, bitten, unstable, almost broken, or harmonically overcrowded.
 
 Possible uses:
 
@@ -161,16 +161,16 @@ This project is openly vibe-coded. AI assistance was used heavily, under human d
 
 ## Project lineage
 
-Fractal Wavetable began as an exploration of the Fractal Wavetable Generator idea attributed to Carl Hudson / tonysnail. It now contains two related but legally and technically distinct paths:
+Fractured Wavetable began as an exploration of the Fractal Wavetable Generator idea attributed to Carl Hudson / tonysnail. It now contains two related but legally and technically distinct paths:
 
 1. **The older Python/Tkinter version** — a live desktop prototype derived from, adapted around, or closely based on the earlier Fractal Wavetable Generator lineage.
 2. **The newer HTML/JavaScript browser version** — a browser-native, single-file wavetable generator inspired by that lineage, but rebuilt as clean-room DSP experiments using ordinary waveforms, FM-style phase modulation, Pulse Warp duty-cycle shaping, sync-style resets, formant-inspired harmonic peaks, folding, bitcrushing, additive harmonic clusters, modal spacing, feedback sine bending, non-linear phase-distortion remapping, phase warping, smoothing, saturation, bitwise/quantised collision, filtering, morphing, and spectral table reconstruction.
 
 A local/offline version using Carl Hudson’s code is:
-https://github.com/atom-smasher/Fractal-Wavetable-Generator/blob/master/fractal_wt_start_end_morph_tabs_v9_streaming_export.py
+https://github.com/atom-smasher/Fractured-Wavetable-Generator/blob/master/fractal_wt_start_end_morph_tabs_v9_streaming_export.py
 
 A live online GPL v2 build is available here:
-https://atom-smasher.github.io/Fractal-Wavetable-Generator/
+https://atom-smasher.github.io/Fractured-Wavetable-Generator/
 
 The browser version can run from the live page or locally from the downloaded HTML file. No build step is required.
 
@@ -186,7 +186,7 @@ This repository may contain files with different provenance and different reuse 
 | `fractal_wt_start_end_morph_tabs_v9_streaming_export.py` | Older Python/Tkinter desktop prototype. Useful historically and technically, but treat as provenance-sensitive because it descends from the earlier Fractal Wavetable Generator line. |
 | `main.c` or other original/upstream files | Historical/original Fractal Wavetable Generator material attributed to Carl Hudson / tonysnail. Not relicensed by the browser GPL notice. |
 | `example_WAV_files/` | Example outputs and sound-design material. |
-| GitHub Pages live tool | Online browser build: `https://atom-smasher.github.io/Fractal-Wavetable-Generator/`. |
+| GitHub Pages live tool | Online browser build: `https://atom-smasher.github.io/Fractured-Wavetable-Generator/`. |
 
 The browser version and the older Python version should not be treated as the same licensing object.
 
@@ -222,7 +222,7 @@ This README is not legal advice. It is a practical disclosure so the project doe
 
 ## What the browser version is
 
-Fractal Wavetable v14.15 is a single-file browser instrument and export tool with four main tabs:
+Fractured Wavetable v14.15 is a single-file browser instrument and export tool with four main tabs:
 
 | Tab | Purpose |
 | --- | --- |
@@ -456,7 +456,7 @@ The v14 line has moved quickly. Important recent additions include:
 Open the GitHub Pages version in a modern browser:
 
 ```text
-https://atom-smasher.github.io/Fractal-Wavetable-Generator/
+https://atom-smasher.github.io/Fractured-Wavetable-Generator/
 ```
 
 This is the easiest way to try the browser version without downloading anything.
@@ -537,7 +537,7 @@ Possible future directions:
 
 ## Credits
 
-Fractal Wavetable began as an exploration inspired by the Fractal Wavetable Generator attributed to Carl Hudson / tonysnail.
+Fractured Wavetable began as an exploration inspired by the Fractal Wavetable Generator attributed to Carl Hudson / tonysnail.
 
 The browser implementation was directed and developed by Atom Smasher with heavy AI-assisted programming. The current browser version is a clean-room inspired wavetable generator and morphing lab, not a relicensing of Carl Hudson’s original C implementation.
 
