@@ -6,6 +6,12 @@ Live online GPL v2 build is available here: https://atom-smasher.github.io/Fract
 
 <img width="416" height="263" alt="image" src="https://github.com/user-attachments/assets/c7ae4db5-d0d6-4e71-9669-983b323d027f" />
 
+Fractured Wavetable Generator is for making oscillator waves, morphing START→END sounds, drones, growls, clangs, transitions, texture beds, sampler sources, and raw material for further synthesis or resampling.
+
+---
+
+Press **ESC** to stop audio and cancel active rendering. Leaving a tab also mutes the current audition.
+
 ---
 
 ## Outputs are yours
@@ -16,7 +22,54 @@ The program’s GPL notice applies to the program itself; it does **not**, by it
 
 ---
 
-## Intended use cases
+## What it does
+
+- Playground — build and audition one generated wavetable patch.
+- START→END Morph Export — design two endpoint patches, audition the transition, and export forward or reverse WAV+JSON files.
+- Bulk Random Export — generate batches of random START/END pairs for later auditioning and pruning.
+- Visualisation — inspect the generated table, modulation behaviour, and spectrum.
+- Export — render mono WAV files with JSON metadata, using user-selected length, sample rate, bit depth, DC removal, normalisation, and headroom settings.
+
+The browser version is a single-file HTML/JavaScript tool. No build step is required.
+
+---
+
+## Design approach
+
+Fractured Wavetable favours weirdness over mathematical or musical purity. It is meant to produce sounds that feel discovered rather than selected: harsh, folded, glitching, metallic, unstable, mellowed, blurred, bitten down, or oddly alive.
+
+The project also tries to keep the signal path visible, use meaningful controls, randomise with restraint, and make exported WAVs useful as sound-design objects rather than temporary previews.
+
+---
+
+### Running it
+
+Use the live online version, or download the current HTML file and open it in a modern browser.
+
+Web Audio is required for auditioning. Web MIDI is optional and browser-dependent. Chromium-based browsers are usually the safest choice for Web MIDI.
+
+Start with the volume low. Some settings can produce sharp, bright, or abrupt digital sounds.
+
+## License and provenance
+
+The current browser implementation is released under the GNU General Public License version 2 only:
+`SPDX-License-Identifier: GPL-2.0-only`
+
+Fractured Wavetable began as an exploration inspired by the Fractal Wavetable Generator concept attributed to Carl Hudson / tonysnail. Carl Hudson’s original C implementation is separately copyrighted and is not relicensed by the browser version’s GPL notice.
+
+Older Python/Tkinter and original/upstream files in this repository may have different provenance. Do not assume that the browser GPL notice automatically relicenses older or inherited code.
+
+This README is a practical provenance note, not legal advice.
+
+---
+
+## Credits
+
+Fractured Wavetable Generator was directed and developed by Atom Smasher with heavy AI-assisted programming (vibe coding), iterative listening, testing, renaming, fixing, and expansion.
+
+---
+
+## Use cases
 
 Fractured Wavetable can be used in several different ways.
 
@@ -131,115 +184,9 @@ The code should not be treated as ideal architecture. It is a prototype, a lab n
 
 ---
 
-## Design principles
-
-### Playability over mathematical purity
-
-The generator is allowed to be strange, but the audio path should stay alive. Extreme settings are clipped, bounded, normalised, widened, cancelled, or replaced when necessary.
-
-### Visible signal flow
-
-The visualiser should help explain what the tool is doing. Base-table, phase-locked, time-domain, animated, and spectrum views answer different questions. Visual mode and animation FPS are global visualiser preferences shared across tabs.
-
-### Meaningful labels
-
-The project has moved away from anonymous “pots” toward family-specific labels. Internally, the three generator controls are still stored as `pot1`, `pot2`, and `pot3` for patch and JSON stability, but the UI presents labels such as `FM Index`, `Modulator Ratio`, `Carrier Colour`, `Sync Intensity`, `Source A Shape`, `Source B Shape`, `Formant Spacing`, `Vowel Position`, and `Bandwidth / Grit`.
-
-### Randomisation with restraint
-
-Randomisation should help find new sounds without destroying the whole context. Bulk randomisation targets sound-design parameters but leaves render/export format choices under user control. Filters are reset to Off for safer random batches.
-
-### Outputs as sound-design objects
-
-The WAV file can be the endpoint or the starting point. It can become a finished drone, a one-shot, a sampler source, a wavetable frame, a vector corner, or raw material for later mangling.
-
-### Honest provenance and AI assistance
-
-This project is openly vibe-coded. AI assistance was used heavily, under human direction, through iterative listening, testing, renaming, fixing, and expansion. That does not remove the need for review, testing, cleanup, and licensing discipline.
-
----
-
-## Project lineage
-
-Fractured Wavetable began as an exploration of the Fractal Wavetable Generator idea attributed to Carl Hudson / tonysnail. It now contains two related but legally and technically distinct paths:
-
-1. **The older Python/Tkinter version** — a live desktop prototype derived from, adapted around, or closely based on the earlier Fractal Wavetable Generator lineage.
-2. **The newer HTML/JavaScript browser version** — a browser-native, single-file wavetable generator inspired by that lineage, but rebuilt as clean-room DSP experiments using ordinary waveforms, FM-style phase modulation, Pulse Warp duty-cycle shaping, sync-style resets, formant-inspired harmonic peaks, folding, bitcrushing, additive harmonic clusters, modal spacing, feedback sine bending, non-linear phase-distortion remapping, phase warping, smoothing, saturation, bitwise/quantised collision, filtering, morphing, and spectral table reconstruction.
-
-A local/offline version using Carl Hudson’s code is:
-https://github.com/atom-smasher/Fractured-Wavetable-Generator/blob/master/fractal_wt_start_end_morph_tabs_v9_streaming_export.py
-
-A live online GPL v2 build is available here:
-https://atom-smasher.github.io/Fractured-Wavetable-Generator/
-
-The browser version can run from the live page or locally from the downloaded HTML file. No build step is required.
-
----
-
-## Repository contents
-
-This repository may contain files with different provenance and different reuse status.
-
-| File / area | Status |
-| --- | --- |
-| `fractal_wavetable_clean_chaos_lab_v14.15.html` | Current browser version. Copyright © 2026 Atom Smasher. Released under GPL-2.0-only. |
-| `fractal_wt_start_end_morph_tabs_v9_streaming_export.py` | Older Python/Tkinter desktop prototype. Useful historically and technically, but treat as provenance-sensitive because it descends from the earlier Fractal Wavetable Generator line. |
-| `main.c` or other original/upstream files | Historical/original Fractal Wavetable Generator material attributed to Carl Hudson / tonysnail. Not relicensed by the browser GPL notice. |
-| `example_WAV_files/` | Example outputs and sound-design material. |
-| GitHub Pages live tool | Online browser build: `https://atom-smasher.github.io/Fractured-Wavetable-Generator/`. |
-
-The browser version and the older Python version should not be treated as the same licensing object.
-
----
-
-## License and provenance
-
-### Browser version
-
-The browser implementation is free software under the **GNU General Public License version 2 only**:
-
-```text
-SPDX-License-Identifier: GPL-2.0-only
-```
-
-If this project is redistributed as a repository or release package, include the GPL v2 license text in a `COPYING` file.
-
-The browser implementation is inspired by Carl Hudson’s Fractal Wavetable Generator concept. Carl Hudson’s original C implementation is separately copyrighted and is **not** relicensed by the browser version’s GPL notice.
-
-### Phase distortion provenance
-
-The Phase Distortion engines are clean-room DSP experiments based on general non-linear phase remapping and ordinary waveform lookup. They do **not** include Casio CZ ROM waveforms, proprietary source code, or a claim of CZ compatibility.
-
-### Python and original-code lineage
-
-The older Python/Tkinter version was developed as a live, Linux-friendly exploration of the Carl Hudson / tonysnail Fractal Wavetable Generator idea. Because it is closer to the older implementation and algorithmic lineage, treat that file as **source-available for study and personal experimentation unless the original rights status is resolved**.
-
-Do not assume that the GPL notice attached to the browser implementation automatically relicenses the older Python file, the original C file, or any code copied or adapted from the original project.
-
-This README is not legal advice. It is a practical disclosure so the project does not overclaim ownership or mislead users about reuse rights.
-
----
-
-## What the browser version is
-
-Fractured Wavetable v14.15 is a single-file browser instrument and export tool with four main tabs:
-
-| Tab | Purpose |
-| --- | --- |
-| **Single Engine / Playground** | Build and audition one generated wavetable patch. |
-| **START→END Morph Export** | Design two endpoint patches, audition the morph, and export forward/reverse WAV+JSON files. |
-| **Bulk Random Export** | Generate batches of random START/END pairs for later auditioning and pruning. |
-| **Notes** | Built-in usage, license, provenance, persistence, and export notes. |
-
-The browser version is meant to sit somewhere between instrument, laboratory, sample generator, and tutorial. It is not trying to be a conventional subtractive synth or a polished commercial plugin. It is for making waveforms that feel discovered rather than selected: harsh, folded, glitching, metallic, unstable, mellowed, blurred, bitten down, or oddly alive.
-
----
-
-## Browser v14.15 feature summary
+## Browser v2 feature summary
 
 ### Generator families and variants
-
-The current browser version uses clean-room DSP engines rather than directly porting the original recurrence. Generator selection is split into a **Family** selector and adjacent **Smooth** / **Crunchy** checkboxes. Internally, patches and JSON still save full explicit engine names such as `Pulse Warp Crunchy`.
 
 Current generator families:
 
@@ -281,31 +228,36 @@ The three main generator controls keep their internal names as `pot1`, `pot2`, a
 
 The Sync family uses bounded bidirectional A↔B cross-coupling. Source A can shape Source B, and Source B can shape Source A, without using unstable recursive feedback.
 
-### Wavetable modes
+### Wavetable modes (wave interpolation)
 
-v14.15 includes 42 wavetable type modes. Wavetable Type is the combine/collision stage for the two internal source waves.
+v2.0a includes 43 wavetable type modes. Wavetable Type is the combine/collision stage for the two internal source waves.
 
 Modes include:
-
-- Source A / Source B
-- A/B splices
-- sum, difference, multiply, divide
-- quantised OR, XOR, AND, XNOR
-- min, max, absolute difference
-- fold sum and fold difference
-- comparator and interleave
-- average, mostly-A, mostly-B
-- primary-phase crossfade
-- smooth average and smooth difference
-- sine shaping, soft saturation, soft clip, hard clip
-- triangle folding, root/power shaping
-- zero-cross blending
-- Hann-windowed shaping
-- phase blur
-- Odd Soft, Even Soft, Odd Hard, and Even Hard
-- gated and sign-multiply modes
-
-The JSON metadata stores an internal wavetable `id` separately from the visible UI number. They currently match, but they are intentionally decoupled so the menu can be regrouped later without redefining old internal mode IDs.
+- Source A, Source B
+- B→A Splice, A→B Splice
+- Sum, Difference
+- Multiply, Divide
+- Quantised OR, Quantised XOR, Quantised AND, Quantised XNOR
+- Min, Max
+- Abs Difference
+- Fold Sum, Fold Difference
+- Comparator, Interleave
+- Edge
+- Average, Mostly A, Mostly B
+- Primary Phase Crossfade
+- Smooth Average, Smooth Difference
+- Sine Shaper
+- Soft Saturate
+- Triangle Fold Soft
+- Root Shape, Power Shape
+- Zero-Cross Blend
+- Hann Windowed
+- Phase Blur
+- Odd Soft, Even Soft, Odd Hard, Even Hard
+- Gated B
+- Sign Multiply
+- Soft Clip Sum, Hard Clip Sum
+- Cyclic Comb.
 
 ### Modulation
 
@@ -316,7 +268,7 @@ Each patch includes self-modulation controls:
 - **PWM** — phase-width warping for arbitrary wavetables.
 - **AM** — waveform self-modulates amplitude.
 
-The FM range is bounded so the oscillator stays musically controllable instead of collapsing into runaway pitch shifts or zero-frequency stalls.
+The FM range is bounded so the oscillator stays musically controllable instead of collapsing into runaway pitch shifts.
 
 ### Filter
 
@@ -392,6 +344,7 @@ The Morph tab supports START→END sound design and export. Morph render modes i
 - Warm Wavetable Morph — equal-power table blend plus smoothing.
 - Softened Morph — more rounded middle.
 - Saturated Morph — gentle compression/glue.
+- Comb Wavetable Morph — hollow cyclic interference.
 - FFT Spectral Morph — rebuilds tables from harmonic data.
 - Spectral Envelope Morph — smoother spectral envelope movement.
 - Harmonic Level Morph — stable phase with changing harmonic levels.
@@ -400,52 +353,9 @@ The Morph tab supports START→END sound design and export. Morph render modes i
 
 The browser version exports mono WAV files and JSON sidecars.
 
-Export controls include:
-
-- render length by cycles, seconds, or samples
-- sample rate
-- bit depth:
-  - 8-bit PCM
-  - 12-bit PCM in 16-bit WAV
-  - 16-bit PCM
-  - 24-bit PCM
-  - 32-bit PCM
-- forward, reverse, or both directions
-- separate WAV+JSON files or one ZIP
-- DC removal:
-  - Off
-  - Whole File
-  - Per Cycle
-- normalisation:
-  - Off
-  - Whole File Peak
-  - Per Cycle Peak
-- headroom in dB
-- JSON sidecar metadata
-- schema version 4 metadata
+Export controls include render length by cycles, seconds, or samples; sample rate; bit depth; morph render mode; FFT anchor count; morph curve mode and amount; cycle-stepped transition; shared or separate START/END wavetable types; shared or separate START/END FM pitch ranges; forward, reverse, or both directions; separate WAV+JSON files or one ZIP; DC removal; normalisation; headroom in dB; and schema version 4 JSON metadata.
 
 Very long renders are allowed, but browser export is still memory-bound. WAV files are generated in browser memory before download. Large renders can stress RAM, CPU time, browser Blob/download limits, storage writes, filesystem limits, and classic RIFF/WAV size limits.
-
-Press **ESC** to stop audio and cancel active rendering. Leaving a tab also mutes the current audition.
-
----
-
-## Recent browser-version changes
-
-The v14 line has moved quickly. Important recent additions include:
-
-- GPL-2.0-only notices and clearer output/provenance notes.
-- Verbose tutorial comments in the browser JavaScript.
-- Phase Distortion Smooth/Crunchy engines with clean-room provenance notes.
-- Wavetable mode internal IDs decoupled from visible UI numbering.
-- Odd/Even Soft and Odd/Even Hard wavetable modes.
-- Cookie-backed global settings persistence, with `localStorage` fallback.
-- Shared Visual Mode and Animation FPS across Playground and Morph.
-- Family + Smooth/Crunchy variant selection instead of one long engine dropdown.
-- FM, Pulse Warp, Sync, Formant, Fold, Bitcrush, Harmonic Cluster, Modal, and Feedback Sine engine families.
-- Family-specific knob labels that update when the engine family changes.
-- Sync engine retuning so knobs behave more like waveshape controls than pitch controls, with bounded bidirectional A↔B cross-coupling.
-- Formant and FM refinements so Source A/B and Shape 2 controls are more meaningful.
 
 ---
 
@@ -500,45 +410,3 @@ sudo apt install python3-tk portaudio19-dev
 ```
 
 The Python version remains useful as an annotated development history and for understanding the evolution of the project, but the browser version is the cleaner current direction.
-
----
-
-## Project status
-
-The browser version is the current focus.
-
-Near-term priorities:
-
-- keep the browser version GPL-2.0-only with clear notices
-- include `COPYING` with the GPL v2 license text
-- keep provenance notes visible
-- avoid applying the browser GPL notice to older/inherited code
-- keep the live online tool current with the recommended browser build
-- add screenshots and short demo audio
-- document the wavetable modes and generator families more completely
-- improve examples and export recipes
-- add browser compatibility notes
-- split historical/provenance-sensitive code from current browser code more clearly
-- consider a cleaner directory layout, such as `browser/`, `legacy-python/`, `original/`, and `example_WAV_files/`
-
-Possible future directions:
-
-- AudioWorklet live engine for lower-latency browser audio
-- preset import/export
-- more formal patch schema documentation
-- sampler/wavetable export recipes
-- additional filter types
-- safer loudness metering
-- better long-render warnings
-- screenshots, GIFs, and demo videos
-- curated example WAV packs
-
----
-
-## Credits
-
-Fractured Wavetable began as an exploration inspired by the Fractal Wavetable Generator attributed to Carl Hudson / tonysnail.
-
-The browser implementation was directed and developed by Atom Smasher with heavy AI-assisted programming. The current browser version is a clean-room inspired wavetable generator and morphing lab, not a relicensing of Carl Hudson’s original C implementation.
-
-The project exists for sound designers, sound explorers, synthesizer programmers, musicians, people learning synthesis, and people learning to code.
