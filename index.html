@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.2
+Fractured Wavetable Generator v2.3l
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,9 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v2.2 adds the reciprocal wavetable/interpolation modes to
-the reorganised Wavetable Type dropdown, renames ambiguous soft-only modes for
-clearer UI wording, and keeps complementary/reciprocal modes adjacent.
+Modification note: v2.3l fixes a Phase-locked / Animated visualiser regression caused by one leftover AM Tone helper reference after the Ring Mod rename, and makes visualiser redraw failures non-blocking so patch edits still update live audio. v2.3j replaced the experimental AM Tone control with Ring Mod; the old internal patch field is kept for JSON compatibility, while the UI and render path use a multi-ratio self-ring stage.
 
 Provenance note: this browser implementation is inspired by Carl Hudson’s
 Fractal Wavetable Generator concept. Carl Hudson’s original C implementation
@@ -37,7 +35,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.2</title>
+<title>Fractured Wavetable Generator v2.3l</title>
 <style>
   :root {
     --bg: #101216;
@@ -63,6 +61,7 @@ itself, impose GPL licensing on generated outputs.
   button.active { background: #183244; border-color: var(--accent); }
   button.primary { background: #0d4460; border-color: #257fa5; }
   button.danger { background: #451c27; border-color: #8c4050; }
+  button.playing, button.primary.playing, button.danger.playing { background: #5b1420; border-color: var(--bad); box-shadow: 0 0 0 1px rgba(255,111,125,0.35) inset; color: var(--text); }
   main { padding: 14px 18px 28px; }
   .tab { display: none; }
   .tab.active { display: block; }
@@ -87,6 +86,11 @@ itself, impose GPL licensing on generated outputs.
   .status { white-space: pre-wrap; min-height: 24px; padding: 9px; background: #0d1118; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }
   .status strong { color: var(--text); }
   .note { color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .note code { display: inline-block; min-width: 1.8em; text-align: center; color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
+  .shortcutTable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 13px; }
+  .shortcutTable th, .shortcutTable td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  .shortcutTable th { color: var(--accent); background: #11161d; }
+  .shortcutTable code { display: inline-block; min-width: 1.8em; text-align: center; color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
   a { color: var(--accent); }
   .compactSettingGroup { border: 1px solid var(--line); border-radius: 10px; padding: 9px; margin: 8px 0; background: #11161d; }
   .compactSettingGroup h3 { margin-top: 0; }
@@ -101,7 +105,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.2</h1>
+  <h1>Fractured Wavetable Generator v2.3l</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -130,9 +134,9 @@ itself, impose GPL licensing on generated outputs.
           <select id="singleVisualMode">
             <option>Off</option>
             <option>Base table</option>
-            <option>Phase-locked FM/PWM/AM</option>
-            <option>Animated stable FM/PWM/AM</option>
-            <option>Time-domain FM/PWM/AM</option>
+            <option>Phase-locked FM/PWM/Ring Mod</option>
+            <option>Animated stable FM/PWM/Ring Mod</option>
+            <option>Time-domain FM/PWM/Ring Mod</option>
             <option>Spectrum analyser</option>
           </select>
         </div>
@@ -185,9 +189,9 @@ itself, impose GPL licensing on generated outputs.
           <select id="morphVisualMode">
             <option>Off</option>
             <option>Base table</option>
-            <option>Phase-locked FM/PWM/AM</option>
-            <option>Animated stable FM/PWM/AM</option>
-            <option>Time-domain FM/PWM/AM</option>
+            <option>Phase-locked FM/PWM/Ring Mod</option>
+            <option>Animated stable FM/PWM/Ring Mod</option>
+            <option>Time-domain FM/PWM/Ring Mod</option>
             <option>Spectrum analyser</option>
           </select>
         </div>
@@ -204,7 +208,7 @@ itself, impose GPL licensing on generated outputs.
         </div>
         <div id="exportControls"></div>
         <div class="buttonbar">
-          <button class="primary" id="playMorph">Play Morph</button>
+          <button class="primary" id="playMorph">Play Forward Morph</button>
           <button id="playReverse">Play Reverse</button>
         </div>
         <div class="buttonbar">
@@ -240,7 +244,7 @@ itself, impose GPL licensing on generated outputs.
       </div>
       <div class="panel">
         <h2>Bulk export notes</h2>
-        <p class="note">Bulk randomises the generator engine, the three family-specific generator knobs, wavetable type, FM/PWM/AM, FM pitch range, source/result windows, and START/END patches. Filters are reset to Off so random batches are less likely to disappear into silence.</p>
+        <p class="note">Bulk randomises the generator engine, the three family-specific generator knobs, wavetable type, FM/PWM/Ring Mod, FM pitch range, source/result windows, and START/END patches. Filters are reset to Off so random batches are less likely to disappear into silence.</p>
         <p class="note">Bulk uses the render settings shown on this tab: length, sample rate, bit depth, morph render mode, FFT anchor count, DC removal, normalisation, and headroom. Those settings are shared with the Morph tab. Direction and download mode are Bulk-only controls.</p>
         <p class="note">Locked in bulk mode: there is no per-iteration audition, no manual START/END editing during a batch, no separate START/END FM-range toggle, and no per-file morph-mode variation unless you change the global Morph Render Mode before starting the batch.</p>
       </div>
@@ -251,25 +255,34 @@ itself, impose GPL licensing on generated outputs.
     <div class="panel">
       <h2>Notes</h2>
       <p class="note">Fractured Wavetable Generator is a browser-native, single-file wavetable generator. It is designed for making loopable oscillator material, long evolving WAV files, drones, noisy transitions, fractured transitions, and sound-design source material.</p>
+      <h3>Usage Notes</h3>
+      <p class="note">Pressing <code>ESC</code> stops audio and cancels active rendering. Leaving a tab also mutes the current audition. Keyboard shortcuts are ignored while an input, slider, dropdown, button, or editable field has focus. Space is left to the browser.</p>
+      <h3>Keyboard Shortcuts</h3>
+      <table class="shortcutTable">
+        <thead><tr><th>Context</th><th>Shortcut</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Global</td><td><code>ESC</code></td><td>Stop all audio and cancel active rendering</td></tr>
+          <tr><td>Playground &amp; Morph</td><td><code>Media Play/Pause</code></td><td>Same action as <code>P</code>, where supported by the browser</td></tr>
+          <tr><td>Playground</td><td><code>P</code></td><td>Play/Pause Playground Drone</td></tr>
+          <tr><td>Morph</td><td><code>S</code></td><td>Play/Pause Drone START</td></tr>
+          <tr><td>Morph</td><td><code>E</code></td><td>Play/Pause Drone END</td></tr>
+          <tr><td>Morph</td><td><code>F</code></td><td>Play/Pause Play Forward Morph</td></tr>
+          <tr><td>Morph</td><td><code>R</code></td><td>Toggle Play Reverse</td></tr>
+          <tr><td>Morph</td><td><code>P</code></td><td>Play/Pause the most recently used Morph sound</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic; note/octave controls and MIDI note input set the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
+      <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, headroom, Different START/END Wavetable Types, Different START/END FM Pitch Range, Cycle-stepped transition, and the last open tab.</p>
+      <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
+      <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. Some older or redundant internal modes remain loadable for JSON compatibility but are hidden from the normal dropdown and randomisation pool, so old patches can still render while the main UI stays cleaner.</p>
+      <p class="note">Visualisation note: FM/PWM/Ring Mod views and the spectrum analyser show a post-filter preview. Base table shows the generated table before oscillator modulation and filtering. Animated stable mode uses a higher-resolution preview so block/interleave patterns are less likely to be skipped visually. Ring Mod is implemented as an Ring Mod stage, so higher Ring Mod values crossfade from the clean carrier into a multi-ratio self-ring modulator, adding sidebands, clang, and phase-related grit instead of ordinary level tremolo. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
+      <p class="note">Export notes: WAV files are generated in browser memory before download. Very long renders can stress RRing Mod and browser Blob/download limits. ZIP exports drop their temporary references after the download is triggered, but the browser decides when memory is actually reclaimed.</p>
       <h3>License and provenance</h3>
       <p class="note"><strong>License:</strong> This browser implementation is released as free software under the GNU General Public License version 2 only (<code>GPL-2.0-only</code>). It comes with no warranty. If this file is redistributed as part of a repository or release package, include the GPL v2 license text in a <code>COPYING</code> file.</p>
       <p class="note"><strong>Provenance:</strong> This browser implementation is inspired by Carl Hudson’s Fractal Wavetable Generator concept. Carl Hudson’s original C implementation is separately copyrighted and is not relicensed here.</p>
       <p class="note"><strong>Phase distortion provenance:</strong> The Phase Distortion Smooth and Phase Distortion Crunchy engines are clean-room DSP experiments based on general non-linear phase remapping and ordinary waveform lookup. They do not include Casio CZ ROM waveforms, proprietary source code, or a claim of CZ compatibility.</p>
       <p class="note"><strong>Outputs:</strong> Audio, WAV, and JSON files generated by this tool are user-created sound-design outputs. Any output from this tool is yours to use however you want. The program’s GPL notice applies to the program itself; it does not, by itself, impose GPL licensing on generated outputs.</p>
-      <h3>Usage Notes</h3>
-      <p class="note">Pressing ESC stops audio and cancels active rendering. Leaving a tab also mutes the current audition.</p>
-      <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic; note/octave controls and MIDI note input set the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
-      <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, and headroom.</p>
-      <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
-      <p class="note">Generator selection is split into a Family dropdown and adjacent Smooth/Crunchy variant check-boxes. The two variant boxes act as a pair: choosing one clears the other. Internally, patches still save the full engine name, such as <code>Pulse Warp Crunchy</code>, so JSON remains explicit while the UI stays compact.</p>
-      <p class="note">The generator engines are clean-room DSP experiments built from ordinary waveforms, FM-style phase modulation, Pulse Warp duty-cycle shaping, sync-style resets, formant-inspired harmonic peaks, folding, bitcrushing, additive harmonic clusters, modal spacing, feedback sine bending, non-linear phase-distortion remapping, phase warping, smoothing, saturation, bitwise/quantised collision, comb-style phase-offset interference, and spectral table reconstruction. Wavetable Type is the collision/combine stage.</p>
-      <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. In v2.2 the dropdown is grouped by musical function, so visible UI order may differ from internal IDs. This lets the menu be made more readable without redefining old internal mode IDs.</p>
-      <p class="note">Phase Distortion engines use Primary Phase for phase-distortion depth and phase offset, Shape 1 for the breakpoint/knee, and Shape 2 for source-wave flavour plus a second warped source. Smooth rounds the phase knees; Crunchy adds stronger bends, folding, and edge motion than Smooth, but v14.07 reduces the jumpiest Shape 1/Shape 2 threshold noise so the range is wider and more controllable.</p>
-      <p class="note">The three main generator knobs keep their internal names in code and JSON as <code>pot1</code>, <code>pot2</code>, and <code>pot3</code>, but the UI relabels them by generator family and rebuilds those labels immediately when Generator Family changes. For example, FM shows Index, Ratio, and Carrier Colour; Sync shows Sync Intensity, Source A Shape, and Source B Shape; Formant shows Formant Spacing, Vowel Position, and Bandwidth / Grit. In the Sync family, Source A and Source B use bounded bidirectional cross-coupling: each source can shape the other without using unstable recursive feedback. Smooth variants are more rounded and root-stable; Crunchy variants push harder phase warp, folding, quantisation, reset edges, feedback, or digital grit.</p>
-      <p class="note">Visualisation note: FM/PWM/AM views and the spectrum analyser show a post-filter preview. Base table shows the generated table before oscillator modulation and filtering. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
-      <p class="note">Morph render mode changes the transition character. Full Interpolation favours digital noise. Crossfade favours analogue warmth but can phase or beat. Wavetable modes blend oscillator tables before playback. Comb Wavetable Morph adds cyclic feed-forward phase-offset interference to create hollow, flangey, metallic, or vocal-ish motion without using recursive feedback. FFT modes rebuild tables from harmonic data; more anchors use more CPU and add more internal motion.</p>
-      <p class="note">Export notes: WAV files are generated in browser memory before download. Very long renders can stress RAM and browser Blob/download limits. ZIP exports drop their temporary references after the download is triggered, but the browser decides when memory is actually reclaimed.</p>
-      <p class="note">Project repository: <a href="https://github.com/atom-smasher/Fractured-Wavetable-Generator/blob/master/README.md" target="_blank" rel="noopener noreferrer">https://github.com/atom-smasher/Fractured-Wavetable-Generator/blob/master/README.md</a></p>
+      <p class="note">Project repository: <a href="https://github.com/atom-smasher/Fractured-Wavetable-Generator/" target="_blank" rel="noopener noreferrer">https://github.com/atom-smasher/Fractured-Wavetable-Generator/</a></p>
     </div>
   </section>
 </main>
@@ -290,7 +303,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.2';
+  const APP_VERSION = 'v2.3l';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -311,64 +324,131 @@ itself, impose GPL licensing on generated outputs.
   const MORPH_MAX_TABLE_FRAMES = 4096;
   const MORPH_TABLE_CACHE_LIMIT = 512;
   const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-  const VISUAL_MODES = ['Off', 'Base table', 'Phase-locked FM/PWM/AM', 'Animated stable FM/PWM/AM', 'Time-domain FM/PWM/AM', 'Spectrum analyser'];
+  const VISUAL_MODES = ['Off', 'Base table', 'Phase-locked FM/PWM/Ring Mod', 'Animated stable FM/PWM/Ring Mod', 'Time-domain FM/PWM/Ring Mod', 'Spectrum analyser'];
   const GLOBAL_SETTINGS_COOKIE = 'fractal_wavetable_global_settings_v1';
   const GLOBAL_SETTINGS_LOCALSTORAGE = 'fractal_wavetable_global_settings_v1';
   const GLOBAL_SETTINGS_MAX_AGE_DAYS = 365;
 
   // TUTORIAL: Wavetable mode metadata. Each mode now has an explicit internal id and
   // TUTORIAL: an explicit UI number. The internal id is what patches and JSON store; the UI
-  // TUTORIAL: number is only presentation. In v2.2 the visible list is grouped by musical function,
+  // TUTORIAL: number is only presentation. In v2.1 the visible list is grouped by musical function,
   // TUTORIAL: so UI numbers no longer have to match internal ids. That decoupling lets future versions reorder or regroup the menu without silently
   // TUTORIAL: changing what an existing JSON wavetableType id means.
   const WT_MODE_INFO = [
     {id: 0, ui: 0, group: 'Sources / Splices', name: 'Source A', description: 'First generated source wave before combine/collision shaping'},
     {id: 1, ui: 1, group: 'Sources / Splices', name: 'Source B', description: 'Second generated source wave before combine/collision shaping'},
+
+    // TUTORIAL: Splice modes are repeated A/B block selectors inside one 256-sample table.
+    // TUTORIAL: A plain A→B Splice is one A block followed by one B block. Splice ×2 repeats
+    // TUTORIAL: that A/B pair twice per cycle; Splice ×16 repeats it sixteen times per cycle.
+    // TUTORIAL: The temporary v2.3b "Interleave 8" name is now presented as A→B Splice ×16,
+    // TUTORIAL: because it uses eight-sample A/B blocks, which creates sixteen A/B block pairs per cycle.
     {id: 3, ui: 2, group: 'Sources / Splices', name: 'A→B Splice', description: 'First half Source A, second half Source B'},
     {id: 2, ui: 3, group: 'Sources / Splices', name: 'B→A Splice', description: 'First half Source B, second half Source A'},
-    {id: 18, ui: 4, group: 'Sources / Splices', name: 'Interleave', description: 'Alternates samples from Source A and Source B'},
-    {id: 20, ui: 5, group: 'Blend / Difference', name: 'Average', description: 'Balanced average of the two sources'},
-    {id: 4, ui: 6, group: 'Blend / Difference', name: 'Sum', description: 'Normalised Source A and Source B added together'},
-    {id: 5, ui: 7, group: 'Blend / Difference', name: 'Difference', description: 'Source A minus Source B'},
-    {id: 14, ui: 8, group: 'Blend / Difference', name: 'Abs Difference', description: 'Rectified source difference; buzzy and octave-like'},
-    {id: 24, ui: 9, group: 'Blend / Difference', name: 'Smooth Average', description: 'Low-pass smoothed source average'},
-    {id: 25, ui: 10, group: 'Blend / Difference', name: 'Smooth Difference', description: 'Rounded version of the difference mode'},
-    {id: 21, ui: 11, group: 'Blend / Difference', name: 'Mostly A', description: 'Weighted blend biased toward Source A'},
-    {id: 22, ui: 12, group: 'Blend / Difference', name: 'Mostly B', description: 'Weighted blend biased toward Source B'},
-    {id: 23, ui: 13, group: 'Blend / Difference', name: 'Primary Phase Crossfade', description: 'Primary Phase crossfades between Source A and Source B'},
-    {id: 12, ui: 14, group: 'Compare / Edges', name: 'Min', description: 'Takes the lower of the two sources at each sample'},
-    {id: 13, ui: 15, group: 'Compare / Edges', name: 'Max', description: 'Takes the higher of the two sources at each sample'},
-    {id: 17, ui: 16, group: 'Compare / Edges', name: 'Comparator', description: 'Hard ±1 output depending on whether Source A exceeds Source B'},
-    {id: 19, ui: 17, group: 'Compare / Edges', name: 'Edge', description: 'Derivative-style mode that emphasises moving edges'},
-    {id: 6, ui: 18, group: 'Multiply / Divide / Polarity', name: 'Multiply', description: 'Sources multiplied sample-by-sample'},
-    {id: 7, ui: 19, group: 'Multiply / Divide / Polarity', name: 'A Divided by B', description: 'Source A is reshaped by Source B level; quiet B areas push A harder, with protection from runaway peaks'},
-    {id: 43, ui: 20, group: 'Multiply / Divide / Polarity', name: 'B Divided by A', description: 'Source B is reshaped by Source A level; quiet A areas push B harder, with protection from runaway peaks'},
-    {id: 38, ui: 21, group: 'Multiply / Divide / Polarity', name: 'A-Gated B', description: 'Gate = Source A; audio = Source B. B passes while A is positive, otherwise silence'},
-    {id: 44, ui: 22, group: 'Multiply / Divide / Polarity', name: 'B-Gated A', description: 'Gate = Source B; audio = Source A. A passes while B is positive, otherwise silence'},
-    {id: 39, ui: 23, group: 'Multiply / Divide / Polarity', name: 'A Flips B Polarity', description: 'Source A controls Source B polarity: positive A passes B normally, negative A inverts B'},
-    {id: 45, ui: 24, group: 'Multiply / Divide / Polarity', name: 'B Flips A Polarity', description: 'Source B controls Source A polarity: positive B passes A normally, negative B inverts A'},
-    {id: 8, ui: 25, group: 'Quantised Logic', name: 'Quantised OR', description: 'Source collision after an 8-bit quantise stage, using bitwise OR'},
-    {id: 10, ui: 26, group: 'Quantised Logic', name: 'Quantised AND', description: 'Source collision after an 8-bit quantise stage, using bitwise AND'},
-    {id: 9, ui: 27, group: 'Quantised Logic', name: 'Quantised XOR', description: 'Source collision after an 8-bit quantise stage, using bitwise XOR'},
-    {id: 11, ui: 28, group: 'Quantised Logic', name: 'Quantised XNOR', description: 'Inverted quantised XOR; wide plateaus and hard flips'},
-    {id: 15, ui: 29, group: 'Folding / Shaping', name: 'Fold Sum', description: 'Wavefolded sum for rich synth-like harmonics'},
-    {id: 16, ui: 30, group: 'Folding / Shaping', name: 'Fold Difference', description: 'Wavefolded difference for metallic hollow harmonics'},
-    {id: 28, ui: 31, group: 'Folding / Shaping', name: 'Triangle Fold', description: 'Gentle triangular folding with rounded edges'},
-    {id: 26, ui: 32, group: 'Folding / Shaping', name: 'Sine Shaper', description: 'Trigonometric rounding of the blended source'},
-    {id: 27, ui: 33, group: 'Folding / Shaping', name: 'Warm Saturation', description: 'Mild tanh saturation for warmer compression'},
-    {id: 40, ui: 34, group: 'Folding / Shaping', name: 'Soft Clip Sum', description: 'Heavier tanh clipping of the source sum'},
-    {id: 41, ui: 35, group: 'Folding / Shaping', name: 'Hard Clip Sum', description: 'Flat-topped clipped source sum with strong harmonics'},
-    {id: 29, ui: 36, group: 'Folding / Shaping', name: 'Root Shape', description: 'Lifts quiet detail while rounding the extremes'},
-    {id: 30, ui: 37, group: 'Folding / Shaping', name: 'Power Shape', description: 'Darker shaping that suppresses mid-level detail'},
-    {id: 34, ui: 38, group: 'Symmetry / Harmonics', name: 'Odd Soft', description: 'Smoothed odd-symmetric projection; rounded odd-harmonic emphasis'},
-    {id: 35, ui: 39, group: 'Symmetry / Harmonics', name: 'Even Soft', description: 'Smoothed even-symmetric projection; rounded hollow/formant emphasis'},
-    {id: 36, ui: 40, group: 'Symmetry / Harmonics', name: 'Odd Hard', description: 'Folded odd-edge mode with polarity gates and sharper odd-harmonic bite'},
-    {id: 37, ui: 41, group: 'Symmetry / Harmonics', name: 'Even Hard', description: 'Rectified even-ridge mode with hard plateaus and stronger even-harmonic bite'},
-    {id: 31, ui: 42, group: 'Window / Blur / Interference', name: 'Zero-Cross Blend', description: 'Blends toward a sine-like curve near zero crossings'},
-    {id: 32, ui: 43, group: 'Window / Blur / Interference', name: 'Hann Windowed', description: 'Raised-cosine cycle window that softens boundary bite'},
-    {id: 33, ui: 44, group: 'Window / Blur / Interference', name: 'Phase Blur', description: 'Chorus-like internal smoothing inside one cycle'},
-    {id: 42, ui: 45, group: 'Window / Blur / Interference', name: 'Cyclic Comb', description: 'Feed-forward phase-offset interference between the two sources; hollow, flangey, and metallic'},
+    {id: 51, ui: 4, group: 'Sources / Splices', name: 'A→B Splice ×2', description: 'Two repeated A-then-B source blocks per cycle'},
+    {id: 52, ui: 5, group: 'Sources / Splices', name: 'B→A Splice ×2', description: 'Two repeated B-then-A source blocks per cycle'},
+    {id: 53, ui: 6, group: 'Sources / Splices', name: 'A→B Splice ×4', description: 'Four repeated A-then-B source blocks per cycle'},
+    {id: 54, ui: 7, group: 'Sources / Splices', name: 'B→A Splice ×4', description: 'Four repeated B-then-A source blocks per cycle'},
+    {id: 55, ui: 8, group: 'Sources / Splices', name: 'A→B Splice ×8', description: 'Eight repeated A-then-B source blocks per cycle'},
+    {id: 56, ui: 9, group: 'Sources / Splices', name: 'B→A Splice ×8', description: 'Eight repeated B-then-A source blocks per cycle'},
+    {id: 50, ui: 10, group: 'Sources / Splices', name: 'A→B Splice ×16', description: 'Sixteen repeated A-then-B source blocks per cycle; renamed from v2.3b Interleave 8'},
+    {id: 57, ui: 11, group: 'Sources / Splices', name: 'B→A Splice ×16', description: 'Sixteen repeated B-then-A source blocks per cycle'},
+
+    // TUTORIAL: The original single-sample Interleave remains loadable as legacy id 18,
+    // TUTORIAL: but it is hidden because alternating every table sample creates Nyquist-ish
+    // TUTORIAL: edge energy and can be misleading in lower-resolution animated previews.
+    {id: 18, ui: 98, group: 'Legacy / Hidden', name: 'Interleave 1', description: 'Legacy: alternates every single sample from Source A and Source B; hidden because it is extremely high-frequency-heavy', visible: false},
+
+    // TUTORIAL: Average remains a valid legacy internal mode, but it is hidden from
+    // TUTORIAL: the normal UI because final DC removal and peak normalisation make it
+    // TUTORIAL: mathematically redundant with Sum for ordinary exported/auditioned tables.
+    {id: 20, ui: 99, group: 'Legacy / Hidden', name: 'Average', description: 'Legacy: balanced average of the two sources; hidden because it normalises like Sum', visible: false},
+
+    {id: 4, ui: 12, group: 'Blend / Difference', name: 'Sum', description: 'Source A and Source B added together'},
+    {id: 5, ui: 13, group: 'Blend / Difference', name: 'Difference', description: 'Source A minus Source B'},
+    {id: 14, ui: 14, group: 'Blend / Difference', name: 'Abs Difference', description: 'Rectified source difference; buzzy and octave-like'},
+    {id: 24, ui: 15, group: 'Blend / Difference', name: 'Smooth Average', description: 'Heavily smoothed source average; rounded and mellow compared with Sum'},
+    {id: 25, ui: 16, group: 'Blend / Difference', name: 'Smooth Difference', description: 'Low-harmonic subtractive blend; much smoother and hollower than Difference'},
+    {id: 21, ui: 17, group: 'Blend / Difference', name: 'Mostly A', description: 'Weighted blend biased toward Source A'},
+    {id: 22, ui: 18, group: 'Blend / Difference', name: 'Mostly B', description: 'Weighted blend biased toward Source B'},
+
+    // TUTORIAL: Primary Phase Crossfade is kept as a legacy id, but it is hidden from
+    // TUTORIAL: the normal UI because pot1 is already engine-specific. The blend amount
+    // TUTORIAL: was therefore musically ambiguous and often collapsed to Source A or Source B.
+    {id: 23, ui: 97, group: 'Legacy / Hidden', name: 'Primary A/B Blend', description: 'Legacy: Primary knob crossfades between Source A and Source B; hidden because the control role is ambiguous', visible: false},
+
+    {id: 46, ui: 19, group: 'Dynamic A/B Interaction', name: 'A Level Opens B', description: 'Source B fades in as Source A gets louder; quiet A favours Source A'},
+    {id: 47, ui: 20, group: 'Dynamic A/B Interaction', name: 'B Level Opens A', description: 'Source A fades in as Source B gets louder; quiet B favours Source B'},
+    {id: 48, ui: 21, group: 'Dynamic A/B Interaction', name: 'A Polarity Opens B', description: 'Positive Source A favours Source B; negative Source A favours Source A'},
+    {id: 49, ui: 22, group: 'Dynamic A/B Interaction', name: 'B Polarity Opens A', description: 'Positive Source B favours Source A; negative Source B favours Source B'},
+
+    // TUTORIAL: Threshold selector modes are hard, fixed-threshold cousins of the smooth
+    // TUTORIAL: Level Opens modes. They use a fixed ±50% full-scale set-point so the mode
+    // TUTORIAL: remains predictable without adding another UI control. Old ids stay stable;
+    // TUTORIAL: these new ids start after the v2.3c splice/dynamic additions.
+    {id: 58, ui: 23, group: 'Dynamic A/B Interaction', name: 'A Threshold Selects A', description: 'If Source A is above ±50% full-scale, use A; otherwise use B'},
+    {id: 59, ui: 24, group: 'Dynamic A/B Interaction', name: 'A Threshold Selects B', description: 'If Source A is above ±50% full-scale, use B; otherwise use A'},
+    {id: 60, ui: 25, group: 'Dynamic A/B Interaction', name: 'B Threshold Selects B', description: 'If Source B is above ±50% full-scale, use B; otherwise use A'},
+    {id: 61, ui: 26, group: 'Dynamic A/B Interaction', name: 'B Threshold Selects A', description: 'If Source B is above ±50% full-scale, use A; otherwise use B'},
+
+    {id: 12, ui: 27, group: 'Compare / Edges', name: 'Min', description: 'Takes the lower of the two continuous sources at each sample'},
+    {id: 13, ui: 28, group: 'Compare / Edges', name: 'Max', description: 'Takes the higher of the two continuous sources at each sample'},
+    {id: 17, ui: 29, group: 'Compare / Edges', name: 'Comparator', description: 'Hard ±1 output depending on whether Source A exceeds Source B'},
+    {id: 19, ui: 30, group: 'Compare / Edges', name: 'Edge', description: 'Derivative-style mode that emphasises moving edges'},
+
+    {id: 6, ui: 31, group: 'Multiply / Divide / Polarity', name: 'Multiply', description: 'Sources multiplied sample-by-sample'},
+    {id: 7, ui: 32, group: 'Multiply / Divide / Polarity', name: 'A Divided by B', description: 'Source A is reshaped by Source B level; quiet B areas push A harder, with protection from runaway peaks'},
+    {id: 43, ui: 33, group: 'Multiply / Divide / Polarity', name: 'B Divided by A', description: 'Source B is reshaped by Source A level; quiet A areas push B harder, with protection from runaway peaks'},
+    {id: 38, ui: 34, group: 'Multiply / Divide / Polarity', name: 'A-Gated B', description: 'Gate = Source A; audio = Source B. B passes while A is positive, otherwise silence'},
+    {id: 44, ui: 35, group: 'Multiply / Divide / Polarity', name: 'B-Gated A', description: 'Gate = Source B; audio = Source A. A passes while B is positive, otherwise silence'},
+    {id: 39, ui: 36, group: 'Multiply / Divide / Polarity', name: 'A Flips B Polarity', description: 'Source A controls Source B polarity: positive A passes B normally, negative A inverts B'},
+    {id: 45, ui: 37, group: 'Multiply / Divide / Polarity', name: 'B Flips A Polarity', description: 'Source B controls Source A polarity: positive B passes A normally, negative B inverts A'},
+
+    {id: 8, ui: 38, group: 'Low-Bit Logic', name: 'Low-Bit OR', description: 'Very coarse digital source collision using bitwise OR'},
+    {id: 10, ui: 39, group: 'Low-Bit Logic', name: 'Low-Bit AND', description: 'Very coarse digital source collision using bitwise AND'},
+    {id: 9, ui: 40, group: 'Low-Bit Logic', name: 'Low-Bit XOR', description: 'Very coarse digital source collision using bitwise XOR'},
+
+    // TUTORIAL: XNOR remains loadable as legacy id 11, but is hidden because in this
+    // TUTORIAL: bipolar table path it is essentially the polarity complement of Low-Bit XOR.
+    // TUTORIAL: That can matter in phase-sensitive modulation/morphing, but it does not earn
+    // TUTORIAL: normal dropdown space as a distinct static wavetable type.
+    {id: 11, ui: 96, group: 'Legacy / Hidden', name: 'Low-Bit XNOR', description: 'Legacy: inverted low-bit XOR; hidden because it is mostly a polarity complement of Low-Bit XOR', visible: false},
+
+    {id: 15, ui: 41, group: 'Folding / Shaping', name: 'Fold Sum', description: 'Wavefolded sum for rich synth-like harmonics'},
+    {id: 16, ui: 42, group: 'Folding / Shaping', name: 'Fold Difference', description: 'Wavefolded difference for metallic hollow harmonics'},
+
+    // TUTORIAL: Triangle Fold remains loadable for older patches, but is hidden because
+    // TUTORIAL: its v2.2 tone was too close to Fold Sum after final normalisation.
+    {id: 28, ui: 95, group: 'Legacy / Hidden', name: 'Triangle Fold', description: 'Legacy: gentle triangular folding; hidden because it overlaps strongly with Fold Sum', visible: false},
+
+    {id: 26, ui: 43, group: 'Folding / Shaping', name: 'Sine Shaper', description: 'Clean trigonometric rounding of the blended source'},
+
+    // TUTORIAL: Warm Saturation remains loadable for old JSON, but is hidden because
+    // TUTORIAL: its audible result overlapped with Sine Shaper/Root/Power shaping once
+    // TUTORIAL: final normalisation removed its level difference.
+    {id: 27, ui: 94, group: 'Legacy / Hidden', name: 'Warm Saturation', description: 'Legacy: mild tanh saturation; hidden because it overlaps with other shapers after normalisation', visible: false},
+
+    {id: 40, ui: 44, group: 'Folding / Shaping', name: 'Soft Clip Sum', description: 'Soft-knee rounded compression of the source sum; gentler and less linear than Sum'},
+    {id: 41, ui: 45, group: 'Folding / Shaping', name: 'Hard Clip Sum', description: 'Flat-topped clipped source sum with strong harmonics'},
+    {id: 29, ui: 46, group: 'Folding / Shaping', name: 'Root Shape', description: 'Expands quiet/mid detail and brings low-level motion forward'},
+    {id: 30, ui: 47, group: 'Folding / Shaping', name: 'Power Shape', description: 'Suppresses quiet/mid detail, leaving stronger peaks and gaps'},
+
+    {id: 34, ui: 48, group: 'Symmetry / Harmonics', name: 'Odd Soft', description: 'Smoothed odd-symmetric projection; rounded odd-harmonic emphasis'},
+    {id: 35, ui: 49, group: 'Symmetry / Harmonics', name: 'Even Soft', description: 'Smoothed even-symmetric projection; rounded hollow/formant emphasis'},
+    {id: 36, ui: 50, group: 'Symmetry / Harmonics', name: 'Odd Hard', description: 'Folded odd-edge mode with polarity gates and sharper odd-harmonic bite'},
+    {id: 37, ui: 51, group: 'Symmetry / Harmonics', name: 'Even Hard', description: 'Rectified even-ridge mode with hard plateaus and stronger even-harmonic bite'},
+
+    {id: 31, ui: 52, group: 'Window / Interference', name: 'Zero-Cross Blend', description: 'Blends toward a sine-like curve near zero crossings'},
+    {id: 32, ui: 53, group: 'Window / Interference', name: 'Hann Windowed', description: 'Raised-cosine cycle window that softens boundary bite'},
+
+    // TUTORIAL: Phase Blur remains in the DSP switch for older patches, but is hidden
+    // TUTORIAL: from the normal UI because its role overlapped with the stronger and more
+    // TUTORIAL: musically obvious Cyclic Comb / smoothing modes.
+    {id: 33, ui: 93, group: 'Legacy / Hidden', name: 'Phase Blur', description: 'Legacy: chorus-like internal smoothing inside one cycle; hidden because it overlaps with other smoothing/interference modes', visible: false},
+
+    {id: 42, ui: 54, group: 'Window / Interference', name: 'Cyclic Comb', description: 'Feed-forward phase-offset interference between the two sources; hollow, flangey, and metallic'},
   ];
+  const WT_VISIBLE_MODE_INFO = WT_MODE_INFO.filter(mode => mode.visible !== false);
   const WT_MODE_BY_ID = new Map(WT_MODE_INFO.map(mode => [mode.id, mode]));
   const WAVETABLE_TYPE_MIN = Math.min(...WT_MODE_INFO.map(mode => mode.id));
   const WAVETABLE_TYPE_MAX = Math.max(...WT_MODE_INFO.map(mode => mode.id));
@@ -430,7 +510,7 @@ itself, impose GPL licensing on generated outputs.
         Smooth: 'Phase-modulated source engine using continuous ratios and rounded carrier-colour changes.',
         Crunchy: 'Phase-modulated source engine with more awkward ratios, feedback-like phase push, folding, and edge bite.',
       },
-      note: 'Primary Phase sets FM index/depth; Shape 1 moves the modulator ratio; Shape 2 changes carrier flavour and secondary feedback. This bakes FM-style spectra into the generated table before oscillator FM/PWM/AM playback.',
+      note: 'Primary Phase sets FM index/depth; Shape 1 moves the modulator ratio; Shape 2 changes carrier flavour and secondary feedback. This bakes FM-style spectra into the generated table before oscillator FM/PWM/Ring Mod playback.',
     },
     {
       family: 'Pulse Warp',
@@ -575,6 +655,9 @@ itself, impose GPL licensing on generated outputs.
       start: defaultPatch(),
       end: defaultPatch(),
     },
+    ui: {
+      lastOpenTab: 'playground',
+    },
     common: {
       frequency: DEFAULT_FREQUENCY,
       volume: 0.20,
@@ -604,6 +687,8 @@ itself, impose GPL licensing on generated outputs.
     cancelToken: 0,
   };
 
+  let mediaSessionHandlersInstalled = false;
+
   // TUTORIAL: Small browser helpers. These keep the rest of the code readable: `$()` finds
   // TUTORIAL: elements by id, nextFrame() yields back to the browser so progress bars can repaint,
   // TUTORIAL: and the cancellable-work token lets ESC/Stop interrupt long renders safely.
@@ -625,7 +710,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Creates a complete patch object with safe defaults. New random patches and resets start from
   // TUTORIAL: this shape so later code can assume every field exists.
   function defaultPatch() {
-    return { engine: DEFAULT_ENGINE, pot1: 0, pot2: 2048, pot3: 0, wavetableType: 0, fm: 0, pwm: 0, am: 0, filterType: 'Off', filterCutoff: 8000, filterResonance: 0, beforeStart: 0, beforeEnd: 4096, afterStart: 0, afterEnd: 4096, fmRangeLabel: DEFAULT_FM_RANGE_LABEL };
+    return { engine: DEFAULT_ENGINE, pot1: 0, pot2: 2048, pot3: 0, wavetableType: 3, fm: 0, pwm: 0, am: 0, filterType: 'Off', filterCutoff: 8000, filterResonance: 0, beforeStart: 0, beforeEnd: 4096, afterStart: 0, afterEnd: 4096, fmRangeLabel: DEFAULT_FM_RANGE_LABEL };
   }
 
   // TUTORIAL: Sanitises numeric input from sliders, number boxes, JSON-like state, and DSP calculations before
@@ -706,6 +791,10 @@ itself, impose GPL licensing on generated outputs.
       headroomDb: clampFloat(state.export.headroomDb, -60, 0),
       visualMode: canonicalVisualMode(state.visualMode),
       animationFps: clampInt(state.visualFps || 12, 1, 60),
+      differentTypes: !!state.export.differentTypes,
+      differentFmRanges: !!state.export.differentFmRanges,
+      cycleStepped: !!state.export.cycleStepped,
+      lastOpenTab: String(state.ui?.lastOpenTab || activeTabId()),
     };
   }
 
@@ -738,6 +827,10 @@ itself, impose GPL licensing on generated outputs.
     if (isFiniteNumber(saved.headroomDb)) state.export.headroomDb = clampFloat(saved.headroomDb, -60, 0);
     state.visualMode = canonicalVisualMode(saved.visualMode || saved.singleVisualMode || saved.morphVisualMode || state.visualMode);
     if (isFiniteNumber(saved.animationFps)) state.visualFps = clampInt(saved.animationFps, 1, 60);
+    if (typeof saved.differentTypes === 'boolean') state.export.differentTypes = saved.differentTypes;
+    if (typeof saved.differentFmRanges === 'boolean') state.export.differentFmRanges = saved.differentFmRanges;
+    if (typeof saved.cycleStepped === 'boolean') state.export.cycleStepped = saved.cycleStepped;
+    if (['playground', 'morph', 'bulk', 'notes'].includes(String(saved.lastOpenTab))) state.ui.lastOpenTab = String(saved.lastOpenTab);
     state.common.midiStatus = state.common.midiChannel === 'off' ? 'MIDI input off' : `MIDI channel restored: ${state.common.midiChannel === 'omni' ? 'OMNI' : 'ch ' + state.common.midiChannel}`;
   }
 
@@ -912,10 +1005,16 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
-  // TUTORIAL: Converts -1..+1 floating tables into 8-bit unsigned values for bitwise collision modes.
-  function bipolarToU8(arr) {
+  // TUTORIAL: Converts -1..+1 floating tables into deliberately coarse unsigned values for bitwise collision modes.
+  // TUTORIAL: v2.3d keeps the very low-bit quantise stage here so OR/AND/XOR/XNOR sound obviously digital,
+  // TUTORIAL: rather than collapsing toward continuous Min/Max-style comparisons after final normalisation.
+  function bipolarToU8(arr, bits = 4) {
+    const levels = (1 << clampInt(bits, 1, 8)) - 1;
     const out = new Uint8Array(arr.length);
-    for (let i = 0; i < arr.length; i++) out[i] = clampInt((clampFloat(arr[i], -1, 1) + 1) * 127.5, 0, 255);
+    for (let i = 0; i < arr.length; i++) {
+      const q = clampInt((clampFloat(arr[i], -1, 1) + 1) * 0.5 * levels, 0, levels);
+      out[i] = clampInt((q / levels) * 255, 0, 255);
+    }
     return out;
   }
 
@@ -926,10 +1025,10 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
-  // TUTORIAL: Runs OR/XOR/AND/XNOR-style collisions on quantised tables, then returns a bipolar floating
+  // TUTORIAL: Runs OR/XOR/AND/XNOR-style collisions on harsh low-bit tables, then returns a bipolar floating
   // TUTORIAL: result.
   function bitwiseBipolar(a, b, op) {
-    const au = bipolarToU8(a), bu = bipolarToU8(b), out = new Uint8Array(a.length);
+    const au = bipolarToU8(a, 3), bu = bipolarToU8(b, 3), out = new Uint8Array(a.length);
     for (let i = 0; i < a.length; i++) {
       if (op === 'or') out[i] = au[i] | bu[i];
       else if (op === 'xor') out[i] = au[i] ^ bu[i];
@@ -996,6 +1095,32 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Builds a Hann window used by soft/table-shaping modes.
   function hanning(n) { const out = new Float64Array(n); for (let i = 0; i < n; i++) out[i] = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1)); return out; }
+
+  // TUTORIAL: Rebuilds a table using only the lowest harmonic bins. This is intentionally
+  // TUTORIAL: stronger than repeated neighbour smoothing: final peak normalisation can make
+  // TUTORIAL: light smoothing sound nearly unchanged, while low-harmonic reconstruction
+  // TUTORIAL: actually removes the high-order edge detail from the table shape. v2.3b uses
+  // TUTORIAL: this to make Smooth Average and Smooth Difference meaningfully different from their brighter counterparts.
+  function lowHarmonicTable(arr, harmonicLimit = 8) {
+    const src = normaliseBipolar(arr);
+    const out = new Float64Array(TABLE_SIZE);
+    const limit = clampInt(harmonicLimit, 1, (TABLE_SIZE >> 1) - 1);
+    const dc = meanOf(src);
+    for (let n = 0; n < TABLE_SIZE; n++) out[n] = dc;
+    for (let k = 1; k <= limit; k++) {
+      let re = 0, im = 0;
+      for (let n = 0; n < TABLE_SIZE; n++) {
+        const angle = 2 * Math.PI * k * n / TABLE_SIZE;
+        re += src[n] * Math.cos(angle);
+        im += src[n] * Math.sin(angle);
+      }
+      for (let n = 0; n < TABLE_SIZE; n++) {
+        const angle = 2 * Math.PI * k * n / TABLE_SIZE;
+        out[n] += (2 / TABLE_SIZE) * (re * Math.cos(angle) + im * Math.sin(angle));
+      }
+    }
+    return out;
+  }
 
 
   // TUTORIAL: Small deterministic pseudorandom generator used so a patch seed creates repeatable smooth-noise
@@ -1090,6 +1215,17 @@ itself, impose GPL licensing on generated outputs.
       for (let i = 0; i < TABLE_SIZE; i++) c[i] = (a[i] + b[i]) * 0.5;
       raw = new Float64Array(TABLE_SIZE);
       const win = hanning(TABLE_SIZE);
+      const repeatedSplice = (first, second, repeats) => {
+        // TUTORIAL: Repeated splice modes split one cycle into repeated A/B blocks.
+        // TUTORIAL: repeats=1 is the ordinary A→B or B→A half-cycle splice handled above;
+        // TUTORIAL: repeats=16 is the former v2.3b Interleave 8, because eight-sample
+        // TUTORIAL: blocks create sixteen A/B pairs across a 256-sample table.
+        const safeRepeats = clampInt(repeats, 1, TABLE_SIZE / 2);
+        const block = Math.max(1, Math.floor(TABLE_SIZE / (2 * safeRepeats)));
+        const out = new Float64Array(TABLE_SIZE);
+        for (let i = 0; i < TABLE_SIZE; i++) out[i] = (Math.floor(i / block) & 1) === 0 ? first[i] : second[i];
+        return out;
+      };
       switch (wtType) {
         case 4: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = a[i] + b[i]; break;
         case 5: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = a[i] - b[i]; break;
@@ -1106,18 +1242,47 @@ itself, impose GPL licensing on generated outputs.
         case 16: raw = foldBipolar(subArrays(a, b)); break;
         case 17: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = a[i] > b[i] ? 1 : -1; break;
         case 18: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = (i & 1) === 0 ? a[i] : b[i]; break;
+        case 50: raw = repeatedSplice(a, b, 16); break;
+        case 51: raw = repeatedSplice(a, b, 2); break;
+        case 52: raw = repeatedSplice(b, a, 2); break;
+        case 53: raw = repeatedSplice(a, b, 4); break;
+        case 54: raw = repeatedSplice(b, a, 4); break;
+        case 55: raw = repeatedSplice(a, b, 8); break;
+        case 56: raw = repeatedSplice(b, a, 8); break;
+        case 57: raw = repeatedSplice(b, a, 16); break;
         case 19: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = c[(i + 1) % TABLE_SIZE] - c[i]; break;
         case 20: raw = c; break;
         case 21: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = 0.75 * a[i] + 0.25 * b[i]; break;
         case 22: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = 0.25 * a[i] + 0.75 * b[i]; break;
         case 23: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = (1 - seedMix) * a[i] + seedMix * b[i]; break;
-        case 24: raw = circularSmoothTable(c, 3); break;
-        case 25: raw = circularSmoothTable(subArrays(a, b), 3); break;
-        case 26: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.sin(c[i] * (Math.PI / 2)); break;
+        case 24: {
+          // Smooth Average should be audibly mellower than Sum after final normalisation.
+          // Low-harmonic reconstruction removes upper edge detail before extra cyclic smoothing.
+          raw = circularSmoothTable(lowHarmonicTable(c, 5), 12);
+          break;
+        }
+        case 25: {
+          // Smooth Difference should be audibly distinct from Difference after final
+          // normalisation. Rebuilding only the lowest harmonics gives it a rounded,
+          // hollow subtractive identity instead of merely lowering the level of edges.
+          const diff = subArrays(a, b);
+          raw = circularSmoothTable(lowHarmonicTable(diff, 7), 8);
+          break;
+        }
+        case 26: for (let i = 0; i < TABLE_SIZE; i++) {
+          const x = clampFloat(1.25 * c[i], -1, 1);
+          raw[i] = Math.sin(x * (Math.PI / 2));
+        } break;
         case 27: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.tanh(1.8 * c[i]); break;
         case 28: { const fs = foldBipolar(scaleArray(addArrays(a, b), 0.85)); for (let i = 0; i < TABLE_SIZE; i++) raw[i] = 0.65 * fs[i] + 0.35 * c[i]; break; }
-        case 29: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.sign(c[i]) * Math.sqrt(clampFloat(Math.abs(c[i]), 0, 1)); break;
-        case 30: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.sign(c[i]) * (clampFloat(Math.abs(c[i]), 0, 1) ** 2); break;
+        case 29: for (let i = 0; i < TABLE_SIZE; i++) {
+          raw[i] = Math.sign(c[i]) * (clampFloat(Math.abs(c[i]), 0, 1) ** 0.38);
+        } break;
+        case 30: for (let i = 0; i < TABLE_SIZE; i++) {
+          const ax = clampFloat(Math.abs(c[i]), 0, 1);
+          const shaped = ax <= 0.08 ? 0 : ((ax - 0.08) / 0.92) ** 3.1;
+          raw[i] = Math.sign(c[i]) * shaped;
+        } break;
         case 31: for (let i = 0; i < TABLE_SIZE; i++) { const sine = Math.sin(2 * Math.PI * i / TABLE_SIZE); const zw = clampFloat(1 - Math.abs(c[i]) * 2, 0, 1); raw[i] = (1 - 0.45 * zw) * c[i] + (0.45 * zw) * sine; } break;
         case 32: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = c[i] * win[i]; break;
         case 33: raw = phaseBlurTable(c); break;
@@ -1169,12 +1334,36 @@ itself, impose GPL licensing on generated outputs.
         }
         case 38: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = a[i] > 0 ? b[i] : 0; break;
         case 39: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = (a[i] >= 0 ? 1 : -1) * b[i]; break;
-        case 40: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.tanh(3 * (a[i] + b[i])); break;
+        case 40: {
+          // Soft Clip Sum should not collapse back into Sum after peak normalisation.
+          // Use a soft-knee compressor curve with rounded peaks, rather than a mostly
+          // dry tanh blend, so the shape changes without becoming a hard clip.
+          for (let i = 0; i < TABLE_SIZE; i++) {
+            const x = 0.70 * (a[i] + b[i]);
+            const ax = Math.abs(x);
+            const knee = 0.30;
+            const curved = ax <= knee
+              ? x
+              : Math.sign(x) * (knee + (1 - knee) * (1 - Math.exp(-2.75 * (ax - knee))) / (1 - Math.exp(-2.75 * (1.40 - knee))));
+            const rounded = Math.sin((Math.PI / 2) * clampFloat(curved, -1, 1));
+            raw[i] = 0.16 * x + 0.84 * rounded;
+          }
+          raw = circularSmoothTable(raw, 5);
+          break;
+        }
         case 41: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = clampFloat(2.5 * (a[i] + b[i]), -1, 1); break;
         case 42: raw = cyclicCombTable(a, b, seedMix, 1.0); break;
         case 43: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = b[i] / Math.max(Math.abs(a[i]), 0.05); break;
         case 44: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = b[i] > 0 ? a[i] : 0; break;
         case 45: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = (b[i] >= 0 ? 1 : -1) * a[i]; break;
+        case 46: for (let i = 0; i < TABLE_SIZE; i++) { const mix = clampFloat(Math.abs(a[i]), 0, 1); raw[i] = (1 - mix) * a[i] + mix * b[i]; } break;
+        case 47: for (let i = 0; i < TABLE_SIZE; i++) { const mix = clampFloat(Math.abs(b[i]), 0, 1); raw[i] = (1 - mix) * b[i] + mix * a[i]; } break;
+        case 48: for (let i = 0; i < TABLE_SIZE; i++) { const mix = clampFloat(0.5 + 0.5 * a[i], 0, 1); raw[i] = (1 - mix) * a[i] + mix * b[i]; } break;
+        case 49: for (let i = 0; i < TABLE_SIZE; i++) { const mix = clampFloat(0.5 + 0.5 * b[i], 0, 1); raw[i] = (1 - mix) * b[i] + mix * a[i]; } break;
+        case 58: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.abs(a[i]) >= 0.5 ? a[i] : b[i]; break;
+        case 59: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.abs(a[i]) >= 0.5 ? b[i] : a[i]; break;
+        case 60: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.abs(b[i]) >= 0.5 ? b[i] : a[i]; break;
+        case 61: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.abs(b[i]) >= 0.5 ? a[i] : b[i]; break;
         default: raw = srcA;
       }
     }
@@ -1413,7 +1602,7 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: FM generator engine. This bakes phase-modulation spectra into the generated
-  // TUTORIAL: table itself, before the live/export oscillator applies its own FM/PWM/AM stage.
+  // TUTORIAL: table itself, before the live/export oscillator applies its own FM/PWM/Ring Mod stage.
   function generateFmPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
     const seedMix = pot1 / POT_MAX_12BIT, shapeA = pot2 / POT_MAX_12BIT, shapeB = pot3 / POT_MAX_12BIT;
@@ -2000,30 +2189,81 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
+  // TUTORIAL: Ring Mod stage. v2.3j drops the experimental Ring Mod Tone behaviour for now.
+  // TUTORIAL: The old internal field is still named `am` so older JSON and patch state remain
+  // TUTORIAL: compatible, but the user-facing control is Ring Mod. The modulator is derived
+  // TUTORIAL: from the same table at several integer phase ratios, so a single-cycle render
+  // TUTORIAL: remains loopable while the audible result is much less like ordinary volume AM.
+  function ringModStage(table, phase, amount, depthScale = 1) {
+    const depth = clampFloat((clampFloat(amount, 0, 255) / 255) * depthScale, 0, 1);
+    const ph = ((Number(phase) || 0) % 1 + 1) % 1;
+    const src = clampFloat(readTableLinear(table, ph), -1, 1);
+    if (depth <= EPSILON) return {depth: 0, modSignal: src, modulator: 1, src, edge: 0};
+
+    // Integer-ratio taps keep exported cycles loopable. The offsets prevent the modulator from
+    // simply shadowing the carrier, which was the main reason self-Ring Mod felt weak by itself.
+    const m2 = clampFloat(readTableLinear(table, ph * 2 + 0.2500), -1, 1);
+    const m3 = clampFloat(readTableLinear(table, ph * 3 + 0.1250), -1, 1);
+    const m5 = clampFloat(readTableLinear(table, ph * 5 + 0.0625), -1, 1);
+
+    const rawMod = Math.tanh((m2 * 0.78 + m3 * 0.58 + m5 * 0.36) * (1.10 + 1.35 * depth));
+    const signedEdge = Math.sign(rawMod || 1) * Math.pow(Math.abs(rawMod), 0.58 - 0.18 * depth);
+    const rectEdge = clampFloat(Math.abs(m3 - m5) * 1.35 - 0.45, -1, 1);
+    const modulator = clampFloat(
+      rawMod * (1 - 0.42 * depth)
+      + signedEdge * (0.58 * depth)
+      + rectEdge * (0.24 * depth),
+      -1,
+      1
+    );
+
+    // FM and PWM still need a bipolar modulation signal. Blend toward the ring modulator as
+    // Ring Mod rises so combined FM/PWM/Ring Mod patches become less static.
+    const modSignal = clampFloat(src * (1 - 0.45 * depth) + modulator * (0.45 * depth), -1, 1);
+    return {depth, modSignal, modulator, src, edge: rectEdge};
+  }
+
+  // TUTORIAL: Applies the audible ring-mod multiplication. The dry path is unchanged at zero.
+  // TUTORIAL: As the control rises, the carrier is multiplied by the multi-ratio modulator,
+  // TUTORIAL: then lightly folded/saturated so the result does not collapse into quiet tremolo.
+  function applyRingMod(sample, stage) {
+    const s = clampFloat(sample, -1, 1);
+    if (!stage || stage.depth <= EPSILON) return s;
+    const depth = clampFloat(stage.depth, 0, 1);
+    const modulator = clampFloat(stage.modulator, -1, 1);
+    const edge = clampFloat(stage.edge || 0, -1, 1);
+
+    const ring = clampFloat(s * modulator, -1, 1);
+    const ringEdge = clampFloat(Math.abs(ring) * 2 - 1, -1, 1);
+    const folded = Math.sin(clampFloat(ring + s * (0.22 + 0.18 * depth) + edge * 0.18 * depth, -1.6, 1.6) * Math.PI * (0.58 + 1.04 * depth));
+    const driven = Math.tanh((ring * 2.35 + folded * 0.82 * depth + ringEdge * 0.48 * depth) * (1 + 0.72 * depth));
+    const wet = clampFloat(driven * (0.86 + 0.12 * depth) + folded * (0.18 * depth) + ringEdge * (0.10 * depth), -1, 1);
+
+    return clampFloat(s * (1 - depth) + wet * depth, -1, 1);
+  }
+
   // TUTORIAL: Builds a stable one-cycle visual/audio preview where FM changes phase shape without horizontal
   // TUTORIAL: drift.
   function renderPhaseLocked(table, fm, pwm, am, fmRangeCents, frames = 512, depthScale = 1) {
     if (!tableIsUsable(table)) table = fallbackTable();
     const out = new Float32Array(frames), rates = new Float64Array(frames), phaseMap = new Float64Array(frames);
     const pwmDepth = clampFloat(pwm, 0, 255) / 255 * 0.48 * depthScale;
-    const amDepth = clampFloat(am, 0, 255) / 255 * depthScale;
     let total = 0;
     for (let i = 0; i < frames; i++) {
-      const ph = i / frames, modSample = readTableLinear(table, ph);
-      const amGainForMod = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-      const modSignal = clampFloat(modSample * amGainForMod, -1, 1);
-      rates[i] = boundedFmPhaseScale(modSignal, fm, fmRangeCents, depthScale);
+      const ph = i / frames;
+      const ringStage = ringModStage(table, ph, am, depthScale);
+      rates[i] = boundedFmPhaseScale(ringStage.modSignal, fm, fmRangeCents, depthScale);
       total += rates[i];
     }
     let cumulative = 0;
     for (let i = 0; i < frames; i++) { phaseMap[i] = total > EPSILON ? (cumulative / total) % 1 : i / frames; cumulative += rates[i]; }
     for (let i = 0; i < frames; i++) {
-      const ph = phaseMap[i], modSample = readTableLinear(table, ph);
-      const amGain = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-      const modSignal = clampFloat(modSample * amGain, -1, 1);
+      const ph = phaseMap[i];
+      const ringStage = ringModStage(table, ph, am, depthScale);
+      const modSignal = ringStage.modSignal;
       const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
       const readPhase = ph < width ? (ph / width) * 0.5 : 0.5 + ((ph - width) / (1 - width)) * 0.5;
-      out[i] = clampFloat(readTableLinear(table, readPhase) * amGain, -1, 1);
+      out[i] = applyRingMod(readTableLinear(table, readPhase), ringStage);
     }
     return out;
   }
@@ -2034,15 +2274,13 @@ itself, impose GPL licensing on generated outputs.
     if (!tableIsUsable(table)) table = fallbackTable();
     const out = new Float32Array(frames);
     const pwmDepth = clampFloat(pwm, 0, 255) / 255 * 0.48;
-    const amDepth = clampFloat(am, 0, 255) / 255;
     let phase = 0, baseInc = 1 / frames;
     for (let i = 0; i < frames; i++) {
-      const modSample = readTableLinear(table, phase);
-      const amGain = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-      const modSignal = clampFloat(modSample * amGain, -1, 1);
+      const ringStage = ringModStage(table, phase, am);
+      const modSignal = ringStage.modSignal;
       const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
       const readPhase = phase < width ? (phase / width) * 0.5 : 0.5 + ((phase - width) / (1 - width)) * 0.5;
-      out[i] = clampFloat(readTableLinear(table, readPhase) * amGain, -1, 1);
+      out[i] = applyRingMod(readTableLinear(table, readPhase), ringStage);
       phase = (phase + baseInc * boundedFmPhaseScale(modSignal, fm, fmRangeCents)) % 1;
     }
     return out;
@@ -2145,17 +2383,15 @@ itself, impose GPL licensing on generated outputs.
       || String(a.fmRangeLabel || DEFAULT_FM_RANGE_LABEL) !== String(b.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
   }
 
-  // TUTORIAL: One-sample oscillator render. This is the inner DSP loop: read the table, apply AM,
+  // TUTORIAL: One-sample oscillator render. This is the inner DSP loop: read the table, apply Ring Mod,
   // TUTORIAL: warp phase width for PWM, apply bounded self-FM, then optionally filter the output.
   function renderFrameSample(frame, phase, baseInc, filterState, filterCoeffs) {
-    const modSample = readTableLinear(frame.table, phase.value);
-    const amDepth = clampFloat(frame.am, 0, 255) / 255;
-    const amGain = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-    const modSignal = clampFloat(modSample * amGain, -1, 1);
+    const ringStage = ringModStage(frame.table, phase.value, frame.am);
+    const modSignal = ringStage.modSignal;
     const pwmDepth = clampFloat(frame.pwm, 0, 255) / 255 * 0.48;
     const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
     const readPhase = phase.value < width ? (phase.value / width) * 0.5 : 0.5 + ((phase.value - width) / (1 - width)) * 0.5;
-    let sample = clampFloat(readTableLinear(frame.table, readPhase) * amGain, -1, 1);
+    let sample = applyRingMod(readTableLinear(frame.table, readPhase), ringStage);
     sample = clampFloat(processBiquadSample(sample, filterCoeffs, filterState), -1, 1);
     phase.value += Math.min(baseInc * boundedFmPhaseScale(modSignal, frame.fm, frame.fmRangeCents), 0.49);
     if (phase.value >= 1) phase.value -= Math.floor(phase.value);
@@ -2165,14 +2401,12 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Variant of the oscillator inner loop that omits filter/output cleanup for branch-combination
   // TUTORIAL: render modes.
   function renderFrameSampleDry(frame, phase, baseInc) {
-    const modSample = readTableLinear(frame.table, phase.value);
-    const amDepth = clampFloat(frame.am, 0, 255) / 255;
-    const amGain = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-    const modSignal = clampFloat(modSample * amGain, -1, 1);
+    const ringStage = ringModStage(frame.table, phase.value, frame.am);
+    const modSignal = ringStage.modSignal;
     const pwmDepth = clampFloat(frame.pwm, 0, 255) / 255 * 0.48;
     const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
     const readPhase = phase.value < width ? (phase.value / width) * 0.5 : 0.5 + ((phase.value - width) / (1 - width)) * 0.5;
-    const sample = clampFloat(readTableLinear(frame.table, readPhase) * amGain, -1, 1);
+    const sample = applyRingMod(readTableLinear(frame.table, readPhase), ringStage);
     phase.value += Math.min(baseInc * boundedFmPhaseScale(modSignal, frame.fm, frame.fmRangeCents), 0.49);
     if (phase.value >= 1) phase.value -= Math.floor(phase.value);
     return sample;
@@ -2401,14 +2635,12 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Renders one endpoint sample for crossfade paths that need complete START and END audio streams.
   function renderFixedEndpointSample(endpoint, phase, filterState, filterCoeffs) {
-    const modSample = readTableLinear(endpoint.table, phase.value);
-    const amDepth = clampFloat(endpoint.patch.am, 0, 255) / 255;
-    const amGain = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-    const modSignal = clampFloat(modSample * amGain, -1, 1);
+    const ringStage = ringModStage(endpoint.table, phase.value, endpoint.patch.am);
+    const modSignal = ringStage.modSignal;
     const pwmDepth = clampFloat(endpoint.patch.pwm, 0, 255) / 255 * 0.48;
     const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
     const readPhase = phase.value < width ? (phase.value / width) * 0.5 : 0.5 + ((phase.value - width) / (1 - width)) * 0.5;
-    let sample = clampFloat(readTableLinear(endpoint.table, readPhase) * amGain, -1, 1);
+    let sample = applyRingMod(readTableLinear(endpoint.table, readPhase), ringStage);
     sample = clampFloat(processBiquadSample(sample, filterCoeffs, filterState), -1, 1);
     phase.value += Math.min(endpoint.baseInc * boundedFmPhaseScale(modSignal, endpoint.patch.fm, endpoint.fmRangeCents), 0.49);
     if (phase.value >= 1) phase.value -= Math.floor(phase.value);
@@ -2855,14 +3087,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
         filterFrameIndex = idx;
         filterCoeffs = biquadCoeffs(fr.filterType, fr.filterCutoff, fr.filterResonance, sr);
       }
-      const modSample = readTableLinear(fr.table, phase);
-      const amDepth = clampFloat(fr.am, 0, 255) / 255;
-      const amGain = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-      const modSignal = clampFloat(modSample * amGain, -1, 1);
+      const ringStage = ringModStage(fr.table, phase, fr.am);
+      const modSignal = ringStage.modSignal;
       const pwmDepth = clampFloat(fr.pwm, 0, 255) / 255 * 0.48;
       const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
       const readPhase = phase < width ? (phase / width) * 0.5 : 0.5 + ((phase - width) / (1 - width)) * 0.5;
-      let sample = clampFloat(readTableLinear(fr.table, readPhase) * amGain, -1, 1);
+      let sample = applyRingMod(readTableLinear(fr.table, readPhase), ringStage);
       sample = clampFloat(processBiquadSample(sample, filterCoeffs, filterState), -1, 1);
       out[i] = sample;
       phase += Math.min(baseInc * boundedFmPhaseScale(modSignal, fr.fm, fr.fmRangeCents), 0.49);
@@ -2942,7 +3172,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       source_end: patchMetadata(endPatch),
       result_start: direction === 'reverse' ? patchMetadata(endPatch) : patchMetadata(startPatch),
       result_end: direction === 'reverse' ? patchMetadata(startPatch) : patchMetadata(endPatch),
-      export_writer: {mode: 'buffered-browser-blob', embedded_systems_note: 'Browser Blob export is simple but not memory-streaming; very long renders still stress RAM, CPU time, storage writes, filesystem limits, and RIFF/WAV size limits.'},
+      export_writer: {mode: 'buffered-browser-blob', embedded_systems_note: 'Browser Blob export is simple but not memory-streaming; very long renders still stress RRing Mod, CPU time, storage writes, filesystem limits, and RIFF/WAV size limits.'},
       notes,
     };
   }
@@ -2951,7 +3181,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const engineName = canonicalEngineName(p.engine || DEFAULT_ENGINE);
     const parts = enginePartsFor(engineName);
     const wt = wavetableInfoFor(p.wavetableType);
-    return {...p, engine: engineName, engine_family: parts.family, engine_variant: parts.variant, engine_info: visibleEngineInfoFor(engineName), wavetableType: wt.id, wavetable: {id: wt.id, number: wt.id, ui_number: wt.ui, name: wt.name, description: wt.description}, fm_range_cents: fmRangeLabelToCents(p.fmRangeLabel)};
+    return {...p, ring_mod: clampInt(p.am || 0, 0, 255), engine: engineName, engine_family: parts.family, engine_variant: parts.variant, engine_info: visibleEngineInfoFor(engineName), wavetableType: wt.id, wavetable: {id: wt.id, number: wt.id, ui_number: wt.ui, name: wt.name, description: wt.description}, fm_range_cents: fmRangeLabelToCents(p.fmRangeLabel)};
   }
 
   // TUTORIAL: Returns the actual patch used for START/END metadata after shared export overrides are applied.
@@ -3296,7 +3526,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Detects whether the current visual mode needs a continuing animation loop.
   function isAnimatedVisualMode(mode) {
-    return mode === 'Animated stable FM/PWM/AM';
+    return mode === 'Animated stable FM/PWM/Ring Mod';
   }
 
   // TUTORIAL: Creates a slow 0..1..0 modulation-depth sweep for stable animated previews.
@@ -3305,24 +3535,24 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Visualiser data preparation. This mirrors the audio/render path closely enough that
-  // TUTORIAL: the display reflects post-filter output for FM/PWM/AM modes while Base Table remains
+  // TUTORIAL: the display reflects post-filter output for FM/PWM/Ring Mod modes while Base Table remains
   // TUTORIAL: a pre-modulation table view.
   function visualDataForPatch(patch, mode) {
     if (mode === 'Off') return {kind: 'off', data: null, label: 'Visualiser Is Turned Off'};
     const table = tableForPatch(patch);
     const fmRange = fmRangeLabelToCents(patch.fmRangeLabel);
-    if (mode === 'Phase-locked FM/PWM/AM') {
+    if (mode === 'Phase-locked FM/PWM/Ring Mod') {
       const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'wave', data: wave, label: 'phase-locked FM/PWM/AM, post-filter'};
+      return {kind: 'wave', data: wave, label: 'phase-locked FM/PWM/Ring Mod, post-filter'};
     }
-    if (mode === 'Animated stable FM/PWM/AM') {
+    if (mode === 'Animated stable FM/PWM/Ring Mod') {
       const depth = animatedDepthScale();
-      const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange, 128, depth), patch);
-      return {kind: 'wave', data: wave, label: `animated stable FM/PWM/AM, post-filter depth ${depth.toFixed(2)}×`};
+      const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange, 512, depth), patch);
+      return {kind: 'wave', data: wave, label: `animated stable FM/PWM/Ring Mod, post-filter depth ${depth.toFixed(2)}×`};
     }
-    if (mode === 'Time-domain FM/PWM/AM') {
+    if (mode === 'Time-domain FM/PWM/Ring Mod') {
       const wave = applyVisualFilter(renderTimeDomain(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'wave', data: wave, label: 'time-domain FM/PWM/AM, post-filter'};
+      return {kind: 'wave', data: wave, label: 'time-domain FM/PWM/Ring Mod, post-filter'};
     }
     if (mode === 'Spectrum analyser') {
       const wave = applyVisualFilter(renderTimeDomain(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
@@ -3334,19 +3564,35 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Redraws all relevant canvases after patch, visual mode, or animation state changes.
   function updateVisuals(updateStatus = true) {
     const tab = activeTabId();
-    if (tab === 'playground') {
-      const visualMode = canonicalVisualMode(state.visualMode);
-      const v = visualDataForPatch(state.patches.single, visualMode);
-      drawVisual($('singleCanvas'), v);
-    } else if (tab === 'morph') {
-      const visualMode = canonicalVisualMode(state.visualMode);
-      let v = visualDataForPatch(effectivePatchForKey('start'), visualMode);
-      drawVisual($('startCanvas'), v, 'START ');
-      v = visualDataForPatch(effectivePatchForKey('end'), visualMode);
-      drawVisual($('endCanvas'), v, 'END ');
+    let visualError = null;
+
+    // Live audio must keep following the patch even if the visualiser hits a bug.
+    // v2.3k exposed this: a visualiser exception stopped the rest of the patch-change
+    // handler, so generator edits appeared to have no effect while the canvas was blank.
+    if (state.audio.playing && state.audio.mode === 'single') {
+      updateLiveAudioFromPatch(effectivePatchForKey(state.audio.livePatchKey));
     }
-    if (updateStatus) updateStatusSummaries();
-    if (state.audio.playing && state.audio.mode === 'single') updateLiveAudioFromPatch(effectivePatchForKey(state.audio.livePatchKey));
+
+    try {
+      if (tab === 'playground') {
+        const visualMode = canonicalVisualMode(state.visualMode);
+        const v = visualDataForPatch(state.patches.single, visualMode);
+        drawVisual($('singleCanvas'), v);
+      } else if (tab === 'morph') {
+        const visualMode = canonicalVisualMode(state.visualMode);
+        let v = visualDataForPatch(effectivePatchForKey('start'), visualMode);
+        drawVisual($('startCanvas'), v, 'START ');
+        v = visualDataForPatch(effectivePatchForKey('end'), visualMode);
+        drawVisual($('endCanvas'), v, 'END ');
+      }
+    } catch (err) {
+      visualError = err;
+      console.error('Visualiser update failed', err);
+      const target = tab === 'morph' ? $('morphStatus') : $('singleStatus');
+      if (target) target.textContent = `Visualiser update failed: ${err && err.message ? err.message : err}`;
+    }
+
+    if (updateStatus && !visualError) updateStatusSummaries();
     ensureVisualAnimationLoop();
   }
 
@@ -3424,6 +3670,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Browser audio bootstrap. Web Audio contexts normally have to start from a user
   // TUTORIAL: gesture, so audio setup is delayed until the user asks to play or drone a patch.
   async function ensureAudio() {
+    installMediaSessionHandlers();
     if (!state.audio.ctx || state.audio.ctx.state === 'closed') {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) throw new Error('Web Audio is not available in this browser.');
@@ -3463,17 +3710,15 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     let phase = state.audio.phase || 0;
     const baseInc = clampFloat(state.audio.frequency || DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY) / state.audio.ctx.sampleRate;
     const pwmDepth = clampFloat(state.audio.pwm || 0, 0, 255) / 255 * 0.48;
-    const amDepth = clampFloat(state.audio.am || 0, 0, 255) / 255;
     const fm = clampFloat(state.audio.fm || 0, 0, 255), fmRangeCents = clampFloat(state.audio.fmRangeCents || 1200, 0, MAX_FM_RANGE_CENTS);
     const filterCoeffs = biquadCoeffs(state.audio.filterType, state.audio.filterCutoff, state.audio.filterResonance, state.audio.ctx.sampleRate);
     const filterState = state.audio.filterState || (state.audio.filterState = makeBiquadState());
     for (let i = 0; i < outL.length; i++) {
-      const modSample = readTableLinear(table, phase);
-      const amGain = clampFloat((1 - amDepth) + amDepth * (0.5 + 0.5 * modSample), 0, 1.5);
-      const modSignal = clampFloat(modSample * amGain, -1, 1);
+      const ringStage = ringModStage(table, phase, state.audio.am || 0);
+      const modSignal = ringStage.modSignal;
       const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
       const readPhase = phase < width ? (phase / width) * 0.5 : 0.5 + ((phase - width) / (1 - width)) * 0.5;
-      let sample = clampFloat(readTableLinear(table, readPhase) * amGain, -1, 1);
+      let sample = applyRingMod(readTableLinear(table, readPhase), ringStage);
       sample = clampFloat(processBiquadSample(sample, filterCoeffs, filterState), -1, 1);
       outL[i] = sample; outR[i] = sample;
       phase += Math.min(baseInc * boundedFmPhaseScale(modSignal, fm, fmRangeCents), 0.49);
@@ -3486,7 +3731,91 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   async function dronePatch(key) {
     await ensureAudio(); cancelCancellableWork(); stopBufferSourceOnly(); state.audio.mode = 'single'; state.audio.livePatchKey = key; updateLiveAudioFromPatch(effectivePatchForKey(key));
     state.audio.node.connect(state.audio.gain); state.audio.playing = true; state.audio.phase = 0;
+    state.audio.transportTarget = key;
+    if (key === 'start' || key === 'end') state.audio.lastMorphTransport = key;
     updateStatusSummaries();
+    updateTransportButtons();
+  }
+
+  // TUTORIAL: Toggles a live drone target. Buttons and keyboard shortcuts use this, while
+  // TUTORIAL: automatic patch refreshes still call dronePatch() directly so editing a sounding
+  // TUTORIAL: patch retunes it rather than unexpectedly stopping it.
+  function toggleDronePatch(key) {
+    if (state.audio.playing && state.audio.mode === 'single' && state.audio.livePatchKey === key) {
+      stopAudio({cancel: false});
+      return;
+    }
+    dronePatch(key).catch(err => {
+      const target = key === 'single' ? $('singleStatus') : $('morphStatus');
+      if (target) target.textContent = `Drone failed: ${err.message || err}`;
+    });
+  }
+
+  // TUTORIAL: Toggles one-shot Morph playback. Pressing the same transport again stops it;
+  // TUTORIAL: pressing a different transport stops the current sound and starts the new target.
+  function toggleMorphPlayback(reverse = false) {
+    const target = reverse ? 'morph-reverse' : 'morph-forward';
+    if (state.audio.playing && state.audio.mode === 'morph' && state.audio.transportTarget === target) {
+      stopAudio({cancel: false});
+      return;
+    }
+    state.audio.lastMorphTransport = target;
+    playMorphBuffer(reverse).catch(err => {
+      const status = $('morphStatus');
+      if (status) status.textContent = `Morph playback failed: ${err.message || err}`;
+    });
+  }
+
+  // TUTORIAL: Replays whichever Morph target the user most recently used. This gives the P
+  // TUTORIAL: shortcut a predictable play/pause role without stealing the browser's Space key.
+  function toggleMostRecentMorphTransport() {
+    const target = state.audio.lastMorphTransport || 'start';
+    if (target === 'end') toggleDronePatch('end');
+    else if (target === 'morph-forward') toggleMorphPlayback(false);
+    else if (target === 'morph-reverse') toggleMorphPlayback(true);
+    else toggleDronePatch('start');
+  }
+
+  // TUTORIAL: P/MediaPlayPause use the same context-sensitive transport decision.
+  function toggleCurrentContextTransport() {
+    if (activeTabId() === 'morph') toggleMostRecentMorphTransport();
+    else if (activeTabId() === 'playground') toggleDronePatch('single');
+  }
+
+  // TUTORIAL: Browser media keys are not ordinary keydown events in many browsers.
+  // TUTORIAL: Media Session handlers catch hardware Play/Pause when the browser supports it.
+  function installMediaSessionHandlers() {
+    if (mediaSessionHandlersInstalled || !('mediaSession' in navigator)) return;
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({title: 'Fractured Wavetable Generator', artist: 'Atom Smasher'});
+    } catch (_) {}
+    try { navigator.mediaSession.setActionHandler('play', () => toggleCurrentContextTransport()); } catch (_) {}
+    try { navigator.mediaSession.setActionHandler('pause', () => toggleCurrentContextTransport()); } catch (_) {}
+    try { navigator.mediaSession.setActionHandler('stop', () => globalPanicStop()); } catch (_) {}
+    mediaSessionHandlersInstalled = true;
+  }
+
+  // TUTORIAL: Keeps browser media-key state roughly aligned with the tool's current audio state.
+  function updateMediaSessionState() {
+    if (!('mediaSession' in navigator)) return;
+    try { navigator.mediaSession.playbackState = state.audio.playing ? 'playing' : 'paused'; } catch (_) {}
+  }
+
+  // TUTORIAL: Reflects the currently sounding audio target in the transport buttons.
+  function updateTransportButtons() {
+    const active = state.audio.playing ? state.audio.transportTarget : null;
+    const pairs = [
+      ['singleDrone', 'single'],
+      ['auditionStart', 'start'],
+      ['auditionEnd', 'end'],
+      ['playMorph', 'morph-forward'],
+      ['playReverse', 'morph-reverse'],
+    ];
+    for (const [id, target] of pairs) {
+      const btn = $(id);
+      if (btn) btn.classList.toggle('playing', active === target);
+    }
+    updateMediaSessionState();
   }
   // TUTORIAL: Stops one-shot playback sources without necessarily tearing down live-drone state.
   function stopBufferSourceOnly() {
@@ -3508,6 +3837,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.audio.playing = false;
     state.audio.mode = 'single';
     if (state.audio.node) { try { state.audio.node.disconnect(); } catch (_) {} }
+    state.audio.transportTarget = null;
+    updateTransportButtons();
     if (options.hard && state.audio.ctx) {
       const ctx = state.audio.ctx;
       try { if (state.audio.gain) state.audio.gain.disconnect(); } catch (_) {}
@@ -3522,6 +3853,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.audio.playbackSerial = (state.audio.playbackSerial || 0) + 1;
     state.audio.playing = false;
     state.audio.mode = 'single';
+    state.audio.transportTarget = null;
+    updateTransportButtons();
     if (state.audio.node) { try { state.audio.node.disconnect(); } catch (_) {} }
   }
 
@@ -3566,7 +3899,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Plays a pre-rendered morph buffer through Web Audio.
-  function playRenderedMorphAudio(rendered) {
+  function playRenderedMorphAudio(rendered, transportTarget = 'morph-forward') {
     const buffer = state.audio.ctx.createBuffer(1, rendered.audio.length, rendered.summary.sampleRate);
     buffer.copyToChannel(rendered.audio, 0);
     const src = state.audio.ctx.createBufferSource();
@@ -3577,7 +3910,18 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.audio.sources.add(src);
     state.audio.playing = true;
     state.audio.mode = 'morph';
-    src.onended = () => { state.audio.sources.delete(src); if (state.audio.source === src) state.audio.source = null; if (state.audio.mode === 'morph') state.audio.playing = false; };
+    state.audio.transportTarget = transportTarget;
+    state.audio.lastMorphTransport = transportTarget;
+    updateTransportButtons();
+    src.onended = () => {
+      state.audio.sources.delete(src);
+      if (state.audio.source === src) state.audio.source = null;
+      if (state.audio.mode === 'morph' && state.audio.transportTarget === transportTarget) {
+        state.audio.playing = false;
+        state.audio.transportTarget = null;
+      }
+      updateTransportButtons();
+    };
   }
 
   // TUTORIAL: Renders or reuses a morph audition buffer, then plays it forward or reverse.
@@ -3589,7 +3933,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const cached = cachedRenderedMorph(signature);
     const label = reverse ? 'reverse morph' : 'morph';
     if (cached) {
-      playRenderedMorphAudio(cached);
+      playRenderedMorphAudio(cached, reverse ? 'morph-reverse' : 'morph-forward');
       $('exportProgress').value = 1;
       $('morphStatus').textContent = `Replaying cached ${label}: ${cached.summary.durationSeconds.toFixed(3)} s`;
       return;
@@ -3603,7 +3947,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       throwIfCancelled(token);
       if (playbackSerial !== state.audio.playbackSerial || activeTabId() !== 'morph') { $('morphStatus').textContent = 'Morph playback muted because the tab changed.'; return; }
       cacheRenderedMorph(rendered, signature);
-      playRenderedMorphAudio(rendered);
+      playRenderedMorphAudio(rendered, reverse ? 'morph-reverse' : 'morph-forward');
       $('exportProgress').value = 1;
       $('morphStatus').textContent = `Playing rendered ${label}: ${rendered.summary.durationSeconds.toFixed(3)} s`;
     } catch (err) {
@@ -3624,7 +3968,24 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       select.appendChild(opt);
     });
     select.value = parts.family;
-    select.addEventListener('change', () => onChange(select.value));
+    let keyboardNavigation = false;
+    let pendingRebuild = false;
+    const commitDeferredRebuild = () => {
+      if (!pendingRebuild) return;
+      pendingRebuild = false;
+      keyboardNavigation = false;
+      onChange(select.value, {deferRebuild: false, commitOnly: true});
+    };
+    select.addEventListener('keydown', ev => {
+      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(ev.key)) keyboardNavigation = true;
+      else if (ev.key === 'Enter') setTimeout(commitDeferredRebuild, 0);
+      else if (ev.key === 'Escape') { keyboardNavigation = false; pendingRebuild = false; }
+    });
+    select.addEventListener('change', () => {
+      pendingRebuild = keyboardNavigation;
+      onChange(select.value, {deferRebuild: keyboardNavigation, commitOnly: false});
+    });
+    select.addEventListener('blur', commitDeferredRebuild);
     return select;
   }
 
@@ -3666,12 +4027,20 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Builds the wavetable-type dropdown from WT_MODE_INFO.
   // TUTORIAL: Option values are internal ids; the number at the front of the text is a display
   // TUTORIAL: number. Keeping those separate means later UI ordering changes do not redefine JSON ids.
-  // TUTORIAL: v2.2 uses optgroups so complementary and reciprocal combine modes stay adjacent.
+  // TUTORIAL: v2.3 uses optgroups and a visible-mode filter so complementary/reciprocal modes stay adjacent while redundant legacy ids remain loadable.
   function createWavetableSelect(value, onChange) {
     const select = document.createElement('select');
     const groups = new Map();
-    WT_MODE_INFO.forEach(mode => {
-      const groupName = String(mode.group || 'Other');
+    const selectedId = canonicalWavetableType(value);
+    const selectedInfo = wavetableInfoFor(selectedId);
+    // TUTORIAL: Most legacy/redundant modes are not offered in the normal dropdown or
+    // TUTORIAL: randomiser, but if an older patch already uses one, show that one mode
+    // TUTORIAL: under a Legacy optgroup so the patch remains inspectable and renderable.
+    const visibleModes = selectedInfo.visible === false
+      ? WT_VISIBLE_MODE_INFO.concat([selectedInfo])
+      : WT_VISIBLE_MODE_INFO;
+    visibleModes.forEach(mode => {
+      const groupName = String(mode.visible === false ? 'Legacy / Hidden' : (mode.group || 'Other'));
       let parent = groups.get(groupName);
       if (!parent) {
         parent = document.createElement('optgroup');
@@ -3684,7 +4053,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       opt.textContent = `${mode.ui} - ${mode.name} - ${mode.description}`;
       parent.appendChild(opt);
     });
-    select.value = canonicalWavetableType(value);
+    select.value = selectedId;
     select.addEventListener('change', () => onChange(canonicalWavetableType(select.value)));
     return select;
   }
@@ -3754,18 +4123,22 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const afterPatchChange = () => { updateVisuals(); autoAuditionPatch(patchKey); };
     patch.engine = canonicalEngineName(patch.engine || DEFAULT_ENGINE);
     const engineParts = enginePartsFor(patch.engine);
-    const setEngineFromParts = (family, variant) => {
+    const setEngineFromParts = (family, variant, opts = {}) => {
       // TUTORIAL: Changing the engine family changes the meaning of pot1/pot2/pot3.
-      // TUTORIAL: Rebuild this patch panel immediately so the three visible knob labels,
-      // TUTORIAL: the family note, and the paired Smooth/Crunchy check-boxes stay in sync
-      // TUTORIAL: with the canonical full engine name stored in the patch.
+      // TUTORIAL: Mouse/check-box changes rebuild immediately. Keyboard arrow navigation in
+      // TUTORIAL: the Generator Family select defers the rebuild until Enter/blur so the
+      // TUTORIAL: native dropdown can keep focus and scroll through options like other selects.
+      // TUTORIAL: If the controls are rebuilt, redraw after the rebuild. Drawing before the
+      // TUTORIAL: START/END canvas is replaced leaves the new non-animated Morph visualiser blank
+      // TUTORIAL: until another parameter change. Animated mode hid that bug because its frame loop
+      // TUTORIAL: redrew the new canvas a moment later.
       patch.engine = engineNameFromParts(family, variant);
-      addPatchControls(id, patchKey);
+      if (!opts.deferRebuild) addPatchControls(id, patchKey);
       afterPatchChange();
     };
     const engineFamilyRow = document.createElement('div'); engineFamilyRow.className = 'row wide';
     const engineFamilyLab = document.createElement('label'); engineFamilyLab.textContent = 'Generator Family';
-    const engineFamilySel = createEngineFamilySelect(patch.engine, family => setEngineFromParts(family, enginePartsFor(patch.engine).variant));
+    const engineFamilySel = createEngineFamilySelect(patch.engine, (family, opts = {}) => setEngineFromParts(family, enginePartsFor(patch.engine).variant, opts));
     engineFamilyRow.append(engineFamilyLab, engineFamilySel); parent.appendChild(engineFamilyRow);
     const engineVariantRow = document.createElement('div'); engineVariantRow.className = 'row wide';
     const engineVariantLab = document.createElement('label'); engineVariantLab.textContent = 'Engine Variant';
@@ -3783,7 +4156,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     addSlider(parent, 'FM', patch, 'fm', 0, 255, 1, afterPatchChange);
     const fmRow = document.createElement('div'); fmRow.className = 'row wide'; const fmLab = document.createElement('label'); fmLab.textContent = 'FM Pitch Range'; const fmSel = document.createElement('select'); FM_RANGES.forEach(([label]) => { const opt = document.createElement('option'); opt.textContent = label; opt.value = label; fmSel.appendChild(opt); }); fmSel.value = patch.fmRangeLabel; fmSel.disabled = (patchKey === 'start' || patchKey === 'end') && !state.export.differentFmRanges; fmSel.addEventListener('change', () => { patch.fmRangeLabel = fmSel.value; afterPatchChange(); }); fmRow.append(fmLab, fmSel); parent.appendChild(fmRow);
     addSlider(parent, 'PWM', patch, 'pwm', 0, 255, 1, afterPatchChange);
-    addSlider(parent, 'AM', patch, 'am', 0, 255, 1, afterPatchChange);
+    addSlider(parent, 'Ring Mod', patch, 'am', 0, 255, 1, afterPatchChange);
     const filterRow = document.createElement('div'); filterRow.className = 'row wide';
     const filterLab = document.createElement('label'); filterLab.textContent = 'Filter Type';
     const filterSel = document.createElement('select'); FILTER_TYPES.forEach(v => filterSel.append(new Option(v, v)));
@@ -4203,12 +4576,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     syncRangeNumber(volumeRange, volumeNum, v => { state.common.volume = clampFloat(v, 0, 1); persistGlobalSettings(); }, () => { setOutputGain(); syncPitchControls(); updateStatusSummaries(); });
 
     const checks = document.createElement('div'); checks.innerHTML = `<label><input id="diffTypes" type="checkbox"> Different START/END Wavetable Types</label><br><label><input id="diffFmRanges" type="checkbox"> Different START/END FM Pitch Range</label><br><label><input id="cycleStepped" type="checkbox"> Cycle-stepped transition</label>`; row('Morph Options', checks);
-    const sharedType = createWavetableSelect(state.export.sharedType, v => { state.export.sharedType = v; updateVisuals(); updateStatusSummaries(); });
+    const sharedType = createWavetableSelect(state.export.sharedType, v => { state.export.sharedType = v; persistGlobalSettings(); updateVisuals(); updateStatusSummaries(); });
     sharedType.dataset.exportSetting = 'shared-wavetable-type';
     row('Shared Wavetable Type', sharedType);
     const sharedFm = document.createElement('select');
     sharedFm.dataset.exportSetting = 'shared-fm-range';
-    FM_RANGES.forEach(([label]) => sharedFm.append(new Option(label, label))); sharedFm.value = state.export.sharedFmRange; sharedFm.onchange = () => { state.export.sharedFmRange = sharedFm.value; state.patches.start.fmRangeLabel = sharedFm.value; state.patches.end.fmRangeLabel = sharedFm.value; updateVisuals(); updateStatusSummaries(); }; row('Shared FM Pitch Range', sharedFm);
+    FM_RANGES.forEach(([label]) => sharedFm.append(new Option(label, label))); sharedFm.value = state.export.sharedFmRange; sharedFm.onchange = () => { state.export.sharedFmRange = sharedFm.value; state.patches.start.fmRangeLabel = sharedFm.value; state.patches.end.fmRangeLabel = sharedFm.value; persistGlobalSettings(); updateVisuals(); updateStatusSummaries(); }; row('Shared FM Pitch Range', sharedFm);
     const curveMode = document.createElement('select'); ['Bend','S-curve'].forEach(v => curveMode.append(new Option(v, v))); curveMode.value = state.export.curveMode; curveMode.onchange = () => state.export.curveMode = curveMode.value; row('Curve Mode', curveMode);
     row('Curve Amount', makeCurveAmountControl());
     row('DC Removal', makeDcControl());
@@ -4218,9 +4591,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     row('Download Mode', makeDownloadModeControl('morphDownloadMode'));
 
     setTimeout(() => {
-      $('diffTypes').checked = state.export.differentTypes; $('diffTypes').onchange = e => { state.export.differentTypes = e.target.checked; rebuildPatchControls(); updateStatusSummaries(); };
-      $('diffFmRanges').checked = state.export.differentFmRanges; $('diffFmRanges').onchange = e => { state.export.differentFmRanges = e.target.checked; rebuildPatchControls(); updateStatusSummaries(); };
-      $('cycleStepped').checked = state.export.cycleStepped; $('cycleStepped').onchange = e => { state.export.cycleStepped = e.target.checked; updateStatusSummaries(); };
+      $('diffTypes').checked = state.export.differentTypes; $('diffTypes').onchange = e => { state.export.differentTypes = e.target.checked; persistGlobalSettings(); rebuildPatchControls(); updateStatusSummaries(); };
+      $('diffFmRanges').checked = state.export.differentFmRanges; $('diffFmRanges').onchange = e => { state.export.differentFmRanges = e.target.checked; persistGlobalSettings(); rebuildPatchControls(); updateStatusSummaries(); };
+      $('cycleStepped').checked = state.export.cycleStepped; $('cycleStepped').onchange = e => { state.export.cycleStepped = e.target.checked; persistGlobalSettings(); updateStatusSummaries(); };
       syncDownloadModeControls();
     }, 0);
   }
@@ -4301,7 +4674,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const p = defaultPatch();
     p.engine = randomEngineName();
     p.pot1 = randInt(0, POT_MAX_12BIT); p.pot2 = randInt(0, POT_MAX_12BIT); p.pot3 = randInt(0, POT_MAX_12BIT);
-    p.wavetableType = WT_MODE_INFO[randInt(0, WT_MODE_INFO.length - 1)].id; p.fm = randInt(0, 255); p.pwm = randInt(0, 255); p.am = randInt(0, 255);
+    p.wavetableType = WT_VISIBLE_MODE_INFO[randInt(0, WT_VISIBLE_MODE_INFO.length - 1)].id; p.fm = randInt(0, 255); p.pwm = randInt(0, 255); p.am = randInt(0, 255);
     [p.beforeStart, p.beforeEnd] = randomWindowPair(); [p.afterStart, p.afterEnd] = randomWindowPair();
     p.fmRangeLabel = FM_RANGES[randInt(0, FM_RANGES.length - 1)][0];
     p.filterType = 'Off';
@@ -4463,6 +4836,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (options.mute !== false && activeTabId() !== targetId) muteCurrentTabAudio();
     document.querySelectorAll('.tabButton').forEach(b => b.classList.toggle('active', b.dataset.tab === targetId));
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === targetId));
+    state.ui.lastOpenTab = targetId;
+    if (options.persist !== false) persistGlobalSettings();
     updateVisuals();
   }
 
@@ -4531,6 +4906,41 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
 
+
+  // TUTORIAL: Keyboard transport shortcuts are intentionally ignored while form controls have
+  // TUTORIAL: focus. This prevents typing or native select/slider interaction from starting audio.
+  function shortcutFocusIsEditable(target) {
+    const el = target instanceof Element ? target : document.activeElement;
+    if (!el) return false;
+    if (el.isContentEditable) return true;
+    const tag = String(el.tagName || '').toLowerCase();
+    return ['input', 'textarea', 'select', 'button'].includes(tag);
+  }
+
+  // TUTORIAL: Routes P/MediaPlayPause plus Morph-tab mnemonic keys to transport actions while
+  // TUTORIAL: leaving Space to the browser for normal page scrolling.
+  function handleTransportShortcut(ev) {
+    if (ev.defaultPrevented || shortcutFocusIsEditable(ev.target)) return;
+    const tab = activeTabId();
+    const key = String(ev.key || '').toLowerCase();
+    const isMediaPlayPause = ev.key === 'MediaPlayPause' || ev.code === 'MediaPlayPause';
+    let handled = false;
+    if (tab === 'playground' && (key === 'p' || isMediaPlayPause)) {
+      toggleCurrentContextTransport();
+      handled = true;
+    } else if (tab === 'morph') {
+      if (key === 's') { toggleDronePatch('start'); handled = true; }
+      else if (key === 'e') { toggleDronePatch('end'); handled = true; }
+      else if (key === 'f') { toggleMorphPlayback(false); handled = true; }
+      else if (key === 'r') { toggleMorphPlayback(true); handled = true; }
+      else if (key === 'p' || isMediaPlayPause) { toggleCurrentContextTransport(); handled = true; }
+    }
+    if (handled) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+  }
+
   // TUTORIAL: Event wiring. All DOM event handlers are connected in one place so the HTML remains
   // TUTORIAL: declarative and the code path from button/slider to state update is easier to trace.
   function wireUi() {
@@ -4538,23 +4948,25 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const escStop = ev => { if (ev.key === 'Escape' || ev.code === 'Escape') { ev.preventDefault(); ev.stopPropagation(); globalPanicStop(); } };
     document.addEventListener('keydown', escStop, {capture: true});
     window.addEventListener('keydown', escStop, {capture: true});
+    document.addEventListener('keydown', handleTransportShortcut);
+    installMediaSessionHandlers();
     if ($('bulkDownloadMode')) $('bulkDownloadMode').onchange = e => { state.export.zipDownloads = e.target.value === 'zip'; persistGlobalSettings(); syncDownloadModeControls(); updateStatusSummaries(); };
     $('singleVisualMode').onchange = e => setVisualMode(e.target.value);
     if ($('morphVisualMode')) $('morphVisualMode').onchange = e => setVisualMode(e.target.value);
     if ($('singleAnimFps')) $('singleAnimFps').onchange = e => setAnimationFps(e.target.value);
     if ($('morphAnimFps')) $('morphAnimFps').onchange = e => setAnimationFps(e.target.value);
-    $('singleDrone').onclick = () => dronePatch('single');
+    $('singleDrone').onclick = () => toggleDronePatch('single');
     $('stopAudio').onclick = globalPanicStop; $('stopAudio2').onclick = globalPanicStop;
     $('singleRandom').onclick = () => { state.patches.single = randomPatch(); rebuildPatchControls(); autoAuditionPatch('single'); };
     $('singleReset').onclick = () => { state.patches.single = defaultPatch(); rebuildPatchControls(); autoAuditionPatch('single'); };
-    $('auditionStart').onclick = () => dronePatch('start'); $('auditionEnd').onclick = () => dronePatch('end');
+    $('auditionStart').onclick = () => toggleDronePatch('start'); $('auditionEnd').onclick = () => toggleDronePatch('end');
     $('randomStart').onclick = () => { state.patches.start = randomPatch(); rebuildPatchControls(); autoAuditionPatch('start'); };
     $('randomEnd').onclick = () => { state.patches.end = randomPatch(); rebuildPatchControls(); autoAuditionPatch('end'); };
     $('copyStartToEnd').onclick = () => { state.patches.end = {...state.patches.start}; rebuildPatchControls(); autoAuditionPatch('end'); };
     $('copyEndToStart').onclick = () => { state.patches.start = {...state.patches.end}; rebuildPatchControls(); autoAuditionPatch('start'); };
     $('swapStartEnd').onclick = () => { const t = state.patches.start; state.patches.start = state.patches.end; state.patches.end = t; rebuildPatchControls(); autoAuditionCurrentContext(); };
-    $('playMorph').onclick = () => playMorphBuffer(false);
-    $('playReverse').onclick = () => playMorphBuffer(true);
+    $('playMorph').onclick = () => toggleMorphPlayback(false);
+    $('playReverse').onclick = () => toggleMorphPlayback(true);
     $('exportForward').onclick = () => exportDirection('forward');
     $('exportReverse').onclick = () => exportDirection('reverse');
     $('exportBoth').onclick = exportBothDirections;
@@ -4627,7 +5039,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     syncPitchControls();
     syncExportSettingControls();
     syncVisualControls();
-    updateVisuals();
+    activateTab(state.ui.lastOpenTab || 'playground', {mute: false, persist: false});
+    updateTransportButtons();
   }
   init();
 })();
