@@ -248,13 +248,14 @@ Modes include:
 - Smooth Average, Smooth Difference
 - Sine Shaper
 - Soft Saturate
-- Triangle Fold Soft
+- Triangle Fold
 - Root Shape, Power Shape
 - Zero-Cross Blend
 - Hann Windowed
 - Phase Blur
 - Odd Soft, Even Soft, Odd Hard, Even Hard
-- Gated B
+- Gated A, Gated B
+- A Flips B Polarity, B Flips A Polarity
 - Sign Multiply
 - Soft Clip Sum, Hard Clip Sum
 - Cyclic Comb.
