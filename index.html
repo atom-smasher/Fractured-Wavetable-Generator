@@ -1,23 +1,22 @@
 <!doctype html>
 <!--
-Fractal Wavetable v14.15
+Fractured Wavetable Generator v2.0a
 Copyright (C) 2026 Atom Smasher
 
-This file is part of Fractal Wavetable Browser.
+This file is part of Fractured Wavetable Generator.
 
-Fractal Wavetable Browser is free software: you can redistribute it and/or
+Fractured Wavetable Generator is free software: you can redistribute it and/or
 modify it under the terms of the GNU General Public License version 2 only.
 
-Fractal Wavetable Browser is distributed in the hope that it will be useful,
+Fractured Wavetable Generator is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v14.15 restores live family-specific generator knob labels
-when changing Generator Family or Smooth/Crunchy Variant. It keeps the v14.14
-bounded bidirectional Sync cross-coupling, cookie-backed global settings,
-shared visualiser settings, and compact variant check-box UI.
+Modification note: v2.0a refines the Playground-to-Morph copy controls after the v2.0 rename to Fractured Wavetable Generator
+and adds Playground→Morph copy buttons, a compact Off state for visualisers,
+and START/END visualisers embedded higher in the Morph patch panels.
 
 Provenance note: this browser implementation is inspired by Carl Hudson’s
 Fractal Wavetable Generator concept. Carl Hudson’s original C implementation
@@ -32,7 +31,13 @@ itself, impose GPL licensing on generated outputs.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fractal Wavetable v14.15</title>
+<!-- Embedded favicon icons: derived from the supplied PNG icon files, with target sizes taken from the filenames. -->
+<link rel="icon" type="image/png" sizes="16x16" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAY0lEQVR42mNkZmH9z0ABYGKgENDOgILLvxgKLv8iKMeESwE2NjKYoMtGYy9M0GWD24LLdXADcDmTkDewuoCQYcj+RzGAUGCRFAa4NGGzhAlZAz7nw+TQDWcixnZ83mAc+pkJANDgKSm5SIonAAAAAElFTkSuQmCC">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAoElEQVR42u1XQRKAIAhUsn7T33xKf/M3XupaHhQEska4Obq4sws4+iWspxsY4AaHETACgQqIKT/Wx76xsGwFyqTUc0HjslbcVftPEda8bylz3y9rBrgSzj0HMDbU5EcTaCURUSCmLNZmLAveJgGSQ6Ukj7EORvr/rTakTLaeduxSgCM/FgsaLx8FC1IzvhcLmskxWNC8DJPL28/ICExP4ALd7kdZ0SpSvwAAAABJRU5ErkJggg==">
+<link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
+<link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
+<title>Fractured Wavetable Generator v2.0a</title>
 <style>
   :root {
     --bg: #101216;
@@ -96,7 +101,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractal Wavetable v14.15</h1>
+  <h1>Fractured Wavetable Generator v2.0a</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -123,6 +128,7 @@ itself, impose GPL licensing on generated outputs.
         <div class="row wide">
           <label for="singleVisualMode">Visual mode</label>
           <select id="singleVisualMode">
+            <option>Off</option>
             <option>Base table</option>
             <option>Phase-locked FM/PWM/AM</option>
             <option>Animated stable FM/PWM/AM</option>
@@ -160,7 +166,6 @@ itself, impose GPL licensing on generated outputs.
           <button id="copyStartToEnd">Copy START → END</button>
         </div>
         <div id="startControls"></div>
-        <canvas id="startCanvas" width="520" height="250"></canvas>
       </div>
       <div class="panel">
         <h2>END Patch</h2>
@@ -171,7 +176,6 @@ itself, impose GPL licensing on generated outputs.
           <button id="swapStartEnd">Swap</button>
         </div>
         <div id="endControls"></div>
-        <canvas id="endCanvas" width="520" height="250"></canvas>
       </div>
       <div class="panel">
         <h2>Morph / Export</h2>
@@ -179,6 +183,7 @@ itself, impose GPL licensing on generated outputs.
         <div class="row wide">
           <label for="morphVisualMode">Visual mode</label>
           <select id="morphVisualMode">
+            <option>Off</option>
             <option>Base table</option>
             <option>Phase-locked FM/PWM/AM</option>
             <option>Animated stable FM/PWM/AM</option>
@@ -223,7 +228,7 @@ itself, impose GPL licensing on generated outputs.
         <p class="note">Bulk export runs random iterations. Each iteration creates a random START/END pair, then renders the selected direction(s).</p>
         <div class="row"><label>Random iterations</label><input id="bulkCount" type="range" min="1" max="50" value="5"><input id="bulkCountNum" type="number" min="1" max="200" value="5"></div>
         <div class="row wide"><label>Directions</label><select id="bulkDirections"><option>Forward only</option><option>Reverse only</option><option>Forward + Reverse</option></select></div>
-        <div class="row wide"><label>Prefix</label><input id="bulkPrefix" type="text" value="fractal_wt_bulk"></div>
+        <div class="row wide"><label>Prefix</label><input id="bulkPrefix" type="text" value="fractured_wt_bulk"></div>
         <div id="bulkPitchControls" class="compactSettingGroup"></div>
         <div id="bulkExportControls" class="compactSettingGroup"></div>
         <div class="row wide"><label>Download Mode</label><select id="bulkDownloadMode"><option value="zip" selected>One ZIP file</option><option value="separate">Separate WAV+JSON files</option></select></div>
@@ -245,7 +250,7 @@ itself, impose GPL licensing on generated outputs.
   <section id="notes" class="tab">
     <div class="panel">
       <h2>Notes</h2>
-      <p class="note">Fractal Wavetable is a browser-native, single-file wavetable generator. It is designed for making loopable oscillator material, long evolving WAV files, drones, noisy transitions, and sound-design source material.</p>
+      <p class="note">Fractured Wavetable Generator is a browser-native, single-file wavetable generator. It is designed for making loopable oscillator material, long evolving WAV files, drones, noisy transitions, fractured transitions, and sound-design source material.</p>
       <h3>License and provenance</h3>
       <p class="note"><strong>License:</strong> This browser implementation is released as free software under the GNU General Public License version 2 only (<code>GPL-2.0-only</code>). It comes with no warranty. If this file is redistributed as part of a repository or release package, include the GPL v2 license text in a <code>COPYING</code> file.</p>
       <p class="note"><strong>Provenance:</strong> This browser implementation is inspired by Carl Hudson’s Fractal Wavetable Generator concept. Carl Hudson’s original C implementation is separately copyrighted and is not relicensed here.</p>
@@ -255,14 +260,14 @@ itself, impose GPL licensing on generated outputs.
       <p class="note">Pressing ESC stops audio and cancels active rendering. Leaving a tab also mutes the current audition.</p>
       <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic; note/octave controls and MIDI note input set the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
       <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, and headroom.</p>
-      <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings.</p>
+      <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
       <p class="note">Generator selection is split into a Family dropdown and adjacent Smooth/Crunchy variant check-boxes. The two variant boxes act as a pair: choosing one clears the other. Internally, patches still save the full engine name, such as <code>Pulse Warp Crunchy</code>, so JSON remains explicit while the UI stays compact.</p>
-      <p class="note">The generator engines are clean-room DSP experiments built from ordinary waveforms, FM-style phase modulation, Pulse Warp duty-cycle shaping, sync-style resets, formant-inspired harmonic peaks, folding, bitcrushing, additive harmonic clusters, modal spacing, feedback sine bending, non-linear phase-distortion remapping, phase warping, smoothing, saturation, bitwise/quantised collision, and spectral table reconstruction. Wavetable Type is the collision/combine stage.</p>
+      <p class="note">The generator engines are clean-room DSP experiments built from ordinary waveforms, FM-style phase modulation, Pulse Warp duty-cycle shaping, sync-style resets, formant-inspired harmonic peaks, folding, bitcrushing, additive harmonic clusters, modal spacing, feedback sine bending, non-linear phase-distortion remapping, phase warping, smoothing, saturation, bitwise/quantised collision, comb-style phase-offset interference, and spectral table reconstruction. Wavetable Type is the collision/combine stage.</p>
       <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. They currently match, but they are intentionally decoupled so the menu can be regrouped later without redefining old internal mode IDs.</p>
       <p class="note">Phase Distortion engines use Primary Phase for phase-distortion depth and phase offset, Shape 1 for the breakpoint/knee, and Shape 2 for source-wave flavour plus a second warped source. Smooth rounds the phase knees; Crunchy adds stronger bends, folding, and edge motion than Smooth, but v14.07 reduces the jumpiest Shape 1/Shape 2 threshold noise so the range is wider and more controllable.</p>
       <p class="note">The three main generator knobs keep their internal names in code and JSON as <code>pot1</code>, <code>pot2</code>, and <code>pot3</code>, but the UI relabels them by generator family and rebuilds those labels immediately when Generator Family changes. For example, FM shows Index, Ratio, and Carrier Colour; Sync shows Sync Intensity, Source A Shape, and Source B Shape; Formant shows Formant Spacing, Vowel Position, and Bandwidth / Grit. In the Sync family, Source A and Source B use bounded bidirectional cross-coupling: each source can shape the other without using unstable recursive feedback. Smooth variants are more rounded and root-stable; Crunchy variants push harder phase warp, folding, quantisation, reset edges, feedback, or digital grit.</p>
       <p class="note">Visualisation note: FM/PWM/AM views and the spectrum analyser show a post-filter preview. Base table shows the generated table before oscillator modulation and filtering. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
-      <p class="note">Morph render mode changes the transition character. Full Interpolation favours digital noise. Crossfade favours analogue warmth but can phase or beat. Wavetable modes blend oscillator tables before playback. FFT modes rebuild tables from harmonic data; more anchors use more CPU and add more internal motion.</p>
+      <p class="note">Morph render mode changes the transition character. Full Interpolation favours digital noise. Crossfade favours analogue warmth but can phase or beat. Wavetable modes blend oscillator tables before playback. Comb Wavetable Morph adds cyclic feed-forward phase-offset interference to create hollow, flangey, metallic, or vocal-ish motion without using recursive feedback. FFT modes rebuild tables from harmonic data; more anchors use more CPU and add more internal motion.</p>
       <p class="note">Export notes: WAV files are generated in browser memory before download. Very long renders can stress RAM and browser Blob/download limits. ZIP exports drop their temporary references after the download is triggered, but the browser decides when memory is actually reclaimed.</p>
       <p class="note">Project repository: <a href="https://github.com/atom-smasher/Fractal-Wavetable-Generator" target="_blank" rel="noopener noreferrer">https://github.com/atom-smasher/Fractal-Wavetable-Generator</a></p>
     </div>
@@ -285,7 +290,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v14.15';
+  const APP_VERSION = 'v2.0a';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -306,7 +311,7 @@ itself, impose GPL licensing on generated outputs.
   const MORPH_MAX_TABLE_FRAMES = 4096;
   const MORPH_TABLE_CACHE_LIMIT = 512;
   const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-  const VISUAL_MODES = ['Base table', 'Phase-locked FM/PWM/AM', 'Animated stable FM/PWM/AM', 'Time-domain FM/PWM/AM', 'Spectrum analyser'];
+  const VISUAL_MODES = ['Off', 'Base table', 'Phase-locked FM/PWM/AM', 'Animated stable FM/PWM/AM', 'Time-domain FM/PWM/AM', 'Spectrum analyser'];
   const GLOBAL_SETTINGS_COOKIE = 'fractal_wavetable_global_settings_v1';
   const GLOBAL_SETTINGS_LOCALSTORAGE = 'fractal_wavetable_global_settings_v1';
   const GLOBAL_SETTINGS_MAX_AGE_DAYS = 365;
@@ -359,6 +364,7 @@ itself, impose GPL licensing on generated outputs.
     {id: 39, ui: 39, name: 'Sign Multiply', description: 'Source B polarity-flipped by Source A'},
     {id: 40, ui: 40, name: 'Soft Clip Sum', description: 'Heavier tanh clipping of the source sum'},
     {id: 41, ui: 41, name: 'Hard Clip Sum', description: 'Flat-topped clipped source sum with strong harmonics'},
+    {id: 42, ui: 42, name: 'Cyclic Comb', description: 'Feed-forward phase-offset interference between the two sources; hollow, flangey, and metallic'},
   ];
   const WT_MODE_BY_ID = new Map(WT_MODE_INFO.map(mode => [mode.id, mode]));
   const WAVETABLE_TYPE_MIN = Math.min(...WT_MODE_INFO.map(mode => mode.id));
@@ -543,6 +549,7 @@ itself, impose GPL licensing on generated outputs.
     ['Warm Wavetable Morph (One Oscillator, Smooth Blend)', 'Uses equal-power table blending plus light middle smoothing for a warmer one-oscillator morph.'],
     ['Softened Morph (Rounded Middle)', 'Blends tables as one oscillator and applies the strongest smoothing near the middle of the transition.'],
     ['Saturated Morph (Warm, Compressed)', 'Blends tables as one oscillator and applies gentle soft saturation to glue the transition.'],
+    ['Comb Wavetable Morph (Hollow Interference)', 'Blends START and END as one oscillator, then adds cyclic feed-forward phase-offset interference for hollow, flangey, metallic motion.'],
     ['FFT Spectral Morph (Digital Tone, Less Crunchy)', 'Analyses 2, 3, 5, or 9 table states into harmonics, blends between spectral anchors, rebuilds a table, then runs the usual oscillator/output cleanup.'],
     ['Spectral Envelope Morph (Smooth Digital Tone)', 'Blends a smoothed harmonic envelope rather than every sharp spectral detail; smoother and less crunchy.'],
     ['Harmonic Level Morph (Stable, Less Phasey)', 'Keeps phase more stable while morphing harmonic levels; usually less swirly than full FFT morph.'],
@@ -579,7 +586,7 @@ itself, impose GPL licensing on generated outputs.
       morphRenderMode: DEFAULT_MORPH_RENDER_MODE, spectralStates: 3,
       curveAmount: 127, curveMode: 'Bend', cycleStepped: false,
       differentTypes: false, sharedType: 3, differentFmRanges: false, sharedFmRange: DEFAULT_FM_RANGE_LABEL,
-      dcMode: 'Per Cycle', normMode: 'Per Cycle Peak', headroomDb: -0.1, prefix: 'fractal_wt_morph', zipDownloads: true,
+      dcMode: 'Per Cycle', normMode: 'Per Cycle Peak', headroomDb: -0.1, prefix: 'fractured_wt_morph', zipDownloads: true,
     },
     audio: {
       ctx: null, node: null, gain: null, source: null, sources: new Set(), playing: false, phase: 0,
@@ -963,6 +970,27 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
+  // TUTORIAL: Creates a cyclic feed-forward comb inside one wavetable cycle.
+  // TUTORIAL: This is table-domain phase-offset interference, not a recursive delay line.
+  // TUTORIAL: The delayed reads wrap around the 256-sample table so the result stays loopable,
+  // TUTORIAL: and the final table normaliser handles level and DC cleanup after the collision.
+  function cyclicCombTable(a, b, seedMix = 0.5, depthScale = 1.0) {
+    const seed = clampFloat(seedMix, 0, 1);
+    const depth = clampFloat((0.20 + 0.55 * seed) * clampFloat(depthScale, 0, 1.5), 0, 0.92);
+    const delayA = clampInt(2 + seed * 61, 1, TABLE_SIZE - 1);
+    const delayB = clampInt(3 + (1 - seed) * 93, 1, TABLE_SIZE - 1);
+    const polarity = Math.cos(2 * Math.PI * seed);
+    const out = new Float64Array(TABLE_SIZE);
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const dry = 0.52 * a[i] + 0.48 * b[i];
+      const delayedA = a[(i - delayA + TABLE_SIZE) & (TABLE_SIZE - 1)];
+      const delayedB = b[(i - delayB + TABLE_SIZE) & (TABLE_SIZE - 1)];
+      const comb = 0.62 * delayedB - 0.38 * polarity * delayedA;
+      out[i] = dry + depth * comb;
+    }
+    return out;
+  }
+
   // TUTORIAL: Builds a Hann window used by soft/table-shaping modes.
   function hanning(n) { const out = new Float64Array(n); for (let i = 0; i < n; i++) out[i] = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1)); return out; }
 
@@ -1140,6 +1168,7 @@ itself, impose GPL licensing on generated outputs.
         case 39: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = (a[i] >= 0 ? 1 : -1) * b[i]; break;
         case 40: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = Math.tanh(3 * (a[i] + b[i])); break;
         case 41: for (let i = 0; i < TABLE_SIZE; i++) raw[i] = clampFloat(2.5 * (a[i] + b[i]), -1, 1); break;
+        case 42: raw = cyclicCombTable(a, b, seedMix, 1.0); break;
         default: raw = srcA;
       }
     }
@@ -1786,6 +1815,7 @@ itself, impose GPL licensing on generated outputs.
     if (v === 'Crossfade (Favours Smooth Blending)') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Crossfade (Favours Smooth Blending)') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Crossfade (Favours Analogue Creaminess)') return 'Crossfade (Favours Analogue Warmth)';
+    if (v === 'Comb Morph' || v === 'Comb Wavetable Morph' || v === 'Comb Wavetable Morph (Hollow Interference)') return 'Comb Wavetable Morph (Hollow Interference)';
     if (v === 'FFT Morph' || v === 'Spectral Morph' || v === 'FFT Spectral Morph (Digital Tone, Less Crunchy)') return 'FFT Spectral Morph (Digital Tone, Less Crunchy)';
     return DEFAULT_MORPH_RENDER_MODE;
   }
@@ -2193,6 +2223,29 @@ itself, impose GPL licensing on generated outputs.
     return clampFloat(Math.tanh(drive * x) / denom, -1, 1);
   }
 
+  // TUTORIAL: Builds a comb-interference table for Comb Wavetable Morph.
+  // TUTORIAL: START and END are first blended as one oscillator table, then a feed-forward
+  // TUTORIAL: cyclic delay is mixed back in strongest near the middle of the morph. Because it is not recursive, it should not run
+  // TUTORIAL: away like an ordinary feedback comb filter can.
+  function combMorphTable(startTable, endTable, t) {
+    const fade = clampFloat(t, 0, 1);
+    const base = tableBlendNoFallback(startTable, endTable, fade, 'equal-power');
+    const middle = morphMiddleAmount(fade);
+    const delay = clampInt(1 + fade * 63 + middle * 17, 1, TABLE_SIZE - 1);
+    const secondaryDelay = clampInt(3 + (1 - fade) * 47 + middle * 29, 1, TABLE_SIZE - 1);
+    const depth = clampFloat(0.62 * middle, 0, 0.72);
+    const raw = new Float64Array(TABLE_SIZE);
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const delayedBase = readTableLinear(base, (i - delay) / TABLE_SIZE);
+      const delayedEnd = readTableLinear(endTable, (i - secondaryDelay) / TABLE_SIZE);
+      const delayedStart = readTableLinear(startTable, (i + secondaryDelay) / TABLE_SIZE);
+      const movingComb = delayedBase - ((1 - fade) * delayedEnd + fade * delayedStart);
+      raw[i] = 0.82 * base[i] + depth * movingComb;
+    }
+    const smoothed = finaliseRawTableNoFallback(circularSmoothTable(raw, 1)) || finaliseRawTable(raw);
+    return smoothed;
+  }
+
   let dftTrigCache = null;
   // TUTORIAL: Precomputes sine/cosine lookup tables for the small 256-sample DFT used by spectral morphing.
   function dftTrigTables() {
@@ -2497,10 +2550,15 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       if (!frame) {
         const aFrame = startCache.frame(pos.idx);
         const bFrame = endCache.frame(pos.idx);
-        let table = tableBlendNoFallback(aFrame.table, bFrame.table, pos.fade, variant === 'warm' ? 'equal-power' : 'linear');
-        if (variant === 'warm') table = finaliseRawTableNoFallback(softenTableForMorph(table, pos.fade, 0.35)) || table;
-        if (variant === 'soft') table = finaliseRawTableNoFallback(softenTableForMorph(table, pos.fade, 1.0)) || table;
         const t = pos.fade;
+        let table;
+        if (variant === 'comb') {
+          table = combMorphTable(aFrame.table, bFrame.table, t);
+        } else {
+          table = tableBlendNoFallback(aFrame.table, bFrame.table, t, variant === 'warm' ? 'equal-power' : 'linear');
+          if (variant === 'warm') table = finaliseRawTableNoFallback(softenTableForMorph(table, t, 0.35)) || table;
+          if (variant === 'soft') table = finaliseRawTableNoFallback(softenTableForMorph(table, t, 1.0)) || table;
+        }
         const interp = interpolatedPatch(start, end, t, state.export.differentTypes ? null : state.export.sharedType);
         let fmRangeCents;
         if (state.export.differentFmRanges) fmRangeCents = lerp(fmRangeLabelToCents(start.fmRangeLabel), fmRangeLabelToCents(end.fmRangeLabel), t);
@@ -2558,6 +2616,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (variant === 'warm') notes.push('Warm Wavetable Morph: START and END tables are equal-power blended as one oscillator, with light middle smoothing.');
     else if (variant === 'soft') notes.push('Softened Morph: START and END tables are blended as one oscillator, with smoothing strongest near the middle.');
     else if (variant === 'saturated') notes.push('Saturated Morph: START and END tables are blended as one oscillator, then gently soft-saturated through the transition.');
+    else if (variant === 'comb') notes.push('Comb Wavetable Morph: START and END tables are blended as one oscillator, then a cyclic feed-forward phase-offset comb is applied to the intermediate table before playback.');
     else notes.push('Wavetable Morph: START and END tables are blended before one oscillator path; final WAV output uses the selected DC removal and normalisation mode.');
     if (fadeFilters) notes.push('Wavetable Morph: START and END filter types are faded as separate filter paths so there is no midpoint type switch.');
     return {audio, summary, notes};
@@ -2747,6 +2806,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (mode === 'Saturated Morph (Warm, Compressed)') {
       return renderMorphAudioWavetable(start, end, reverse, progress, token, 'saturated');
     }
+    if (mode === 'Comb Wavetable Morph (Hollow Interference)') {
+      return renderMorphAudioWavetable(start, end, reverse, progress, token, 'comb');
+    }
     throwIfCancelled(token);
     const summary = renderLengthSummary();
     const n = summary.sampleCount, sr = summary.sampleRate, freq = summary.frequency;
@@ -2865,7 +2927,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   function metadataFor(direction, summary, notes, startPatch, endPatch) {
     return {
       schema_version: 4,
-      generator: 'Fractal Wavetable',
+      generator: 'Fractured Wavetable Generator',
       direction,
       created_utc: new Date().toISOString(),
       render_summary: summary,
@@ -2901,7 +2963,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: needed.
   function downloadBlob(blob, filename) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 5000); }
   // TUTORIAL: Converts user-entered prefixes into filesystem-safe filename fragments.
-  function safeName(s) { return String(s || 'fractal_wt').trim().replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+|_+$/g, '') || 'fractal_wt'; }
+  function safeName(s) { return String(s || 'fractured_wt').trim().replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+|_+$/g, '') || 'fractured_wt'; }
   // TUTORIAL: Creates a compact UTC timestamp for deterministic export filenames.
   function compactTimestampUTC(date = new Date()) {
     const pad = n => String(n).padStart(2, '0');
@@ -3118,9 +3180,52 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     ctx.fillText('-96 dB', w - pad - 52, h - pad - 4);
   }
 
-  // TUTORIAL: Chooses wave or spectrum drawing depending on the selected visual mode.
+  // TUTORIAL: Remember each visualiser canvas's normal size so the Off mode can shrink it
+  // TUTORIAL: without permanently changing the drawing area for the other modes.
+  function rememberVisualCanvasSize(canvas) {
+    if (!canvas) return;
+    if (!canvas.dataset.baseWidth) canvas.dataset.baseWidth = String(canvas.width || 520);
+    if (!canvas.dataset.baseHeight) canvas.dataset.baseHeight = String(canvas.height || 250);
+  }
+
+  // TUTORIAL: Restores a visualiser canvas after the compact Off mode has changed its height.
+  function restoreVisualCanvasSize(canvas) {
+    if (!canvas) return;
+    rememberVisualCanvasSize(canvas);
+    const w = clampInt(canvas.dataset.baseWidth, 64, 4096);
+    const h = clampInt(canvas.dataset.baseHeight, 32, 4096);
+    if (canvas.width !== w) canvas.width = w;
+    if (canvas.height !== h) canvas.height = h;
+  }
+
+  // TUTORIAL: Draws a compact framed replacement for the visualiser. This keeps a visible
+  // TUTORIAL: placeholder in the layout while giving the patch controls back their vertical room.
+  function drawVisualOff(canvas, label) {
+    if (!canvas) return;
+    rememberVisualCanvasSize(canvas);
+    const w = clampInt(canvas.dataset.baseWidth, 64, 4096);
+    const h = 54;
+    if (canvas.width !== w) canvas.width = w;
+    if (canvas.height !== h) canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#030405';
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = '#73d7ff';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(10, 10, w - 20, h - 20);
+    ctx.fillStyle = '#73d7ff';
+    ctx.font = '14px system-ui, sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label || 'Visualiser Is Turned Off', 22, h / 2);
+  }
+
+  // TUTORIAL: Chooses wave, spectrum, or compact-off drawing depending on the selected visual mode.
   function drawVisual(canvas, visual, prefix = '') {
     const label = `${prefix}${visual.label}`;
+    if (!canvas) return;
+    if (visual.kind === 'off') { drawVisualOff(canvas, label); return; }
+    restoreVisualCanvasSize(canvas);
     if (visual.kind === 'spectrum') drawSpectrum(canvas, visual.data, label);
     else drawWave(canvas, visual.data, label);
   }
@@ -3197,6 +3302,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: the display reflects post-filter output for FM/PWM/AM modes while Base Table remains
   // TUTORIAL: a pre-modulation table view.
   function visualDataForPatch(patch, mode) {
+    if (mode === 'Off') return {kind: 'off', data: null, label: 'Visualiser Is Turned Off'};
     const table = tableForPatch(patch);
     const fmRange = fmRangeLabelToCents(patch.fmRangeLabel);
     if (mode === 'Phase-locked FM/PWM/AM') {
@@ -3563,15 +3669,41 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Keeps a slider and numeric input paired without letting one drift from the other.
+  // TUTORIAL: Dragging the range slider commits immediately. Number fields commit on
+  // TUTORIAL: normal change/blur, Enter, or stepper-style up/down movement. Plain typing
+  // TUTORIAL: is allowed to remain provisional until the user commits it.
   function syncRangeNumber(range, num, setter, afterChange = updateVisuals) {
     const apply = value => {
+      if (value === '' || !Number.isFinite(Number(value))) return;
       range.value = value;
       num.value = value;
       setter(Number(value));
       afterChange();
     };
     range.addEventListener('input', () => apply(range.value));
-    num.addEventListener('change', () => apply(num.value));
+    let commitNextNumberInput = false;
+    num.addEventListener('keydown', ev => {
+      if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown' || ev.key === 'PageUp' || ev.key === 'PageDown') {
+        commitNextNumberInput = true;
+        setTimeout(() => apply(num.value), 0);
+      } else if (ev.key === 'Enter') {
+        ev.preventDefault();
+        apply(num.value);
+      }
+    });
+    num.addEventListener('wheel', () => {
+      commitNextNumberInput = true;
+      setTimeout(() => apply(num.value), 0);
+    });
+    num.addEventListener('input', ev => {
+      const inputType = String(ev.inputType || '');
+      const looksLikeTyping = inputType.startsWith('insert') || inputType.startsWith('delete') || inputType.includes('Composition');
+      if (commitNextNumberInput || !looksLikeTyping) {
+        commitNextNumberInput = false;
+        apply(num.value);
+      }
+    });
+    num.addEventListener('change', () => { commitNextNumberInput = false; apply(num.value); });
   }
 
   // TUTORIAL: Adds a labelled slider row and writes changes back through the supplied callback.
@@ -3639,11 +3771,49 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     filterRow.append(filterLab, filterSel); parent.appendChild(filterRow);
     addSlider(parent, 'Filter Cutoff Hz', patch, 'filterCutoff', 20, 20000, 1, afterPatchChange);
     addSlider(parent, 'Filter Resonance', patch, 'filterResonance', 0, 1, 0.01, afterPatchChange);
+    if (patchKey === 'start' || patchKey === 'end') addPatchVisualiserCanvas(parent, patchKey);
     addSlider(parent, 'Source Window Start', patch, 'beforeStart', 0, WINDOW_STEPS, 1, afterPatchChange);
     addSlider(parent, 'Source Window End', patch, 'beforeEnd', 0, WINDOW_STEPS, 1, afterPatchChange);
     addSlider(parent, 'Result Window Start', patch, 'afterStart', 0, WINDOW_STEPS, 1, afterPatchChange);
     addSlider(parent, 'Result Window End', patch, 'afterEnd', 0, WINDOW_STEPS, 1, afterPatchChange);
+    if (patchKey === 'single') addPlaygroundMorphCopyButtons(parent);
   }
+
+  // TUTORIAL: Inserts the START/END visualiser inside the patch-control flow. Keeping the
+  // TUTORIAL: canvas below Filter Resonance makes filter edits and their visual effect easier
+  // TUTORIAL: to read without scrolling past the source/result window controls.
+  function addPatchVisualiserCanvas(parent, patchKey) {
+    const canvas = document.createElement('canvas');
+    canvas.id = patchKey === 'end' ? 'endCanvas' : 'startCanvas';
+    canvas.width = 520;
+    canvas.height = 250;
+    canvas.dataset.baseWidth = '520';
+    canvas.dataset.baseHeight = '250';
+    parent.appendChild(canvas);
+  }
+
+  // TUTORIAL: Playground copy buttons turn a single patch idea into a START/END morph setup.
+  // TUTORIAL: They deliberately mute audition before switching tabs, so copied settings do not
+  // TUTORIAL: leave the Playground drone running behind the Morph tab.
+  function addPlaygroundMorphCopyButtons(parent) {
+    const bar = document.createElement('div');
+    bar.className = 'buttonbar';
+    const toStart = document.createElement('button');
+    toStart.textContent = 'Copy → START';
+    toStart.type = 'button';
+    toStart.onclick = () => copyPlaygroundPatchToMorph('start');
+    const toEnd = document.createElement('button');
+    toEnd.textContent = 'Copy → END';
+    toEnd.type = 'button';
+    toEnd.onclick = () => copyPlaygroundPatchToMorph('end');
+    const toBoth = document.createElement('button');
+    toBoth.textContent = 'Copy → Both';
+    toBoth.type = 'button';
+    toBoth.onclick = () => copyPlaygroundPatchToMorph('both');
+    bar.append(toStart, toEnd, toBoth);
+    parent.appendChild(bar);
+  }
+
 
   // TUTORIAL: Creates a standard two-column settings row.
   function makeRow(parent, label, control, className = 'row wide') {
@@ -3817,6 +3987,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     document.querySelectorAll('[data-export-setting="dc-mode"]').forEach(el => el.value = state.export.dcMode);
     document.querySelectorAll('[data-export-setting="norm-mode"]').forEach(el => el.value = state.export.normMode);
     document.querySelectorAll('[data-export-setting="headroom-db"]').forEach(el => el.value = state.export.headroomDb);
+    document.querySelectorAll('[data-export-setting="shared-wavetable-type"]').forEach(el => el.value = String(canonicalWavetableType(state.export.sharedType)));
+    document.querySelectorAll('[data-export-setting="shared-fm-range"]').forEach(el => el.value = state.export.sharedFmRange || DEFAULT_FM_RANGE_LABEL);
     syncDownloadModeControls();
   }
 
@@ -4010,8 +4182,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     syncRangeNumber(volumeRange, volumeNum, v => { state.common.volume = clampFloat(v, 0, 1); persistGlobalSettings(); }, () => { setOutputGain(); syncPitchControls(); updateStatusSummaries(); });
 
     const checks = document.createElement('div'); checks.innerHTML = `<label><input id="diffTypes" type="checkbox"> Different START/END Wavetable Types</label><br><label><input id="diffFmRanges" type="checkbox"> Different START/END FM Pitch Range</label><br><label><input id="cycleStepped" type="checkbox"> Cycle-stepped transition</label>`; row('Morph Options', checks);
-    const sharedType = createWavetableSelect(state.export.sharedType, v => { state.export.sharedType = v; updateVisuals(); updateStatusSummaries(); }); row('Shared Wavetable Type', sharedType);
-    const sharedFm = document.createElement('select'); FM_RANGES.forEach(([label]) => sharedFm.append(new Option(label, label))); sharedFm.value = state.export.sharedFmRange; sharedFm.onchange = () => { state.export.sharedFmRange = sharedFm.value; state.patches.start.fmRangeLabel = sharedFm.value; state.patches.end.fmRangeLabel = sharedFm.value; updateVisuals(); updateStatusSummaries(); }; row('Shared FM Pitch Range', sharedFm);
+    const sharedType = createWavetableSelect(state.export.sharedType, v => { state.export.sharedType = v; updateVisuals(); updateStatusSummaries(); });
+    sharedType.dataset.exportSetting = 'shared-wavetable-type';
+    row('Shared Wavetable Type', sharedType);
+    const sharedFm = document.createElement('select');
+    sharedFm.dataset.exportSetting = 'shared-fm-range';
+    FM_RANGES.forEach(([label]) => sharedFm.append(new Option(label, label))); sharedFm.value = state.export.sharedFmRange; sharedFm.onchange = () => { state.export.sharedFmRange = sharedFm.value; state.patches.start.fmRangeLabel = sharedFm.value; state.patches.end.fmRangeLabel = sharedFm.value; updateVisuals(); updateStatusSummaries(); }; row('Shared FM Pitch Range', sharedFm);
     const curveMode = document.createElement('select'); ['Bend','S-curve'].forEach(v => curveMode.append(new Option(v, v))); curveMode.value = state.export.curveMode; curveMode.onchange = () => state.export.curveMode = curveMode.value; row('Curve Mode', curveMode);
     row('Curve Amount', makeCurveAmountControl());
     row('DC Removal', makeDcControl());
@@ -4249,17 +4425,95 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     else handleMidiNoteOff(channel, note);
   }
 
+  // TUTORIAL: Creates an independent patch copy and re-applies canonical defaults. This avoids
+  // TUTORIAL: START/END sharing the same object when a Playground patch is copied into Morph.
+  function clonePatchForMorph(patch) {
+    const p = {...defaultPatch(), ...patch};
+    p.engine = canonicalEngineName(p.engine || DEFAULT_ENGINE);
+    p.wavetableType = canonicalWavetableType(p.wavetableType);
+    p.fmRangeLabel = p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL;
+    return p;
+  }
+
+  // TUTORIAL: Programmatic tab switch used by both tab buttons and Playground→Morph copy buttons.
+  function activateTab(tabId, options = {}) {
+    const targetId = String(tabId || 'playground');
+    if (!$(targetId)) return;
+    if (options.mute !== false && activeTabId() !== targetId) muteCurrentTabAudio();
+    document.querySelectorAll('.tabButton').forEach(b => b.classList.toggle('active', b.dataset.tab === targetId));
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === targetId));
+    updateVisuals();
+  }
+
+  // TUTORIAL: Reads the currently effective endpoint wavetable type and FM range.
+  // TUTORIAL: In shared mode, the disabled START/END controls do not represent what
+  // TUTORIAL: the render path is actually using, so copy operations must preserve the
+  // TUTORIAL: shared value as the untouched endpoint's explicit value before switching
+  // TUTORIAL: into Different START/END mode.
+  function effectiveMorphEndpointSettings(patch) {
+    return {
+      wavetableType: state.export.differentTypes ? canonicalWavetableType(patch.wavetableType) : canonicalWavetableType(state.export.sharedType),
+      fmRangeLabel: state.export.differentFmRanges ? (patch.fmRangeLabel || DEFAULT_FM_RANGE_LABEL) : (state.export.sharedFmRange || DEFAULT_FM_RANGE_LABEL),
+    };
+  }
+
+  // TUTORIAL: Applies START/END wavetable-type routing after a Playground copy.
+  // TUTORIAL: Copy → Both intentionally returns to shared mode. Copy → START or
+  // TUTORIAL: Copy → END enables Different START/END mode only when the two
+  // TUTORIAL: effective endpoint values now need to differ.
+  function applyCopiedWavetableRouting(target, copied, beforeStart, beforeEnd) {
+    const nextStart = target === 'end' ? beforeStart.wavetableType : canonicalWavetableType(copied.wavetableType);
+    const nextEnd = target === 'start' ? beforeEnd.wavetableType : canonicalWavetableType(copied.wavetableType);
+    state.patches.start.wavetableType = nextStart;
+    state.patches.end.wavetableType = nextEnd;
+    if (nextStart === nextEnd) {
+      state.export.differentTypes = false;
+      state.export.sharedType = nextStart;
+    } else {
+      state.export.differentTypes = true;
+    }
+  }
+
+  // TUTORIAL: Applies START/END FM-range routing after a Playground copy, mirroring
+  // TUTORIAL: the wavetable-type rules above.
+  function applyCopiedFmRangeRouting(target, copied, beforeStart, beforeEnd) {
+    const nextStart = target === 'end' ? beforeStart.fmRangeLabel : (copied.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
+    const nextEnd = target === 'start' ? beforeEnd.fmRangeLabel : (copied.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
+    state.patches.start.fmRangeLabel = nextStart;
+    state.patches.end.fmRangeLabel = nextEnd;
+    if (nextStart === nextEnd) {
+      state.export.differentFmRanges = false;
+      state.export.sharedFmRange = nextStart;
+    } else {
+      state.export.differentFmRanges = true;
+    }
+  }
+
+  // TUTORIAL: Copies the Playground patch into START, END, or both Morph endpoints, then opens
+  // TUTORIAL: the Morph tab silently so the new endpoints are ready to audition or export.
+  function copyPlaygroundPatchToMorph(target) {
+    muteCurrentTabAudio();
+    const beforeStart = effectiveMorphEndpointSettings(state.patches.start);
+    const beforeEnd = effectiveMorphEndpointSettings(state.patches.end);
+    const copied = clonePatchForMorph(state.patches.single);
+    if (target === 'start' || target === 'both') state.patches.start = clonePatchForMorph(copied);
+    if (target === 'end' || target === 'both') state.patches.end = clonePatchForMorph(copied);
+    applyCopiedWavetableRouting(target, copied, beforeStart, beforeEnd);
+    applyCopiedFmRangeRouting(target, copied, beforeStart, beforeEnd);
+    state.audio.morphCache = null;
+    rebuildPatchControls();
+    syncExportSettingControls();
+    activateTab('morph', {mute: false});
+    const label = target === 'both' ? 'START and END' : target.toUpperCase();
+    const status = $('morphStatus');
+    if (status) status.textContent = `Copied Playground settings to ${label}. Audio muted.`;
+  }
+
+
   // TUTORIAL: Event wiring. All DOM event handlers are connected in one place so the HTML remains
   // TUTORIAL: declarative and the code path from button/slider to state update is easier to trace.
   function wireUi() {
-    document.querySelectorAll('.tabButton').forEach(btn => btn.addEventListener('click', () => {
-      if (activeTabId() !== btn.dataset.tab) muteCurrentTabAudio();
-      document.querySelectorAll('.tabButton').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      $(btn.dataset.tab).classList.add('active');
-      updateVisuals();
-    }));
+    document.querySelectorAll('.tabButton').forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
     const escStop = ev => { if (ev.key === 'Escape' || ev.code === 'Escape') { ev.preventDefault(); ev.stopPropagation(); globalPanicStop(); } };
     document.addEventListener('keydown', escStop, {capture: true});
     window.addEventListener('keydown', escStop, {capture: true});
