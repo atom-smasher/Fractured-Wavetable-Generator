@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.1
+Fractured Wavetable Generator v2.2
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,9 +14,9 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v2.1 adds reciprocal A/B polarity-sensitive wavetable types for protected division, sign gating,
-and sign-controlled polarity flipping. It also renames the existing directional modes so the UI states which source
-controls polarity/gating and which source is being shaped. The dropdown is grouped by musical function while preserving internal mode IDs for patch compatibility.
+Modification note: v2.2 adds the reciprocal wavetable/interpolation modes to
+the reorganised Wavetable Type dropdown, renames ambiguous soft-only modes for
+clearer UI wording, and keeps complementary/reciprocal modes adjacent.
 
 Provenance note: this browser implementation is inspired by Carl Hudson’s
 Fractal Wavetable Generator concept. Carl Hudson’s original C implementation
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.1</title>
+<title>Fractured Wavetable Generator v2.2</title>
 <style>
   :root {
     --bg: #101216;
@@ -101,7 +101,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.1</h1>
+  <h1>Fractured Wavetable Generator v2.2</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -263,7 +263,7 @@ itself, impose GPL licensing on generated outputs.
       <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
       <p class="note">Generator selection is split into a Family dropdown and adjacent Smooth/Crunchy variant check-boxes. The two variant boxes act as a pair: choosing one clears the other. Internally, patches still save the full engine name, such as <code>Pulse Warp Crunchy</code>, so JSON remains explicit while the UI stays compact.</p>
       <p class="note">The generator engines are clean-room DSP experiments built from ordinary waveforms, FM-style phase modulation, Pulse Warp duty-cycle shaping, sync-style resets, formant-inspired harmonic peaks, folding, bitcrushing, additive harmonic clusters, modal spacing, feedback sine bending, non-linear phase-distortion remapping, phase warping, smoothing, saturation, bitwise/quantised collision, comb-style phase-offset interference, and spectral table reconstruction. Wavetable Type is the collision/combine stage.</p>
-      <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. In v2.1 the dropdown is grouped by musical function, so visible UI order may differ from internal IDs. This lets the menu be made more readable without redefining old internal mode IDs.</p>
+      <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. In v2.2 the dropdown is grouped by musical function, so visible UI order may differ from internal IDs. This lets the menu be made more readable without redefining old internal mode IDs.</p>
       <p class="note">Phase Distortion engines use Primary Phase for phase-distortion depth and phase offset, Shape 1 for the breakpoint/knee, and Shape 2 for source-wave flavour plus a second warped source. Smooth rounds the phase knees; Crunchy adds stronger bends, folding, and edge motion than Smooth, but v14.07 reduces the jumpiest Shape 1/Shape 2 threshold noise so the range is wider and more controllable.</p>
       <p class="note">The three main generator knobs keep their internal names in code and JSON as <code>pot1</code>, <code>pot2</code>, and <code>pot3</code>, but the UI relabels them by generator family and rebuilds those labels immediately when Generator Family changes. For example, FM shows Index, Ratio, and Carrier Colour; Sync shows Sync Intensity, Source A Shape, and Source B Shape; Formant shows Formant Spacing, Vowel Position, and Bandwidth / Grit. In the Sync family, Source A and Source B use bounded bidirectional cross-coupling: each source can shape the other without using unstable recursive feedback. Smooth variants are more rounded and root-stable; Crunchy variants push harder phase warp, folding, quantisation, reset edges, feedback, or digital grit.</p>
       <p class="note">Visualisation note: FM/PWM/AM views and the spectrum analyser show a post-filter preview. Base table shows the generated table before oscillator modulation and filtering. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
@@ -290,7 +290,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.1';
+  const APP_VERSION = 'v2.2';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -318,56 +318,56 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Wavetable mode metadata. Each mode now has an explicit internal id and
   // TUTORIAL: an explicit UI number. The internal id is what patches and JSON store; the UI
-  // TUTORIAL: number is only presentation. In v2.1 the visible list is grouped by musical function,
+  // TUTORIAL: number is only presentation. In v2.2 the visible list is grouped by musical function,
   // TUTORIAL: so UI numbers no longer have to match internal ids. That decoupling lets future versions reorder or regroup the menu without silently
   // TUTORIAL: changing what an existing JSON wavetableType id means.
   const WT_MODE_INFO = [
-    {id: 0, ui: 0, group: 'Sources', name: 'Source A', description: 'First generated source wave before combine/collision shaping'},
-    {id: 1, ui: 1, group: 'Sources', name: 'Source B', description: 'Second generated source wave before combine/collision shaping'},
-    {id: 3, ui: 2, group: 'Sources', name: 'A→B Splice', description: 'First half Source A, second half Source B'},
-    {id: 2, ui: 3, group: 'Sources', name: 'B→A Splice', description: 'First half Source B, second half Source A'},
-    {id: 20, ui: 4, group: 'Blends', name: 'Average', description: 'Balanced average of the two sources'},
-    {id: 4, ui: 5, group: 'Blends', name: 'Sum', description: 'Normalised Source A and Source B added together'},
-    {id: 21, ui: 6, group: 'Blends', name: 'Mostly A', description: 'Weighted blend biased toward Source A'},
-    {id: 22, ui: 7, group: 'Blends', name: 'Mostly B', description: 'Weighted blend biased toward Source B'},
-    {id: 23, ui: 8, group: 'Blends', name: 'Primary Phase Crossfade', description: 'Primary Phase crossfades between Source A and Source B'},
-    {id: 24, ui: 9, group: 'Blends', name: 'Smooth Average', description: 'Low-pass smoothed source average'},
-    {id: 33, ui: 10, group: 'Blends', name: 'Phase Blur', description: 'Chorus-like internal smoothing inside one cycle'},
-    {id: 32, ui: 11, group: 'Blends', name: 'Hann Windowed', description: 'Raised-cosine cycle window that softens boundary bite'},
-    {id: 31, ui: 12, group: 'Blends', name: 'Zero-Cross Blend', description: 'Blends toward a sine-like curve near zero crossings'},
-    {id: 5, ui: 13, group: 'Difference / Edges', name: 'Difference', description: 'Source A minus Source B'},
-    {id: 14, ui: 14, group: 'Difference / Edges', name: 'Abs Difference', description: 'Rectified source difference; buzzy and octave-like'},
-    {id: 25, ui: 15, group: 'Difference / Edges', name: 'Smooth Difference', description: 'Rounded version of the difference mode'},
-    {id: 16, ui: 16, group: 'Difference / Edges', name: 'Fold Difference', description: 'Wavefolded difference for metallic hollow harmonics'},
-    {id: 12, ui: 17, group: 'Difference / Edges', name: 'Min', description: 'Takes the lower of the two sources at each sample'},
-    {id: 13, ui: 18, group: 'Difference / Edges', name: 'Max', description: 'Takes the higher of the two sources at each sample'},
-    {id: 17, ui: 19, group: 'Difference / Edges', name: 'Comparator', description: 'Hard ±1 output depending on whether Source A exceeds Source B'},
-    {id: 18, ui: 20, group: 'Difference / Edges', name: 'Interleave', description: 'Alternates samples from Source A and Source B'},
-    {id: 19, ui: 21, group: 'Difference / Edges', name: 'Edge', description: 'Derivative-style mode that emphasises moving edges'},
-    {id: 6, ui: 22, group: 'Multiply / Divide / Polarity', name: 'Multiply', description: 'Sources multiplied sample-by-sample'},
-    {id: 7, ui: 23, group: 'Multiply / Divide / Polarity', name: 'A Divided by B', description: 'Source A is reshaped by Source B level; quiet B areas push A harder, with protection from runaway peaks'},
-    {id: 43, ui: 24, group: 'Multiply / Divide / Polarity', name: 'B Divided by A', description: 'Source B is reshaped by Source A level; quiet A areas push B harder, with protection from runaway peaks'},
-    {id: 38, ui: 25, group: 'Multiply / Divide / Polarity', name: 'A-Gated B', description: 'Gate = Source A; audio = Source B. B passes while A is positive, otherwise silence'},
-    {id: 44, ui: 26, group: 'Multiply / Divide / Polarity', name: 'B-Gated A', description: 'Gate = Source B; audio = Source A. A passes while B is positive, otherwise silence'},
-    {id: 39, ui: 27, group: 'Multiply / Divide / Polarity', name: 'A Flips B Polarity', description: 'Source A controls Source B polarity: positive A passes B normally, negative A inverts B'},
-    {id: 45, ui: 28, group: 'Multiply / Divide / Polarity', name: 'B Flips A Polarity', description: 'Source B controls Source A polarity: positive B passes A normally, negative B inverts A'},
-    {id: 8, ui: 29, group: 'Quantised Logic', name: 'Quantised OR', description: 'Source collision after an 8-bit quantise stage, using bitwise OR'},
-    {id: 9, ui: 30, group: 'Quantised Logic', name: 'Quantised XOR', description: 'Source collision after an 8-bit quantise stage, using bitwise XOR'},
-    {id: 10, ui: 31, group: 'Quantised Logic', name: 'Quantised AND', description: 'Source collision after an 8-bit quantise stage, using bitwise AND'},
-    {id: 11, ui: 32, group: 'Quantised Logic', name: 'Quantised XNOR', description: 'Inverted quantised XOR; wide plateaus and hard flips'},
-    {id: 15, ui: 33, group: 'Folding / Shaping', name: 'Fold Sum', description: 'Wavefolded sum for rich synth-like harmonics'},
-    {id: 26, ui: 34, group: 'Folding / Shaping', name: 'Sine Shaper', description: 'Trigonometric rounding of the blended source'},
-    {id: 27, ui: 35, group: 'Folding / Shaping', name: 'Soft Saturate', description: 'Mild tanh saturation for warmer compression'},
-    {id: 28, ui: 36, group: 'Folding / Shaping', name: 'Triangle Fold Soft', description: 'Gentle triangular folding with rounded edges'},
-    {id: 29, ui: 37, group: 'Folding / Shaping', name: 'Root Shape', description: 'Lifts quiet detail while rounding the extremes'},
-    {id: 30, ui: 38, group: 'Folding / Shaping', name: 'Power Shape', description: 'Darker shaping that suppresses mid-level detail'},
-    {id: 40, ui: 39, group: 'Folding / Shaping', name: 'Soft Clip Sum', description: 'Heavier tanh clipping of the source sum'},
-    {id: 41, ui: 40, group: 'Folding / Shaping', name: 'Hard Clip Sum', description: 'Flat-topped clipped source sum with strong harmonics'},
-    {id: 34, ui: 41, group: 'Symmetry / Harmonics', name: 'Odd Soft', description: 'Smoothed odd-symmetric projection; rounded odd-harmonic emphasis'},
-    {id: 36, ui: 42, group: 'Symmetry / Harmonics', name: 'Odd Hard', description: 'Folded odd-edge mode with polarity gates and sharper odd-harmonic bite'},
-    {id: 35, ui: 43, group: 'Symmetry / Harmonics', name: 'Even Soft', description: 'Smoothed even-symmetric projection; rounded hollow/formant emphasis'},
-    {id: 37, ui: 44, group: 'Symmetry / Harmonics', name: 'Even Hard', description: 'Rectified even-ridge mode with hard plateaus and stronger even-harmonic bite'},
-    {id: 42, ui: 45, group: 'Comb / Interference', name: 'Cyclic Comb', description: 'Feed-forward phase-offset interference between the two sources; hollow, flangey, and metallic'},
+    {id: 0, ui: 0, group: 'Sources / Splices', name: 'Source A', description: 'First generated source wave before combine/collision shaping'},
+    {id: 1, ui: 1, group: 'Sources / Splices', name: 'Source B', description: 'Second generated source wave before combine/collision shaping'},
+    {id: 3, ui: 2, group: 'Sources / Splices', name: 'A→B Splice', description: 'First half Source A, second half Source B'},
+    {id: 2, ui: 3, group: 'Sources / Splices', name: 'B→A Splice', description: 'First half Source B, second half Source A'},
+    {id: 18, ui: 4, group: 'Sources / Splices', name: 'Interleave', description: 'Alternates samples from Source A and Source B'},
+    {id: 20, ui: 5, group: 'Blend / Difference', name: 'Average', description: 'Balanced average of the two sources'},
+    {id: 4, ui: 6, group: 'Blend / Difference', name: 'Sum', description: 'Normalised Source A and Source B added together'},
+    {id: 5, ui: 7, group: 'Blend / Difference', name: 'Difference', description: 'Source A minus Source B'},
+    {id: 14, ui: 8, group: 'Blend / Difference', name: 'Abs Difference', description: 'Rectified source difference; buzzy and octave-like'},
+    {id: 24, ui: 9, group: 'Blend / Difference', name: 'Smooth Average', description: 'Low-pass smoothed source average'},
+    {id: 25, ui: 10, group: 'Blend / Difference', name: 'Smooth Difference', description: 'Rounded version of the difference mode'},
+    {id: 21, ui: 11, group: 'Blend / Difference', name: 'Mostly A', description: 'Weighted blend biased toward Source A'},
+    {id: 22, ui: 12, group: 'Blend / Difference', name: 'Mostly B', description: 'Weighted blend biased toward Source B'},
+    {id: 23, ui: 13, group: 'Blend / Difference', name: 'Primary Phase Crossfade', description: 'Primary Phase crossfades between Source A and Source B'},
+    {id: 12, ui: 14, group: 'Compare / Edges', name: 'Min', description: 'Takes the lower of the two sources at each sample'},
+    {id: 13, ui: 15, group: 'Compare / Edges', name: 'Max', description: 'Takes the higher of the two sources at each sample'},
+    {id: 17, ui: 16, group: 'Compare / Edges', name: 'Comparator', description: 'Hard ±1 output depending on whether Source A exceeds Source B'},
+    {id: 19, ui: 17, group: 'Compare / Edges', name: 'Edge', description: 'Derivative-style mode that emphasises moving edges'},
+    {id: 6, ui: 18, group: 'Multiply / Divide / Polarity', name: 'Multiply', description: 'Sources multiplied sample-by-sample'},
+    {id: 7, ui: 19, group: 'Multiply / Divide / Polarity', name: 'A Divided by B', description: 'Source A is reshaped by Source B level; quiet B areas push A harder, with protection from runaway peaks'},
+    {id: 43, ui: 20, group: 'Multiply / Divide / Polarity', name: 'B Divided by A', description: 'Source B is reshaped by Source A level; quiet A areas push B harder, with protection from runaway peaks'},
+    {id: 38, ui: 21, group: 'Multiply / Divide / Polarity', name: 'A-Gated B', description: 'Gate = Source A; audio = Source B. B passes while A is positive, otherwise silence'},
+    {id: 44, ui: 22, group: 'Multiply / Divide / Polarity', name: 'B-Gated A', description: 'Gate = Source B; audio = Source A. A passes while B is positive, otherwise silence'},
+    {id: 39, ui: 23, group: 'Multiply / Divide / Polarity', name: 'A Flips B Polarity', description: 'Source A controls Source B polarity: positive A passes B normally, negative A inverts B'},
+    {id: 45, ui: 24, group: 'Multiply / Divide / Polarity', name: 'B Flips A Polarity', description: 'Source B controls Source A polarity: positive B passes A normally, negative B inverts A'},
+    {id: 8, ui: 25, group: 'Quantised Logic', name: 'Quantised OR', description: 'Source collision after an 8-bit quantise stage, using bitwise OR'},
+    {id: 10, ui: 26, group: 'Quantised Logic', name: 'Quantised AND', description: 'Source collision after an 8-bit quantise stage, using bitwise AND'},
+    {id: 9, ui: 27, group: 'Quantised Logic', name: 'Quantised XOR', description: 'Source collision after an 8-bit quantise stage, using bitwise XOR'},
+    {id: 11, ui: 28, group: 'Quantised Logic', name: 'Quantised XNOR', description: 'Inverted quantised XOR; wide plateaus and hard flips'},
+    {id: 15, ui: 29, group: 'Folding / Shaping', name: 'Fold Sum', description: 'Wavefolded sum for rich synth-like harmonics'},
+    {id: 16, ui: 30, group: 'Folding / Shaping', name: 'Fold Difference', description: 'Wavefolded difference for metallic hollow harmonics'},
+    {id: 28, ui: 31, group: 'Folding / Shaping', name: 'Triangle Fold', description: 'Gentle triangular folding with rounded edges'},
+    {id: 26, ui: 32, group: 'Folding / Shaping', name: 'Sine Shaper', description: 'Trigonometric rounding of the blended source'},
+    {id: 27, ui: 33, group: 'Folding / Shaping', name: 'Warm Saturation', description: 'Mild tanh saturation for warmer compression'},
+    {id: 40, ui: 34, group: 'Folding / Shaping', name: 'Soft Clip Sum', description: 'Heavier tanh clipping of the source sum'},
+    {id: 41, ui: 35, group: 'Folding / Shaping', name: 'Hard Clip Sum', description: 'Flat-topped clipped source sum with strong harmonics'},
+    {id: 29, ui: 36, group: 'Folding / Shaping', name: 'Root Shape', description: 'Lifts quiet detail while rounding the extremes'},
+    {id: 30, ui: 37, group: 'Folding / Shaping', name: 'Power Shape', description: 'Darker shaping that suppresses mid-level detail'},
+    {id: 34, ui: 38, group: 'Symmetry / Harmonics', name: 'Odd Soft', description: 'Smoothed odd-symmetric projection; rounded odd-harmonic emphasis'},
+    {id: 35, ui: 39, group: 'Symmetry / Harmonics', name: 'Even Soft', description: 'Smoothed even-symmetric projection; rounded hollow/formant emphasis'},
+    {id: 36, ui: 40, group: 'Symmetry / Harmonics', name: 'Odd Hard', description: 'Folded odd-edge mode with polarity gates and sharper odd-harmonic bite'},
+    {id: 37, ui: 41, group: 'Symmetry / Harmonics', name: 'Even Hard', description: 'Rectified even-ridge mode with hard plateaus and stronger even-harmonic bite'},
+    {id: 31, ui: 42, group: 'Window / Blur / Interference', name: 'Zero-Cross Blend', description: 'Blends toward a sine-like curve near zero crossings'},
+    {id: 32, ui: 43, group: 'Window / Blur / Interference', name: 'Hann Windowed', description: 'Raised-cosine cycle window that softens boundary bite'},
+    {id: 33, ui: 44, group: 'Window / Blur / Interference', name: 'Phase Blur', description: 'Chorus-like internal smoothing inside one cycle'},
+    {id: 42, ui: 45, group: 'Window / Blur / Interference', name: 'Cyclic Comb', description: 'Feed-forward phase-offset interference between the two sources; hollow, flangey, and metallic'},
   ];
   const WT_MODE_BY_ID = new Map(WT_MODE_INFO.map(mode => [mode.id, mode]));
   const WAVETABLE_TYPE_MIN = Math.min(...WT_MODE_INFO.map(mode => mode.id));
@@ -3666,7 +3666,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Builds the wavetable-type dropdown from WT_MODE_INFO.
   // TUTORIAL: Option values are internal ids; the number at the front of the text is a display
   // TUTORIAL: number. Keeping those separate means later UI ordering changes do not redefine JSON ids.
-  // TUTORIAL: v2.1 uses optgroups so related combine modes and reciprocal A/B modes stay adjacent.
+  // TUTORIAL: v2.2 uses optgroups so complementary and reciprocal combine modes stay adjacent.
   function createWavetableSelect(value, onChange) {
     const select = document.createElement('select');
     const groups = new Map();
