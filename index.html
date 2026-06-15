@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.4c
+Fractured Wavetable Generator v2.4m
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v2.4c lets focused Calculator Multisample Planner lowest/highest MIDI-note fields learn from incoming Web MIDI note-on messages, while ignoring the matching note-off for calculator entry so the synth gate is not accidentally triggered. v2.4b fixed the Multisample Planner note-name readouts. v2.4a refined loop-safety UI defaults and Calculator teaching text.
+Modification note: v2.4m fixes the Morph loop-safety show/hide behaviour: collapsed mode now keeps only the summary and frequency-action buttons visible, while the detailed loop-closure findings, sound-design notes, and explanatory guidance are shown only when details are expanded. v2.4l narrowed the notice policy so red !! items are reserved for practical loop-closure issues and orange ! items are restrained sound-design notes.
 
 Recent v2.4 summary: v2.4 was a release-cleanup pass after the v2.3 series. It kept the v2.3zg behaviour, preserved the concise visualiser path captions, kept the slow-animation performance guard, fixed lingering RAM wording in export notes, and added tutorial comments around the newer tab-persistence, loop-safety, Bulk loop-safe planning, and notice-refresh helpers.
 
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.4c</title>
+<title>Fractured Wavetable Generator v2.4m</title>
 <style>
   :root {
     --bg: #101216;
@@ -87,17 +87,30 @@ itself, impose GPL licensing on generated outputs.
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .status { white-space: pre-wrap; min-height: 24px; padding: 9px; background: #0d1118; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }
   .status strong { color: var(--text); }
-  .loopNotice { margin: 8px 0; border-color: #4b5567; }
+  .loopNotice { margin: 8px 0; border-color: #4b5567; white-space: normal; line-height: 1.35; }
   .loopNotice.safe { border-color: rgba(132,240,178,0.55); color: var(--ok); }
-  .loopNotice.warn { border-color: rgba(255,211,108,0.65); color: var(--warn); }
+  .loopNotice.warn { border-color: rgba(255,211,108,0.65); color: var(--muted); }
   .loopNotice.caution { border-color: rgba(255,211,108,0.45); color: var(--muted); }
   .loopNotice strong { color: var(--text); }
-  .loopNoticeHeader { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .loopNoticeHeader { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 2px; }
   .loopNoticeHeader strong { flex: 1; }
   .loopNoticeToggle { padding: 3px 8px; font-size: 12px; white-space: nowrap; }
-  .loopNoticeSummary { margin: 0 0 6px; }
-  .loopNoticeBody p { margin: 0 0 0.65em; }
+  .loopNoticeSummary { margin: 0 0 3px; color: var(--text); }
+  .loopNoticeBody { margin-top: 4px; }
+  .loopNoticeBody p { margin: 0 0 0.35em; }
   .loopNoticeBody p:last-child { margin-bottom: 0; }
+  .loopNoticeFindingList, .loopNoticeCompact { margin: 2px 0 4px; display: grid; gap: 5px; }
+  .loopNoticeGroup { display: grid; gap: 2px; }
+  .loopNoticeGroupTitle { margin: 1px 0 0; color: var(--text); font-weight: 650; font-size: 12px; }
+  .loopNoticeFinding { display: grid; grid-template-columns: 1.8em minmax(0, 1fr); gap: 3px; align-items: start; margin: 0; color: var(--muted); }
+  .loopNoticeIssueMarker { color: var(--bad); font-weight: 900; text-align: center; }
+  .loopNoticeNoteMarker { color: var(--warn); font-weight: 800; text-align: center; }
+  .loopNoticeOkHint { color: var(--ok); }
+  .loopFrequencySuggestions { margin: 3px 0 4px; }
+  .loopFrequencySuggestions p { margin: 0 0 2px; }
+  .loopFrequencySuggestions .buttonbar { margin: 3px 0 2px; }
+  .loopFrequencySuggestions button { font-size: 12px; padding: 5px 8px; }
+  .loopFrequencySuggestions .small { display: block; margin: 2px 0 0; }
   .loopSafeDetails p { margin: 0 0 0.65em; }
   .loopSafeDetails p:last-child { margin-bottom: 0; }
   .note { color: var(--muted); font-size: 13px; line-height: 1.45; }
@@ -134,7 +147,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.4c</h1>
+  <h1>Fractured Wavetable Generator v2.4m</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -367,7 +380,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.4c';
+  const APP_VERSION = 'v2.4m';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -2426,12 +2439,23 @@ itself, impose GPL licensing on generated outputs.
     return {severity, flag, message, ...meta};
   }
 
-  // TUTORIAL: Detects oscillator-stage modulation. These controls can move apparent
-  // TUTORIAL: phase landmarks even when the underlying table length is mathematically exact.
-  function patchUsesNonNeutralModulation(patch) {
-    return (clampFloat(patch?.fm || 0, 0, 255) > 0)
-      || (clampFloat(patch?.pwm || 0, 0, 255) > 0)
+  // TUTORIAL: Detects oscillator-stage FM, which changes the actual phase increment.
+  // TUTORIAL: PWM and Ring Mod can change the visible/spectral shape, but they do not by
+  // TUTORIAL: themselves change the oscillator phase accumulator.
+  function patchUsesFm(patch) {
+    return clampFloat(patch?.fm || 0, 0, 255) > 0;
+  }
+
+  // TUTORIAL: Detects post-phase modulation that can make visual landmarks busier without
+  // TUTORIAL: being as strong a loop-closure risk as oscillator FM.
+  function patchUsesShapeModulation(patch) {
+    return (clampFloat(patch?.pwm || 0, 0, 255) > 0)
       || (clampFloat(patch?.am || 0, 0, 255) > 0);
+  }
+
+  // TUTORIAL: Detects any oscillator-stage modulation for visual/status summaries.
+  function patchUsesNonNeutralModulation(patch) {
+    return patchUsesFm(patch) || patchUsesShapeModulation(patch);
   }
 
   // TUTORIAL: Detects subtractive filtering. Recursive filter memory can make the final
@@ -2454,23 +2478,24 @@ itself, impose GPL licensing on generated outputs.
     return patchKey === 'end' ? 'END' : patchKey === 'start' ? 'START' : 'Patch';
   }
 
-  // TUTORIAL: Collects patch-local loop-safety findings. This does not decide whether
-  // TUTORIAL: a render is musically useful; it only flags things that can complicate exact looping.
+  // TUTORIAL: Collects patch-local loop-safety findings. Keep this deliberately narrow:
+  // TUTORIAL: red issues are reserved for things that can interfere with exact whole-file
+  // TUTORIAL: loop closure. Orange notes are explanatory sound-design context, not warnings
+  // TUTORIAL: against ordinary fractured/digital waveform behaviour.
   function loopSafetyFindingsForPatch(patch, patchKey) {
     const label = patchLoopLabel(patchKey);
     const findings = [];
-    if (patchUsesNonNeutralModulation(patch)) {
-      findings.push(loopFinding('hard', `${label} uses oscillator FM, PWM, or Ring Mod, which can move phase landmarks inside a nominal cycle.`, {kind: 'modulation', label}));
+    if (patchUsesFm(patch)) {
+      findings.push(loopFinding('hard', `${label} uses oscillator FM; variable phase increment can affect exact cycle closure.`, {kind: 'fm', label}));
     }
     if (patchUsesNonNeutralFilter(patch)) {
-      findings.push(loopFinding('hard', `${label} uses a filter or resonance; filter memory can change the boundary of a rendered cycle.`, {kind: 'filter', label}));
+      findings.push(loopFinding('caution', `${label} uses a filter or resonance; filter memory can colour the loop boundary.`, {kind: 'filter', label}));
     }
     if (patchUsesNonFullWindows(patch)) {
-      findings.push(loopFinding('hard', `${label} uses source/result windows rather than full-cycle windows.`, {kind: 'windows', label}));
+      findings.push(loopFinding('caution', `${label} uses source/result windows rather than full-cycle windows; this may create intentional table-boundary character.`, {kind: 'windows', label}));
     }
-    const wtInfo = wavetableInfoFor(patch?.wavetableType);
-    if (wtInfo && ['Sources / Splices', 'Compare / Edges', 'Dynamic A/B Interaction', 'Low-Bit Logic', 'Window / Interference'].includes(String(wtInfo.group || ''))) {
-      findings.push(loopFinding('caution', `${label} Wavetable Type “${wtInfo.name}” may create sharp or visually misleading cycle landmarks.`, {kind: 'wavetable_type', label}));
+    if (patchUsesShapeModulation(patch)) {
+      findings.push(loopFinding('caution', `${label} uses PWM or Ring Mod; visible landmarks and spectra may move during the morph.`, {kind: 'shape_modulation', label}));
     }
     return findings;
   }
@@ -2489,13 +2514,16 @@ itself, impose GPL licensing on generated outputs.
       findings.push(loopFinding('hard', 'Phase-Offset Crossfade deliberately offsets the END frame, so whole-file loop closure is not expected.', {kind: 'phase_offset_morph'}));
     }
     if (!state.export.cycleStepped) {
-      findings.push(loopFinding('caution', 'Cycle-stepped transition is off; continuous morphing can make the start and end of a whole file represent different intermediate states.', {kind: 'continuous_morph'}));
+      findings.push(loopFinding('hard', 'Cycle-stepped transition is off; continuous morphing can make the start and end of a whole file represent different intermediate states.', {kind: 'continuous_morph'}));
     }
-    if (state.export.differentTypes) {
-      findings.push(loopFinding('caution', 'Different START/END Wavetable Types are enabled; endpoint structure may change across the morph.', {kind: 'different_types'}));
-    }
-    if (state.export.differentFmRanges) {
-      findings.push(loopFinding('caution', 'Different START/END FM Pitch Range is enabled; endpoint modulation scale may change across the morph.', {kind: 'different_fm_ranges'}));
+    if (state.export.differentTypes && startPatch && endPatch) {
+      const startType = canonicalWavetableType(startPatch.wavetableType);
+      const endType = canonicalWavetableType(endPatch.wavetableType);
+      if (startType !== endType) {
+        const startInfo = wavetableInfoFor(startType);
+        const endInfo = wavetableInfoFor(endType);
+        findings.push(loopFinding('caution', `START and END use different Wavetable Types: “${startInfo.name}” → “${endInfo.name}”.`, {kind: 'different_types'}));
+      }
     }
     if (startPatch && endPatch && canonicalEngineName(startPatch.engine) !== canonicalEngineName(endPatch.engine)) {
       findings.push(loopFinding('caution', 'START and END use different Generator Family/Variant settings; the morph can change source structure even with loop-safe length math.', {kind: 'different_engines'}));
@@ -2675,14 +2703,89 @@ itself, impose GPL licensing on generated outputs.
       `Result: target ${plan.targetSamplesPerCycle || plan.samplesPerCycle} samples/cycle, effective ${plan.samplesPerCycle.toFixed(6)} samples/cycle, ${plan.frequency.toFixed(6)} Hz, ${plan.cycles} cycle(s), and ${plan.sampleCount} samples per file. Duration target ${plan.requestedDuration.toFixed(6)} s → ${plan.actualDuration.toFixed(6)} s.${delta}`,
       plan.changes.length ? `Temporary render changes: ${plan.changes.join('; ')}.` : 'No temporary length/frequency changes are needed for the current render settings.',
       'The loop-safe target is used as the clean cycle-planning target. Cycles and Samples mode snap rendered length to whole target-sized cycles; Seconds mode keeps the selected duration and chooses the nearest whole-cycle frequency.',
-      'Generator Family and Wavetable Type are not forcibly flattened; otherwise Bulk would stop being useful as a random generator. They are accounted for as content/boundary cautions because some engines and wavetable modes can create sharp or visually misleading cycle landmarks.',
+      'Generator Family and Wavetable Type are not forcibly flattened; otherwise Bulk would stop being useful as a random generator. They are mentioned only as sound-design context when they actually differ across START and END.',
       'This is mainly for wavetable developers. For one-shots, drones, risers, and general sound design, it is usually fine to disable this `Phase-accurate loop-safe` feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.'
     ];
   }
 
-  // TUTORIAL: Converts an array of notice paragraphs into simple escaped <p> blocks.
+  // TUTORIAL: Converts an array of notice paragraphs into escaped <p> blocks.
+  // TUTORIAL: A paragraph can be a plain string or {text, className}; the latter
+  // TUTORIAL: lets advisory text use semantic colour without injecting raw HTML.
   function paragraphHtml(lines) {
-    return lines.map(line => `<p>${escapeHtml(line)}</p>`).join('');
+    return lines.map(line => {
+      if (line && typeof line === 'object') {
+        const cls = line.className ? ` class="${String(line.className).replace(/[^a-zA-Z0-9_-]/g, '')}"` : '';
+        return `<p${cls}>${escapeHtml(line.text || '')}</p>`;
+      }
+      return `<p>${escapeHtml(line)}</p>`;
+    }).join('');
+  }
+
+  // TUTORIAL: Morph loop-safety notices are grouped by practical meaning.
+  // TUTORIAL: Loop-closure issues are things that can stop a whole rendered file from
+  // TUTORIAL: landing cleanly on a cycle boundary. Sound-design notes are softer reminders
+  // TUTORIAL: about sharp landmarks or changing endpoint structure; they are not treated as
+  // TUTORIAL: failures, because fractured digital sound design often wants those behaviours.
+  function loopFindingRowsHtml(findings, hard) {
+    const markerClass = hard ? 'loopNoticeIssueMarker' : 'loopNoticeNoteMarker';
+    const marker = hard ? '!!' : '!';
+    return findings.map(finding => `<div class="loopNoticeFinding"><span class="${markerClass}">${marker}</span><span>${escapeHtml(finding.message)}</span></div>`).join('');
+  }
+
+  function loopFindingListHtml(findings) {
+    const hard = findings.filter(finding => finding.severity === 'hard');
+    const notes = findings.filter(finding => finding.severity !== 'hard');
+    const groups = [];
+    if (hard.length) groups.push(`<div class="loopNoticeGroup"><div class="loopNoticeGroupTitle">Loop-closure issues</div>${loopFindingRowsHtml(hard, true)}</div>`);
+    if (notes.length) groups.push(`<div class="loopNoticeGroup"><div class="loopNoticeGroupTitle">Sound-design notes</div>${loopFindingRowsHtml(notes, false)}</div>`);
+    return groups.join('');
+  }
+
+  // TUTORIAL: The Morph loop-safety warning can detect a non-integer samples-per-cycle
+  // TUTORIAL: relationship, but the useful next step is often a concrete frequency. These
+  // TUTORIAL: targets use the fixed 256-sample internal table and simple 2x/4x render
+  // TUTORIAL: oversampling choices. They set pitch only; the selected render unit/length
+  // TUTORIAL: stays under the user's control.
+  function morphLoopSafeFrequencyTargets(summary = renderLengthSummary()) {
+    const sr = clampInt(summary.sampleRate, 8000, 384000);
+    return [
+      {samplesPerCycle: TABLE_SIZE, label: `${TABLE_SIZE} samples/cycle — native table match`},
+      {samplesPerCycle: TABLE_SIZE * 2, label: `${TABLE_SIZE * 2} samples/cycle — 2× oversampling`},
+      {samplesPerCycle: TABLE_SIZE * 4, label: `${TABLE_SIZE * 4} samples/cycle — 4× oversampling`},
+    ].map(target => {
+      const frequency = sr / target.samplesPerCycle;
+      return {...target, frequency, valid: frequency >= MIN_FREQUENCY && frequency <= MAX_FREQUENCY};
+    });
+  }
+
+  // TUTORIAL: Builds a compact explanation plus buttons for applying the target frequencies.
+  // TUTORIAL: In Cycles mode the sample count is especially clear: cycles × samples-per-cycle.
+  // TUTORIAL: In Seconds/Samples mode the buttons still correct the pitch/sample-rate ratio,
+  // TUTORIAL: but the chosen length can still decide whether the whole file ends on a cycle boundary.
+  function morphLoopSafeFrequencySuggestionsHtml(summary = renderLengthSummary()) {
+    const targets = morphLoopSafeFrequencyTargets(summary);
+    const cycleText = state.export.mode === 'Cycles'
+      ? `For the current ${formatCalcNumber(Math.max(1, Number(state.export.value) || MORPH_DEFAULT_CYCLES), 6)} cycle(s), render length becomes cycles × samples-per-cycle.`
+      : 'Setting pitch fixes samples-per-cycle; whole-file loop closure still depends on duration/sample count.';
+    const buttons = targets.map(target => {
+      const disabled = target.valid ? '' : ' disabled';
+      return `<button type="button" data-morph-frequency-target="${target.samplesPerCycle}"${disabled}>Set ${escapeHtml(formatFrequencyHz(target.frequency, 6))} Hz — ${escapeHtml(target.label)}</button>`;
+    }).join('');
+    return `<div class="loopFrequencySuggestions"><p><strong>Frequency suggestions:</strong> set the shared pitch to match the current sample rate.</p><div class="buttonbar">${buttons}</div><p class="small">${escapeHtml(cycleText)}</p></div>`;
+  }
+
+  // TUTORIAL: Applies one Morph loop-safety frequency suggestion to the shared pitch controls.
+  // TUTORIAL: setCommonFrequency() handles UI sync, persistence, status text, visual refresh,
+  // TUTORIAL: and live audition retuning for the current tab.
+  function applyMorphLoopSafeFrequencyTarget(samplesPerCycle) {
+    const target = clampInt(samplesPerCycle, 1, 65536);
+    const sr = clampInt(state.export.sampleRate, 8000, 384000);
+    const frequency = sr / target;
+    // TUTORIAL: These advisory buttons are calculator-style helpers. They update
+    // TUTORIAL: the shared pitch and the notice, but they deliberately do not start
+    // TUTORIAL: or restart Morph audition.
+    setCommonFrequency(frequency, {audition: false});
+    updateLoopSafetyNoticesSafely();
   }
 
   // TUTORIAL: Plain-text version of the Bulk loop-safe explanation for export metadata.
@@ -4106,32 +4209,32 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: the loop-safety checks themselves.
   function morphLoopSafetyMessageParts(findings) {
     const hard = findings.filter(finding => finding.severity === 'hard');
-    const cautions = findings.filter(finding => finding.severity !== 'hard');
+    const notes = findings.filter(finding => finding.severity !== 'hard');
+    const issueText = `${hard.length} loop-closure issue(s)`;
+    const noteText = `${notes.length} sound-design note(s)`;
     if (hard.length) {
       return {
         className: 'warn',
-        summary: `${hard.length} phase/length setting(s) may prevent phase-accurate loop closure.`,
+        summary: notes.length ? `${issueText} and ${noteText} found.` : `${issueText} found.`,
         paragraphs: [
-          ...hard.map(finding => finding.message),
-          ...cautions.map(finding => `Caution: ${finding.message}`),
-          'For ordinary one-shots, drones, risers, or transitions, this may be fine: render as needed or slightly longer than needed, then trim to a zero crossing later.',
-          'For precise wavetable frames, use neutral modulation/filter settings and non-phase-offset morph modes.',
+          {text: 'For ordinary one-shots, drones, risers, or transitions, this is probably fine: render as needed or slightly longer than needed, then trim to a zero crossing later.', className: 'loopNoticeOkHint'},
+          'For precise wavetable frames, use integer samples-per-cycle, full-cycle windows, and non-phase-offset morph modes.',
         ],
       };
     }
-    if (cautions.length) {
+    if (notes.length) {
       return {
         className: 'caution',
-        summary: `No hard phase/length hazards detected, but ${cautions.length} content/boundary caution(s) may affect how cleanly the waveform appears to loop.`,
+        summary: `No loop-closure issues detected; ${noteText} found.`,
         paragraphs: [
-          ...cautions.map(finding => finding.message),
+          {text: 'For ordinary one-shots, drones, risers, or transitions, this is probably fine: render as needed or slightly longer than needed, then trim to a zero crossing later.', className: 'loopNoticeOkHint'},
           'For strict wavetable-frame development, verify the boundary visually or analytically.',
         ],
       };
     }
     return {
       className: 'safe',
-      summary: 'Current render settings are sample-aligned and do not use the common phase-offset/modulation/filter hazards.',
+      summary: 'No loop-closure issues or sound-design notes detected.',
       paragraphs: ['Complex wavetable shapes can still contain deliberate sharp edges.'],
     };
   }
@@ -4143,19 +4246,23 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (!box) return;
     const findings = loopSafetyFindingsForSettings(state.patches.start, state.patches.end);
     const parts = morphLoopSafetyMessageParts(findings);
+    const summary = renderLengthSummary();
     const expanded = state.ui.morphLoopSafetyExpanded !== false;
+    const hasSamplesPerCycleWarning = findings.some(finding => finding?.kind === 'samples_per_cycle' || finding?.meta?.kind === 'samples_per_cycle');
     box.classList.remove('safe', 'warn', 'caution');
     box.classList.add(parts.className);
-    const detailHtml = expanded ? `<div class="loopNoticeBody">${paragraphHtml(parts.paragraphs)}</div>` : '';
-    box.innerHTML = `
-      <div class="loopNoticeHeader">
-        <strong>Wavetable loop-safety notice:</strong>
-        <button type="button" class="loopNoticeToggle" id="morphLoopSafetyToggle">${expanded ? 'Hide details' : 'Show details'}</button>
-      </div>
-      <p class="loopNoticeSummary">${escapeHtml(parts.summary)}</p>
-      ${detailHtml}`;
+    const suggestionHtml = hasSamplesPerCycleWarning ? morphLoopSafeFrequencySuggestionsHtml(summary) : '';
+    const findingListHtml = findings.length ? `<div class="loopNoticeFindingList">${loopFindingListHtml(findings)}</div>` : '';
+    // TUTORIAL: Collapsed mode is deliberately a true compact view: keep the summary
+    // TUTORIAL: and any frequency-fix buttons visible, but hide the detailed issue/note
+    // TUTORIAL: list and explanatory guidance until the user asks for details.
+    const detailHtml = expanded ? `<div class="loopNoticeBody">${findingListHtml}${paragraphHtml(parts.paragraphs)}</div>` : '';
+    box.innerHTML = `<div class="loopNoticeHeader"><strong>Wavetable loop-safety notice:</strong><button type="button" class="loopNoticeToggle" id="morphLoopSafetyToggle">${expanded ? 'Hide details' : 'Show details'}</button></div><p class="loopNoticeSummary">${escapeHtml(parts.summary)}</p>${suggestionHtml}${detailHtml}`;
     const toggle = $('morphLoopSafetyToggle');
     if (toggle) toggle.onclick = () => setMorphLoopSafetyExpanded(!expanded);
+    box.querySelectorAll('[data-morph-frequency-target]').forEach(button => {
+      button.onclick = () => applyMorphLoopSafeFrequencyTarget(button.dataset.morphFrequencyTarget);
+    });
   }
 
   // TUTORIAL: Keeps the Bulk loop-safe details live with the currently selected pitch,
@@ -5481,6 +5588,17 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return 440 * (2 ** ((clampInt(midiNote, 0, 127) - 69) / 12));
   }
 
+  // TUTORIAL: Frequencies shown for loop-safe planning sometimes need more than
+  // TUTORIAL: three decimals. For example, 44100 Hz / 1024 samples-per-cycle is
+  // TUTORIAL: 43.06640625 Hz. Showing only 43.066 Hz can make an exact advisory
+  // TUTORIAL: button look inexact, so this formatter keeps up to six decimals
+  // TUTORIAL: while trimming unnecessary trailing zeros for ordinary values.
+  function formatFrequencyHz(value, maxDecimals = 6) {
+    const f = clampFloat(value, MIN_FREQUENCY, MAX_FREQUENCY);
+    const digits = clampInt(maxDecimals, 0, 9);
+    return f.toFixed(digits).replace(/\.?0+$/, '');
+  }
+
   // TUTORIAL: Finds the closest equal-tempered note for a typed frequency without forcing quantisation.
   function nearestNoteForFrequency(frequency) {
     const f = clampFloat(frequency, MIN_FREQUENCY, MAX_FREQUENCY);
@@ -5495,9 +5613,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const selectedNoteFrequency = noteToFrequency(note.note, note.octave);
     const cents = 1200 * Math.log2(f / selectedNoteFrequency);
     const detuneText = Math.abs(cents) < 0.01 ? 'exact' : `${cents >= 0 ? '+' : ''}${cents.toFixed(2)} cents`;
-    const noteFrequencyText = `${note.note}${note.octave} = ${selectedNoteFrequency.toFixed(3)} Hz`;
+    const noteFrequencyText = `${note.note}${note.octave} = ${formatFrequencyHz(selectedNoteFrequency, 3)} Hz`;
     document.querySelectorAll('[data-pitch="frequency-slider"]').forEach(el => el.value = frequencyToSliderValue(f));
-    document.querySelectorAll('[data-pitch="frequency-hz"]').forEach(el => el.value = f.toFixed(3));
+    document.querySelectorAll('[data-pitch="frequency-hz"]').forEach(el => el.value = formatFrequencyHz(f, 6));
     document.querySelectorAll('[data-pitch="note-name"]').forEach(el => el.value = note.note);
     document.querySelectorAll('[data-pitch="note-octave"]').forEach(el => el.value = String(note.octave));
     document.querySelectorAll('[data-pitch="selected-note-frequency"]').forEach(el => el.textContent = noteFrequencyText);
