@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.4m
+Fractured Wavetable Generator v2.4r
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v2.4m fixes the Morph loop-safety show/hide behaviour: collapsed mode now keeps only the summary and frequency-action buttons visible, while the detailed loop-closure findings, sound-design notes, and explanatory guidance are shown only when details are expanded. v2.4l narrowed the notice policy so red !! items are reserved for practical loop-closure issues and orange ! items are restrained sound-design notes.
+Modification note: v2.4r separates typed/export pitch limits from the logarithmic pitch slider: typed frequency boxes now accept down to 1 Hz without clamping mid-entry, while the slider remains a practical 20 Hz–20 kHz performance control. v2.4q fixes WAV LIST/INFO text termination by using an escaped NUL in the JavaScript source instead of a literal NUL byte, preventing metadata readers from showing replacement-character garbage. v2.4p made the schema v5 export_context path robust for ordinary Morph exports and records lightweight JSON-only export context for Morph and Bulk renders. The WAV metadata remains minimal: one per-render export UUID for matching WAV/JSON files, ordinary INFO provenance, and the custom FWID chunk. v2.4n updated export provenance and JSON sidecar metadata to schema v5.
 
 Recent v2.4 summary: v2.4 was a release-cleanup pass after the v2.3 series. It kept the v2.3zg behaviour, preserved the concise visualiser path captions, kept the slow-animation performance guard, fixed lingering RAM wording in export notes, and added tutorial comments around the newer tab-persistence, loop-safety, Bulk loop-safe planning, and notice-refresh helpers.
 
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.4m</title>
+<title>Fractured Wavetable Generator v2.4r</title>
 <style>
   :root {
     --bg: #101216;
@@ -147,7 +147,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.4m</h1>
+  <h1>Fractured Wavetable Generator v2.4r</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -347,7 +347,7 @@ itself, impose GPL licensing on generated outputs.
           <tr><td>Morph</td><td><code>P</code></td><td>Play/Pause the most recently used Morph sound</td></tr>
         </tbody>
       </table>
-      <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic; note/octave controls and MIDI note input set the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
+      <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic and covers 20 Hz–20 kHz; typed frequency and note/octave controls can go down to 1 Hz for long-cycle and sub-audio sound-design exports. MIDI note input sets the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
       <p class="note">Calculator note entry: when the Calculator tab’s Multisample Planner Lowest MIDI note or Highest MIDI note number box has focus, incoming accepted MIDI note-on messages set that field instead of starting an audition. This uses the same Web MIDI permission and channel setting as the main pitch controls.</p>
       <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, headroom, Different START/END Wavetable Types, Different START/END FM Pitch Range, Cycle-stepped transition, Calculator tab values while open, and the last open tab.</p>
       <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
@@ -380,11 +380,12 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.4m';
+  const APP_VERSION = 'v2.4r';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
-  const MIN_FREQUENCY = 20.0;
+  const MIN_FREQUENCY = 1.0;
+  const MIN_SLIDER_FREQUENCY = 20.0;
   const MAX_FREQUENCY = 20000.0;
   const WINDOW_STEPS = 4096.0;
   const MIN_WINDOW_STEPS = 16.0;
@@ -3661,55 +3662,253 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   function scaleSegmentToPeak(y, a, b, target) { let p = 0; for (let i = a; i < b; i++) p = Math.max(p, Math.abs(y[i])); if (p > EPSILON && Number.isFinite(p)) for (let i = a; i < b; i++) y[i] *= target / p; }
 
   // TUTORIAL: WAV encoder. The renderers produce floating-point samples; this function writes a
-  // TUTORIAL: browser Blob containing a mono WAV file in the selected bit depth.
-  function encodeWavMono(audio, sampleRate, bitDepthLabel) {
+  // TUTORIAL: browser Blob containing a mono WAV file in the selected bit depth. Export metadata is
+  // TUTORIAL: stored in ordinary RIFF chunks before the audio data: LIST/INFO for human-readable
+  // TUTORIAL: provenance, and FWID for the machine-readable UUID shared with the JSON sidecar.
+  function encodeWavMono(audio, sampleRate, bitDepthLabel, wavMeta = {}) {
     const bits = bitDepthLabel.startsWith('8') ? 8 : bitDepthLabel.startsWith('12') ? 12 : bitDepthLabel.startsWith('16') ? 16 : bitDepthLabel.startsWith('24') ? 24 : 32;
     const containerBytes = bits === 8 ? 1 : bits === 24 ? 3 : bits === 32 ? 4 : 2;
     const dataBytes = audio.length * containerBytes;
-    const buffer = new ArrayBuffer(44 + dataBytes);
-    const view = new DataView(buffer);
-    writeAscii(view, 0, 'RIFF'); view.setUint32(4, 36 + dataBytes, true); writeAscii(view, 8, 'WAVE');
-    writeAscii(view, 12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
-    view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * containerBytes, true); view.setUint16(32, containerBytes, true); view.setUint16(34, containerBytes * 8, true);
-    writeAscii(view, 36, 'data'); view.setUint32(40, dataBytes, true);
-    let o = 44;
+    const fmtPayload = new ArrayBuffer(16);
+    const fv = new DataView(fmtPayload);
+    fv.setUint16(0, 1, true); // PCM
+    fv.setUint16(2, 1, true); // mono
+    fv.setUint32(4, sampleRate, true);
+    fv.setUint32(8, sampleRate * containerBytes, true);
+    fv.setUint16(12, containerBytes, true);
+    fv.setUint16(14, containerBytes * 8, true);
+    const dataPayload = new Uint8Array(dataBytes);
+    const dataView = new DataView(dataPayload.buffer);
+    let o = 0;
     for (let i = 0; i < audio.length; i++) {
       let x = clampFloat(audio[i], -1, 1);
-      if (bits === 8) { view.setUint8(o, clampInt(x * 127 + 128, 0, 255)); o += 1; }
-      else if (bits === 12) { const q = Math.round(x * 2047) / 2047; view.setInt16(o, clampInt(q * 32767, -32768, 32767), true); o += 2; }
-      else if (bits === 16) { view.setInt16(o, clampInt(x * 32767, -32768, 32767), true); o += 2; }
-      else if (bits === 24) { let v = clampInt(x * 8388607, -8388608, 8388607); if (v < 0) v += 1 << 24; view.setUint8(o++, v & 255); view.setUint8(o++, (v >> 8) & 255); view.setUint8(o++, (v >> 16) & 255); }
-      else { view.setInt32(o, clampInt(x * 2147483647, -2147483648, 2147483647), true); o += 4; }
+      if (bits === 8) { dataView.setUint8(o, clampInt(x * 127 + 128, 0, 255)); o += 1; }
+      else if (bits === 12) { const q = Math.round(x * 2047) / 2047; dataView.setInt16(o, clampInt(q * 32767, -32768, 32767), true); o += 2; }
+      else if (bits === 16) { dataView.setInt16(o, clampInt(x * 32767, -32768, 32767), true); o += 2; }
+      else if (bits === 24) { let v = clampInt(x * 8388607, -8388608, 8388607); if (v < 0) v += 1 << 24; dataView.setUint8(o++, v & 255); dataView.setUint8(o++, (v >> 8) & 255); dataView.setUint8(o++, (v >> 16) & 255); }
+      else { dataView.setInt32(o, clampInt(x * 2147483647, -2147483648, 2147483647), true); o += 4; }
     }
+    const info = wavInfoChunk({
+      ISFT: `Fractured Wavetable Generator ${APP_VERSION}`,
+      INAM: wavMeta.basename || '',
+      ICMT: `export_id=${wavMeta.exportId || ''}; json=${wavMeta.jsonFilename || ''}`,
+    });
+    const chunks = [riffChunk('fmt ', fmtPayload)];
+    if (info) chunks.push(info);
+    if (wavMeta.exportId) chunks.push(riffChunk('FWID', utf8Bytes(wavMeta.exportId)));
+    chunks.push(riffChunk('data', dataPayload));
+    const totalBytes = 12 + chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
+    const buffer = new ArrayBuffer(totalBytes);
+    const view = new DataView(buffer);
+    writeAscii(view, 0, 'RIFF'); view.setUint32(4, totalBytes - 8, true); writeAscii(view, 8, 'WAVE');
+    const out = new Uint8Array(buffer);
+    let offset = 12;
+    for (const chunk of chunks) { out.set(new Uint8Array(chunk), offset); offset += chunk.byteLength; }
     return new Blob([buffer], {type: 'audio/wav'});
   }
   // TUTORIAL: Writes ASCII chunk identifiers into a DataView while encoding WAV data.
   function writeAscii(view, offset, text) { for (let i = 0; i < text.length; i++) view.setUint8(offset + i, text.charCodeAt(i)); }
+  // TUTORIAL: Converts text to bytes for JSON-adjacent RIFF metadata. WAV INFO readers are inconsistent
+  // TUTORIAL: about character encoding, but UTF-8 remains safe for the ASCII-heavy fields used here.
+  function utf8Bytes(text) { return new TextEncoder().encode(String(text ?? '')); }
+  // TUTORIAL: Builds a padded RIFF chunk. RIFF chunk sizes omit the padding byte, but the file must still
+  // TUTORIAL: pad odd-length chunks so the next chunk begins on an even byte boundary.
+  function riffChunk(id, payload) {
+    const bytes = payload instanceof Uint8Array ? payload : new Uint8Array(payload);
+    const padded = bytes.length + (bytes.length & 1);
+    const buffer = new ArrayBuffer(8 + padded);
+    const view = new DataView(buffer);
+    writeAscii(view, 0, id.slice(0, 4).padEnd(4, ' '));
+    view.setUint32(4, bytes.length, true);
+    new Uint8Array(buffer, 8, bytes.length).set(bytes);
+    return buffer;
+  }
+  // TUTORIAL: LIST/INFO is the old but widely recognised WAV metadata container. It is not precise
+  // TUTORIAL: enough for full patch data, so the JSON sidecar remains the source of truth.
+  function wavInfoChunk(fields) {
+    const subChunks = [];
+    for (const [id, value] of Object.entries(fields)) {
+      const text = String(value || '').trim();
+      if (!text) continue;
+      subChunks.push(riffChunk(id, utf8Bytes(text + '\0')));
+    }
+    if (!subChunks.length) return null;
+    const size = 4 + subChunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
+    const payload = new Uint8Array(size);
+    const view = new DataView(payload.buffer);
+    writeAscii(view, 0, 'INFO');
+    let offset = 4;
+    for (const chunk of subChunks) { payload.set(new Uint8Array(chunk), offset); offset += chunk.byteLength; }
+    return riffChunk('LIST', payload);
+  }
 
-  // TUTORIAL: JSON sidecar metadata. These functions capture the exact generator/export settings
-  // TUTORIAL: that produced a WAV so sound-design batches remain traceable later.
-  function metadataFor(direction, summary, notes, startPatch, endPatch) {
+  // TUTORIAL: JSON sidecar metadata. Schema v5 is the public export format: it keeps application
+  // TUTORIAL: provenance, file pairing, UUID identity, control scales, render settings, morph settings,
+  // TUTORIAL: and patch metadata separate so old internal names do not leak as current terminology.
+  function metadataFor(direction, summary, notes, startPatch, endPatch, fileMeta = {}) {
+    const basename = fileMeta.basename || `${safeName(state.export.prefix)}_${direction}_${compactTimestampUTC()}`;
+    const wavFilename = fileMeta.wavFilename || `${basename}.wav`;
+    const jsonFilename = fileMeta.jsonFilename || `${basename}.json`;
+    const exportId = fileMeta.exportId || makeExportId();
+    const forwardStart = effectiveExportPatch(startPatch);
+    const forwardEnd = effectiveExportPatch(endPatch);
+    const renderStart = direction === 'reverse' ? forwardEnd : forwardStart;
+    const renderEnd = direction === 'reverse' ? forwardStart : forwardEnd;
     return {
-      schema_version: 4,
+      schema_version: 5,
       generator: 'Fractured Wavetable Generator',
+      export_id: exportId,
       direction,
       created_utc: new Date().toISOString(),
+      files: {basename, wav_filename: wavFilename, json_filename: jsonFilename},
+      application: applicationMetadata(),
+      value_scales: valueScaleMetadata(),
+      export_context: exportContextMetadata(direction, fileMeta.exportContext),
       render_summary: summary,
-      shared_settings: {...state.export, frequency: state.common.frequency},
-      source_start: patchMetadata(startPatch),
-      source_end: patchMetadata(endPatch),
-      result_start: direction === 'reverse' ? patchMetadata(endPatch) : patchMetadata(startPatch),
-      result_end: direction === 'reverse' ? patchMetadata(startPatch) : patchMetadata(endPatch),
-      export_writer: {mode: 'buffered-browser-blob', embedded_systems_note: 'Browser Blob export is simple but not memory-streaming; very long renders still stress RAM, CPU time, storage writes, filesystem limits, and RIFF/WAV size limits.'},
+      render_settings: renderSettingsMetadata(),
+      morph_settings: morphSettingsMetadata(),
+      patches: {
+        design_start: patchMetadata(startPatch),
+        design_end: patchMetadata(endPatch),
+        render_start: patchMetadata(renderStart),
+        render_end: patchMetadata(renderEnd),
+      },
+      export_writer: {mode: 'buffered-browser-blob', wav_metadata: ['LIST/INFO', 'FWID'], embedded_systems_note: 'Browser Blob export is simple but not memory-streaming; very long renders still stress RAM, CPU time, storage writes, filesystem limits, and RIFF/WAV size limits.'},
       notes,
     };
   }
-  // TUTORIAL: Serialises one patch into JSON-friendly metadata.
+  // TUTORIAL: Export context is intentionally JSON-only. It helps describe whether this sidecar came
+  // TUTORIAL: from the Morph tab or Bulk tab without adding extra grouping UUIDs or more metadata
+  // TUTORIAL: to the WAV file. A null context must be treated as an empty object because ordinary
+  // TUTORIAL: Morph exports do not need to pass batch metadata.
+  function exportContextMetadata(direction, context = {}) {
+    context = context || {};
+    const kind = context.kind || 'morph';
+    const out = {
+      kind,
+      source_tab: context.source_tab || (kind === 'bulk' ? 'Bulk Random Export' : 'Morph'),
+      direction,
+    };
+    if (Number.isFinite(context.batch_index)) out.batch_index = context.batch_index;
+    if (Number.isFinite(context.batch_count)) out.batch_count = context.batch_count;
+    return out;
+  }
+  // TUTORIAL: Application identity belongs in the JSON so files remain traceable after renaming,
+  // TUTORIAL: uploading, zipping, or importing into another tool.
+  function applicationMetadata() {
+    return {
+      name: 'Fractured Wavetable Generator',
+      version: APP_VERSION,
+      repository_url: 'https://github.com/atom-smasher/Fractured-Wavetable-Generator/',
+      live_url: 'https://atom-smasher.github.io/Fractured-Wavetable-Generator/',
+      license: 'GPL-2.0-only',
+    };
+  }
+  // TUTORIAL: Centralised scales avoid repeating "scale: 4096" beside every control value and make
+  // TUTORIAL: clear that 256 table samples, 4096-step controls, and rendered samples-per-cycle are
+  // TUTORIAL: three different domains.
+  function valueScaleMetadata() {
+    return {
+      pot_controls: {min: 0, max: POT_MAX_12BIT, steps: POT_MAX_12BIT + 1},
+      window_controls: {min: 0, max: WINDOW_STEPS - 1, steps: WINDOW_STEPS, wraps: true},
+      modulation_depth: {min: 0, max: 255, steps: 256},
+      wavetable_audio: {internal_table_size: TABLE_SIZE},
+    };
+  }
+  // TUTORIAL: Settings are grouped by purpose rather than dumped as one state object.
+  function renderSettingsMetadata() {
+    return {
+      mode: state.export.mode,
+      value: state.export.value,
+      sample_rate: state.export.sampleRate,
+      bit_depth: state.export.bitDepth,
+      frequency: state.common.frequency,
+      dc_mode: state.export.dcMode,
+      normalisation_mode: state.export.normMode,
+      headroom_db: state.export.headroomDb,
+    };
+  }
+  // TUTORIAL: Morph settings describe how START and END are turned into a rendered file. Bulk-only
+  // TUTORIAL: settings are intentionally excluded from ordinary Morph exports.
+  function morphSettingsMetadata() {
+    const sharedWt = wavetableInfoFor(state.export.sharedType);
+    return {
+      render_mode: state.export.morphRenderMode,
+      spectral_states: state.export.spectralStates,
+      curve: {amount: state.export.curveAmount, mode: state.export.curveMode},
+      cycle_stepped: !!state.export.cycleStepped,
+      endpoint_routing: {
+        different_wavetable_types: !!state.export.differentTypes,
+        shared_wavetable_type: state.export.differentTypes ? null : {id: sharedWt.id, ui_number: sharedWt.ui, name: sharedWt.name},
+        different_fm_ranges: !!state.export.differentFmRanges,
+        shared_fm_range: state.export.differentFmRanges ? null : {label: state.export.sharedFmRange, cents: fmRangeLabelToCents(state.export.sharedFmRange)},
+      },
+    };
+  }
+  // TUTORIAL: Serialises one patch into JSON-friendly metadata. The old internal am field is preserved
+  // TUTORIAL: only in legacy_internal; public schema v5 uses modulation.ring_mod.
   function patchMetadata(p) {
     const engineName = canonicalEngineName(p.engine || DEFAULT_ENGINE);
     const parts = enginePartsFor(engineName);
     const wt = wavetableInfoFor(p.wavetableType);
-    return {...p, ring_mod: clampInt(p.am || 0, 0, 255), engine: engineName, engine_family: parts.family, engine_variant: parts.variant, engine_info: visibleEngineInfoFor(engineName), wavetableType: wt.id, wavetable: {id: wt.id, number: wt.id, ui_number: wt.ui, name: wt.name, description: wt.description}, fm_range_cents: fmRangeLabelToCents(p.fmRangeLabel)};
+    const labels = knobLabelsForEngine(engineName);
+    return {
+      engine: {name: engineName, family: parts.family, variant: parts.variant, description: parts.description || visibleEngineInfoFor(engineName)[1]},
+      generator_controls: {
+        scale_ref: 'pot_controls',
+        pot1: {label: labels.pot1, value: clampInt(p.pot1 || 0, 0, POT_MAX_12BIT)},
+        pot2: {label: labels.pot2, value: clampInt(p.pot2 || 0, 0, POT_MAX_12BIT)},
+        pot3: {label: labels.pot3, value: clampInt(p.pot3 || 0, 0, POT_MAX_12BIT)},
+      },
+      wavetable: {id: wt.id, ui_number: wt.ui, name: wt.name, description: wt.description},
+      modulation: {
+        depth_scale_ref: 'modulation_depth',
+        fm: clampInt(p.fm || 0, 0, 255),
+        pwm: clampInt(p.pwm || 0, 0, 255),
+        ring_mod: clampInt(p.am || 0, 0, 255),
+        fm_range: {label: p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL, cents: fmRangeLabelToCents(p.fmRangeLabel)},
+      },
+      filter: {
+        type: p.filterType || 'Off',
+        cutoff_hz: clampFloat(p.filterCutoff ?? 8000, 20, 20000),
+        resonance: clampFloat(p.filterResonance ?? 0, 0, 1),
+      },
+      windows: {
+        scale_ref: 'window_controls',
+        source: {start: clampInt(p.beforeStart || 0, 0, WINDOW_STEPS), end: clampInt(p.beforeEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS)},
+        result: {start: clampInt(p.afterStart || 0, 0, WINDOW_STEPS), end: clampInt(p.afterEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS)},
+      },
+      legacy_internal: {
+        engine: engineName,
+        pot1: clampInt(p.pot1 || 0, 0, POT_MAX_12BIT),
+        pot2: clampInt(p.pot2 || 0, 0, POT_MAX_12BIT),
+        pot3: clampInt(p.pot3 || 0, 0, POT_MAX_12BIT),
+        wavetableType: wt.id,
+        fm: clampInt(p.fm || 0, 0, 255),
+        pwm: clampInt(p.pwm || 0, 0, 255),
+        am: clampInt(p.am || 0, 0, 255),
+        filterType: p.filterType || 'Off',
+        filterCutoff: clampFloat(p.filterCutoff ?? 8000, 20, 20000),
+        filterResonance: clampFloat(p.filterResonance ?? 0, 0, 1),
+        beforeStart: clampInt(p.beforeStart || 0, 0, WINDOW_STEPS),
+        beforeEnd: clampInt(p.beforeEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS),
+        afterStart: clampInt(p.afterStart || 0, 0, WINDOW_STEPS),
+        afterEnd: clampInt(p.afterEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS),
+        fmRangeLabel: p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL,
+      },
+    };
+  }
+  // TUTORIAL: Creates the UUID used to match one WAV file with its JSON sidecar. It is an export ID,
+  // TUTORIAL: not a patch ID: rendering the same settings again gets a new UUID.
+  function makeExportId() {
+    if (crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+    const bytes = new Uint8Array(16);
+    if (crypto && typeof crypto.getRandomValues === 'function') crypto.getRandomValues(bytes);
+    else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = [...bytes].map(b => b.toString(16).padStart(2, '0'));
+    return `${hex.slice(0, 4).join('')}-${hex.slice(4, 6).join('')}-${hex.slice(6, 8).join('')}-${hex.slice(8, 10).join('')}-${hex.slice(10).join('')}`;
   }
 
   // TUTORIAL: Returns the actual patch used for START/END metadata after shared export overrides are applied.
@@ -3834,10 +4033,14 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       throwIfCancelled(token);
       const stamp = options.timestamp || compactTimestampUTC();
       const base = `${safeName(prefix)}_${direction}_${stamp}`;
-      const wavBlob = encodeWavMono(rendered.audio, rendered.summary.sampleRate, rendered.summary.bitDepth);
-      const meta = metadataFor(direction, rendered.summary, rendered.notes, startPatch, endPatch);
+      const exportId = makeExportId();
+      const wavFilename = `${base}.wav`;
+      const jsonFilename = `${base}.json`;
+      const fileMeta = {basename: base, wavFilename, jsonFilename, exportId, exportContext: options.exportContext || {}};
+      const wavBlob = encodeWavMono(rendered.audio, rendered.summary.sampleRate, rendered.summary.bitDepth, fileMeta);
+      const meta = metadataFor(direction, rendered.summary, rendered.notes, startPatch, endPatch, fileMeta);
       const jsonBlob = new Blob([JSON.stringify(meta, null, 2)], {type: 'application/json'});
-      const files = [{name: `${base}.wav`, data: wavBlob}, {name: `${base}.json`, data: jsonBlob}];
+      const files = [{name: wavFilename, data: wavBlob}, {name: jsonFilename, data: jsonBlob}];
       if (shouldDownload) {
         if (shouldZip) {
           statusEl.textContent = `Packing ${direction} ZIP…`;
@@ -5564,22 +5767,27 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Maps Hz to a logarithmic slider position, matching musical pitch perception better than a linear
-  // TUTORIAL: slider.
+  // TUTORIAL: slider. The typed/export frequency range goes down to 1 Hz for long cycles and
+  // TUTORIAL: sub-audio sound-design work, but the slider remains a practical 20 Hz–20 kHz
+  // TUTORIAL: performance control. Values below the slider floor are shown with the slider at
+  // TUTORIAL: its minimum position, without changing the typed frequency value.
   function frequencyToSliderValue(frequency) {
-    const f = clampFloat(frequency, MIN_FREQUENCY, MAX_FREQUENCY);
-    return 1000 * (Math.log(f / MIN_FREQUENCY) / Math.log(MAX_FREQUENCY / MIN_FREQUENCY));
+    const f = clampFloat(frequency, MIN_SLIDER_FREQUENCY, MAX_FREQUENCY);
+    return 1000 * (Math.log(f / MIN_SLIDER_FREQUENCY) / Math.log(MAX_FREQUENCY / MIN_SLIDER_FREQUENCY));
   }
 
   // TUTORIAL: Inverse of frequencyToSliderValue; converts slider position back to Hz.
   function sliderValueToFrequency(value) {
     const t = clampFloat(value, 0, 1000) / 1000;
-    return MIN_FREQUENCY * ((MAX_FREQUENCY / MIN_FREQUENCY) ** t);
+    return MIN_SLIDER_FREQUENCY * ((MAX_FREQUENCY / MIN_SLIDER_FREQUENCY) ** t);
   }
 
   // TUTORIAL: Converts note+octave to equal-tempered frequency using A4 = 440 Hz.
+  // TUTORIAL: Negative octave values are allowed so typed sub-20 Hz frequencies still have
+  // TUTORIAL: meaningful nearest-note readouts instead of blanking the note controls.
   function noteToFrequency(noteName, octave) {
     const noteIndex = Math.max(0, NOTE_NAMES.indexOf(String(noteName)));
-    const midi = (clampInt(octave, 0, 10) + 1) * 12 + noteIndex;
+    const midi = (clampInt(octave, -4, 10) + 1) * 12 + noteIndex;
     return 440 * (2 ** ((midi - 69) / 12));
   }
 
@@ -5600,10 +5808,14 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Finds the closest equal-tempered note for a typed frequency without forcing quantisation.
+  // TUTORIAL: This intentionally allows negative MIDI-like note numbers for sub-audio and
+  // TUTORIAL: near-sub-audio frequencies; MIDI input is still clamped to real 0–127 note-on
+  // TUTORIAL: messages elsewhere.
   function nearestNoteForFrequency(frequency) {
     const f = clampFloat(frequency, MIN_FREQUENCY, MAX_FREQUENCY);
-    const midi = clampInt(Math.round(69 + 12 * Math.log2(f / 440)), 0, 127);
-    return {midi, note: NOTE_NAMES[midi % 12], octave: Math.floor(midi / 12) - 1};
+    const midi = clampInt(Math.round(69 + 12 * Math.log2(f / 440)), -48, 127);
+    const noteIndex = ((midi % 12) + 12) % 12;
+    return {midi, note: NOTE_NAMES[noteIndex], octave: Math.floor(midi / 12) - 1};
   }
 
   // TUTORIAL: Keeps frequency, note/octave, and readout text consistent after any pitch change.
@@ -5615,7 +5827,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const detuneText = Math.abs(cents) < 0.01 ? 'exact' : `${cents >= 0 ? '+' : ''}${cents.toFixed(2)} cents`;
     const noteFrequencyText = `${note.note}${note.octave} = ${formatFrequencyHz(selectedNoteFrequency, 3)} Hz`;
     document.querySelectorAll('[data-pitch="frequency-slider"]').forEach(el => el.value = frequencyToSliderValue(f));
-    document.querySelectorAll('[data-pitch="frequency-hz"]').forEach(el => el.value = formatFrequencyHz(f, 6));
+    document.querySelectorAll('[data-pitch="frequency-hz"]').forEach(el => {
+      // TUTORIAL: Leave the actively edited number box alone so partial values such as
+      // TUTORIAL: “50.” or “1.5” are not reformatted mid-keystroke. Blur/change commits
+      // TUTORIAL: the final value and normalises the display.
+      if (el !== document.activeElement) el.value = formatFrequencyHz(f, 6);
+    });
     document.querySelectorAll('[data-pitch="note-name"]').forEach(el => el.value = note.note);
     document.querySelectorAll('[data-pitch="note-octave"]').forEach(el => el.value = String(note.octave));
     document.querySelectorAll('[data-pitch="selected-note-frequency"]').forEach(el => el.textContent = noteFrequencyText);
@@ -5677,11 +5894,22 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const frequencyBox = document.createElement('div');
     frequencyBox.append(frequencyHz, frequencyRef);
     frequencySlider.addEventListener('input', () => setCommonFrequency(sliderValueToFrequency(frequencySlider.value)));
+    // TUTORIAL: Do not clamp/format the number box while the user is still typing.
+    // TUTORIAL: Earlier versions called setCommonFrequency() for any finite intermediate
+    // TUTORIAL: value, so typing “50” first committed “5”, clamped it upward, and rewrote
+    // TUTORIAL: the field before the second digit arrived. During input, commit only values
+    // TUTORIAL: that are already inside the typed/export range; final blur/change still
+    // TUTORIAL: clamps blank or out-of-range text to a safe value.
     frequencyHz.addEventListener('input', () => {
-      if (frequencyHz.value === '' || !Number.isFinite(Number(frequencyHz.value))) return;
-      setCommonFrequency(Number(frequencyHz.value), {persist: false, audition: false});
+      const raw = frequencyHz.value.trim();
+      const n = Number(raw);
+      if (raw === '' || !Number.isFinite(n) || n < MIN_FREQUENCY || n > MAX_FREQUENCY) return;
+      setCommonFrequency(n, {persist: false, audition: false});
     });
-    frequencyHz.addEventListener('change', () => setCommonFrequency(Number(frequencyHz.value)));
+    frequencyHz.addEventListener('change', () => {
+      const n = Number(frequencyHz.value);
+      setCommonFrequency(Number.isFinite(n) ? n : state.common.frequency);
+    });
     frequencyRow.append(frequencyLabel, frequencySlider, frequencyBox);
     parent.appendChild(frequencyRow);
 
@@ -5696,7 +5924,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     NOTE_NAMES.forEach(n => { const opt = document.createElement('option'); opt.value = n; opt.textContent = n; noteSelect.appendChild(opt); });
     const octaveSelect = document.createElement('select');
     octaveSelect.dataset.pitch = 'note-octave';
-    for (let o = 0; o <= 10; o++) { const opt = document.createElement('option'); opt.value = String(o); opt.textContent = `Octave ${o}`; octaveSelect.appendChild(opt); }
+    for (let o = -4; o <= 10; o++) { const opt = document.createElement('option'); opt.value = String(o); opt.textContent = `Octave ${o}`; octaveSelect.appendChild(opt); }
     const noteFrequency = document.createElement('span');
     noteFrequency.className = 'small';
     noteFrequency.dataset.pitch = 'selected-note-frequency';
@@ -6276,6 +6504,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
           const scale = renderProgressPortion / total;
           const result = await exportDirection(dir, start, end, prefix, $('bulkStatus'), $('bulkProgress'), {
             download: !zipMode, zip: false, token, cache: false, progressOffset: offset, progressScale: scale,
+            exportContext: {kind: 'bulk', source_tab: 'Bulk Random Export', batch_index: i + 1, batch_count: count},
             onProgress: (_local, global) => { $('bulkStatus').textContent = `Bulk rendering iteration ${i + 1}/${count}, ${dir} (${Math.round(global * 100)}%)…`; }
           });
           if (!result) throwIfCancelled(token);
