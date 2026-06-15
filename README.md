@@ -24,10 +24,11 @@ The program’s GPL notice applies to the program itself; it does **not**, by it
 
 ## What it does
 
-- Playground — build and audition one generated wavetable patch.
+- Playground — build, randomise, and audition one generated wavetable patch.
 - START→END Morph Export — design two endpoint patches, audition the transition, and export forward or reverse WAV+JSON files.
 - Bulk Random Export — generate batches of random START/END pairs for later auditioning and pruning.
-- Visualisation — inspect the generated table, modulation behaviour, and spectrum.
+- Calculator — plan sample rate, samples per cycle, frequency, duration, tempo length, file size, and simple multisample maps.
+- Visualisation — inspect the generated table, modulation behaviour, time-domain shape, and spectrum.
 - Export — render mono WAV files with JSON metadata, using user-selected length, sample rate, bit depth, DC removal, normalisation, and headroom settings.
 
 The browser version is a single-file HTML/JavaScript tool. No build step is required.
@@ -36,11 +37,9 @@ The browser version is a single-file HTML/JavaScript tool. No build step is requ
 
 ## Design approach
 
-Fractured Wavetable favours weirdness over mathematical or musical purity. It is meant to produce sounds that feel discovered rather than selected: harsh, folded, glitching, metallic, unstable, mellowed, blurred, bitten down, or oddly alive.
+Fractured Wavetable favours artistic weirdness over mathematical or musical purity. It is meant to produce sounds that feel discovered rather than selected: harsh, folded, glitching, metallic, unstable, mellowed, blurred, bitten down, or oddly alive.
 
-The project also tries to keep the signal path visible, use meaningful controls, randomise with restraint, and make exported WAVs useful as sound-design objects rather than temporary previews.
-
----
+The project also tries to keep the signal path visible, use meaningful controls, randomise with restraint, and make exported WAVs useful as sound-design objects.
 
 ### Running it
 
@@ -49,6 +48,8 @@ Use the live online version, or download the current HTML file and open it in a 
 Web Audio is required for auditioning. Web MIDI is optional and browser-dependent. Chromium-based browsers are usually the safest choice for Web MIDI.
 
 Start with the volume low. Some settings can produce sharp, bright, or abrupt digital sounds.
+
+---
 
 ## License and provenance
 
@@ -77,114 +78,43 @@ Fractured Wavetable can be used in several different ways.
 
 A one-cycle or short-cycle export can become oscillator material for wavetable synths, samplers, keygroups, or resynthesis workflows. Longer multi-cycle exports can become scanning material or evolving wavetable-like sources.
 
-Possible uses:
-
-- single-cycle oscillator waves
-- harsh digital wavetable frames
-- mellow or blurred wavetable sources
-- bass, lead, stab, drone, and pad oscillator material
-- morphing START/END tables for custom wavetable construction
-
 ### Vector and crossfade instruments
 
 Several exported WAVs can become corners or layers in a vector-style instrument. One export might be bright, another hollow, another noisy, another mellow. These can be crossfaded with an XY pad, mod wheel, velocity, envelope, LFO, or DAW automation.
-
-Possible uses:
-
-- four WAVs as XY vector corners
-- START and END exports as macro endpoints
-- related waves as velocity layers
-- stable/unstable or smooth/noisy sound pairs
 
 ### Subtractive synthesis source material
 
 Instead of starting a subtractive patch with a saw, square, or triangle, Fractured Wavetable can provide a more complex oscillator source before the filter even starts working.
 
-Possible uses:
-
-- bass oscillators with unusual harmonics
-- aggressive leads and stabs
-- resonant filter sweeps over complex sources
-- noisy but pitched percussion material
-- mellow source waves for pads and blurred textures
-
 ### Sampler-based synthesis
 
 Short files can become one-shots. Medium files can become keygroup sources. Long files can become drones, atmospheres, or resampling beds.
-
-Possible uses:
-
-- metallic hits and clangs
-- growls and bass shots
-- loopable drone tones
-- reverse swells and transitions
-- sampler instruments for MPC, Octatrack, Deluge, Kontakt, Renoise, Ableton, Bitwig, or hardware phrase samplers
 
 ### Drones and long-form sound
 
 The same generator can produce long, sustained files for drone, ambient, installation, noise, and resampling work. In this workflow, the WAV file may be the finished sound rather than a source for another synthesizer.
 
-Possible uses:
-
-- dark ambient drones
-- noise beds
-- shoegaze layers
-- long intros and outros
-- slowly shifting electronic textures
-- resampling sessions where the interesting moment may happen later
-
 ### Growls, clangs, and hostile digital sounds
 
 Fractured Wavetable is good at sounds that feel like they are misbehaving: folded, bitten, unstable, almost broken, or harmonically overcrowded.
 
-Possible uses:
-
-- bass growls
-- metallic clangs
-- FM-like snarls
-- sync-like rips
-- formant-ish growls
-- bitcrushed and folded source tones
-- digital scrape tones
-- synthetic impacts
-- glitch percussion
-- abrasive techno and industrial source material
-
 ### Shoegaze, ambient, and blurred textures
 
-The project is not only for harsh sounds. Some modes and settings soften, blur, smear, hollow out, or round the waveform. These outputs can be layered behind guitars, pads, reverbs, chorus, shimmer, tape-style effects, or granular clouds.
-
-Possible uses:
-
-- blurred pad sources
-- chorus-friendly single-cycle waves
-- noisy shimmer layers
-- unstable organ-like tones
-- faint digital movement under guitars
-- texture beds for intros, bridges, and transitions
+The project is not only for harsh sounds. Some modes and settings soften, blur, smear, hollow out, or round the waveform. These outputs can be layered with guitars, pads, reverbs, chorus, shimmer, tape-style effects, or granular clouds.
 
 ### Learning sound design
 
-The tool exposes waveform generation, modulation, filtering, visualisation, playback, and export in one place. That makes it useful for learning relationships that are often taught separately:
-
-- what a single-cycle waveform is
-- how waveform shape relates to tone
-- why sharp edges create brighter harmonic content
-- how FM, AM, and phase-width modulation affect sound
-- how phase distortion, sync, folding, pulse-width shaping, and formant-style shaping can be baked into a wavetable
-- why filtering changes both the sound and the spectrum
-- why a WAV file can be a finished sound or oscillator material
-- why cycle count matters when exporting sound-design source files
+The tool exposes waveform generation, modulation, filtering, visualisation, playback, export, and sample-planning maths in one place. That makes it useful for learning relationships that are often taught separately:
 
 ### Learning to code
 
-The project is also a code-learning object. It was developed through fast, conversational, AI-assisted iteration. The current files are heavily commented so a reader can follow the path from controls to state, generation, audio, visualisation, export, WAV writing, ZIP packaging, persistent settings, and JSON metadata.
+The project is also a code-learning object. It was developed through fast, conversational, AI-assisted iteration. The current files are heavily commented so a reader can follow the path from controls to state, generation, audio, visualisation, calculator maths, export, WAV writing, ZIP packaging, persistent settings, and JSON metadata.
 
 The code should not be treated as ideal architecture. It is a prototype, a lab notebook, and a tutorial. That is part of its value.
 
 ---
 
-## Browser v2 feature summary
+## Browser v2.4 feature summary
 
 ### Generator families and variants
 
@@ -230,35 +160,19 @@ The Sync family uses bounded bidirectional A↔B cross-coupling. Source A can sh
 
 ### Wavetable modes (wave interpolation)
 
-v2.0a includes 43 wavetable type modes. Wavetable Type is the combine/collision stage for the two internal source waves.
+v2.4 exposes 55 visible wavetable type modes. Additional legacy modes remain loadable for older JSON files, but are hidden from the normal dropdown and randomisation pool when they overlap too strongly with clearer current modes.
 
-Modes include:
-- Source A, Source B
-- B→A Splice, A→B Splice
-- Sum, Difference
-- Multiply, Divide
-- Quantised OR, Quantised XOR, Quantised AND, Quantised XNOR
-- Min, Max
-- Abs Difference
-- Fold Sum, Fold Difference
-- Comparator, Interleave
-- Edge
-- Average, Mostly A, Mostly B
-- Primary Phase Crossfade
-- Smooth Average, Smooth Difference
-- Sine Shaper
-- Soft Saturate
-- Triangle Fold
-- Root Shape, Power Shape
-- Zero-Cross Blend
-- Hann Windowed
-- Phase Blur
-- Odd Soft, Even Soft, Odd Hard, Even Hard
-- Gated A, Gated B
-- A Flips B Polarity, B Flips A Polarity
-- Sign Multiply
-- Soft Clip Sum, Hard Clip Sum
-- Cyclic Comb.
+Wavetable Type is the combine/collision stage for the two internal source waves. Visible groups include:
+
+- Sources / Splices — Source A, Source B, A→B and B→A splice modes from single half-cycle splices up to ×16 block splices.
+- Blend / Difference — Sum, Difference, Abs Difference, Smooth Average, Smooth Difference, Mostly A, Mostly B.
+- Dynamic A/B Interaction — level, polarity, and threshold modes where one source opens, selects, or shapes the other.
+- Compare / Edges — Min, Max, Comparator, and Edge.
+- Multiply / Divide / Polarity — Multiply, A/B divide modes, A/B gated modes, and polarity-flip modes.
+- Low-Bit Logic — Low-Bit OR, AND, and XOR.
+- Folding / Shaping — Fold Sum, Fold Difference, Sine Shaper, Soft Clip Sum, Hard Clip Sum, Root Shape, and Power Shape.
+- Symmetry / Harmonics — Odd Soft, Even Soft, Odd Hard, and Even Hard.
+- Window / Interference — Zero-Cross Blend, Hann Windowed, and Cyclic Comb.
 
 ### Modulation
 
@@ -267,18 +181,13 @@ Each patch includes self-modulation controls:
 - **FM** — waveform self-modulates pitch.
 - **FM Pitch Range** — bounded musical FM range, from cents to multi-octave movement.
 - **PWM** — phase-width warping for arbitrary wavetables.
-- **AM** — waveform self-modulates amplitude.
+- **Ring Mod** — a multi-ratio self-ring-mod stage that adds sidebands, clang, and phase-related grit.
 
-The FM range is bounded so the oscillator stays musically controllable instead of collapsing into runaway pitch shifts.
+The FM range is bounded so the oscillator stays musically controllable instead of collapsing into runaway pitch shifts. The old internal patch field for AM remains for JSON compatibility, but the current UI and render path use Ring Mod.
 
 ### Filter
 
-The browser version includes a simple subtractive output filter stage:
-
-- Off
-- Low-pass
-- High-pass
-- Band-pass
+The browser version includes a simple subtractive output filter stage.
 
 Randomisation resets the filter to **Off** so random batches are less likely to disappear into silence.
 
@@ -294,19 +203,35 @@ Pitch is shared across Playground, Morph, and Bulk:
 
 MIDI note input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority.
 
+### Calculator
+
+The Calculator tab is a planning helper for wavetable and sampler work. It does not generate sound by itself; it explains and applies the arithmetic behind the render settings.
+
+It can help plan:
+
+- sample rate and samples-per-cycle targets
+- recommended frequency for 128, 256, 512, or 1024 samples per cycle
+- exact duration and total sample count from cycle count
+- nearest equal-tempered note and pitch offset
+- mono WAV data-size estimates by bit depth and file count
+- tempo/bar-length renders for risers, transitions, drones, and morphs
+- rough multisample maps by MIDI range, zone spacing, and seconds per root note
+
+The native internal table is 256 samples. Higher samples-per-cycle targets oversample the rendered/interpolated result and create larger files; lower values create smaller files but preserve less cycle detail.
+
 ### Visualisation
 
 The visualiser can show:
 
-- base generated table
-- phase-locked FM/PWM/AM
-- animated stable FM/PWM/AM
-- time-domain FM/PWM/AM
-- spectrum analyser
+- Base table — post wave interpolator; pre modulation.
+- Phase-locked — post modulation.
+- Slow animation — post modulation.
+- Time-domain — post modulation.
+- Spectrum analyser — post modulation.
 
 Visual Mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value.
 
-FM/PWM/AM views and the spectrum analyser show a **post-filter preview**. The base table shows the generated table before oscillator modulation and filtering. The spectrum analyser is a cyclic single-cycle analyser, not a room or microphone analyser.
+The Slow animation view is a slow-motion visualisation of audio-frequency FM/PWM/Ring Mod effects. It is not real-time oscillator speed or playback speed. If FM, PWM, and Ring Mod are all zero, the Slow animation view is static and should not keep repainting.
 
 ### Persistent global settings
 
@@ -328,6 +253,11 @@ Saved settings include:
 - DC removal
 - normalisation
 - headroom dB
+- Different START/END Wavetable Types
+- Different START/END FM Pitch Range
+- Cycle-stepped transition
+- Calculator tab values while open
+- last open tab
 
 Patch-specific sound-design parameters are not treated as global cookie settings.
 
@@ -350,11 +280,23 @@ The Morph tab supports START→END sound design and export. Morph render modes i
 - Spectral Envelope Morph — smoother spectral envelope movement.
 - Harmonic Level Morph — stable phase with changing harmonic levels.
 
+### Loop-safe bulk export
+
+Bulk includes an optional **Phase-accurate loop-safe** mode aimed mainly at wavetable developers. It neutralises settings that can make a file fail simple phase-closure tests, then plans output around exact samples-per-cycle targets.
+
+Current loop-safe targets are:
+
+- 256 samples/cycle — native internal table match
+- 512 samples/cycle — 2× oversampling
+- 1024 samples/cycle — 4× oversampling
+
+For one-shots, drones, risers, texture beds, and general sound design, it is usually fine to leave loop-safe mode off, render as needed or slightly longer than needed, then trim to a zero crossing later.
+
 ### Export
 
 The browser version exports mono WAV files and JSON sidecars.
 
-Export controls include render length by cycles, seconds, or samples; sample rate; bit depth; morph render mode; FFT anchor count; morph curve mode and amount; cycle-stepped transition; shared or separate START/END wavetable types; shared or separate START/END FM pitch ranges; forward, reverse, or both directions; separate WAV+JSON files or one ZIP; DC removal; normalisation; headroom in dB; and schema version 4 JSON metadata.
+Export controls include render length by cycles, seconds, or samples; sample rate; bit depth; morph render mode; FFT anchor count; morph curve mode and amount; cycle-stepped transition; shared or separate START/END wavetable types; shared or separate START/END FM pitch ranges; forward, reverse, or both directions; separate WAV+JSON files or one ZIP; DC removal; normalisation; headroom in dB; and JSON metadata.
 
 Very long renders are allowed, but browser export is still memory-bound. WAV files are generated in browser memory before download. Large renders can stress RAM, CPU time, browser Blob/download limits, storage writes, filesystem limits, and classic RIFF/WAV size limits.
 
@@ -364,20 +306,16 @@ Very long renders are allowed, but browser export is still memory-bound. WAV fil
 
 ### Use the live online tool
 
-Open the GitHub Pages version in a modern browser:
-
-```text
-https://atom-smasher.github.io/Fractured-Wavetable-Generator/
-```
+Open the GitHub Pages version in a modern browser - https://atom-smasher.github.io/Fractured-Wavetable-Generator/
 
 This is the easiest way to try the browser version without downloading anything.
 
 ### Run it locally
 
-Download or clone the repository, then open the HTML file in a modern browser:
+Download or clone the repository, then open the current HTML file in a modern browser:
 
 ```text
-fractal_wavetable_clean_chaos_lab_v14.15.html
+fractured_wavetable_generator_v2_4.html
 ```
 
 No build step is required. The browser version is a single-file HTML/JavaScript tool, so the local file and the hosted page should behave the same when the same build is deployed, except that cookie behaviour may differ for local `file://` testing. Local testing can use the `localStorage` fallback.
