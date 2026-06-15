@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.3l
+Fractured Wavetable Generator v2.4
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,9 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v2.3l fixes a Phase-locked / Animated visualiser regression caused by one leftover AM Tone helper reference after the Ring Mod rename, and makes visualiser redraw failures non-blocking so patch edits still update live audio. v2.3j replaced the experimental AM Tone control with Ring Mod; the old internal patch field is kept for JSON compatibility, while the UI and render path use a multi-ratio self-ring stage.
+Modification note: v2.4 is a release-cleanup pass after the v2.3 series. It keeps the v2.3zg behaviour, preserves the concise visualiser path captions, keeps the slow-animation performance guard, fixes lingering RAM wording in export notes, and adds tutorial comments around the newer tab-persistence, loop-safety, Bulk loop-safe planning, and notice-refresh helpers.
+
+Recent v2.3 summary: the v2.3 series added the Calculator tab, expanded sample/cycle and file-size planning, refined wavetable-developer loop-safety checks, restored the missing loop-safety findings function, corrected the Bulk loop-safe targets back to the 256-sample native table match, and clarified visualiser labels. Earlier v2.3 work also replaced the experimental AM Tone control with Ring Mod while keeping the old internal patch field for JSON compatibility.
 
 Provenance note: this browser implementation is inspired by Carl Hudson’s
 Fractal Wavetable Generator concept. Carl Hudson’s original C implementation
@@ -35,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.3l</title>
+<title>Fractured Wavetable Generator v2.4</title>
 <style>
   :root {
     --bg: #101216;
@@ -85,6 +87,13 @@ itself, impose GPL licensing on generated outputs.
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .status { white-space: pre-wrap; min-height: 24px; padding: 9px; background: #0d1118; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }
   .status strong { color: var(--text); }
+  .loopNotice { margin: 8px 0; border-color: #4b5567; }
+  .loopNotice.safe { border-color: rgba(132,240,178,0.55); color: var(--ok); }
+  .loopNotice.warn { border-color: rgba(255,211,108,0.65); color: var(--warn); }
+  .loopNotice.caution { border-color: rgba(255,211,108,0.45); color: var(--muted); }
+  .loopNotice strong { color: var(--text); }
+  .loopSafeDetails p { margin: 0 0 0.65em; }
+  .loopSafeDetails p:last-child { margin-bottom: 0; }
   .note { color: var(--muted); font-size: 13px; line-height: 1.45; }
   .note code { display: inline-block; min-width: 1.8em; text-align: center; color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
   .shortcutTable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 13px; }
@@ -93,25 +102,40 @@ itself, impose GPL licensing on generated outputs.
   .shortcutTable code { display: inline-block; min-width: 1.8em; text-align: center; color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
   a { color: var(--accent); }
   .compactSettingGroup { border: 1px solid var(--line); border-radius: 10px; padding: 9px; margin: 8px 0; background: #11161d; }
-  .compactSettingGroup h3 { margin-top: 0; }
+  .compactSettingGroup h3 { margin: 0 0 8px; font-size: 14px; color: var(--accent); }
   .warn { color: var(--warn); }
   .ok { color: var(--ok); }
   .bad { color: var(--bad); }
   .small { font-size: 12px; color: var(--muted); }
   .hr { border-top: 1px solid var(--line); margin: 10px 0; }
+  .calcBox { border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin: 10px 0; background: #11161d; }
+  .calcBox h3 { margin: 0 0 8px; font-size: 19px; font-weight: 750; color: var(--accent); }
+  .calcResultGrid { display: grid; grid-template-columns: repeat(2, minmax(180px, 1fr)); gap: 8px; margin: 8px 0; }
+  .calcResult { border: 1px solid var(--line); border-radius: 8px; background: #0f131a; padding: 8px; }
+  .calcResult strong { display: block; color: var(--accent); font-size: 12px; margin-bottom: 3px; }
+  .calcResult span { font-size: 15px; }
+  .applyButtonRows { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
+  .applyButtonRows .buttonbar { margin: 0; }
+  .presetBar { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+  .presetBar button { padding: 4px 7px; font-size: 12px; }
+  .glossaryTable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 13px; }
+  .glossaryTable th, .glossaryTable td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  .glossaryTable th { color: var(--accent); background: #11161d; }
+  .glossaryTable code { color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
   progress { width: 100%; height: 18px; }
   @media (max-width: 1180px) { .grid, .grid3, .two { grid-template-columns: 1fr; } nav { top: 80px; overflow-x: auto; } }
 </style>
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.3l</h1>
+  <h1>Fractured Wavetable Generator v2.4</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
   <button class="tabButton active" data-tab="playground">Single Engine / Playground</button>
   <button class="tabButton" data-tab="morph">START→END Morph Export</button>
   <button class="tabButton" data-tab="bulk">Bulk Random Export</button>
+  <button class="tabButton" data-tab="calculator">Calculator</button>
   <button class="tabButton" data-tab="notes">Notes</button>
 </nav>
 <main>
@@ -208,6 +232,7 @@ itself, impose GPL licensing on generated outputs.
         </div>
         <div id="exportControls"></div>
         <div class="buttonbar">
+          <button class="danger" id="stopAudio2">Stop Audio</button>
           <button class="primary" id="playMorph">Play Forward Morph</button>
           <button id="playReverse">Play Reverse</button>
         </div>
@@ -216,9 +241,7 @@ itself, impose GPL licensing on generated outputs.
           <button id="exportReverse">Export Reverse</button>
           <button id="exportBoth">Export Both</button>
         </div>
-        <div class="buttonbar">
-          <button class="danger" id="stopAudio2">Stop Audio</button>
-        </div>
+        <div class="status loopNotice" id="morphLoopSafetyNotice"></div>
         <progress id="exportProgress" value="0" max="1"></progress>
         <div class="status" id="morphStatus">Ready.</div>
       </div>
@@ -246,7 +269,41 @@ itself, impose GPL licensing on generated outputs.
         <h2>Bulk export notes</h2>
         <p class="note">Bulk randomises the generator engine, the three family-specific generator knobs, wavetable type, FM/PWM/Ring Mod, FM pitch range, source/result windows, and START/END patches. Filters are reset to Off so random batches are less likely to disappear into silence.</p>
         <p class="note">Bulk uses the render settings shown on this tab: length, sample rate, bit depth, morph render mode, FFT anchor count, DC removal, normalisation, and headroom. Those settings are shared with the Morph tab. Direction and download mode are Bulk-only controls.</p>
+        <p class="note">The phase-accurate loop-safe option is aimed at wavetable developers. It temporarily neutralises modulation, filters, source/result windows, phase-offset morphing, and non-integer sample/cycle relationships during the batch. For ordinary sound-design files, it is usually fine to disable this <code>Phase-accurate loop-safe</code> feature, and render as needed or slightly longer than needed, then trim to a zero crossing later. In this mode, the target selector appears only when enabled. The default target is <code>256 samples/cycle</code>, matching the native internal table size; <code>512</code> and <code>1024</code> are 2× and 4× oversampling targets. Cycles and Samples may adjust rendered length to land on whole target-sized cycles; Seconds preserves the selected duration and adjusts frequency to land on a whole-cycle file.</p>
         <p class="note">Locked in bulk mode: there is no per-iteration audition, no manual START/END editing during a batch, no separate START/END FM-range toggle, and no per-file morph-mode variation unless you change the global Morph Render Mode before starting the batch.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="calculator" class="tab">
+    <div class="grid">
+      <div class="panel">
+        <h2>Calculator</h2>
+        <p class="note">Use this tab to plan morph exports in terms of frequency, sample rate, samples per cycle, total samples, seconds, cycles, tempo, and multisample maps. The Set buttons write into the shared Morph/Bulk pitch and render settings.</p>
+        <div id="calculatorControls"></div>
+        <div class="status" id="calculatorStatus">Ready.</div>
+      </div>
+      <div class="panel">
+        <h2>Glossary</h2>
+        <p class="note">These definitions describe how this tool uses the terms. Other synths and DAWs may use “frame” or “wavetable” differently.</p>
+        <table class="glossaryTable">
+          <thead><tr><th>Term</th><th>Meaning in this tool</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sample</strong></td><td>One stored audio value in the exported WAV file. At 96 kHz, one second contains 96,000 samples.</td></tr>
+            <tr><td><strong>Sample rate</strong></td><td>How many audio samples are written per second in the exported WAV. The Calculator offers the same fixed rate choices as the render tabs. Sample rate affects exported sample count and file size, but it does not force a pitch after another synth imports the WAV.</td></tr>
+            <tr><td><strong>Frequency / Hz</strong></td><td>Oscillator pitch during audition and render. Frequency determines how many cycles fit into a second, and therefore how many exported samples represent each cycle at a given sample rate.</td></tr>
+            <tr><td><strong>Cycle</strong></td><td>One complete oscillator period at the current frequency. In Cycles render mode, export length is calculated as cycles ÷ frequency. Example: 128 cycles at 64 Hz = 2 seconds; 128 cycles at 128 Hz = 1 second.</td></tr>
+            <tr><td><strong>Samples per cycle</strong></td><td>Export sample rate ÷ render frequency. For example, 96,000 Hz ÷ 375 Hz = 256 exported samples per cycle. Higher values make larger files and preserve more rendered cycle detail; lower values make smaller files and preserve less cycle detail.</td></tr>
+            <tr><td><strong>Internal table</strong></td><td>The generated oscillator table used by the engine. This version uses a fixed 256-sample internal table before export rendering and interpolation. During WAV export, the oscillator is sampled at the chosen WAV sample rate and render frequency. Low notes produce many exported samples per cycle; high notes produce fewer. Exports below 256 samples per cycle can be useful, but they use fewer exported samples than internal table points, so sharp or chaotic detail can be under-represented.</td></tr>
+            <tr><td><strong>Frame</strong></td><td>Planning term for one intended wavetable slot or snapshot. The exported WAV itself is still just ordinary audio samples; it does not store frame markers.</td></tr>
+            <tr><td><strong>Morph frame</strong></td><td>An intermediate sound state along START→END. The renderer may calculate many internal states while writing a continuous WAV.</td></tr>
+            <tr><td><strong>Render unit / length</strong></td><td>The shared Morph/Bulk length control. It can mean Cycles, Seconds, or Samples, depending on the selected unit.</td></tr>
+            <tr><td><strong>Duration</strong></td><td>The actual exported length in seconds. It can be entered directly in Seconds mode, derived as samples ÷ sample rate in Samples mode, or derived as cycles ÷ frequency in Cycles mode.</td></tr>
+            <tr><td><strong>Bit depth</strong></td><td>The amplitude resolution of the WAV file. It affects quantisation/noise floor and file size, but not pitch or render duration.</td></tr>
+          </tbody>
+        </table>
+        <h3>Rule of thumb</h3>
+        <p class="note">For sample-exact wavetable planning, choose the target samples per cycle first, then calculate frequency as <code>sample rate ÷ samples per cycle</code>. At 96 kHz, 256 samples per cycle gives 375 Hz. As a rule of thumb, 256 samples per cycle is the native internal table match; higher values oversample the rendered/interpolated result and create larger files; lower values create smaller files but preserve less cycle detail.</p>
       </div>
     </div>
   </section>
@@ -272,11 +329,11 @@ itself, impose GPL licensing on generated outputs.
         </tbody>
       </table>
       <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic; note/octave controls and MIDI note input set the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
-      <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, headroom, Different START/END Wavetable Types, Different START/END FM Pitch Range, Cycle-stepped transition, and the last open tab.</p>
+      <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, headroom, Different START/END Wavetable Types, Different START/END FM Pitch Range, Cycle-stepped transition, Calculator tab values while open, and the last open tab.</p>
       <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
       <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. Some older or redundant internal modes remain loadable for JSON compatibility but are hidden from the normal dropdown and randomisation pool, so old patches can still render while the main UI stays cleaner.</p>
-      <p class="note">Visualisation note: FM/PWM/Ring Mod views and the spectrum analyser show a post-filter preview. Base table shows the generated table before oscillator modulation and filtering. Animated stable mode uses a higher-resolution preview so block/interleave patterns are less likely to be skipped visually. Ring Mod is implemented as an Ring Mod stage, so higher Ring Mod values crossfade from the clean carrier into a multi-ratio self-ring modulator, adding sidebands, clang, and phase-related grit instead of ordinary level tremolo. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
-      <p class="note">Export notes: WAV files are generated in browser memory before download. Very long renders can stress RRing Mod and browser Blob/download limits. ZIP exports drop their temporary references after the download is triggered, but the browser decides when memory is actually reclaimed.</p>
+      <p class="note">Visualisation note: Base table shows the generated table post wave interpolator and pre modulation. Phase-locked, Slow animation, Time-domain, and Spectrum analyser views are post modulation previews. When active, the Slow animation visualiser is a slow-motion visualisation of audio-frequency FM/PWM/Ring Mod effects; it is not real-time oscillator speed or playback speed. If FM, PWM, and Ring Mod are all zero, the Slow animation view is static and should not keep repainting. Ring Mod is implemented as a self-ring-mod stage, so higher Ring Mod values crossfade from the clean carrier into a multi-ratio self-ring modulator, adding sidebands, clang, and phase-related grit instead of ordinary level tremolo. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
+      <p class="note">Export notes: WAV files are generated in browser memory before download. Very long renders can stress RAM and browser Blob/download limits. ZIP exports drop their temporary references after the download is triggered, but the browser decides when memory is actually reclaimed.</p>
       <h3>License and provenance</h3>
       <p class="note"><strong>License:</strong> This browser implementation is released as free software under the GNU General Public License version 2 only (<code>GPL-2.0-only</code>). It comes with no warranty. If this file is redistributed as part of a repository or release package, include the GPL v2 license text in a <code>COPYING</code> file.</p>
       <p class="note"><strong>Provenance:</strong> This browser implementation is inspired by Carl Hudson’s Fractal Wavetable Generator concept. Carl Hudson’s original C implementation is separately copyrighted and is not relicensed here.</p>
@@ -303,7 +360,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.3l';
+  const APP_VERSION = 'v2.4';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -327,6 +384,7 @@ itself, impose GPL licensing on generated outputs.
   const VISUAL_MODES = ['Off', 'Base table', 'Phase-locked FM/PWM/Ring Mod', 'Animated stable FM/PWM/Ring Mod', 'Time-domain FM/PWM/Ring Mod', 'Spectrum analyser'];
   const GLOBAL_SETTINGS_COOKIE = 'fractal_wavetable_global_settings_v1';
   const GLOBAL_SETTINGS_LOCALSTORAGE = 'fractal_wavetable_global_settings_v1';
+  const LAST_OPEN_TAB_LOCALSTORAGE = 'fractured_wavetable_last_open_tab_v1';
   const GLOBAL_SETTINGS_MAX_AGE_DAYS = 365;
 
   // TUTORIAL: Wavetable mode metadata. Each mode now has an explicit internal id and
@@ -602,6 +660,8 @@ itself, impose GPL licensing on generated outputs.
     'Feedback Sine': ['Feedback Depth', 'Feedback Phase', 'Saturation / Folding'],
   };
 
+  // TUTORIAL: Returns the visible labels for pot1/pot2/pot3 after resolving
+  // TUTORIAL: the selected engine family. Patch data keeps stable pot names; the UI gets musical names.
   function knobLabelsForEngine(name) {
     const family = enginePartsFor(name).family;
     const labels = ENGINE_KNOB_LABELS[family] || ['Primary Phase', 'Shape 1', 'Shape 2'];
@@ -625,7 +685,7 @@ itself, impose GPL licensing on generated outputs.
     ['Full Interpolation (Favours Digital Noise)', 'Moves one path through intermediate settings; useful for digital fracture and noisy transitions.'],
     ['Crossfade (Favours Analogue Warmth)', 'Renders START and END as complete endpoint sounds, then fades between them. Smooth, but can phase or beat.'],
     ['Phase-Aligned Crossfade (Warm, Less Beating)', 'Rotates the END table toward the START phase before crossfading; warmer and usually less hollow.'],
-    ['Phase-Offset Crossfade (Analogue Phaser Motion)', 'Intentionally offsets one endpoint before crossfading; can create phaser-like cancellation and movement.'],
+    ['Phase-Offset Crossfade (Analogue Phaser Motion)', 'Intentionally offsets one endpoint before crossfading; can create phaser-like cancellation and movement. Not intended for whole-file loop-closure tests.'],
     ['Dual-Path Interpolation (Avoids Midpoint Switches)', 'Interpolates continuous controls in START-type and END-type paths, then fades between paths.'],
     ['Hybrid Morph (Values Move, Types Fade)', 'Uses full interpolation when structures match; fades type/filter/engine changes when they do not.'],
     ['Wavetable Morph (Blends Tables Before Audio)', 'Blends START and END tables before one oscillator path; continuous controls still move after the table blend.'],
@@ -670,7 +730,7 @@ itself, impose GPL licensing on generated outputs.
     export: {
       mode: 'Cycles', value: MORPH_DEFAULT_CYCLES, sampleRate: DEFAULT_SAMPLE_RATE, bitDepth: '16-bit PCM',
       morphRenderMode: DEFAULT_MORPH_RENDER_MODE, spectralStates: 3,
-      curveAmount: 127, curveMode: 'Bend', cycleStepped: false,
+      curveAmount: 127, curveMode: 'Bend', cycleStepped: false, loopSafeBulk: false, loopSafeBulkStrategy: '256',
       differentTypes: false, sharedType: 3, differentFmRanges: false, sharedFmRange: DEFAULT_FM_RANGE_LABEL,
       dcMode: 'Per Cycle', normMode: 'Per Cycle Peak', headroomDb: -0.1, prefix: 'fractured_wt_morph', zipDownloads: true,
     },
@@ -685,6 +745,11 @@ itself, impose GPL licensing on generated outputs.
     visualRaf: null,
     visualLastTs: 0,
     cancelToken: 0,
+    // Current loop-safety snapshot for the Morph tab. The findings functions
+    // remain the source of truth; these arrays make the active red/yellow flags
+    // easy to inspect, display, or include in future JSON/debug output.
+    loopSafetyFindings: [],
+    loopSafetyFlags: [],
   };
 
   let mediaSessionHandlersInstalled = false;
@@ -771,6 +836,30 @@ itself, impose GPL licensing on generated outputs.
     return null;
   }
 
+  // TUTORIAL: Validates tab ids before reading or writing them to persistent storage.
+  // TUTORIAL: This prevents stale values from older builds from activating a missing panel.
+  function isValidTabId(tabId) {
+    return ['playground', 'morph', 'bulk', 'calculator', 'notes'].includes(String(tabId));
+  }
+
+  // TUTORIAL: Reads the dedicated localStorage tab key. It is intentionally separate
+  // TUTORIAL: from the larger global settings blob because file:// cookie behaviour can vary.
+  function readLastOpenTabSetting() {
+    try {
+      const tab = localStorage.getItem(LAST_OPEN_TAB_LOCALSTORAGE);
+      return isValidTabId(tab) ? tab : '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  // TUTORIAL: Persists the active tab immediately during tab changes. Keeping this tiny
+  // TUTORIAL: write separate from cookies makes last-open-tab reliable during local testing.
+  function persistLastOpenTabSetting(tabId) {
+    if (!isValidTabId(tabId)) return;
+    try { localStorage.setItem(LAST_OPEN_TAB_LOCALSTORAGE, String(tabId)); } catch (_) {}
+  }
+
   // TUTORIAL: Captures only cross-session global preferences. Patch-specific sound-design parameters stay
   // TUTORIAL: out of the cookie so loading the page still starts from the normal patch defaults.
   function globalSettingsSnapshot() {
@@ -794,6 +883,8 @@ itself, impose GPL licensing on generated outputs.
       differentTypes: !!state.export.differentTypes,
       differentFmRanges: !!state.export.differentFmRanges,
       cycleStepped: !!state.export.cycleStepped,
+      loopSafeBulk: !!state.export.loopSafeBulk,
+      loopSafeBulkStrategy: canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy),
       lastOpenTab: String(state.ui?.lastOpenTab || activeTabId()),
     };
   }
@@ -830,7 +921,9 @@ itself, impose GPL licensing on generated outputs.
     if (typeof saved.differentTypes === 'boolean') state.export.differentTypes = saved.differentTypes;
     if (typeof saved.differentFmRanges === 'boolean') state.export.differentFmRanges = saved.differentFmRanges;
     if (typeof saved.cycleStepped === 'boolean') state.export.cycleStepped = saved.cycleStepped;
-    if (['playground', 'morph', 'bulk', 'notes'].includes(String(saved.lastOpenTab))) state.ui.lastOpenTab = String(saved.lastOpenTab);
+    if (typeof saved.loopSafeBulk === 'boolean') state.export.loopSafeBulk = saved.loopSafeBulk;
+    if (saved.loopSafeBulkStrategy != null) state.export.loopSafeBulkStrategy = canonicalLoopSafeBulkStrategy(saved.loopSafeBulkStrategy);
+    if (isValidTabId(saved.lastOpenTab)) state.ui.lastOpenTab = String(saved.lastOpenTab);
     state.common.midiStatus = state.common.midiChannel === 'off' ? 'MIDI input off' : `MIDI channel restored: ${state.common.midiChannel === 'omni' ? 'OMNI' : 'ch ' + state.common.midiChannel}`;
   }
 
@@ -1497,7 +1590,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: phase before waveform lookup, then hands those sources to the existing
   // TUTORIAL: Wavetable Type collision/combine stage. Smooth keeps the remap continuous;
   // TUTORIAL: Crunchy deliberately adds stronger phase bends, folding, and edge motion, but
-  // TUTORIAL: v14.07 keeps the Shape 1/Shape 2 response more continuous than v14.06.
+  // TUTORIAL: The current tuning keeps the Shape 1/Shape 2 response more continuous than earlier crunchy phase-distortion experiments.
   function generatePhaseDistortionPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
     const seedMix = pot1 / POT_MAX_12BIT;
@@ -1693,7 +1786,7 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Sync generator engine. It approximates oscillator hard-sync by repeatedly resetting
-  // TUTORIAL: an internal source phase inside one output cycle. In v14.14 the reset ratios remain
+  // TUTORIAL: an internal source phase inside one output cycle. In this tuning the reset ratios remain
   // TUTORIAL: deliberately constrained: the knobs are intended to change sync intensity and the
   // TUTORIAL: A/B source waveshapes, not act like exposed pitch-ratio controls.
   function generateSyncPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
@@ -1711,7 +1804,7 @@ itself, impose GPL licensing on generated outputs.
     const ratioB = (smoothProfile ? 3.16 : 3.52) + ratioDrift * Math.cos(2 * Math.PI * (sourceBShape + 0.17));
 
     // TUTORIAL: Source A and Source B are not independent islands in the Sync engine.
-    // TUTORIAL: v14.14 adds bounded bidirectional cross-coupling: B can bend A, and A can
+    // TUTORIAL: The Sync source pair uses bounded bidirectional cross-coupling: B can bend A, and A can
     // TUTORIAL: bend B. This is not recursive feedback; each source reads a limited, stable
     // TUTORIAL: hint from the other source's control shape so Source-only wavetable modes still
     // TUTORIAL: reveal some interaction without turning knob motion into obvious pitch changes.
@@ -2008,7 +2101,6 @@ itself, impose GPL licensing on generated outputs.
     if (v === 'Output crossfade') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Crossfade') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Crossfade (Favours Smooth Blending)') return 'Crossfade (Favours Analogue Warmth)';
-    if (v === 'Crossfade (Favours Smooth Blending)') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Crossfade (Favours Analogue Creaminess)') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Comb Morph' || v === 'Comb Wavetable Morph' || v === 'Comb Wavetable Morph (Hollow Interference)') return 'Comb Wavetable Morph (Hollow Interference)';
     if (v === 'FFT Morph' || v === 'Spectral Morph' || v === 'FFT Spectral Morph (Digital Tone, Less Crunchy)') return 'FFT Spectral Morph (Digital Tone, Less Crunchy)';
@@ -2286,6 +2378,327 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
+
+  // TUTORIAL: Loop-safety helpers separate exact length math from whether the waveform returns
+  // TUTORIAL: to a phase-compatible boundary. The registry-style findings below keep the warning
+  // TUTORIAL: system maintainable: new features should add one rule here, rather than scattering
+  // TUTORIAL: loop-safety text through the UI, renderer, and export metadata.
+  function nearlyInteger(value, tolerance = 1e-6) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return false;
+    return Math.abs(n - Math.round(n)) <= tolerance;
+  }
+
+  // TUTORIAL: Makes a shallow copy of a patch before temporary loop-safe overrides are applied.
+  function clonePatch(patch) {
+    return {...patch};
+  }
+
+  // TUTORIAL: Creates the neutral audition/export version of a patch for phase-accurate
+  // TUTORIAL: loop planning: modulation, filters, and partial-cycle windows are flattened.
+  function neutralisePatchForLoopSafety(patch) {
+    const p = clonePatch(patch);
+    p.fm = 0;
+    p.pwm = 0;
+    p.am = 0;
+    p.filterType = 'Off';
+    p.filterCutoff = 8000;
+    p.filterResonance = 0;
+    p.beforeStart = 0;
+    p.beforeEnd = WINDOW_STEPS;
+    p.afterStart = 0;
+    p.afterEnd = WINDOW_STEPS;
+    return p;
+  }
+
+  // TUTORIAL: Normalised warning objects let the Morph notice, Bulk notice, and future
+  // TUTORIAL: metadata/debug output all describe loop-safety issues in the same shape.
+  function loopFinding(severity, message, meta = {}) {
+    const kind = String(meta.kind || 'loop_safety');
+    const label = meta.label ? `${meta.label}:` : '';
+    const flag = meta.flag || `${label}${kind}`;
+    return {severity, flag, message, ...meta};
+  }
+
+  // TUTORIAL: Detects oscillator-stage modulation. These controls can move apparent
+  // TUTORIAL: phase landmarks even when the underlying table length is mathematically exact.
+  function patchUsesNonNeutralModulation(patch) {
+    return (clampFloat(patch?.fm || 0, 0, 255) > 0)
+      || (clampFloat(patch?.pwm || 0, 0, 255) > 0)
+      || (clampFloat(patch?.am || 0, 0, 255) > 0);
+  }
+
+  // TUTORIAL: Detects subtractive filtering. Recursive filter memory can make the final
+  // TUTORIAL: sample boundary depend on what happened just before the boundary.
+  function patchUsesNonNeutralFilter(patch) {
+    return String(patch?.filterType || 'Off') !== 'Off'
+      || clampFloat(patch?.filterResonance || 0, 0, 1) > 0;
+  }
+
+  // TUTORIAL: Detects source/result windows that are not full-cycle reads. Partial windows
+  // TUTORIAL: can be useful sound-design tools, but they complicate strict wavetable closure.
+  function patchUsesNonFullWindows(patch) {
+    const bw = clampWindowPair(patch?.beforeStart ?? 0, patch?.beforeEnd ?? WINDOW_STEPS);
+    const aw = clampWindowPair(patch?.afterStart ?? 0, patch?.afterEnd ?? WINDOW_STEPS);
+    return !isFullWindow(bw.start, bw.length) || !isFullWindow(aw.start, aw.length);
+  }
+
+  // TUTORIAL: Converts internal patch keys into short labels used in warnings.
+  function patchLoopLabel(patchKey) {
+    return patchKey === 'end' ? 'END' : patchKey === 'start' ? 'START' : 'Patch';
+  }
+
+  // TUTORIAL: Collects patch-local loop-safety findings. This does not decide whether
+  // TUTORIAL: a render is musically useful; it only flags things that can complicate exact looping.
+  function loopSafetyFindingsForPatch(patch, patchKey) {
+    const label = patchLoopLabel(patchKey);
+    const findings = [];
+    if (patchUsesNonNeutralModulation(patch)) {
+      findings.push(loopFinding('hard', `${label} uses oscillator FM, PWM, or Ring Mod, which can move phase landmarks inside a nominal cycle.`, {kind: 'modulation', label}));
+    }
+    if (patchUsesNonNeutralFilter(patch)) {
+      findings.push(loopFinding('hard', `${label} uses a filter or resonance; filter memory can change the boundary of a rendered cycle.`, {kind: 'filter', label}));
+    }
+    if (patchUsesNonFullWindows(patch)) {
+      findings.push(loopFinding('hard', `${label} uses source/result windows rather than full-cycle windows.`, {kind: 'windows', label}));
+    }
+    const wtInfo = wavetableInfoFor(patch?.wavetableType);
+    if (wtInfo && ['Sources / Splices', 'Compare / Edges', 'Dynamic A/B Interaction', 'Low-Bit Logic', 'Window / Interference'].includes(String(wtInfo.group || ''))) {
+      findings.push(loopFinding('caution', `${label} Wavetable Type “${wtInfo.name}” may create sharp or visually misleading cycle landmarks.`, {kind: 'wavetable_type', label}));
+    }
+    return findings;
+  }
+
+  // TUTORIAL: Collects whole-render loop-safety findings across pitch/sample-rate math,
+  // TUTORIAL: morph mode, shared START/END options, and both endpoint patches.
+  function loopSafetyFindingsForSettings(startPatch = state.patches.start, endPatch = state.patches.end) {
+    const findings = [];
+    const summary = renderLengthSummary();
+    const mode = canonicalMorphRenderMode(state.export.morphRenderMode);
+
+    if (!nearlyInteger(summary.samplesPerCycle, 1e-6)) {
+      findings.push(loopFinding('hard', `Current render pitch/sample-rate relationship is ${summary.samplesPerCycle.toFixed(6)} samples/cycle, not an integer samples/cycle.`, {kind: 'samples_per_cycle'}));
+    }
+    if (mode === 'Phase-Offset Crossfade (Analogue Phaser Motion)') {
+      findings.push(loopFinding('hard', 'Phase-Offset Crossfade deliberately offsets the END frame, so whole-file loop closure is not expected.', {kind: 'phase_offset_morph'}));
+    }
+    if (!state.export.cycleStepped) {
+      findings.push(loopFinding('caution', 'Cycle-stepped transition is off; continuous morphing can make the start and end of a whole file represent different intermediate states.', {kind: 'continuous_morph'}));
+    }
+    if (state.export.differentTypes) {
+      findings.push(loopFinding('caution', 'Different START/END Wavetable Types are enabled; endpoint structure may change across the morph.', {kind: 'different_types'}));
+    }
+    if (state.export.differentFmRanges) {
+      findings.push(loopFinding('caution', 'Different START/END FM Pitch Range is enabled; endpoint modulation scale may change across the morph.', {kind: 'different_fm_ranges'}));
+    }
+    if (startPatch && endPatch && canonicalEngineName(startPatch.engine) !== canonicalEngineName(endPatch.engine)) {
+      findings.push(loopFinding('caution', 'START and END use different Generator Family/Variant settings; the morph can change source structure even with loop-safe length math.', {kind: 'different_engines'}));
+    }
+
+    findings.push(...loopSafetyFindingsForPatch(startPatch, 'start'));
+    findings.push(...loopSafetyFindingsForPatch(endPatch, 'end'));
+
+    state.loopSafetyFindings = findings;
+    state.loopSafetyFlags = findings.map(finding => finding.flag);
+    return findings;
+  }
+
+  // TUTORIAL: Bulk loop-safe targets are frame-oriented samples-per-cycle choices.
+  // TUTORIAL: 256 matches the fixed internal table; 512 and 1024 oversample that table.
+  const LOOP_SAFE_BULK_STRATEGIES = [
+    ['256', '256 samples/cycle — native table match'],
+    ['512', '512 samples/cycle — 2× oversampling (2× larger file size)'],
+    ['1024', '1024 samples/cycle — 4× oversampling (4× larger file size)'],
+  ];
+
+  const LOOP_SAFE_TABLE_FRIENDLY_SPP = [256, 512, 1024];
+
+  // TUTORIAL: Migrates older/scratch loop-safe setting values into the current strategy list.
+  // TUTORIAL: The temporary v2.3za 128-sample value is deliberately corrected back to 256.
+  function canonicalLoopSafeBulkStrategy(value) {
+    const v = String(value || '256');
+    if (v === 'preserve-duration' || v === 'native-256' || v === '128') return '256';
+    if (v === '1024') return '1024';
+    return LOOP_SAFE_BULK_STRATEGIES.some(([id]) => id === v) ? v : '256';
+  }
+
+  // TUTORIAL: Converts the stored loop-safe strategy id into the label shown beside the dropdown.
+  function loopSafeBulkStrategyLabel(value = state.export.loopSafeBulkStrategy) {
+    const id = canonicalLoopSafeBulkStrategy(value);
+    const found = LOOP_SAFE_BULK_STRATEGIES.find(([strategyId]) => strategyId === id);
+    return found ? found[1] : LOOP_SAFE_BULK_STRATEGIES[0][1];
+  }
+
+  // TUTORIAL: Rejects samples-per-cycle targets that would force the resulting pitch outside
+  // TUTORIAL: the allowed frequency range at the selected sample rate.
+  function validSamplesPerCycleTarget(target, sampleRate) {
+    const spp = clampInt(target, 1, Math.max(1, Math.floor(sampleRate / MIN_FREQUENCY)));
+    const freq = sampleRate / spp;
+    return Number.isFinite(freq) && freq >= MIN_FREQUENCY && freq <= MAX_FREQUENCY;
+  }
+
+  // TUTORIAL: Filters the preferred table-friendly targets for the current sample rate.
+  function tableFriendlySamplesPerCycleTargets(sampleRate) {
+    return LOOP_SAFE_TABLE_FRIENDLY_SPP.filter(spp => validSamplesPerCycleTarget(spp, sampleRate));
+  }
+
+  // TUTORIAL: Chooses the perceptually nearest candidate by ratio rather than absolute difference,
+  // TUTORIAL: so 256→512 and 512→1024 are treated as comparable octave-like steps.
+  function nearestByLogRatio(candidates, target) {
+    const safeTarget = Math.max(1, Number(target) || TABLE_SIZE);
+    let best = candidates[0] || TABLE_SIZE;
+    let bestScore = Infinity;
+    for (const candidate of candidates) {
+      const score = Math.abs(Math.log(candidate / safeTarget));
+      if (score < bestScore) { best = candidate; bestScore = score; }
+    }
+    return best;
+  }
+
+  // TUTORIAL: Finds samples-per-cycle divisors that exactly divide a requested sample count.
+  // TUTORIAL: This is useful when Samples mode should keep a stored sample length loopable.
+  function divisorsForSampleCount(sampleCount, sampleRate) {
+    const n = clampInt(sampleCount, 1, 1_000_000_000);
+    const out = [];
+    const limit = Math.floor(Math.sqrt(n));
+    for (let d = 1; d <= limit; d++) {
+      if (n % d !== 0) continue;
+      const a = d, b = n / d;
+      if (validSamplesPerCycleTarget(a, sampleRate)) out.push(a);
+      if (b !== a && validSamplesPerCycleTarget(b, sampleRate)) out.push(b);
+    }
+    return out.sort((a, b) => a - b);
+  }
+
+  // TUTORIAL: Resolves the selected fixed Bulk target into a numeric samples-per-cycle value.
+  function fixedLoopSafeSamplesPerCycle(strategy, sampleRate) {
+    const safeStrategy = canonicalLoopSafeBulkStrategy(strategy);
+    const target = Number(safeStrategy);
+    return Number.isFinite(target) ? target : 256;
+  }
+
+  // TUTORIAL: Plans the temporary Bulk render settings used only while Phase-accurate
+  // TUTORIAL: loop-safe export is enabled. It explains what is preserved and what is adjusted.
+  function loopSafeBulkPlan() {
+    const sr = clampInt(state.export.sampleRate, 8000, 384000);
+    const originalFreq = clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY);
+    const strategy = canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy);
+    const strategyLabel = loopSafeBulkStrategyLabel(strategy);
+    const requested = Number(state.export.value);
+    const safeRequested = Number.isFinite(requested) ? requested : MORPH_DEFAULT_CYCLES;
+    const mode = ['Cycles', 'Seconds', 'Samples'].includes(state.export.mode) ? state.export.mode : 'Cycles';
+    const targetSpp = fixedLoopSafeSamplesPerCycle(strategy, sr) || 256;
+    let samplesPerCycle = targetSpp;
+    let cycles;
+    let sampleCount;
+    let requestedDuration;
+    let priorityNote;
+
+    if (mode === 'Samples') {
+      const requestedSamples = Math.max(1, Math.round(Math.max(1, safeRequested)));
+      requestedDuration = requestedSamples / sr;
+      cycles = Math.max(1, Math.round(requestedSamples / samplesPerCycle));
+      sampleCount = cycles * samplesPerCycle;
+      priorityNote = `Samples mode: requested ${requestedSamples} samples; snapping to ${cycles} whole cycle(s) at ${samplesPerCycle} samples/cycle (${sampleCount} samples).`;
+    } else if (mode === 'Seconds') {
+      requestedDuration = Math.max(1 / originalFreq, safeRequested || 0);
+      const requestedSamples = Math.max(1, Math.round(requestedDuration * sr));
+      cycles = Math.max(1, Math.round(requestedSamples / samplesPerCycle));
+      sampleCount = requestedSamples;
+      samplesPerCycle = sampleCount / cycles;
+      priorityNote = `Seconds mode: preserving the selected ${requestedDuration.toFixed(6)} s duration and choosing ${cycles} whole cycle(s) nearest the ${targetSpp} samples/cycle target.`;
+    } else {
+      const requestedCycles = Math.max(1, Math.round(Math.max(1, safeRequested || MORPH_DEFAULT_CYCLES)));
+      cycles = requestedCycles;
+      sampleCount = cycles * samplesPerCycle;
+      requestedDuration = requestedCycles / originalFreq;
+      priorityNote = `Cycles mode: preserving the requested ${cycles} cycle(s) and using the ${targetSpp} samples/cycle target.`;
+    }
+
+    let finalFreq = cycles / Math.max(sampleCount / sr, 1 / sr);
+    if (finalFreq < MIN_FREQUENCY || finalFreq > MAX_FREQUENCY) {
+      const allowedMinSpp = sr / MAX_FREQUENCY;
+      const allowedMaxSpp = sr / MIN_FREQUENCY;
+      const clampedTarget = clampFloat(samplesPerCycle, allowedMinSpp, allowedMaxSpp);
+      if (mode === 'Seconds') {
+        const requestedSamples = Math.max(1, sampleCount);
+        cycles = Math.max(1, Math.round(requestedSamples / clampedTarget));
+        sampleCount = requestedSamples;
+        samplesPerCycle = sampleCount / cycles;
+        finalFreq = cycles / Math.max(sampleCount / sr, 1 / sr);
+      } else {
+        samplesPerCycle = Math.max(1, Math.round(clampedTarget));
+        sampleCount = Math.max(1, cycles) * samplesPerCycle;
+        finalFreq = sr / samplesPerCycle;
+      }
+      priorityNote += ` Selected target was outside the supported pitch range; using ${samplesPerCycle.toFixed(6)} effective samples/cycle instead.`;
+    }
+
+    cycles = Math.max(1, Math.round(cycles));
+    sampleCount = Math.max(1, Math.round(sampleCount));
+    samplesPerCycle = sampleCount / cycles;
+    finalFreq = clampFloat(cycles / Math.max(sampleCount / sr, 1 / sr), MIN_FREQUENCY, MAX_FREQUENCY);
+    const actualDuration = sampleCount / sr;
+    const durationDelta = actualDuration - requestedDuration;
+    const changes = [];
+    if (Math.abs(finalFreq - originalFreq) > 1e-9) changes.push(`frequency ${originalFreq.toFixed(6)} Hz → ${finalFreq.toFixed(6)} Hz so the file contains ${cycles} whole cycle(s)`);
+    changes.push(priorityNote);
+    if (mode === 'Seconds') {
+      changes.push(`duration held at ${actualDuration.toFixed(6)} s (${cycles} cycle(s), ${sampleCount} samples, ${samplesPerCycle.toFixed(6)} effective samples/cycle)`);
+    } else {
+      changes.push(`duration target ${requestedDuration.toFixed(6)} s → ${actualDuration.toFixed(6)} s (${cycles} cycle(s), ${sampleCount} samples, ${samplesPerCycle.toFixed(6)} samples/cycle)`);
+    }
+    if (state.export.mode !== 'Cycles' || Math.abs(Number(state.export.value) - cycles) > 1e-9) changes.push(`temporary render unit/length → ${cycles} Cycles`);
+    if (canonicalMorphRenderMode(state.export.morphRenderMode) !== DEFAULT_MORPH_RENDER_MODE) changes.push(`morph mode → ${DEFAULT_MORPH_RENDER_MODE}`);
+    if (!state.export.cycleStepped) changes.push('Cycle-stepped transition → on');
+    return {sampleRate: sr, samplesPerCycle, targetSamplesPerCycle: targetSpp, frequency: finalFreq, cycles, requestedDuration, actualDuration, durationDelta, sampleCount, changes, strategy, strategyLabel, priorityNote, originalMode: mode};
+  }
+
+  // TUTORIAL: Escapes generated notice text before it is inserted as HTML paragraphs.
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, ch => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch]));
+  }
+
+  // TUTORIAL: Builds paragraph-sized human text for the enabled Bulk loop-safe explanation.
+  function loopSafeBulkDisabledLines(plan = loopSafeBulkPlan()) {
+    const delta = Math.abs(plan.durationDelta) > 1e-9 ? ` Duration difference: ${plan.durationDelta >= 0 ? '+' : ''}${plan.durationDelta.toFixed(6)} s.` : '';
+    return [
+      'For wavetable-developer loop safety, Bulk temporarily disables or overrides oscillator FM, PWM, Ring Mod, filters, source/result windows, phase-offset morphing, continuous non-cycle-stepped morphing, and render length/frequency relationships that would not close on a whole-cycle file.',
+      `Loop-safe target: ${plan.strategyLabel}.`,
+      `Unit priority: ${plan.priorityNote}`,
+      `Result: target ${plan.targetSamplesPerCycle || plan.samplesPerCycle} samples/cycle, effective ${plan.samplesPerCycle.toFixed(6)} samples/cycle, ${plan.frequency.toFixed(6)} Hz, ${plan.cycles} cycle(s), and ${plan.sampleCount} samples per file. Duration target ${plan.requestedDuration.toFixed(6)} s → ${plan.actualDuration.toFixed(6)} s.${delta}`,
+      plan.changes.length ? `Temporary render changes: ${plan.changes.join('; ')}.` : 'No temporary length/frequency changes are needed for the current render settings.',
+      'The loop-safe target is used as the clean cycle-planning target. Cycles and Samples mode snap rendered length to whole target-sized cycles; Seconds mode keeps the selected duration and chooses the nearest whole-cycle frequency.',
+      'Generator Family and Wavetable Type are not forcibly flattened; otherwise Bulk would stop being useful as a random generator. They are accounted for as content/boundary cautions because some engines and wavetable modes can create sharp or visually misleading cycle landmarks.',
+      'This is mainly for wavetable developers. For one-shots, drones, risers, and general sound design, it is usually fine to disable this `Phase-accurate loop-safe` feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.'
+    ];
+  }
+
+  // TUTORIAL: Converts an array of notice paragraphs into simple escaped <p> blocks.
+  function paragraphHtml(lines) {
+    return lines.map(line => `<p>${escapeHtml(line)}</p>`).join('');
+  }
+
+  // TUTORIAL: Plain-text version of the Bulk loop-safe explanation for export metadata.
+  function loopSafeBulkDisabledText(plan = loopSafeBulkPlan()) {
+    return loopSafeBulkDisabledLines(plan).join('\n\n');
+  }
+
+  // TUTORIAL: HTML version of the Bulk loop-safe explanation for the on-page status box.
+  function loopSafeBulkDisabledHtml(plan = loopSafeBulkPlan()) {
+    return paragraphHtml(loopSafeBulkDisabledLines(plan));
+  }
+
+  // TUTORIAL: Plain-text explanation shown when Bulk loop-safe mode is off.
+  function loopSafeBulkOffText() {
+    return 'Off: Bulk uses the visible render settings and randomises FM/PWM/Ring Mod, source/result windows, and morph-relevant patch settings. For one-shots, drones, risers, and general sound design, it is usually fine to disable this `Phase-accurate loop-safe` feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.';
+  }
+
+  // TUTORIAL: HTML explanation shown when Bulk loop-safe mode is off.
+  function loopSafeBulkOffHtml() {
+    return paragraphHtml([loopSafeBulkOffText()]);
+  }
+
   // TUTORIAL: Turns export length settings into sample/frame/cycle counts and a human-readable summary.
   function renderLengthSummary() {
     const sr = clampInt(state.export.sampleRate, 8000, 384000);
@@ -2302,6 +2715,9 @@ itself, impose GPL licensing on generated outputs.
     if (sampleCount * 8 > 500_000_000) warnings.push(`large memory use likely: ${(sampleCount * 8 / 1e9).toFixed(2)} GB+ before download`);
     if (spp < 32) warnings.push(`very low cycle resolution: ${spp.toFixed(2)} samples/cycle`);
     else if (spp < 128) warnings.push(`low cycle resolution: ${spp.toFixed(2)} samples/cycle`);
+    if (canonicalMorphRenderMode(state.export.morphRenderMode) === 'Phase-Offset Crossfade (Analogue Phaser Motion)' && state.export.cycleStepped) {
+      warnings.push('Phase-Offset Crossfade deliberately shifts the END frame; sample count can be cycle-exact while the whole file is not loop-closed');
+    }
     return {requestedMode: state.export.mode, requestedValue: requested, sampleRate: sr, bitDepth: state.export.bitDepth, frequency: freq, sampleCount, durationSeconds: duration, nominalCycles: duration * freq, samplesPerCycle: spp, warnings};
   }
 
@@ -2690,8 +3106,9 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
-  
-async function renderMorphAudioDualPath(start, end, reverse = false, progress = null, token = state.cancelToken, notePrefix = 'Dual-Path Interpolation') {
+  // TUTORIAL: Dual-path morph rendering avoids abrupt midpoint switches by rendering
+  // TUTORIAL: a START-structure path and an END-structure path, then fading between them.
+  async function renderMorphAudioDualPath(start, end, reverse = false, progress = null, token = state.cancelToken, notePrefix = 'Dual-Path Interpolation') {
     throwIfCancelled(token);
     const summary = renderLengthSummary();
     const n = summary.sampleCount, sr = summary.sampleRate, freq = summary.frequency;
@@ -2997,7 +3414,10 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const notes = summary.warnings.slice();
     if ((startPatch.filterType || 'Off') !== (endPatch.filterType || 'Off')) notes.push('Crossfade: START and END filter types were rendered as separate streams and faded, not mathematically interpolated.');
     if (opts.phaseAlign) notes.push('Phase-Aligned Crossfade: END table was rotated toward START before rendering to reduce cancellation.');
-    if (opts.phaseOffset) notes.push('Phase-Offset Crossfade: END table was deliberately offset before rendering to encourage phaser-like cancellation.');
+    if (opts.phaseOffset) {
+      notes.push('Phase-Offset Crossfade: END table was deliberately offset before rendering to encourage phaser-like cancellation.');
+      notes.push('Phase-Offset Crossfade: sample count and nominal cycles can be correct while the whole file does not close back to the first sample; use a non-phase-offset mode for loop-closure tests.');
+    }
     notes.push('Crossfade mode: all START and END parameters are rendered as two complete endpoint signals, then crossfaded by the morph curve.');
     notes.push('Crossfade mode: branch DC removal/normalisation happens before the fade, so Per Cycle Peak does not erase the crossfade curve.');
     return {audio, summary, notes};
@@ -3172,7 +3592,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       source_end: patchMetadata(endPatch),
       result_start: direction === 'reverse' ? patchMetadata(endPatch) : patchMetadata(startPatch),
       result_end: direction === 'reverse' ? patchMetadata(startPatch) : patchMetadata(endPatch),
-      export_writer: {mode: 'buffered-browser-blob', embedded_systems_note: 'Browser Blob export is simple but not memory-streaming; very long renders still stress RRing Mod, CPU time, storage writes, filesystem limits, and RIFF/WAV size limits.'},
+      export_writer: {mode: 'buffered-browser-blob', embedded_systems_note: 'Browser Blob export is simple but not memory-streaming; very long renders still stress RAM, CPU time, storage writes, filesystem limits, and RIFF/WAV size limits.'},
       notes,
     };
   }
@@ -3524,9 +3944,31 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return document.querySelector('.tab.active')?.id || 'playground';
   }
 
-  // TUTORIAL: Detects whether the current visual mode needs a continuing animation loop.
+  // TUTORIAL: Detects whether the current visual mode is the slow animated modulation preview.
   function isAnimatedVisualMode(mode) {
     return mode === 'Animated stable FM/PWM/Ring Mod';
+  }
+
+  // TUTORIAL: The Animated stable view only needs continuous repainting when at least one
+  // TUTORIAL: oscillator-modulation control is active. If FM, PWM, and Ring Mod are all zero,
+  // TUTORIAL: the slow preview sweep changes no samples, so the canvas should stay static until
+  // TUTORIAL: a parameter edit asks for a redraw.
+  function patchHasVisualModulation(patch) {
+    if (!patch) return false;
+    return clampInt(patch.fm || 0, 0, 255) > 0
+      || clampInt(patch.pwm || 0, 0, 255) > 0
+      || clampInt(patch.am || 0, 0, 255) > 0;
+  }
+
+  // TUTORIAL: Checks the currently visible patches, so Morph only animates when START or END
+  // TUTORIAL: actually has FM/PWM/Ring Mod depth to demonstrate.
+  function visibleAnimatedModulationIsActive() {
+    const mode = canonicalVisualMode(state.visualMode);
+    if (!isAnimatedVisualMode(mode)) return false;
+    const tab = activeTabId();
+    if (tab === 'playground') return patchHasVisualModulation(effectivePatchForKey('single'));
+    if (tab === 'morph') return patchHasVisualModulation(effectivePatchForKey('start')) || patchHasVisualModulation(effectivePatchForKey('end'));
+    return false;
   }
 
   // TUTORIAL: Creates a slow 0..1..0 modulation-depth sweep for stable animated previews.
@@ -3534,8 +3976,14 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return 0.5 - 0.5 * Math.cos(2 * Math.PI * state.visualAnim);
   }
 
+  // TUTORIAL: Caption helpers keep the bottom-of-canvas label short and honest about
+  // TUTORIAL: whether the preview is before or after the oscillator modulation stage.
+  function modulationCaptionSuffix() {
+    return 'post modulation';
+  }
+
   // TUTORIAL: Visualiser data preparation. This mirrors the audio/render path closely enough that
-  // TUTORIAL: the display reflects post-filter output for FM/PWM/Ring Mod modes while Base Table remains
+  // TUTORIAL: the modulation-capable views show post-modulation previews while Base Table remains
   // TUTORIAL: a pre-modulation table view.
   function visualDataForPatch(patch, mode) {
     if (mode === 'Off') return {kind: 'off', data: null, label: 'Visualiser Is Turned Off'};
@@ -3543,22 +3991,24 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const fmRange = fmRangeLabelToCents(patch.fmRangeLabel);
     if (mode === 'Phase-locked FM/PWM/Ring Mod') {
       const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'wave', data: wave, label: 'phase-locked FM/PWM/Ring Mod, post-filter'};
+      return {kind: 'wave', data: wave, label: `phase-locked — ${modulationCaptionSuffix()}`};
     }
     if (mode === 'Animated stable FM/PWM/Ring Mod') {
-      const depth = animatedDepthScale();
+      const hasModulation = patchHasVisualModulation(patch);
+      const depth = hasModulation ? animatedDepthScale() : 1;
       const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange, 512, depth), patch);
-      return {kind: 'wave', data: wave, label: `animated stable FM/PWM/Ring Mod, post-filter depth ${depth.toFixed(2)}×`};
+      const label = 'slow animation — post modulation';
+      return {kind: 'wave', data: wave, label};
     }
     if (mode === 'Time-domain FM/PWM/Ring Mod') {
       const wave = applyVisualFilter(renderTimeDomain(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'wave', data: wave, label: 'time-domain FM/PWM/Ring Mod, post-filter'};
+      return {kind: 'wave', data: wave, label: `time-domain — ${modulationCaptionSuffix()}`};
     }
     if (mode === 'Spectrum analyser') {
       const wave = applyVisualFilter(renderTimeDomain(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'spectrum', data: spectrumForWave(wave), label: 'spectrum analyser, post-filter'};
+      return {kind: 'spectrum', data: spectrumForWave(wave), label: `spectrum analyser — ${modulationCaptionSuffix()}`};
     }
-    return {kind: 'wave', data: table, label: 'base generated table'};
+    return {kind: 'wave', data: table, label: 'base table — post wave interpolator; pre modulation'};
   }
 
   // TUTORIAL: Redraws all relevant canvases after patch, visual mode, or animation state changes.
@@ -3598,9 +4048,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Checks whether any visible visualiser currently needs animation frames.
   function hasAnimatedVisuals() {
-    const tab = activeTabId();
-    if (tab === 'playground' || tab === 'morph') return isAnimatedVisualMode(state.visualMode);
-    return false;
+    return visibleAnimatedModulationIsActive();
   }
 
   // TUTORIAL: Starts the requestAnimationFrame loop only when animated views are visible.
@@ -3629,13 +4077,78 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (hasAnimatedVisuals()) state.visualRaf = requestAnimationFrame(visualAnimationTick);
   }
 
+
+  // TUTORIAL: Recomputes the Morph tab loop-safety status and paints the notice box.
+  // TUTORIAL: The render path is not changed here; this is advisory UI only.
+  function updateMorphLoopSafetyNotice() {
+    const box = $('morphLoopSafetyNotice');
+    if (!box) return;
+    const findings = loopSafetyFindingsForSettings(state.patches.start, state.patches.end);
+    const hard = findings.filter(finding => finding.severity === 'hard');
+    const cautions = findings.filter(finding => finding.severity !== 'hard');
+    box.classList.remove('safe', 'warn', 'caution');
+    if (hard.length) {
+      box.classList.add('warn');
+      const lines = hard.map(finding => finding.message).concat(cautions.map(finding => `Caution: ${finding.message}`));
+      box.innerHTML = `<strong>Wavetable loop-safety notice:</strong> ${hard.length} phase/length setting(s) may prevent phase-accurate loop closure.\n- ${lines.join('\n- ')}\nFor ordinary one-shots, drones, risers, or transitions, this may be fine: render as needed or slightly longer than needed, then trim to a zero crossing later. For precise wavetable frames, use neutral modulation/filter settings and non-phase-offset morph modes.`;
+    } else if (cautions.length) {
+      box.classList.add('caution');
+      box.innerHTML = `<strong>Wavetable loop-safety notice:</strong> no hard phase/length hazards detected, but ${cautions.length} content/boundary caution(s) may affect how cleanly the waveform appears to loop.\n- ${cautions.map(finding => finding.message).join('\n- ')}\nFor strict wavetable-frame development, verify the boundary visually or analytically.`;
+    } else {
+      box.classList.add('safe');
+      box.innerHTML = '<strong>Wavetable loop-safety notice:</strong> current render settings are sample-aligned and do not use the common phase-offset/modulation/filter hazards. Complex wavetable shapes can still contain deliberate sharp edges.';
+    }
+  }
+
+  // TUTORIAL: Keeps the Bulk loop-safe details live with the currently selected pitch,
+  // TUTORIAL: sample-rate, render length, render unit, and loop-safe target.
+  function updateBulkLoopSafeNotice() {
+    const box = $('bulkLoopSafeDetails');
+    if (!box) return;
+    const strategyRow = $('bulkLoopSafeStrategyRow');
+    const strategySelect = $('bulkLoopSafeStrategy');
+    if (strategyRow) strategyRow.style.display = state.export.loopSafeBulk ? '' : 'none';
+    if (strategySelect) strategySelect.disabled = !state.export.loopSafeBulk;
+    if (state.export.loopSafeBulk) {
+      box.innerHTML = loopSafeBulkDisabledHtml();
+    } else {
+      box.innerHTML = loopSafeBulkOffHtml();
+    }
+  }
+
+  // TUTORIAL: Makes loop-safety notice failures non-blocking. A broken warning box should
+  // TUTORIAL: never prevent keyboard shortcuts, transport buttons, or patch auto-audition.
+  function updateLoopSafetyNoticesSafely() {
+    try {
+      updateMorphLoopSafetyNotice();
+    } catch (err) {
+      console.error('Morph loop-safety notice failed', err);
+      const box = $('morphLoopSafetyNotice');
+      if (box) {
+        box.classList.remove('safe', 'warn', 'caution');
+        box.classList.add('caution');
+        box.textContent = `Wavetable loop-safety notice could not be updated: ${err && err.message ? err.message : err}`;
+      }
+    }
+    try {
+      updateBulkLoopSafeNotice();
+    } catch (err) {
+      console.error('Bulk loop-safe notice failed', err);
+      const box = $('bulkLoopSafeDetails');
+      if (box) box.textContent = `Bulk loop-safe details could not be updated: ${err && err.message ? err.message : err}`;
+    }
+  }
+
   // TUTORIAL: Refreshes status text so the UI reports current settings and render assumptions.
   function updateStatusSummaries() {
     const s = renderLengthSummary();
-    $('singleStatus').textContent = `Frequency: ${state.common.frequency.toFixed(3)} Hz | Volume: ${state.common.volume.toFixed(2)} | ${state.common.midiStatus || 'MIDI input off'}`;
-    if (!(state.audio.playing && state.audio.mode === 'morph')) {
-      $('morphStatus').textContent = `Render: ${s.sampleCount} samples, ${s.durationSeconds.toFixed(6)} s, ${s.nominalCycles.toFixed(3)} cycles, ${s.samplesPerCycle.toFixed(2)} samples/cycle${s.warnings.length ? '\nWarnings: ' + s.warnings.join('; ') : ''}`;
+    const singleStatus = $('singleStatus');
+    if (singleStatus) singleStatus.textContent = `Frequency: ${state.common.frequency.toFixed(3)} Hz | Volume: ${state.common.volume.toFixed(2)} | ${state.common.midiStatus || 'MIDI input off'}`;
+    const morphStatus = $('morphStatus');
+    if (morphStatus && !(state.audio.playing && state.audio.mode === 'morph')) {
+      morphStatus.textContent = `Render: ${s.sampleCount} samples, ${s.durationSeconds.toFixed(6)} s, ${s.nominalCycles.toFixed(3)} cycles, ${s.samplesPerCycle.toFixed(2)} samples/cycle${s.warnings.length ? '\nWarnings: ' + s.warnings.join('; ') : ''}`;
     }
+    updateLoopSafetyNoticesSafely();
   }
 
   // TUTORIAL: Updates master gain without rebuilding the audio graph.
@@ -4233,8 +4746,18 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     value.step = 'any';
     value.dataset.exportSetting = 'render-value';
     value.value = state.export.value;
-    mode.onchange = () => { state.export.mode = mode.value; persistGlobalSettings(); updateStatusSummaries(); syncExportSettingControls(); };
-    value.onchange = () => { state.export.value = Number(value.value); persistGlobalSettings(); updateStatusSummaries(); syncExportSettingControls(); };
+    mode.onchange = () => { state.export.mode = mode.value; persistGlobalSettings(); updateStatusSummaries(); updateBulkLoopSafeNotice(); syncExportSettingControls(); };
+    const applyRenderValue = (persistNow, syncNow) => {
+      if (value.value === '' || !Number.isFinite(Number(value.value))) return;
+      state.export.value = Number(value.value);
+      if (persistNow) persistGlobalSettings();
+      updateStatusSummaries();
+      updateBulkLoopSafeNotice();
+      if (syncNow) syncExportSettingControls();
+      else refreshCalculatorOutputs();
+    };
+    value.addEventListener('input', () => applyRenderValue(false, false));
+    value.onchange = () => applyRenderValue(true, true);
     renderPair.append(mode, value);
     return renderPair;
   }
@@ -4245,7 +4768,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     [44100,48000,96000,192000].forEach(v => sr.append(new Option(String(v), String(v))));
     sr.dataset.exportSetting = 'sample-rate';
     sr.value = String(state.export.sampleRate);
-    sr.onchange = () => { state.export.sampleRate = Number(sr.value); persistGlobalSettings(); updateStatusSummaries(); syncExportSettingControls(); };
+    sr.onchange = () => { state.export.sampleRate = Number(sr.value); persistGlobalSettings(); updateStatusSummaries(); updateBulkLoopSafeNotice(); syncExportSettingControls(); };
     return sr;
   }
 
@@ -4312,7 +4835,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     ['Off','Whole File','Per Cycle'].forEach(v => dc.append(new Option(v, v)));
     dc.dataset.exportSetting = 'dc-mode';
     dc.value = state.export.dcMode;
-    dc.onchange = () => { state.export.dcMode = dc.value; persistGlobalSettings(); syncExportSettingControls(); };
+    dc.onchange = () => { state.export.dcMode = dc.value; persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
     return dc;
   }
 
@@ -4322,7 +4845,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     ['Off','Whole File Peak','Per Cycle Peak'].forEach(v => norm.append(new Option(v, v)));
     norm.dataset.exportSetting = 'norm-mode';
     norm.value = state.export.normMode;
-    norm.onchange = () => { state.export.normMode = norm.value; persistGlobalSettings(); syncExportSettingControls(); };
+    norm.onchange = () => { state.export.normMode = norm.value; persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
     return norm;
   }
 
@@ -4333,7 +4856,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     head.step = '0.1';
     head.dataset.exportSetting = 'headroom-db';
     head.value = state.export.headroomDb;
-    head.onchange = () => { state.export.headroomDb = Number(head.value); persistGlobalSettings(); syncExportSettingControls(); };
+    head.onchange = () => { state.export.headroomDb = Number(head.value); persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
     return head;
   }
 
@@ -4370,6 +4893,457 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return holder;
   }
 
+
+  // TUTORIAL: Formats calculator values compactly without hiding useful precision.
+  function formatCalcNumber(value, digits = 6) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return '—';
+    if (Math.abs(n) >= 1000000) return n.toLocaleString(undefined, {maximumFractionDigits: 0});
+    if (Math.abs(n) >= 1000) return n.toLocaleString(undefined, {maximumFractionDigits: 3});
+    if (Math.abs(n) >= 100) return n.toLocaleString(undefined, {maximumFractionDigits: 4});
+    if (Math.abs(n) >= 10) return n.toLocaleString(undefined, {maximumFractionDigits: 5});
+    return Number(n.toFixed(digits)).toLocaleString(undefined, {maximumFractionDigits: digits});
+  }
+
+  // TUTORIAL: Creates a small labelled calculator result tile.
+  function calculatorResultTile(label, value, id) {
+    const tile = document.createElement('div');
+    tile.className = 'calcResult';
+    const strong = document.createElement('strong');
+    strong.textContent = label;
+    const span = document.createElement('span');
+    if (id) span.id = id;
+    span.textContent = value;
+    tile.append(strong, span);
+    return tile;
+  }
+
+  // TUTORIAL: Reads a calculator number input with a safe fallback.
+  function calculatorNumber(id, fallback) {
+    const el = $(id);
+    const n = el ? Number(el.value) : Number(fallback);
+    return Number.isFinite(n) ? n : Number(fallback);
+  }
+
+  // TUTORIAL: Keeps calculator sample rate inside the same practical range used by export.
+  function calculatorSampleRate() {
+    return clampInt(calculatorNumber('calcSampleRate', state.export.sampleRate), 8000, 384000);
+  }
+
+  // TUTORIAL: Returns the current calculator plan. The recommended frequency is the frequency
+  // TUTORIAL: that makes one oscillator cycle occupy the requested number of exported samples.
+  function calculatorPlan() {
+    const sampleRate = calculatorSampleRate();
+    const samplesPerCycle = Math.max(1, calculatorNumber('calcSamplesPerCycle', TABLE_SIZE));
+    const cycles = Math.max(1, calculatorNumber('calcCycles', MORPH_DEFAULT_CYCLES));
+    const recommendedFrequencyRaw = sampleRate / samplesPerCycle;
+    const recommendedFrequency = clampFloat(recommendedFrequencyRaw, MIN_FREQUENCY, MAX_FREQUENCY);
+    const totalSamplesExact = samplesPerCycle * cycles;
+    const totalSamples = Math.max(1, Math.round(totalSamplesExact));
+    const durationSeconds = cycles / recommendedFrequencyRaw;
+    const bpm = Math.max(1, calculatorNumber('calcBpm', 120));
+    const bars = Math.max(0, calculatorNumber('calcBars', 8));
+    const beatsPerBar = Math.max(1, calculatorNumber('calcBeatsPerBar', 4));
+    const tempoSeconds = bars * beatsPerBar * 60 / bpm;
+    const currentFrequency = clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY);
+    const tempoCyclesAtCurrentFrequency = tempoSeconds * currentFrequency;
+    const tempoSamples = Math.max(1, Math.round(tempoSeconds * sampleRate));
+    const calculatorBitDepth = calculatorBitDepthLabel();
+    const bytesPerSample = bitDepthBytes(calculatorBitDepth);
+    const monoBytes = totalSamples * bytesPerSample;
+    const tempoBytes = tempoSamples * bytesPerSample;
+    const batchCount = Math.max(1, calculatorNumber('calcBatchCount', 1));
+
+    let multiLow = clampInt(calculatorNumber('calcMultiLowMidi', 36), 0, 127);
+    let multiHigh = clampInt(calculatorNumber('calcMultiHighMidi', 84), 0, 127);
+    if (multiHigh < multiLow) [multiLow, multiHigh] = [multiHigh, multiLow];
+    const multiSpacing = Math.max(1, clampInt(calculatorNumber('calcMultiSpacing', 12), 1, 48));
+    const multiSeconds = Math.max(0.001, calculatorNumber('calcMultiSeconds', 1));
+    const multiRoots = [];
+    for (let m = multiLow; m <= multiHigh; m += multiSpacing) multiRoots.push(m);
+    if (multiRoots.length && multiRoots[multiRoots.length - 1] !== multiHigh) multiRoots.push(multiHigh);
+    if (!multiRoots.length) multiRoots.push(multiLow);
+    const multiSamplesPerFile = Math.max(1, Math.round(multiSeconds * sampleRate));
+    const multiBytes = multiSamplesPerFile * bytesPerSample * multiRoots.length;
+
+    return {sampleRate, samplesPerCycle, cycles, recommendedFrequencyRaw, recommendedFrequency, totalSamplesExact, totalSamples, durationSeconds, bpm, bars, beatsPerBar, tempoSeconds, currentFrequency, tempoCyclesAtCurrentFrequency, tempoSamples, calculatorBitDepth, bytesPerSample, monoBytes, tempoBytes, batchCount, multiLow, multiHigh, multiSpacing, multiSeconds, multiRoots, multiSamplesPerFile, multiBytes};
+  }
+
+  // TUTORIAL: Reads the calculator bit-depth estimate choice, falling back to the shared export bit depth.
+  function calculatorBitDepthLabel() {
+    const el = $('calcBitDepth');
+    const value = el ? String(el.value || '') : '';
+    const options = ['8-bit PCM', '12-bit PCM in 16-bit WAV', '16-bit PCM', '24-bit PCM', '32-bit PCM'];
+    if (options.includes(value)) return value;
+    if (options.includes(String(state.export.bitDepth || ''))) return String(state.export.bitDepth);
+    return '16-bit PCM';
+  }
+
+  // TUTORIAL: Estimates bytes per mono sample from the current WAV bit-depth label.
+  function bitDepthBytes(label) {
+    const s = String(label || '16-bit PCM');
+    if (s.startsWith('8-bit')) return 1;
+    if (s.startsWith('24-bit')) return 3;
+    if (s.startsWith('32-bit')) return 4;
+    return 2;
+  }
+
+  // TUTORIAL: Converts a byte count into a readable file-size estimate.
+  function formatBytes(bytes) {
+    const b = Math.max(0, Number(bytes) || 0);
+    if (b < 1024) return `${Math.round(b)} B`;
+    if (b < 1024 ** 2) return `${formatCalcNumber(b / 1024, 2)} KiB`;
+    if (b < 1024 ** 3) return `${formatCalcNumber(b / (1024 ** 2), 2)} MiB`;
+    return `${formatCalcNumber(b / (1024 ** 3), 2)} GiB`;
+  }
+
+  // TUTORIAL: Labels a MIDI note as an equal-tempered note name for calculator planning.
+  function midiNoteLabel(midiNote) {
+    const midi = clampInt(midiNote, 0, 127);
+    return `${NOTE_NAMES[midi % 12]}${Math.floor(midi / 12) - 1}`;
+  }
+
+  // TUTORIAL: Applies an absolute samples-per-cycle planning target. The calculator does not
+  // TUTORIAL: separately multiply duration or file size; those are derived from samples/cycle,
+  // TUTORIAL: sample rate, and the selected cycle count.
+  function applyCalculatorTradeoff(value) {
+    const preset = {
+      default: TABLE_SIZE,
+      detail2: TABLE_SIZE * 2,
+      detail4: TABLE_SIZE * 4,
+      compact2: Math.max(1, TABLE_SIZE / 2),
+    }[String(value || 'default')];
+    const spc = $('calcSamplesPerCycle');
+    if (!spc || !preset) return;
+    const current = Math.max(1, calculatorNumber('calcSamplesPerCycle', TABLE_SIZE));
+    const next = Math.max(1, Math.round(preset));
+    spc.value = String(next);
+    refreshCalculatorOutputs();
+    const status = $('calculatorStatus');
+    if (status) {
+      const direction = next === TABLE_SIZE ? 'native internal table match' : next > TABLE_SIZE ? 'larger file, more exported cycle detail' : 'smaller file, less exported cycle detail';
+      status.textContent = `Set samples per cycle from ${formatCalcNumber(current, 6)} to ${formatCalcNumber(next, 6)} (${direction}). Frequency and duration are recalculated from that target.`;
+    }
+  }
+
+  // TUTORIAL: Sets the bit depth used by calculator file-size estimates only. Render-tab bit depth
+  // TUTORIAL: remains a separate export setting.
+  function setCalculatorBitDepth(value) {
+    const options = ['8-bit PCM', '12-bit PCM in 16-bit WAV', '16-bit PCM', '24-bit PCM', '32-bit PCM'];
+    const safe = options.includes(String(value)) ? String(value) : '16-bit PCM';
+    const el = $('calcBitDepth');
+    if (el) el.value = safe;
+    refreshCalculatorOutputs();
+    const status = $('calculatorStatus');
+    if (status) status.textContent = `Calculator file-size estimates now use ${safe}. Morph/Bulk export bit depth was not changed.`;
+  }
+
+  // TUTORIAL: Writes the calculator plan into the shared Morph/Bulk render settings.
+  function applyCalculatorPlan(renderMode) {
+    const plan = calculatorPlan();
+    state.export.sampleRate = plan.sampleRate;
+    setCommonFrequency(plan.recommendedFrequency, {audition: false});
+    state.export.mode = renderMode;
+    if (renderMode === 'Samples') state.export.value = plan.totalSamples;
+    else if (renderMode === 'Seconds') state.export.value = plan.durationSeconds;
+    else state.export.value = plan.cycles;
+    persistGlobalSettings();
+    syncPitchControls();
+    syncExportSettingControls();
+    updateStatusSummaries();
+    refreshCalculatorOutputs();
+    const status = $('calculatorStatus');
+    if (status) {
+      const sampleNote = renderMode === 'Samples' ? 'Samples mode fixes stored sample count; it does not force cycle closure if modulation changes phase progress. ' : '';
+      const cycleNote = renderMode === 'Cycles' ? 'Cycle-exact base-pitch WAVs omit the duplicated wrap endpoint sample; active FM can still change apparent waveform-cycle closure. ' : '';
+      status.textContent = `Set shared Morph/Bulk render: ${plan.sampleRate} Hz sample rate, ${formatCalcNumber(plan.recommendedFrequency, 6)} Hz pitch, ${renderMode} = ${formatCalcNumber(state.export.value, 6)}. ${cycleNote}${sampleNote}Bit depth (only for file size estimates) remains calculator-only.`;
+    }
+  }
+
+  // TUTORIAL: Writes the tempo-derived length into the shared Morph/Bulk render settings.
+  function applyTempoPlan(renderMode) {
+    const plan = calculatorPlan();
+    state.export.sampleRate = plan.sampleRate;
+    state.export.mode = renderMode;
+    if (renderMode === 'Samples') state.export.value = plan.tempoSamples;
+    else if (renderMode === 'Cycles') state.export.value = Math.max(1, Math.round(plan.tempoCyclesAtCurrentFrequency));
+    else state.export.value = plan.tempoSeconds;
+    persistGlobalSettings();
+    syncExportSettingControls();
+    updateStatusSummaries();
+    refreshCalculatorOutputs();
+    const status = $('calculatorStatus');
+    if (status) status.textContent = `Set shared Morph/Bulk render from tempo: ${renderMode} = ${formatCalcNumber(state.export.value, 6)} at ${plan.sampleRate} Hz. Bit depth (only for file size estimates) remains calculator-only.`;
+  }
+
+  // TUTORIAL: Copies current app pitch/render settings into the calculator fields.
+  function calculatorUseCurrentSettings() {
+    const summary = renderLengthSummary();
+    const sr = $('calcSampleRate');
+    const spc = $('calcSamplesPerCycle');
+    const cycles = $('calcCycles');
+    if (sr) sr.value = String(summary.sampleRate);
+    if (spc) spc.value = formatCalcNumber(summary.samplesPerCycle, 6).replace(/,/g, '');
+    if (cycles) cycles.value = formatCalcNumber(summary.nominalCycles, 6).replace(/,/g, '');
+    refreshCalculatorOutputs();
+    const status = $('calculatorStatus');
+    if (status) status.textContent = 'Copied current pitch/render settings into the calculator.';
+  }
+
+  // TUTORIAL: Sets one calculator input and recomputes all derived values.
+  function setCalculatorInput(id, value) {
+    const el = $(id);
+    if (!el) return;
+    el.value = String(value);
+    refreshCalculatorOutputs();
+  }
+
+  // TUTORIAL: Recomputes calculator readouts without changing the patch or render settings.
+  function refreshCalculatorOutputs() {
+    if (!$('calculatorControls')) return;
+    const plan = calculatorPlan();
+    const note = nearestNoteForFrequency(plan.recommendedFrequency);
+    const selectedNoteFrequency = noteToFrequency(note.note, note.octave);
+    const cents = 1200 * Math.log2(plan.recommendedFrequency / selectedNoteFrequency);
+    const freqWarning = plan.recommendedFrequencyRaw !== plan.recommendedFrequency ? ` (clamped from ${formatCalcNumber(plan.recommendedFrequencyRaw, 6)} Hz)` : '';
+    const totalSampleWarning = Math.abs(plan.totalSamplesExact - plan.totalSamples) > 1e-6 ? ` (rounded from ${formatCalcNumber(plan.totalSamplesExact, 6)})` : '';
+    let internalNote = '256 samples/cycle is the native internal table match.';
+    if (plan.samplesPerCycle < TABLE_SIZE) internalNote = `Below 256 samples/cycle: smaller file, less cycle detail. One exported cycle has fewer samples than the internal table and may miss sharp/chaotic detail.`;
+    else if (plan.samplesPerCycle > TABLE_SIZE) internalNote = `Above 256 samples/cycle: larger file, more exported cycle detail. This oversamples the interpolated/post-modulated render rather than adding new source-table points.`;
+    const multiLabels = plan.multiRoots.map(midiNoteLabel);
+    const shownMulti = multiLabels.length > 18 ? `${multiLabels.slice(0, 18).join(', ')} … +${multiLabels.length - 18}` : multiLabels.join(', ');
+    const fields = {
+      calcRecommendedFrequency: `${formatCalcNumber(plan.recommendedFrequency, 6)} Hz${freqWarning}`,
+      calcTotalSamples: `${plan.totalSamples.toLocaleString()} samples${totalSampleWarning}`,
+      calcDuration: `${formatCalcNumber(plan.durationSeconds, 6)} seconds`,
+      calcNearestNote: `${note.note}${note.octave}, ${Math.abs(cents) < 0.01 ? 'exact' : (cents >= 0 ? '+' : '') + cents.toFixed(2) + ' cents'}`,
+      calcCurrentSamplesPerCycle: `${formatCalcNumber(plan.sampleRate / plan.currentFrequency, 6)} samples/cycle at current ${formatCalcNumber(plan.currentFrequency, 6)} Hz pitch`,
+      calcInternalTableNote: internalNote,
+      calcFileEstimate: `${formatBytes(plan.monoBytes)} mono ${plan.calculatorBitDepth} WAV data; ${formatBytes(plan.monoBytes * plan.batchCount)} for ${formatCalcNumber(plan.batchCount, 0)} file(s), before headers/ZIP overhead`,
+      calcTempoDuration: `${formatCalcNumber(plan.tempoSeconds, 6)} seconds`,
+      calcTempoSamples: `${plan.tempoSamples.toLocaleString()} samples`,
+      calcTempoCycles: `${formatCalcNumber(plan.tempoCyclesAtCurrentFrequency, 6)} cycles at current pitch`,
+      calcTempoFileEstimate: `${formatBytes(plan.tempoBytes)} mono ${plan.calculatorBitDepth} WAV data; ${formatBytes(plan.tempoBytes * plan.batchCount)} for ${formatCalcNumber(plan.batchCount, 0)} file(s), before headers/ZIP overhead`,
+      calcMultiRange: `${midiNoteLabel(plan.multiLow)}–${midiNoteLabel(plan.multiHigh)} every ${plan.multiSpacing} semitone(s)`,
+      calcMultiCount: `${plan.multiRoots.length} root sample(s)` ,
+      calcMultiRoots: shownMulti,
+      calcMultiSize: `${formatBytes(plan.multiBytes)} total at ${plan.calculatorBitDepth} for ${formatCalcNumber(plan.multiSeconds, 4)} second(s) per root, before headers/ZIP overhead`,
+    };
+    Object.entries(fields).forEach(([id, value]) => { const el = $(id); if (el) el.textContent = value; });
+    document.querySelectorAll('[data-calc-sample-rate]').forEach(btn => {
+      btn.classList.toggle('active', Number(btn.dataset.calcSampleRate) === plan.sampleRate);
+    });
+    document.querySelectorAll('[data-calc-samples-per-cycle]').forEach(btn => {
+      btn.classList.toggle('active', Number(btn.dataset.calcSamplesPerCycle) === Math.round(plan.samplesPerCycle));
+    });
+    document.querySelectorAll('[data-calc-bit-depth]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.calcBitDepth === plan.calculatorBitDepth);
+    });
+  }
+
+  // TUTORIAL: Builds the Calculator tab controls. It deliberately writes into the same shared
+  // TUTORIAL: pitch and export state used by Morph and Bulk, instead of keeping separate hidden settings.
+  function addCalculatorControls() {
+    const parent = $('calculatorControls');
+    if (!parent) return;
+    parent.innerHTML = '';
+
+    const addNumberRow = (target, label, id, value, attrs = {}) => {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.id = id;
+      input.value = String(value);
+      input.step = attrs.step || 'any';
+      if (attrs.min != null) input.min = String(attrs.min);
+      if (attrs.max != null) input.max = String(attrs.max);
+      input.addEventListener('input', refreshCalculatorOutputs);
+      input.addEventListener('change', refreshCalculatorOutputs);
+      makeRow(target, label, input);
+      return input;
+    };
+
+    const makeCalcBox = (title, noteText) => {
+      const box = document.createElement('div');
+      box.className = 'calcBox';
+      const h = document.createElement('h3');
+      h.textContent = title;
+      box.appendChild(h);
+      if (noteText) {
+        const note = document.createElement('p');
+        note.className = 'note';
+        note.textContent = noteText;
+        box.appendChild(note);
+      }
+      parent.appendChild(box);
+      return box;
+    };
+
+    const bitDepthBox = makeCalcBox('Bit depth (only for file size estimates)', 'Only affects calculator file-size estimates. It does not change Morph/Bulk export bit depth unless you change that setting on the render tabs.');
+    const calcBitDepth = document.createElement('input');
+    calcBitDepth.type = 'hidden';
+    calcBitDepth.id = 'calcBitDepth';
+    calcBitDepth.value = state.export.bitDepth || '16-bit PCM';
+    bitDepthBox.appendChild(calcBitDepth);
+    const bitDepthButtons = document.createElement('div');
+    bitDepthButtons.className = 'buttonbar';
+    ['8-bit PCM','12-bit PCM in 16-bit WAV','16-bit PCM','24-bit PCM','32-bit PCM'].forEach(v => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = v;
+      b.dataset.calcBitDepth = v;
+      b.onclick = () => setCalculatorBitDepth(v);
+      bitDepthButtons.appendChild(b);
+    });
+    bitDepthBox.appendChild(bitDepthButtons);
+
+    const morphBox = makeCalcBox('Wavetable / morph length', 'Choose fixed button targets for WAV sample rate and exported samples per cycle, then let the calculator recommend a render pitch and duration. In Cycles mode, duration = cycles ÷ frequency. Example: 128 cycles at 64 Hz = 2 seconds; the same 128 cycles at 128 Hz = 1 second. Cycles mode sets nominal base-pitch length. A cycle-exact render does not duplicate the wrap endpoint: 4 cycles × 256 samples/cycle = 1024 stored samples. The next implied sample is the return point. That is different from whole-file loop closure: FM, PWM, Ring Mod, filters, wavetable modes, and morph modes can move phase, waveform landmarks, or endpoint shape. Phase-Offset Crossfade intentionally shifts the END frame, so even with a correct 1024-sample file, the end of the file will not necessarily return to the first sample. For diagnostic cycle-closure tests, use neutral modulation/filter settings and a non-phase-offset morph mode. Set Freq + Samples only switches the render unit to a fixed sample count; it is not a cycle-closure fix. Use Seconds or Samples mode when fixed duration or fixed sample count matters more than cycle count.');
+
+    const calcSampleRate = document.createElement('input');
+    calcSampleRate.type = 'hidden';
+    calcSampleRate.id = 'calcSampleRate';
+    calcSampleRate.value = String(state.export.sampleRate);
+    morphBox.appendChild(calcSampleRate);
+    const srButtons = document.createElement('div');
+    srButtons.className = 'presetBar';
+    [44100, 48000, 96000, 192000].forEach(v => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = `${v} Hz`;
+      b.dataset.calcSampleRate = String(v);
+      b.onclick = () => setCalculatorInput('calcSampleRate', v);
+      srButtons.appendChild(b);
+    });
+    makeRow(morphBox, 'Sample rate', srButtons);
+
+    const calcSamplesPerCycle = document.createElement('input');
+    calcSamplesPerCycle.type = 'hidden';
+    calcSamplesPerCycle.id = 'calcSamplesPerCycle';
+    calcSamplesPerCycle.value = String(TABLE_SIZE);
+    morphBox.appendChild(calcSamplesPerCycle);
+    const spcButtons = document.createElement('div');
+    spcButtons.className = 'presetBar';
+    [
+      [128, '128 — smaller file, less cycle detail'],
+      [TABLE_SIZE, `${TABLE_SIZE} — native internal table match`],
+      [512, '512 — larger file, more cycle detail'],
+      [1024, '1024 — much larger file, oversampled cycle'],
+    ].forEach(([v, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      b.dataset.calcSamplesPerCycle = String(v);
+      b.onclick = () => setCalculatorInput('calcSamplesPerCycle', v);
+      spcButtons.appendChild(b);
+    });
+    makeRow(morphBox, 'Samples/cycle target', spcButtons);
+
+    addNumberRow(morphBox, 'Cycles / frames', 'calcCycles', 128, {min: 1, step: 1});
+
+    const resultGrid = document.createElement('div');
+    resultGrid.className = 'calcResultGrid';
+    resultGrid.append(
+      calculatorResultTile('Recommended frequency', '—', 'calcRecommendedFrequency'),
+      calculatorResultTile('Nearest note', '—', 'calcNearestNote'),
+      calculatorResultTile('Duration', '—', 'calcDuration'),
+      calculatorResultTile('Total samples', '—', 'calcTotalSamples'),
+      calculatorResultTile('Current pitch relationship', '—', 'calcCurrentSamplesPerCycle'),
+      calculatorResultTile('File size estimate', '—', 'calcFileEstimate'),
+      calculatorResultTile('Internal table note', '—', 'calcInternalTableNote'),
+    );
+    morphBox.appendChild(resultGrid);
+
+    const batchRow = document.createElement('div');
+    batchRow.className = 'row wide';
+    const batchLabel = document.createElement('label');
+    batchLabel.textContent = 'Files for size estimate';
+    const batchInput = document.createElement('input');
+    batchInput.type = 'number';
+    batchInput.id = 'calcBatchCount';
+    batchInput.min = '1';
+    batchInput.step = '1';
+    batchInput.value = '1';
+    batchInput.addEventListener('input', refreshCalculatorOutputs);
+    batchInput.addEventListener('change', refreshCalculatorOutputs);
+    batchRow.append(batchLabel, batchInput);
+    morphBox.appendChild(batchRow);
+
+    const applyRows = document.createElement('div');
+    applyRows.className = 'applyButtonRows';
+    const useRow = document.createElement('div');
+    useRow.className = 'buttonbar';
+    const useCurrent = document.createElement('button');
+    useCurrent.type = 'button';
+    useCurrent.textContent = 'Use Current Pitch/Render';
+    useCurrent.onclick = calculatorUseCurrentSettings;
+    useRow.append(useCurrent);
+    const setRow = document.createElement('div');
+    setRow.className = 'buttonbar';
+    const setCycles = document.createElement('button');
+    setCycles.type = 'button';
+    setCycles.textContent = 'Set Freq + Cycles';
+    setCycles.onclick = () => applyCalculatorPlan('Cycles');
+    const setSamples = document.createElement('button');
+    setSamples.type = 'button';
+    setSamples.textContent = 'Set Freq + Samples';
+    setSamples.onclick = () => applyCalculatorPlan('Samples');
+    const setSeconds = document.createElement('button');
+    setSeconds.type = 'button';
+    setSeconds.textContent = 'Set Freq + Seconds';
+    setSeconds.onclick = () => applyCalculatorPlan('Seconds');
+    setRow.append(setCycles, setSeconds, setSamples);
+    applyRows.append(useRow, setRow);
+    morphBox.appendChild(applyRows);
+
+    const tempoBox = makeCalcBox('Tempo length', 'Tempo calculations are useful for risers, drones, transitions, and bar-length morphs. Different samplers and DAWs may infer or display tempo differently, especially when they round sample counts, detect transients, or use embedded metadata. This calculator only uses arithmetic: seconds = bars × beats per bar × 60 ÷ BPM.');
+    addNumberRow(tempoBox, 'BPM', 'calcBpm', 120, {min: 1, step: 0.01});
+    addNumberRow(tempoBox, 'Bars', 'calcBars', 8, {min: 0, step: 0.25});
+    addNumberRow(tempoBox, 'Beats per bar', 'calcBeatsPerBar', 4, {min: 1, step: 1});
+
+    const tempoGrid = document.createElement('div');
+    tempoGrid.className = 'calcResultGrid';
+    tempoGrid.append(
+      calculatorResultTile('Tempo duration', '—', 'calcTempoDuration'),
+      calculatorResultTile('Tempo samples', '—', 'calcTempoSamples'),
+      calculatorResultTile('Cycles at current pitch', '—', 'calcTempoCycles'),
+      calculatorResultTile('Tempo file size estimate', '—', 'calcTempoFileEstimate'),
+    );
+    tempoBox.appendChild(tempoGrid);
+
+    const tempoBar = document.createElement('div');
+    tempoBar.className = 'buttonbar';
+    const tempoSeconds = document.createElement('button');
+    tempoSeconds.type = 'button';
+    tempoSeconds.textContent = 'Set Seconds from Tempo';
+    tempoSeconds.onclick = () => applyTempoPlan('Seconds');
+    const tempoSamples = document.createElement('button');
+    tempoSamples.type = 'button';
+    tempoSamples.textContent = 'Set Samples from Tempo';
+    tempoSamples.onclick = () => applyTempoPlan('Samples');
+    const tempoCycles = document.createElement('button');
+    tempoCycles.type = 'button';
+    tempoCycles.textContent = 'Set Rounded Cycles from Tempo';
+    tempoCycles.onclick = () => applyTempoPlan('Cycles');
+    tempoBar.append(tempoSeconds, tempoSamples, tempoCycles);
+    tempoBox.appendChild(tempoBar);
+
+    const multiBox = makeCalcBox('Multisample Planner', 'Planning helper for sampler maps. This is most relevant for long rendered WAVs that will be pitched across a keyboard. It is rarely relevant for single-cycle wavetables, where a synthesizer is typically expected to transpose the oscillator.');
+    addNumberRow(multiBox, 'Lowest MIDI note', 'calcMultiLowMidi', 36, {min: 0, max: 127, step: 1});
+    addNumberRow(multiBox, 'Highest MIDI note', 'calcMultiHighMidi', 84, {min: 0, max: 127, step: 1});
+    addNumberRow(multiBox, 'Zone spacing', 'calcMultiSpacing', 12, {min: 1, max: 48, step: 1});
+    addNumberRow(multiBox, 'Seconds per root', 'calcMultiSeconds', 1, {min: 0.001, step: 0.001});
+    const multiGrid = document.createElement('div');
+    multiGrid.className = 'calcResultGrid';
+    multiGrid.append(
+      calculatorResultTile('Range / spacing', '—', 'calcMultiRange'),
+      calculatorResultTile('Root count', '—', 'calcMultiCount'),
+      calculatorResultTile('Root notes', '—', 'calcMultiRoots'),
+      calculatorResultTile('Multisample size estimate', '—', 'calcMultiSize'),
+    );
+    multiBox.appendChild(multiGrid);
+
+    refreshCalculatorOutputs();
+  }
+
   // TUTORIAL: Pushes shared export settings into duplicate controls across Morph and Bulk tabs.
   function syncExportSettingControls() {
     document.querySelectorAll('[data-export-setting="render-mode"]').forEach(el => el.value = state.export.mode);
@@ -4383,7 +5357,11 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     document.querySelectorAll('[data-export-setting="headroom-db"]').forEach(el => el.value = state.export.headroomDb);
     document.querySelectorAll('[data-export-setting="shared-wavetable-type"]').forEach(el => el.value = String(canonicalWavetableType(state.export.sharedType)));
     document.querySelectorAll('[data-export-setting="shared-fm-range"]').forEach(el => el.value = state.export.sharedFmRange || DEFAULT_FM_RANGE_LABEL);
+    const bulkLoopSafe = $('bulkLoopSafe'); if (bulkLoopSafe) bulkLoopSafe.checked = !!state.export.loopSafeBulk;
+    document.querySelectorAll('[data-export-setting="loop-safe-bulk-strategy"]').forEach(el => el.value = canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy));
     syncDownloadModeControls();
+    updateLoopSafetyNoticesSafely();
+    refreshCalculatorOutputs();
   }
 
   // TUTORIAL: Maps Hz to a logarithmic slider position, matching musical pitch perception better than a linear
@@ -4435,6 +5413,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     document.querySelectorAll('[data-pitch="volume"]').forEach(el => el.value = state.common.volume);
     document.querySelectorAll('[data-pitch="midi-channel"]').forEach(el => el.value = state.common.midiChannel || 'off');
     document.querySelectorAll('[data-pitch="midi-status"]').forEach(el => el.textContent = state.common.midiStatus || 'MIDI input off');
+    refreshCalculatorOutputs();
   }
 
   // TUTORIAL: Sets shared pitch and optionally updates UI/audio immediately.
@@ -4445,6 +5424,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     syncPitchControls();
     if (opts.persist !== false && opts.source !== 'midi') persistGlobalSettings();
     updateStatusSummaries();
+    updateBulkLoopSafeNotice();
     updateVisuals(false);
     if (opts.audition !== false) {
       if (activeTabId() === 'morph') autoAuditionPatch(preferredMorphAuditionKey());
@@ -4487,6 +5467,10 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const frequencyBox = document.createElement('div');
     frequencyBox.append(frequencyHz, frequencyRef);
     frequencySlider.addEventListener('input', () => setCommonFrequency(sliderValueToFrequency(frequencySlider.value)));
+    frequencyHz.addEventListener('input', () => {
+      if (frequencyHz.value === '' || !Number.isFinite(Number(frequencyHz.value))) return;
+      setCommonFrequency(Number(frequencyHz.value), {persist: false, audition: false});
+    });
     frequencyHz.addEventListener('change', () => setCommonFrequency(Number(frequencyHz.value)));
     frequencyRow.append(frequencyLabel, frequencySlider, frequencyBox);
     parent.appendChild(frequencyRow);
@@ -4558,13 +5542,20 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Builds Morph-tab render/export controls.
   function addExportControls() {
     const parent = $('exportControls'); parent.innerHTML = '';
-    const row = (label, control) => { const r = document.createElement('div'); r.className = 'row wide'; const l = document.createElement('label'); l.textContent = label; r.append(l, control); parent.appendChild(r); return control; };
-    const prefix = document.createElement('input'); prefix.type = 'text'; prefix.value = state.export.prefix; prefix.oninput = () => state.export.prefix = prefix.value; row('File Prefix', prefix);
+    const row = (label, control, target = parent) => { const r = document.createElement('div'); r.className = 'row wide'; const l = document.createElement('label'); l.textContent = label; r.append(l, control); target.appendChild(r); return control; };
 
-    row('Render unit / length', makeRenderLengthControl());
+    const fileRenderBox = document.createElement('div');
+    fileRenderBox.className = 'compactSettingGroup';
+    const fileRenderTitle = document.createElement('h3');
+    fileRenderTitle.textContent = 'File / render length';
+    fileRenderBox.appendChild(fileRenderTitle);
+    parent.appendChild(fileRenderBox);
 
-    row('Sample Rate', makeSampleRateControl());
-    row('Bit Depth', makeBitDepthControl());
+    const prefix = document.createElement('input'); prefix.type = 'text'; prefix.value = state.export.prefix; prefix.oninput = () => state.export.prefix = prefix.value; row('File Prefix', prefix, fileRenderBox);
+    row('Render unit / length', makeRenderLengthControl(), fileRenderBox);
+    row('Sample Rate', makeSampleRateControl(), fileRenderBox);
+    row('Bit Depth', makeBitDepthControl(), fileRenderBox);
+
     row('Morph Render Mode', makeMorphRenderModeControl());
     row('FFT Anchor States / CPU', makeSpectralStatesControl());
 
@@ -4607,6 +5598,31 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const h = document.createElement('h3');
     h.textContent = 'Render Settings';
     parent.appendChild(h);
+    const loopSafeHolder = document.createElement('div');
+    loopSafeHolder.className = 'compactSettingGroup';
+    loopSafeHolder.innerHTML = `<label><input id="bulkLoopSafe" type="checkbox"> Phase-accurate loop-safe exports for wavetable developers</label>`;
+    const strategyRow = document.createElement('div');
+    strategyRow.className = 'row wide';
+    strategyRow.id = 'bulkLoopSafeStrategyRow';
+    const strategyLabel = document.createElement('label');
+    strategyLabel.textContent = 'Loop-safe target';
+    const strategySelect = document.createElement('select');
+    strategySelect.id = 'bulkLoopSafeStrategy';
+    strategySelect.dataset.exportSetting = 'loop-safe-bulk-strategy';
+    LOOP_SAFE_BULK_STRATEGIES.forEach(([id, label]) => strategySelect.append(new Option(label, id)));
+    strategySelect.value = canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy);
+    strategyRow.append(strategyLabel, strategySelect);
+    loopSafeHolder.appendChild(strategyRow);
+    const detailBox = document.createElement('div');
+    detailBox.className = 'small loopSafeDetails';
+    detailBox.id = 'bulkLoopSafeDetails';
+    loopSafeHolder.appendChild(detailBox);
+    parent.appendChild(loopSafeHolder);
+    const loopSafeInput = loopSafeHolder.querySelector('#bulkLoopSafe');
+    loopSafeInput.checked = !!state.export.loopSafeBulk;
+    loopSafeInput.onchange = () => { state.export.loopSafeBulk = loopSafeInput.checked; persistGlobalSettings(); updateBulkLoopSafeNotice(); updateStatusSummaries(); };
+    strategySelect.onchange = () => { state.export.loopSafeBulkStrategy = canonicalLoopSafeBulkStrategy(strategySelect.value); persistGlobalSettings(); updateBulkLoopSafeNotice(); updateStatusSummaries(); };
+    updateBulkLoopSafeNotice();
     makeRow(parent, 'Render unit / length', makeRenderLengthControl());
     makeRow(parent, 'Sample Rate', makeSampleRateControl());
     makeRow(parent, 'Bit Depth', makeBitDepthControl());
@@ -4666,6 +5682,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const ss = $('singleStatus'); if (ss) ss.textContent = 'Stopped.';
     const ms = $('morphStatus'); if (ms) ms.textContent = 'Stopped.';
     const bs = $('bulkStatus'); if (bs && state.cancelToken) bs.textContent = 'Stopped / cancelled.';
+    updateLoopSafetyNoticesSafely();
   }
 
   // TUTORIAL: Randomisation intentionally targets sound-design parameters, not global render
@@ -4837,6 +5854,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     document.querySelectorAll('.tabButton').forEach(b => b.classList.toggle('active', b.dataset.tab === targetId));
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === targetId));
     state.ui.lastOpenTab = targetId;
+    persistLastOpenTabSetting(targetId);
     if (options.persist !== false) persistGlobalSettings();
     updateVisuals();
   }
@@ -4984,11 +6002,31 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const zipMode = !!state.export.zipDownloads;
     const zipEntries = [];
     const renderProgressPortion = zipMode ? 0.90 : 1.00;
-    $('bulkProgress').value = 0; $('bulkStatus').textContent = `Bulk rendering ${count} random iteration(s), ${total} direction render(s)${zipMode ? ' into one ZIP' : ''}…`;
+    const loopSafe = !!state.export.loopSafeBulk;
+    const loopSafePlan = loopSafe ? loopSafeBulkPlan() : null;
+    const originalRender = loopSafe ? {
+      frequency: state.common.frequency,
+      mode: state.export.mode,
+      value: state.export.value,
+      morphRenderMode: state.export.morphRenderMode,
+      cycleStepped: state.export.cycleStepped,
+    } : null;
+    if (loopSafe) {
+      state.common.frequency = loopSafePlan.frequency;
+      state.export.mode = 'Cycles';
+      state.export.value = loopSafePlan.cycles;
+      state.export.morphRenderMode = DEFAULT_MORPH_RENDER_MODE;
+      state.export.cycleStepped = true;
+      syncPitchControls();
+      syncExportSettingControls();
+    }
+    $('bulkProgress').value = 0; $('bulkStatus').textContent = `Bulk rendering ${count} random iteration(s), ${total} direction render(s)${zipMode ? ' into one ZIP' : ''}${loopSafe ? '\nLoop-safe mode: ' + loopSafeBulkDisabledText(loopSafePlan) : ''}`;
     try {
       for (let i = 0; i < count; i++) {
         throwIfCancelled(token);
-        const start = randomPatch(), end = randomPatch();
+        const rawStart = randomPatch(), rawEnd = randomPatch();
+        const start = loopSafe ? neutralisePatchForLoopSafety(rawStart) : rawStart;
+        const end = loopSafe ? neutralisePatchForLoopSafety(rawEnd) : rawEnd;
         for (const dir of dirs) {
           throwIfCancelled(token);
           const prefix = `${safeName($('bulkPrefix').value)}_${String(i + 1).padStart(3, '0')}`;
@@ -5020,6 +6058,17 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     } catch (err) {
       if (isAbortError(err)) { $('bulkProgress').value = 0; $('bulkStatus').textContent = `Bulk export cancelled at ${done}/${total}.`; return; }
       $('bulkProgress').value = 0; $('bulkStatus').textContent = `Bulk export failed: ${err.message || err}`; throw err;
+    } finally {
+      if (originalRender) {
+        state.common.frequency = originalRender.frequency;
+        state.export.mode = originalRender.mode;
+        state.export.value = originalRender.value;
+        state.export.morphRenderMode = originalRender.morphRenderMode;
+        state.export.cycleStepped = originalRender.cycleStepped;
+        syncPitchControls();
+        syncExportSettingControls();
+        updateStatusSummaries();
+      }
     }
   }
 
@@ -5027,6 +6076,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: first preview, and then let event handlers drive everything else.
   function init() {
     applySavedGlobalSettings();
+    const lastOpenTab = readLastOpenTabSetting();
+    if (lastOpenTab) state.ui.lastOpenTab = lastOpenTab;
     addPatchControls('singleControls', 'single');
     addPatchControls('startControls', 'start');
     addPatchControls('endControls', 'end');
@@ -5035,11 +6086,13 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     addPitchControlsTo('bulkPitchControls', 'Pitch / MIDI', {includeVolume: false});
     addExportControls();
     addBulkExportControls();
+    addCalculatorControls();
     wireUi();
     syncPitchControls();
     syncExportSettingControls();
     syncVisualControls();
     activateTab(state.ui.lastOpenTab || 'playground', {mute: false, persist: false});
+    updateStatusSummaries();
     updateTransportButtons();
   }
   init();
