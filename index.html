@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.4
+Fractured Wavetable Generator v2.4c
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,9 +14,9 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v2.4 is a release-cleanup pass after the v2.3 series. It keeps the v2.3zg behaviour, preserves the concise visualiser path captions, keeps the slow-animation performance guard, fixes lingering RAM wording in export notes, and adds tutorial comments around the newer tab-persistence, loop-safety, Bulk loop-safe planning, and notice-refresh helpers.
+Modification note: v2.4c lets focused Calculator Multisample Planner lowest/highest MIDI-note fields learn from incoming Web MIDI note-on messages, while ignoring the matching note-off for calculator entry so the synth gate is not accidentally triggered. v2.4b fixed the Multisample Planner note-name readouts. v2.4a refined loop-safety UI defaults and Calculator teaching text.
 
-Recent v2.3 summary: the v2.3 series added the Calculator tab, expanded sample/cycle and file-size planning, refined wavetable-developer loop-safety checks, restored the missing loop-safety findings function, corrected the Bulk loop-safe targets back to the 256-sample native table match, and clarified visualiser labels. Earlier v2.3 work also replaced the experimental AM Tone control with Ring Mod while keeping the old internal patch field for JSON compatibility.
+Recent v2.4 summary: v2.4 was a release-cleanup pass after the v2.3 series. It kept the v2.3zg behaviour, preserved the concise visualiser path captions, kept the slow-animation performance guard, fixed lingering RAM wording in export notes, and added tutorial comments around the newer tab-persistence, loop-safety, Bulk loop-safe planning, and notice-refresh helpers.
 
 Provenance note: this browser implementation is inspired by Carl Hudson’s
 Fractal Wavetable Generator concept. Carl Hudson’s original C implementation
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.4</title>
+<title>Fractured Wavetable Generator v2.4c</title>
 <style>
   :root {
     --bg: #101216;
@@ -92,6 +92,12 @@ itself, impose GPL licensing on generated outputs.
   .loopNotice.warn { border-color: rgba(255,211,108,0.65); color: var(--warn); }
   .loopNotice.caution { border-color: rgba(255,211,108,0.45); color: var(--muted); }
   .loopNotice strong { color: var(--text); }
+  .loopNoticeHeader { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .loopNoticeHeader strong { flex: 1; }
+  .loopNoticeToggle { padding: 3px 8px; font-size: 12px; white-space: nowrap; }
+  .loopNoticeSummary { margin: 0 0 6px; }
+  .loopNoticeBody p { margin: 0 0 0.65em; }
+  .loopNoticeBody p:last-child { margin-bottom: 0; }
   .loopSafeDetails p { margin: 0 0 0.65em; }
   .loopSafeDetails p:last-child { margin-bottom: 0; }
   .note { color: var(--muted); font-size: 13px; line-height: 1.45; }
@@ -128,7 +134,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.4</h1>
+  <h1>Fractured Wavetable Generator v2.4c</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -269,7 +275,7 @@ itself, impose GPL licensing on generated outputs.
         <h2>Bulk export notes</h2>
         <p class="note">Bulk randomises the generator engine, the three family-specific generator knobs, wavetable type, FM/PWM/Ring Mod, FM pitch range, source/result windows, and START/END patches. Filters are reset to Off so random batches are less likely to disappear into silence.</p>
         <p class="note">Bulk uses the render settings shown on this tab: length, sample rate, bit depth, morph render mode, FFT anchor count, DC removal, normalisation, and headroom. Those settings are shared with the Morph tab. Direction and download mode are Bulk-only controls.</p>
-        <p class="note">The phase-accurate loop-safe option is aimed at wavetable developers. It temporarily neutralises modulation, filters, source/result windows, phase-offset morphing, and non-integer sample/cycle relationships during the batch. For ordinary sound-design files, it is usually fine to disable this <code>Phase-accurate loop-safe</code> feature, and render as needed or slightly longer than needed, then trim to a zero crossing later. In this mode, the target selector appears only when enabled. The default target is <code>256 samples/cycle</code>, matching the native internal table size; <code>512</code> and <code>1024</code> are 2× and 4× oversampling targets. Cycles and Samples may adjust rendered length to land on whole target-sized cycles; Seconds preserves the selected duration and adjusts frequency to land on a whole-cycle file.</p>
+        <p class="note">The phase-accurate loop-safe option is aimed at wavetable developers. It temporarily neutralises modulation, filters, source/result windows, phase-offset morphing, and non-integer sample/cycle relationships during the batch. Selecting Seconds turns it off by default; selecting Cycles or Samples turns it on by default. You can still manually select or un-select the checkbox afterward. The target selector appears only when enabled. The default target is <code>256 samples/cycle</code>, matching the native internal table size; <code>512</code> and <code>1024</code> are 2× and 4× oversampling targets.</p>
         <p class="note">Locked in bulk mode: there is no per-iteration audition, no manual START/END editing during a batch, no separate START/END FM-range toggle, and no per-file morph-mode variation unless you change the global Morph Render Mode before starting the batch.</p>
       </div>
     </div>
@@ -329,6 +335,7 @@ itself, impose GPL licensing on generated outputs.
         </tbody>
       </table>
       <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic; note/octave controls and MIDI note input set the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
+      <p class="note">Calculator note entry: when the Calculator tab’s Multisample Planner Lowest MIDI note or Highest MIDI note number box has focus, incoming accepted MIDI note-on messages set that field instead of starting an audition. This uses the same Web MIDI permission and channel setting as the main pitch controls.</p>
       <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, headroom, Different START/END Wavetable Types, Different START/END FM Pitch Range, Cycle-stepped transition, Calculator tab values while open, and the last open tab.</p>
       <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
       <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. Some older or redundant internal modes remain loadable for JSON compatibility but are hidden from the normal dropdown and randomisation pool, so old patches can still render while the main UI stays cleaner.</p>
@@ -360,7 +367,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.4';
+  const APP_VERSION = 'v2.4c';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -660,8 +667,6 @@ itself, impose GPL licensing on generated outputs.
     'Feedback Sine': ['Feedback Depth', 'Feedback Phase', 'Saturation / Folding'],
   };
 
-  // TUTORIAL: Returns the visible labels for pot1/pot2/pot3 after resolving
-  // TUTORIAL: the selected engine family. Patch data keeps stable pot names; the UI gets musical names.
   function knobLabelsForEngine(name) {
     const family = enginePartsFor(name).family;
     const labels = ENGINE_KNOB_LABELS[family] || ['Primary Phase', 'Shape 1', 'Shape 2'];
@@ -717,6 +722,7 @@ itself, impose GPL licensing on generated outputs.
     },
     ui: {
       lastOpenTab: 'playground',
+      morphLoopSafetyExpanded: true,
     },
     common: {
       frequency: DEFAULT_FREQUENCY,
@@ -3106,9 +3112,8 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
-  // TUTORIAL: Dual-path morph rendering avoids abrupt midpoint switches by rendering
-  // TUTORIAL: a START-structure path and an END-structure path, then fading between them.
-  async function renderMorphAudioDualPath(start, end, reverse = false, progress = null, token = state.cancelToken, notePrefix = 'Dual-Path Interpolation') {
+  
+async function renderMorphAudioDualPath(start, end, reverse = false, progress = null, token = state.cancelToken, notePrefix = 'Dual-Path Interpolation') {
     throwIfCancelled(token);
     const summary = renderLengthSummary();
     const n = summary.sampleCount, sr = summary.sampleRate, freq = summary.frequency;
@@ -4078,26 +4083,79 @@ itself, impose GPL licensing on generated outputs.
   }
 
 
+  // TUTORIAL: Render-unit changes set sensible loop-safety defaults without locking the user in.
+  // TUTORIAL: Seconds mode usually means a fixed musical/sound-design duration, so Bulk loop-safe
+  // TUTORIAL: starts off. Cycles and Samples are more often used for exact wavetable planning, so
+  // TUTORIAL: Bulk loop-safe starts on. The checkbox remains a manual override until the next
+  // TUTORIAL: render-unit change.
+  function applyRenderModeLoopSafetyDefaults(mode) {
+    const safeMode = ['Cycles', 'Seconds', 'Samples'].includes(String(mode)) ? String(mode) : 'Cycles';
+    state.ui.morphLoopSafetyExpanded = safeMode !== 'Seconds';
+    state.export.loopSafeBulk = safeMode !== 'Seconds';
+  }
+
+  // TUTORIAL: Manual show/hide for the Morph advisory box. The render-unit selector resets this
+  // TUTORIAL: default, but the user can override the current view after choosing a unit.
+  function setMorphLoopSafetyExpanded(expanded) {
+    state.ui.morphLoopSafetyExpanded = !!expanded;
+    updateMorphLoopSafetyNotice();
+  }
+
+  // TUTORIAL: Converts finding arrays into a compact summary plus paragraph text. Keeping this
+  // TUTORIAL: separate from DOM painting makes the warning box easier to revise without touching
+  // TUTORIAL: the loop-safety checks themselves.
+  function morphLoopSafetyMessageParts(findings) {
+    const hard = findings.filter(finding => finding.severity === 'hard');
+    const cautions = findings.filter(finding => finding.severity !== 'hard');
+    if (hard.length) {
+      return {
+        className: 'warn',
+        summary: `${hard.length} phase/length setting(s) may prevent phase-accurate loop closure.`,
+        paragraphs: [
+          ...hard.map(finding => finding.message),
+          ...cautions.map(finding => `Caution: ${finding.message}`),
+          'For ordinary one-shots, drones, risers, or transitions, this may be fine: render as needed or slightly longer than needed, then trim to a zero crossing later.',
+          'For precise wavetable frames, use neutral modulation/filter settings and non-phase-offset morph modes.',
+        ],
+      };
+    }
+    if (cautions.length) {
+      return {
+        className: 'caution',
+        summary: `No hard phase/length hazards detected, but ${cautions.length} content/boundary caution(s) may affect how cleanly the waveform appears to loop.`,
+        paragraphs: [
+          ...cautions.map(finding => finding.message),
+          'For strict wavetable-frame development, verify the boundary visually or analytically.',
+        ],
+      };
+    }
+    return {
+      className: 'safe',
+      summary: 'Current render settings are sample-aligned and do not use the common phase-offset/modulation/filter hazards.',
+      paragraphs: ['Complex wavetable shapes can still contain deliberate sharp edges.'],
+    };
+  }
+
   // TUTORIAL: Recomputes the Morph tab loop-safety status and paints the notice box.
   // TUTORIAL: The render path is not changed here; this is advisory UI only.
   function updateMorphLoopSafetyNotice() {
     const box = $('morphLoopSafetyNotice');
     if (!box) return;
     const findings = loopSafetyFindingsForSettings(state.patches.start, state.patches.end);
-    const hard = findings.filter(finding => finding.severity === 'hard');
-    const cautions = findings.filter(finding => finding.severity !== 'hard');
+    const parts = morphLoopSafetyMessageParts(findings);
+    const expanded = state.ui.morphLoopSafetyExpanded !== false;
     box.classList.remove('safe', 'warn', 'caution');
-    if (hard.length) {
-      box.classList.add('warn');
-      const lines = hard.map(finding => finding.message).concat(cautions.map(finding => `Caution: ${finding.message}`));
-      box.innerHTML = `<strong>Wavetable loop-safety notice:</strong> ${hard.length} phase/length setting(s) may prevent phase-accurate loop closure.\n- ${lines.join('\n- ')}\nFor ordinary one-shots, drones, risers, or transitions, this may be fine: render as needed or slightly longer than needed, then trim to a zero crossing later. For precise wavetable frames, use neutral modulation/filter settings and non-phase-offset morph modes.`;
-    } else if (cautions.length) {
-      box.classList.add('caution');
-      box.innerHTML = `<strong>Wavetable loop-safety notice:</strong> no hard phase/length hazards detected, but ${cautions.length} content/boundary caution(s) may affect how cleanly the waveform appears to loop.\n- ${cautions.map(finding => finding.message).join('\n- ')}\nFor strict wavetable-frame development, verify the boundary visually or analytically.`;
-    } else {
-      box.classList.add('safe');
-      box.innerHTML = '<strong>Wavetable loop-safety notice:</strong> current render settings are sample-aligned and do not use the common phase-offset/modulation/filter hazards. Complex wavetable shapes can still contain deliberate sharp edges.';
-    }
+    box.classList.add(parts.className);
+    const detailHtml = expanded ? `<div class="loopNoticeBody">${paragraphHtml(parts.paragraphs)}</div>` : '';
+    box.innerHTML = `
+      <div class="loopNoticeHeader">
+        <strong>Wavetable loop-safety notice:</strong>
+        <button type="button" class="loopNoticeToggle" id="morphLoopSafetyToggle">${expanded ? 'Hide details' : 'Show details'}</button>
+      </div>
+      <p class="loopNoticeSummary">${escapeHtml(parts.summary)}</p>
+      ${detailHtml}`;
+    const toggle = $('morphLoopSafetyToggle');
+    if (toggle) toggle.onclick = () => setMorphLoopSafetyExpanded(!expanded);
   }
 
   // TUTORIAL: Keeps the Bulk loop-safe details live with the currently selected pitch,
@@ -4746,7 +4804,7 @@ itself, impose GPL licensing on generated outputs.
     value.step = 'any';
     value.dataset.exportSetting = 'render-value';
     value.value = state.export.value;
-    mode.onchange = () => { state.export.mode = mode.value; persistGlobalSettings(); updateStatusSummaries(); updateBulkLoopSafeNotice(); syncExportSettingControls(); };
+    mode.onchange = () => { state.export.mode = mode.value; applyRenderModeLoopSafetyDefaults(state.export.mode); persistGlobalSettings(); updateStatusSummaries(); syncExportSettingControls(); };
     const applyRenderValue = (persistNow, syncNow) => {
       if (value.value === '' || !Number.isFinite(Number(value.value))) return;
       state.export.value = Number(value.value);
@@ -5044,6 +5102,7 @@ itself, impose GPL licensing on generated outputs.
     state.export.sampleRate = plan.sampleRate;
     setCommonFrequency(plan.recommendedFrequency, {audition: false});
     state.export.mode = renderMode;
+    applyRenderModeLoopSafetyDefaults(state.export.mode);
     if (renderMode === 'Samples') state.export.value = plan.totalSamples;
     else if (renderMode === 'Seconds') state.export.value = plan.durationSeconds;
     else state.export.value = plan.cycles;
@@ -5065,6 +5124,7 @@ itself, impose GPL licensing on generated outputs.
     const plan = calculatorPlan();
     state.export.sampleRate = plan.sampleRate;
     state.export.mode = renderMode;
+    applyRenderModeLoopSafetyDefaults(state.export.mode);
     if (renderMode === 'Samples') state.export.value = plan.tempoSamples;
     else if (renderMode === 'Cycles') state.export.value = Math.max(1, Math.round(plan.tempoCyclesAtCurrentFrequency));
     else state.export.value = plan.tempoSeconds;
@@ -5102,6 +5162,16 @@ itself, impose GPL licensing on generated outputs.
   function refreshCalculatorOutputs() {
     if (!$('calculatorControls')) return;
     const plan = calculatorPlan();
+    // TUTORIAL: These inline labels sit beside the raw input fields, so they should
+    // TUTORIAL: describe the value typed into that field. The planner result below may
+    // TUTORIAL: still sort low/high internally when the values cross, but the labels
+    // TUTORIAL: should not appear to jump to the opposite row.
+    const rawMultiLow = clampInt(calculatorNumber('calcMultiLowMidi', 36), 0, 127);
+    const rawMultiHigh = clampInt(calculatorNumber('calcMultiHighMidi', 84), 0, 127);
+    const lowMidiName = $('calcMultiLowMidiName');
+    if (lowMidiName) lowMidiName.textContent = midiNoteLabel(rawMultiLow);
+    const highMidiName = $('calcMultiHighMidiName');
+    if (highMidiName) highMidiName.textContent = midiNoteLabel(rawMultiHigh);
     const note = nearestNoteForFrequency(plan.recommendedFrequency);
     const selectedNoteFrequency = noteToFrequency(note.note, note.octave);
     const cents = 1200 * Math.log2(plan.recommendedFrequency / selectedNoteFrequency);
@@ -5158,7 +5228,20 @@ itself, impose GPL licensing on generated outputs.
       if (attrs.max != null) input.max = String(attrs.max);
       input.addEventListener('input', refreshCalculatorOutputs);
       input.addEventListener('change', refreshCalculatorOutputs);
-      makeRow(target, label, input);
+      if (attrs.noteLabelId) {
+        const r = document.createElement('div');
+        r.className = 'row wide';
+        const l = document.createElement('label');
+        l.append(document.createTextNode(`${label} [`));
+        const note = document.createElement('span');
+        note.id = attrs.noteLabelId;
+        note.textContent = midiNoteLabel(value);
+        l.append(note, document.createTextNode(']'));
+        r.append(l, input);
+        target.appendChild(r);
+      } else {
+        makeRow(target, label, input);
+      }
       return input;
     };
 
@@ -5169,10 +5252,13 @@ itself, impose GPL licensing on generated outputs.
       h.textContent = title;
       box.appendChild(h);
       if (noteText) {
-        const note = document.createElement('p');
-        note.className = 'note';
-        note.textContent = noteText;
-        box.appendChild(note);
+        const notes = Array.isArray(noteText) ? noteText : [noteText];
+        notes.forEach(text => {
+          const note = document.createElement('p');
+          note.className = 'note';
+          note.textContent = text;
+          box.appendChild(note);
+        });
       }
       parent.appendChild(box);
       return box;
@@ -5196,7 +5282,13 @@ itself, impose GPL licensing on generated outputs.
     });
     bitDepthBox.appendChild(bitDepthButtons);
 
-    const morphBox = makeCalcBox('Wavetable / morph length', 'Choose fixed button targets for WAV sample rate and exported samples per cycle, then let the calculator recommend a render pitch and duration. In Cycles mode, duration = cycles ÷ frequency. Example: 128 cycles at 64 Hz = 2 seconds; the same 128 cycles at 128 Hz = 1 second. Cycles mode sets nominal base-pitch length. A cycle-exact render does not duplicate the wrap endpoint: 4 cycles × 256 samples/cycle = 1024 stored samples. The next implied sample is the return point. That is different from whole-file loop closure: FM, PWM, Ring Mod, filters, wavetable modes, and morph modes can move phase, waveform landmarks, or endpoint shape. Phase-Offset Crossfade intentionally shifts the END frame, so even with a correct 1024-sample file, the end of the file will not necessarily return to the first sample. For diagnostic cycle-closure tests, use neutral modulation/filter settings and a non-phase-offset morph mode. Set Freq + Samples only switches the render unit to a fixed sample count; it is not a cycle-closure fix. Use Seconds or Samples mode when fixed duration or fixed sample count matters more than cycle count.');
+    const morphBox = makeCalcBox('Wavetable / morph length', [
+      'Choose fixed button targets for WAV sample rate and exported samples per cycle, then let the calculator recommend a render pitch and duration.',
+      'In Cycles mode, duration = cycles ÷ frequency. Example: 128 cycles at 64 Hz = 2 seconds; the same 128 cycles at 128 Hz = 1 second. Cycles mode sets nominal base-pitch length.',
+      'A cycle-exact render does not duplicate the wrap endpoint: 4 cycles × 256 samples/cycle = 1024 stored samples. The next implied sample is the return point.',
+      'That is different from whole-file loop closure: FM, PWM, Ring Mod, filters, wavetable modes, and morph modes can move phase, waveform landmarks, or endpoint shape. Phase-Offset Crossfade intentionally shifts the END frame, so even with a correct 1024-sample file, the end of the file will not necessarily return to the first sample.',
+      'For diagnostic cycle-closure tests, use neutral modulation/filter settings and a non-phase-offset morph mode. Set Freq + Samples only switches the render unit to a fixed sample count; it is not a cycle-closure fix. Use Seconds or Samples mode when fixed duration or fixed sample count matters more than cycle count.',
+    ]);
 
     const calcSampleRate = document.createElement('input');
     calcSampleRate.type = 'hidden';
@@ -5327,8 +5419,8 @@ itself, impose GPL licensing on generated outputs.
     tempoBox.appendChild(tempoBar);
 
     const multiBox = makeCalcBox('Multisample Planner', 'Planning helper for sampler maps. This is most relevant for long rendered WAVs that will be pitched across a keyboard. It is rarely relevant for single-cycle wavetables, where a synthesizer is typically expected to transpose the oscillator.');
-    addNumberRow(multiBox, 'Lowest MIDI note', 'calcMultiLowMidi', 36, {min: 0, max: 127, step: 1});
-    addNumberRow(multiBox, 'Highest MIDI note', 'calcMultiHighMidi', 84, {min: 0, max: 127, step: 1});
+    addNumberRow(multiBox, 'Lowest MIDI note', 'calcMultiLowMidi', 36, {min: 0, max: 127, step: 1, noteLabelId: 'calcMultiLowMidiName'});
+    addNumberRow(multiBox, 'Highest MIDI note', 'calcMultiHighMidi', 84, {min: 0, max: 127, step: 1, noteLabelId: 'calcMultiHighMidiName'});
     addNumberRow(multiBox, 'Zone spacing', 'calcMultiSpacing', 12, {min: 1, max: 48, step: 1});
     addNumberRow(multiBox, 'Seconds per root', 'calcMultiSeconds', 1, {min: 0.001, step: 0.001});
     const multiGrid = document.createElement('div');
@@ -5767,6 +5859,37 @@ itself, impose GPL licensing on generated outputs.
     return `${NOTE_NAMES[n % 12]}${Math.floor(n / 12) - 1}`;
   }
 
+  // TUTORIAL: Detects the special Calculator MIDI-learn context. When one of the
+  // TUTORIAL: Multisample Planner note-number fields has focus, an incoming note-on
+  // TUTORIAL: should fill that calculator field instead of behaving like a gated synth
+  // TUTORIAL: note. This keeps MIDI learn local to the focused text entry and leaves
+  // TUTORIAL: ordinary Playground/Morph MIDI audition unchanged everywhere else.
+  function focusedCalculatorMidiTarget() {
+    const el = document.activeElement;
+    if (!el || !el.id) return null;
+    if (el.id === 'calcMultiLowMidi' || el.id === 'calcMultiHighMidi') return el;
+    return null;
+  }
+
+  // TUTORIAL: Applies a MIDI note to the focused Multisample Planner note field.
+  // TUTORIAL: Note-off messages are swallowed while the field remains focused so releasing
+  // TUTORIAL: the key does not stop audio or disturb the normal held-note stack.
+  function handleCalculatorMidiTarget(command, note, velocity) {
+    const target = focusedCalculatorMidiTarget();
+    if (!target) return false;
+    if (command === 0x90 && velocity > 0) {
+      const midi = clampInt(note, 0, 127);
+      target.value = String(midi);
+      refreshCalculatorOutputs();
+      const status = $('calculatorStatus');
+      if (status) {
+        const label = target.id === 'calcMultiLowMidi' ? 'Lowest MIDI note' : 'Highest MIDI note';
+        status.textContent = `${label} set from MIDI: ${midiNoteLabel(midi)} (${midi}).`;
+      }
+    }
+    return true;
+  }
+
   // TUTORIAL: Creates a stable key for the held-note stack.
   function midiHeldKey(channel, note) {
     return `${clampInt(channel, 1, 16)}:${clampInt(note, 0, 127)}`;
@@ -5832,6 +5955,7 @@ itself, impose GPL licensing on generated outputs.
     const channel = (data[0] & 0x0f) + 1;
     const note = clampInt(data[1], 0, 127);
     const velocity = clampInt(data[2], 0, 127);
+    if (handleCalculatorMidiTarget(command, note, velocity)) return;
     if (command === 0x90 && velocity > 0) handleMidiNoteOn(channel, note);
     else handleMidiNoteOff(channel, note);
   }
@@ -6076,6 +6200,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: first preview, and then let event handlers drive everything else.
   function init() {
     applySavedGlobalSettings();
+    state.ui.morphLoopSafetyExpanded = state.export.mode !== 'Seconds';
     const lastOpenTab = readLastOpenTabSetting();
     if (lastOpenTab) state.ui.lastOpenTab = lastOpenTab;
     addPatchControls('singleControls', 'single');
