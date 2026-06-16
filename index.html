@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.6b
+Fractured Wavetable Generator v2.6c
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.6b</title>
+<title>Fractured Wavetable Generator v2.6c</title>
 <style>
   :root {
     --bg: #101216;
@@ -161,7 +161,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.6b</h1>
+  <h1>Fractured Wavetable Generator v2.6c</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -352,9 +352,15 @@ itself, impose GPL licensing on generated outputs.
   <section id="notes" class="tab">
     <div class="panel">
       <h2>Notes</h2>
-      <p class="note">Fractured Wavetable Generator is a browser-native, single-file wavetable generator. It is designed for making loopable oscillator material, long evolving WAV files, drones, noisy transitions, fractured transitions, and sound-design source material.</p>
+      <p class="note">Fractured Wavetable Generator is a browser-native wavetable and sound-design tool. It can make single-cycle oscillator material, evolving WAV files, drones, noisy transitions, morphs, and raw source material for further editing in samplers, synths, or DAWs.</p>
+
       <h3>Usage Notes</h3>
       <p class="note">Pressing <code>ESC</code> stops audio and cancels active rendering. Leaving a tab also mutes the current audition. Keyboard shortcuts are ignored while an input, slider, dropdown, button, or editable field has focus. Space is left to the browser.</p>
+      <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider covers the normal audio range; typed frequency and note/octave controls can go down to 1 Hz for long-cycle and sub-audio exports. MIDI note input, when available, sets the same shared pitch.</p>
+      <p class="note">The visualisers are previews of the generated sound path. Base table shows the generated wavetable; the modulation and spectrum views help show how FM, PWM, Ring Mod, filtering, and morphing affect the result.</p>
+      <p class="note">Morph and Bulk exports create WAV files with optional JSON sidecars. The JSON is there so patches can be inspected or reconstructed later; ordinary users do not need to edit it.</p>
+      <p class="note">Very long browser renders can use a lot of RAM. For unusually long exports, smaller test renders are recommended before committing to a large file.</p>
+
       <h3>Keyboard Shortcuts</h3>
       <table class="shortcutTable">
         <thead><tr><th>Context</th><th>Shortcut</th><th>Action</th></tr></thead>
@@ -369,22 +375,12 @@ itself, impose GPL licensing on generated outputs.
           <tr><td>Morph</td><td><code>P</code></td><td>Play/Pause the most recently used Morph sound</td></tr>
         </tbody>
       </table>
-      <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic and covers 20 Hz–20 kHz; typed frequency and note/octave controls can go down to 1 Hz for long-cycle and sub-audio sound-design exports. MIDI note input sets the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
-      <p class="note">Filter Cutoff uses a logarithmic 20 Hz–20 kHz slider with Hz text entry. Filter Resonance is presented as a 0–127 synth-style control, then mapped to an internal floating-point biquad Q curve for DSP and exports.</p>
-      <p class="note">Calculator note entry: when the Calculator tab’s Multisample Planner Lowest MIDI note or Highest MIDI note number box has focus, incoming accepted MIDI note-on messages set that field instead of starting an audition. This uses the same Web MIDI permission and channel setting as the main pitch controls.</p>
-      <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, headroom, Different START/END Wavetable Types, Different START/END FM Pitch Range, Cycle-stepped transition, Calculator tab values while open, and the last open tab.</p>
-      <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. Collapsing a visualiser box hides the canvas and skips canvas redraw work while it is closed.</p>
-      <p class="note">Window controls use a 0–256 endpoint scale to match the 256-sample single-cycle table. 256 is the cycle end, equivalent in phase to 0, but useful as a full-cycle endpoint.</p>
-      <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. Some older or redundant internal modes remain loadable for JSON compatibility but are hidden from the normal dropdown and randomisation pool, so old patches can still render while the main UI stays cleaner. Exported JSON sidecars use schema v8; current public fields are grouped by purpose and include compact control ranges for reconstruction without repeating UI-only details in every patch. Morph render modes are exported as stable IDs with labels, rather than label-only strings.</p>
-      <p class="note">Source Taps: each generator provides four related taps. Input 1 and Input 2 choose which two taps feed the Wavetable Type stage. Collapsible patch-section open/closed states are saved with the browser’s global UI preferences. The default A/B selection preserves the original generator pair; C/D add extra family-specific material such as blur, residue, sideband, fold, edge, cluster, modal, pulse, sync, or formant taps depending on the selected generator family. Randomise avoids duplicate Input 1/Input 2 tap assignments because same-tap difference/division/logic modes often collapse into safety fallback shapes.</p>
-      <p class="note">Visualisation note: Base table shows the generated table post wave interpolator and pre modulation. Phase-locked, Slow animation, Time-domain, and Spectrum analyser views are post modulation previews. When active, the Slow animation visualiser is a slow-motion visualisation of audio-frequency FM/PWM/Ring Mod effects; it is not real-time oscillator speed or playback speed. If FM, PWM, and Ring Mod are all zero, the Slow animation view is static and should not keep repainting. Ring Mod is implemented as a self-ring-mod stage, so higher Ring Mod values crossfade from the clean carrier into a multi-ratio self-ring modulator, adding sidebands, clang, and phase-related grit instead of ordinary level tremolo. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
-      <p class="note">Export notes: WAV files are generated in browser memory before download. Very long renders can stress RAM and browser Blob/download limits. ZIP exports drop their temporary references after the download is triggered, but the browser decides when memory is actually reclaimed.</p>
+
       <h3>License and provenance</h3>
-      <p class="note"><strong>License:</strong> This browser implementation is released as free software under the GNU General Public License version 2 only (<code>GPL-2.0-only</code>). It comes with no warranty. If this file is redistributed as part of a repository or release package, include the GPL v2 license text in a <code>COPYING</code> file.</p>
+      <p class="note"><strong>License:</strong> This browser implementation is free software under the GNU General Public License version 2 only (<code>GPL-2.0-only</code>). It comes with no warranty.</p>
       <p class="note"><strong>Provenance:</strong> This browser implementation is inspired by Carl Hudson’s Fractal Wavetable Generator concept. Carl Hudson’s original C implementation is separately copyrighted and is not relicensed here.</p>
-      <p class="note"><strong>Phase distortion provenance:</strong> The Phase Distortion Smooth and Phase Distortion Crunchy engines are clean-room DSP experiments based on general non-linear phase remapping and ordinary waveform lookup. They do not include Casio CZ ROM waveforms, proprietary source code, or a claim of CZ compatibility.</p>
       <p class="note"><strong>Outputs:</strong> Audio, WAV, and JSON files generated by this tool are user-created sound-design outputs. Any output from this tool is yours to use however you want. The program’s GPL notice applies to the program itself; it does not, by itself, impose GPL licensing on generated outputs.</p>
-      <p class="note">Project repository: <a href="https://github.com/atom-smasher/Fractured-Wavetable-Generator/" target="_blank" rel="noopener noreferrer">https://github.com/atom-smasher/Fractured-Wavetable-Generator/</a></p>
+      <p class="note">Developers, patch archivists, and anyone wanting implementation details can use the project repository: <a href="https://github.com/atom-smasher/Fractured-Wavetable-Generator/" target="_blank" rel="noopener noreferrer">https://github.com/atom-smasher/Fractured-Wavetable-Generator/</a></p>
     </div>
   </section>
 </main>
@@ -405,7 +401,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.6b';
+  const APP_VERSION = 'v2.6c';
   const EXPORT_SCHEMA_VERSION = 8;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
