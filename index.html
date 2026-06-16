@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.4r
+Fractured Wavetable Generator v2.4s
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.4r</title>
+<title>Fractured Wavetable Generator v2.4s</title>
 <style>
   :root {
     --bg: #101216;
@@ -147,7 +147,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.4r</h1>
+  <h1>Fractured Wavetable Generator v2.4s</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -380,7 +380,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.4r';
+  const APP_VERSION = 'v2.4s';
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -1895,10 +1895,24 @@ itself, impose GPL licensing on generated outputs.
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
     const seedMix = pot1 / POT_MAX_12BIT, vowel = pot2 / POT_MAX_12BIT, grit = pot3 / POT_MAX_12BIT;
     const smoothProfile = String(profile) === 'smooth';
-    const peaksA = [1.65 + 7.25 * vowel, 4.25 + 12.5 * seedMix, 8.5 + 18.5 * (0.35 * grit + 0.65 * vowel)];
-    const peaksB = [2.80 + 7.50 * (1 - vowel), 6.30 + 12.0 * grit, 12.0 + 19.0 * seedMix];
-    const bandwidthA = smoothProfile ? (3.0 + 6.4 * (1 - grit)) : (0.95 + 3.2 * (1 - grit));
-    const bandwidthB = smoothProfile ? (3.4 + 6.8 * (1 - grit)) : (1.1 + 3.8 * (1 - grit));
+
+    // Formant spacing should move the whole peak map, not just one or two peaks.
+    // The curve makes the lower half audible while leaving room for extreme spacing.
+    const spacingCtl = Math.pow(seedMix, smoothProfile ? 0.72 : 0.64);
+    const spread = smoothProfile ? (0.70 + 1.35 * spacingCtl) : (0.62 + 1.75 * spacingCtl);
+    const focus = smoothProfile ? (1.12 - 0.32 * spacingCtl) : (1.22 - 0.46 * spacingCtl);
+    const peaksA = [
+      1.40 + spread * (1.10 + 6.60 * vowel),
+      3.10 + spread * (2.80 + 8.50 * vowel + 1.75 * grit),
+      6.50 + spread * (4.00 + 12.50 * (0.35 * grit + 0.65 * vowel)),
+    ];
+    const peaksB = [
+      2.05 + spread * (1.20 + 7.00 * (1 - vowel)),
+      4.20 + spread * (2.20 + 9.50 * grit),
+      7.20 + spread * (3.50 + 10.50 * spacingCtl),
+    ];
+    const bandwidthA = (smoothProfile ? (3.0 + 6.4 * (1 - grit)) : (0.95 + 3.2 * (1 - grit))) * focus;
+    const bandwidthB = (smoothProfile ? (3.4 + 6.8 * (1 - grit)) : (1.1 + 3.8 * (1 - grit))) * focus;
     const harmonics = smoothProfile ? 36 : 52;
     const a = new Float64Array(TABLE_SIZE), b = new Float64Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) {
@@ -1913,16 +1927,15 @@ itself, impose GPL licensing on generated outputs.
         const rollA = 1 / (h ** (smoothProfile ? 0.96 : 0.72));
         const rollB = 1 / (h ** (smoothProfile ? 1.08 : 0.82));
         const ridgeA = 0.35 + 0.65 * Math.sin(Math.PI * clampFloat(h / Math.max(1, harmonics), 0, 1));
-        ya += wa * rollA * ridgeA * Math.sin(2 * Math.PI * (h * ph + 0.014 * h * seedMix + 0.035 * vowel * Math.sin(2 * Math.PI * ph)));
-        yb += wb * rollB * Math.cos(2 * Math.PI * (h * ph - 0.015 * h * vowel + 0.020 * grit * Math.cos(2 * Math.PI * ph)));
+        ya += wa * rollA * ridgeA * Math.sin(2 * Math.PI * (h * ph + 0.030 * h * spacingCtl + 0.035 * vowel * Math.sin(2 * Math.PI * ph)));
       }
-      const nasalA = Math.sin(2 * Math.PI * ((2.0 + 5.5 * vowel) * ph + 0.21 * seedMix));
+      const nasalA = Math.sin(2 * Math.PI * ((2.0 + 5.5 * vowel + 2.0 * spacingCtl) * ph + 0.55 * spacingCtl));
       const breathA = smoothProfile ? 0 : foldBipolarValue(1.45 * ya + 0.45 * nasalA);
       a[i] = Math.tanh((smoothProfile ? 1.10 : 2.05) * (ya + (smoothProfile ? 0.10 : 0.22) * nasalA + (smoothProfile ? 0 : 0.16 * breathA)));
       b[i] = Math.tanh((smoothProfile ? 0.98 : 1.80) * yb + (smoothProfile ? 0.06 * ya : 0.18 * foldBipolarValue(ya)));
     }
-    return finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 2 : 0);
-  }
+    return finishGeneratedSourcePair(a, b, wtType, spacingCtl, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 2 : 0);
+}
 
   // TUTORIAL: Fold generator engine. This is table-generation wavefolding, distinct from
   // TUTORIAL: the Wavetable Type fold modes that happen later in the combine stage.
@@ -1951,11 +1964,21 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: independent of the WAV export bit depth.
   function generateBitcrushPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
+
     const seedMix = pot1 / POT_MAX_12BIT, dec = pot2 / POT_MAX_12BIT, biasCtl = pot3 / POT_MAX_12BIT;
     const smoothProfile = String(profile) === 'smooth';
-    const levels = clampInt(smoothProfile ? (64 - 56 * seedMix) : (32 - 28 * seedMix), 3, 256);
+
+    // Bit-depth loss is perceptual/log-like: high level-count changes are subtle,
+    // while low level-count changes are very obvious. Map the knob exponentially
+    // so 0–50% already enters clearly crushed territory.
+    const crush = Math.pow(seedMix, smoothProfile ? 0.80 : 0.70);
+    const maxLevels = smoothProfile ? 96 : 64;
+    const minLevels = smoothProfile ? 3 : 2;
+    const levels = clampInt(maxLevels * Math.pow(minLevels / maxLevels, crush), minLevels, maxLevels);
+
     const hold = clampInt(1 + dec * (smoothProfile ? 15 : 39), 1, 48);
     const dither = smoothProfile ? (0.5 / levels) : 0;
+
     const sourceA = biasCtl * 6, sourceB = (1 - biasCtl) * 6;
     const a = new Float64Array(TABLE_SIZE), b = new Float64Array(TABLE_SIZE);
     let lastA = 0, lastB = 0, errA = 0, errB = 0;
@@ -2007,23 +2030,33 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: rather than strict harmonic positions.
   function generateModalPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
-    const spacing = pot1 / POT_MAX_12BIT, bright = pot2 / POT_MAX_12BIT, metal = pot3 / POT_MAX_12BIT;
+    const spacing = pot1 / POT_MAX_12BIT, bright = pot2 / POT_MAX_12BIT, metalCtl = pot3 / POT_MAX_12BIT;
     const smoothProfile = String(profile) === 'smooth';
+    // Metalness/Inharmonicity needs a non-linear response and more than tiny
+    // frequency offsets. Keep low values usable, but make high values clang.
+    const metal = Math.pow(metalCtl, smoothProfile ? 0.72 : 0.62);
+    const metalBipolar = (metalCtl * 2) - 1;
     const modes = clampInt(5 + bright * (smoothProfile ? 18 : 28), 4, 36);
     const stretch = smoothProfile ? (0.10 + 0.42 * spacing) : (0.18 + 0.82 * spacing);
+    const metalSpread = smoothProfile ? (0.12 + 0.18 * metal) : (0.18 + 0.34 * metal);
+    const metalPhase = smoothProfile ? (0.012 + 0.030 * metal) : (0.020 + 0.070 * metal);
+    const metalFold = smoothProfile ? (0.04 * metal) : (0.22 * metal);
     const a = new Float64Array(TABLE_SIZE), b = new Float64Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) {
       const ph = i / TABLE_SIZE;
       let ya = 0, yb = 0;
       for (let m = 1; m <= modes; m++) {
-        const modalA = m * (1 + stretch * Math.sqrt(m) * 0.18) + metal * 0.17 * Math.sin(m * 2.13);
-        const modalB = m * (1 + stretch * Math.pow(m, 0.72) * 0.14) + metal * 0.23 * Math.cos(m * 1.71);
+        const modalIndex = (m * m) / Math.max(1, modes * 2);
+        const modalA = m * (1 + stretch * Math.sqrt(m) * 0.18)
+        + metalSpread * modalIndex * Math.sin(m * 2.13 + 1.7 * metalBipolar);
+        const modalB = m * (1 + stretch * Math.pow(m, 0.72) * 0.14)
+        + metalSpread * 1.18 * modalIndex * Math.cos(m * 1.71 - 1.3 * metalBipolar);
         const amp = Math.exp(-m * (smoothProfile ? 0.13 : 0.08) * (1.2 - bright));
-        ya += amp * Math.sin(2 * Math.PI * (modalA * ph + 0.019 * m * metal));
-        yb += amp * Math.cos(2 * Math.PI * (modalB * ph - 0.017 * m * spacing));
+        ya += amp * Math.sin(2 * Math.PI * (modalA * ph + metalPhase * m * metalBipolar));
+        yb += amp * Math.cos(2 * Math.PI * (modalB * ph - 0.017 * m * spacing - metalPhase * m * metalBipolar));
       }
-      a[i] = Math.tanh((smoothProfile ? 1.05 : 1.80) * ya);
-      b[i] = Math.tanh((smoothProfile ? 1.05 : 1.85) * yb + (smoothProfile ? 0 : 0.18 * foldBipolarValue(ya)));
+      a[i] = Math.tanh((smoothProfile ? 1.05 : 1.80) * ya + metalFold * foldBipolarValue(ya + 0.65 * yb));
+      b[i] = Math.tanh((smoothProfile ? 1.05 : 1.85) * yb + (smoothProfile ? 0 : 0.18 * foldBipolarValue(ya)) + metalFold * foldBipolarValue(yb - 0.45 * ya));
     }
     return finishGeneratedSourcePair(a, b, wtType, spacing, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 1 : 0);
   }
