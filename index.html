@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.4s
+Fractured Wavetable Generator v2.6b
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,9 +14,9 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Modification note: v2.4r separates typed/export pitch limits from the logarithmic pitch slider: typed frequency boxes now accept down to 1 Hz without clamping mid-entry, while the slider remains a practical 20 Hz–20 kHz performance control. v2.4q fixes WAV LIST/INFO text termination by using an escaped NUL in the JavaScript source instead of a literal NUL byte, preventing metadata readers from showing replacement-character garbage. v2.4p made the schema v5 export_context path robust for ordinary Morph exports and records lightweight JSON-only export context for Morph and Bulk renders. The WAV metadata remains minimal: one per-render export UUID for matching WAV/JSON files, ordinary INFO provenance, and the custom FWID chunk. v2.4n updated export provenance and JSON sidecar metadata to schema v5.
+Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports.
 
-Recent v2.4 summary: v2.4 was a release-cleanup pass after the v2.3 series. It kept the v2.3zg behaviour, preserved the concise visualiser path captions, kept the slow-animation performance guard, fixed lingering RAM wording in export notes, and added tutorial comments around the newer tab-persistence, loop-safety, Bulk loop-safe planning, and notice-refresh helpers.
+Recent v2.5 development summary: the v2.5 Source Taps Lab series added A/B/C/D taps, Input 1/Input 2 terminology, collapsible patch sections, logarithmic cutoff/frequency sliders, 0–127 resonance presentation, Morph visualiser collapse controls, and stronger per-engine tap tuning.
 
 Provenance note: this browser implementation is inspired by Carl Hudson’s
 Fractal Wavetable Generator concept. Carl Hudson’s original C implementation
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.4s</title>
+<title>Fractured Wavetable Generator v2.6b</title>
 <style>
   :root {
     --bg: #101216;
@@ -74,6 +74,7 @@ itself, impose GPL licensing on generated outputs.
   .panel h3 { margin: 12px 0 8px; font-size: 14px; color: var(--accent); }
   .row { display: grid; grid-template-columns: 155px minmax(200px, 1fr) 96px; gap: 8px; align-items: center; margin: 5px 0; }
   .row.wide { grid-template-columns: 155px minmax(200px, 1fr); }
+  .row.wtInlineRow { grid-template-columns: 155px minmax(200px, 1fr) minmax(150px, 260px); }
   .row label { color: var(--muted); font-size: 13px; }
   input[type="range"] { width: 100%; }
   input[type="number"], input[type="text"], select { width: 100%; background: #0f131a; color: var(--text); border: 1px solid var(--line); border-radius: 7px; padding: 5px 7px; }
@@ -85,6 +86,19 @@ itself, impose GPL licensing on generated outputs.
   .variantChoiceGroup label { display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; padding: 4px 9px; border: 1px solid var(--line); border-radius: 7px; background: #0f131a; }
   .inlineTriple { display: grid; grid-template-columns: minmax(90px, 0.7fr) minmax(110px, 0.9fr) minmax(140px, 1.2fr); gap: 8px; align-items: center; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  details.modulePanel { border: 1px solid var(--line); border-radius: 10px; background: #11161d; margin: 8px 0; padding: 0; }
+  details.modulePanel > summary { cursor: pointer; list-style: none; padding: 8px 10px; color: var(--text); font-weight: 650; display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+  details.modulePanel > summary::-webkit-details-marker { display: none; }
+  details.modulePanel > summary::before { content: "▸"; color: var(--muted); margin-right: 4px; }
+  details.modulePanel[open] > summary::before { content: "▾"; }
+  .moduleBody { border-top: 1px solid var(--line); padding: 8px 10px 10px; }
+  .moduleSummary { color: var(--muted); font-weight: 400; font-size: 12px; text-align: right; }
+  .moduleSummary.default { color: var(--ok); }
+  .moduleSummary.changed { color: var(--warn); }
+  .row.wide.tapInputRow { grid-template-columns: 64px minmax(200px, 1fr); gap: 6px; }
+  .tapChoiceGroup { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .tapChoiceGroup button { padding: 5px 8px; font-size: 12px; }
+  .tapChoiceGroup button.active { background: #183244; border-color: var(--accent); }
   .status { white-space: pre-wrap; min-height: 24px; padding: 9px; background: #0d1118; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }
   .status strong { color: var(--text); }
   .loopNotice { margin: 8px 0; border-color: #4b5567; white-space: normal; line-height: 1.35; }
@@ -147,7 +161,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.4s</h1>
+  <h1>Fractured Wavetable Generator v2.6b</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -171,33 +185,40 @@ itself, impose GPL licensing on generated outputs.
         <div id="singleControls"></div>
       </div>
       <div class="panel">
-        <h2>Visualiser</h2>
-        <div class="row wide">
-          <label for="singleVisualMode">Visual mode</label>
-          <select id="singleVisualMode">
-            <option>Off</option>
-            <option>Base table</option>
-            <option>Phase-locked FM/PWM/Ring Mod</option>
-            <option>Animated stable FM/PWM/Ring Mod</option>
-            <option>Time-domain FM/PWM/Ring Mod</option>
-            <option>Spectrum analyser</option>
-          </select>
-        </div>
-        <div class="row wide">
-          <label for="singleAnimFps">Animation FPS</label>
-          <select id="singleAnimFps">
-            <option value="2">2 fps — very light</option>
-            <option value="5">5 fps — light</option>
-            <option value="10">10 fps — balanced</option>
-            <option value="12" selected>12 fps — responsive</option>
-            <option value="24">24 fps — heavy</option>
-            <option value="30">30 fps — very heavy</option>
-          </select>
-        </div>
-        <canvas id="singleCanvas" width="720" height="420"></canvas>
-        <div class="hr"></div>
-        <h3>Audio / pitch</h3>
-        <div id="commonControls"></div>
+        <details class="modulePanel" id="singleVisualiserPanel" data-module-key="singleVisualiser" open>
+          <summary><span class="moduleTitle">Visualiser</span><span class="moduleSummary" id="singleVisualiserSummary">Base table</span></summary>
+          <div class="moduleBody">
+            <div class="row wide">
+              <label for="singleVisualMode">Visual mode</label>
+              <select id="singleVisualMode">
+                <option>Base table</option>
+                <option>Phase-locked FM/PWM/Ring Mod</option>
+                <option>Animated stable FM/PWM/Ring Mod</option>
+                <option>Time-domain FM/PWM/Ring Mod</option>
+                <option>Spectrum analyser</option>
+              </select>
+            </div>
+            <div class="row wide">
+              <label for="singleAnimFps">Animation FPS</label>
+              <select id="singleAnimFps">
+                <option value="2">2 fps — very light</option>
+                <option value="5">5 fps — light</option>
+                <option value="10">10 fps — balanced</option>
+                <option value="12" selected>12 fps — responsive</option>
+                <option value="24">24 fps — heavy</option>
+                <option value="30">30 fps — very heavy</option>
+              </select>
+            </div>
+            <canvas id="singleCanvas" width="720" height="420"></canvas>
+          </div>
+        </details>
+        <div class="compactSettingGroup" id="singleVolumeControls"></div>
+        <details class="modulePanel" id="singlePitchPanel" data-module-key="singlePitch" open>
+          <summary><span class="moduleTitle">Pitch</span><span class="moduleSummary" id="singlePitchSummary">110 Hz</span></summary>
+          <div class="moduleBody">
+            <div id="commonControls"></div>
+          </div>
+        </details>
         <div class="status" id="singleStatus">Ready.</div>
       </div>
     </div>
@@ -208,19 +229,21 @@ itself, impose GPL licensing on generated outputs.
       <div class="panel">
         <h2>START Patch</h2>
         <div class="buttonbar">
-          <button id="auditionStart">Drone START</button>
-          <button id="randomStart">Randomise START</button>
-          <button id="copyStartToEnd">Copy START → END</button>
+          <button id="auditionStart">Drone</button>
+          <button id="randomStart">Randomise</button>
+          <button id="randomMorphStart">Randomise &amp; Morph</button>
+          <button id="copyStartToEnd">Copy → END</button>
+          <button id="swapStartEnd">Swap</button>
         </div>
         <div id="startControls"></div>
       </div>
       <div class="panel">
         <h2>END Patch</h2>
         <div class="buttonbar">
-          <button id="auditionEnd">Drone END</button>
-          <button id="randomEnd">Randomise END</button>
-          <button id="copyEndToStart">Copy END → START</button>
-          <button id="swapStartEnd">Swap</button>
+          <button id="auditionEnd">Drone</button>
+          <button id="randomEnd">Randomise</button>
+          <button id="randomMorphEnd">Randomise &amp; Morph</button>
+          <button id="copyEndToStart">Copy → START</button>
         </div>
         <div id="endControls"></div>
       </div>
@@ -230,7 +253,6 @@ itself, impose GPL licensing on generated outputs.
         <div class="row wide">
           <label for="morphVisualMode">Visual mode</label>
           <select id="morphVisualMode">
-            <option>Off</option>
             <option>Base table</option>
             <option>Phase-locked FM/PWM/Ring Mod</option>
             <option>Animated stable FM/PWM/Ring Mod</option>
@@ -348,10 +370,13 @@ itself, impose GPL licensing on generated outputs.
         </tbody>
       </table>
       <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider is logarithmic and covers 20 Hz–20 kHz; typed frequency and note/octave controls can go down to 1 Hz for long-cycle and sub-audio sound-design exports. MIDI note input sets the same frequency. The selected-note readout shows the exact equal-tempered note frequency, even when the typed frequency is between notes. MIDI input is gated: note-on starts or retunes the current drone, note-off releases it, and the most recently held note has priority. MIDI input requires browser Web MIDI support and usually works from local files in Chromium-based browsers.</p>
+      <p class="note">Filter Cutoff uses a logarithmic 20 Hz–20 kHz slider with Hz text entry. Filter Resonance is presented as a 0–127 synth-style control, then mapped to an internal floating-point biquad Q curve for DSP and exports.</p>
       <p class="note">Calculator note entry: when the Calculator tab’s Multisample Planner Lowest MIDI note or Highest MIDI note number box has focus, incoming accepted MIDI note-on messages set that field instead of starting an audition. This uses the same Web MIDI permission and channel setting as the main pitch controls.</p>
       <p class="note">Global settings persistence: the hosted version saves common preferences in a browser cookie, with localStorage as a fallback for local-file testing or stricter cookie contexts. Saved settings include frequency, volume, MIDI channel, render unit/length, visual mode, animation FPS, sample rate, bit depth, Morph Render Mode, FFT anchor count, ZIP/separate download mode, DC removal, normalisation, headroom, Different START/END Wavetable Types, Different START/END FM Pitch Range, Cycle-stepped transition, Calculator tab values while open, and the last open tab.</p>
-      <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. The Off visual mode replaces the drawing area with a compact framed message so the controls take less vertical space.</p>
-      <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. Some older or redundant internal modes remain loadable for JSON compatibility but are hidden from the normal dropdown and randomisation pool, so old patches can still render while the main UI stays cleaner.</p>
+      <p class="note">Visual mode and Animation FPS are universal visualiser preferences. Changing them in Playground or Morph updates the same shared setting and stores one persistent value, rather than keeping separate per-tab visual settings. Collapsing a visualiser box hides the canvas and skips canvas redraw work while it is closed.</p>
+      <p class="note">Window controls use a 0–256 endpoint scale to match the 256-sample single-cycle table. 256 is the cycle end, equivalent in phase to 0, but useful as a full-cycle endpoint.</p>
+      <p class="note">Wavetable Type JSON metadata stores an internal <code>id</code> separately from the visible UI number. Some older or redundant internal modes remain loadable for JSON compatibility but are hidden from the normal dropdown and randomisation pool, so old patches can still render while the main UI stays cleaner. Exported JSON sidecars use schema v8; current public fields are grouped by purpose and include compact control ranges for reconstruction without repeating UI-only details in every patch. Morph render modes are exported as stable IDs with labels, rather than label-only strings.</p>
+      <p class="note">Source Taps: each generator provides four related taps. Input 1 and Input 2 choose which two taps feed the Wavetable Type stage. Collapsible patch-section open/closed states are saved with the browser’s global UI preferences. The default A/B selection preserves the original generator pair; C/D add extra family-specific material such as blur, residue, sideband, fold, edge, cluster, modal, pulse, sync, or formant taps depending on the selected generator family. Randomise avoids duplicate Input 1/Input 2 tap assignments because same-tap difference/division/logic modes often collapse into safety fallback shapes.</p>
       <p class="note">Visualisation note: Base table shows the generated table post wave interpolator and pre modulation. Phase-locked, Slow animation, Time-domain, and Spectrum analyser views are post modulation previews. When active, the Slow animation visualiser is a slow-motion visualisation of audio-frequency FM/PWM/Ring Mod effects; it is not real-time oscillator speed or playback speed. If FM, PWM, and Ring Mod are all zero, the Slow animation view is static and should not keep repainting. Ring Mod is implemented as a self-ring-mod stage, so higher Ring Mod values crossfade from the clean carrier into a multi-ratio self-ring modulator, adding sidebands, clang, and phase-related grit instead of ordinary level tremolo. The spectrum analyser is a cyclic single-cycle analyser, not a room/microphone analyser.</p>
       <p class="note">Export notes: WAV files are generated in browser memory before download. Very long renders can stress RAM and browser Blob/download limits. ZIP exports drop their temporary references after the download is triggered, but the browser decides when memory is actually reclaimed.</p>
       <h3>License and provenance</h3>
@@ -380,15 +405,19 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.4s';
+  const APP_VERSION = 'v2.6b';
+  const EXPORT_SCHEMA_VERSION = 8;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
   const MIN_FREQUENCY = 1.0;
   const MIN_SLIDER_FREQUENCY = 20.0;
   const MAX_FREQUENCY = 20000.0;
-  const WINDOW_STEPS = 4096.0;
-  const MIN_WINDOW_STEPS = 16.0;
+  const FILTER_MIN_CUTOFF = 20.0;
+  const FILTER_MAX_CUTOFF = 20000.0;
+  const FILTER_RESONANCE_UI_MAX = 127.0;
+  const WINDOW_STEPS = 256.0;
+  const MIN_WINDOW_STEPS = 1.0;
   const EPSILON = 1e-20;
   const POT_MAX_12BIT = 4095;
   const POT_SEED_SCALE_12BIT = 2048.0;
@@ -402,7 +431,7 @@ itself, impose GPL licensing on generated outputs.
   const MORPH_MAX_TABLE_FRAMES = 4096;
   const MORPH_TABLE_CACHE_LIMIT = 512;
   const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-  const VISUAL_MODES = ['Off', 'Base table', 'Phase-locked FM/PWM/Ring Mod', 'Animated stable FM/PWM/Ring Mod', 'Time-domain FM/PWM/Ring Mod', 'Spectrum analyser'];
+  const VISUAL_MODES = ['Base table', 'Phase-locked FM/PWM/Ring Mod', 'Animated stable FM/PWM/Ring Mod', 'Time-domain FM/PWM/Ring Mod', 'Spectrum analyser'];
   const GLOBAL_SETTINGS_COOKIE = 'fractal_wavetable_global_settings_v1';
   const GLOBAL_SETTINGS_LOCALSTORAGE = 'fractal_wavetable_global_settings_v1';
   const LAST_OPEN_TAB_LOCALSTORAGE = 'fractured_wavetable_last_open_tab_v1';
@@ -716,6 +745,26 @@ itself, impose GPL licensing on generated outputs.
     ['Spectral Envelope Morph (Smooth Digital Tone)', 'Blends a smoothed harmonic envelope rather than every sharp spectral detail; smoother and less crunchy.'],
     ['Harmonic Level Morph (Stable, Less Phasey)', 'Keeps phase more stable while morphing harmonic levels; usually less swirly than full FFT morph.'],
   ];
+  // TUTORIAL: Human-facing morph-mode labels may change as the UI wording gets refined.
+  // TUTORIAL: JSON exports therefore store these stable IDs alongside the current label,
+  // TUTORIAL: similar to how wavetable modes export an internal id plus UI text.
+  const MORPH_RENDER_MODE_IDS = {
+    'Full Interpolation (Favours Digital Noise)': 'full_interpolation',
+    'Crossfade (Favours Analogue Warmth)': 'crossfade',
+    'Phase-Aligned Crossfade (Warm, Less Beating)': 'phase_aligned_crossfade',
+    'Phase-Offset Crossfade (Analogue Phaser Motion)': 'phase_offset_crossfade',
+    'Dual-Path Interpolation (Avoids Midpoint Switches)': 'dual_path_interpolation',
+    'Hybrid Morph (Values Move, Types Fade)': 'hybrid_morph',
+    'Wavetable Morph (Blends Tables Before Audio)': 'wavetable_morph',
+    'Warm Wavetable Morph (One Oscillator, Smooth Blend)': 'warm_wavetable_morph',
+    'Softened Morph (Rounded Middle)': 'softened_morph',
+    'Saturated Morph (Warm, Compressed)': 'saturated_morph',
+    'Comb Wavetable Morph (Hollow Interference)': 'comb_wavetable_morph',
+    'FFT Spectral Morph (Digital Tone, Less Crunchy)': 'fft_spectral_morph',
+    'Spectral Envelope Morph (Smooth Digital Tone)': 'spectral_envelope_morph',
+    'Harmonic Level Morph (Stable, Less Phasey)': 'harmonic_level_morph',
+  };
+
   const DEFAULT_MORPH_RENDER_MODE = MORPH_RENDER_MODES[0][0];
   const SPECTRAL_STATE_OPTIONS = [
     [2, '2 anchors — CPU Light; START→END spectral blend'],
@@ -737,6 +786,7 @@ itself, impose GPL licensing on generated outputs.
     ui: {
       lastOpenTab: 'playground',
       morphLoopSafetyExpanded: true,
+      moduleOpen: {},
     },
     common: {
       frequency: DEFAULT_FREQUENCY,
@@ -795,7 +845,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Creates a complete patch object with safe defaults. New random patches and resets start from
   // TUTORIAL: this shape so later code can assume every field exists.
   function defaultPatch() {
-    return { engine: DEFAULT_ENGINE, pot1: 0, pot2: 2048, pot3: 0, wavetableType: 3, fm: 0, pwm: 0, am: 0, filterType: 'Off', filterCutoff: 8000, filterResonance: 0, beforeStart: 0, beforeEnd: 4096, afterStart: 0, afterEnd: 4096, fmRangeLabel: DEFAULT_FM_RANGE_LABEL };
+    return { engine: DEFAULT_ENGINE, pot1: 0, pot2: 2048, pot3: 0, sourceInput1: 'A', sourceInput2: 'B', wavetableType: 3, fm: 0, pwm: 0, am: 0, filterType: 'Off', filterCutoff: 8000, filterResonance: 0, beforeStart: 0, beforeEnd: WINDOW_STEPS, afterStart: 0, afterEnd: WINDOW_STEPS, fmRangeLabel: DEFAULT_FM_RANGE_LABEL };
   }
 
   // TUTORIAL: Sanitises numeric input from sliders, number boxes, JSON-like state, and DSP calculations before
@@ -905,6 +955,7 @@ itself, impose GPL licensing on generated outputs.
       cycleStepped: !!state.export.cycleStepped,
       loopSafeBulk: !!state.export.loopSafeBulk,
       loopSafeBulkStrategy: canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy),
+      moduleOpen: Object.assign({}, state.ui?.moduleOpen || {}),
       lastOpenTab: String(state.ui?.lastOpenTab || activeTabId()),
     };
   }
@@ -943,6 +994,7 @@ itself, impose GPL licensing on generated outputs.
     if (typeof saved.cycleStepped === 'boolean') state.export.cycleStepped = saved.cycleStepped;
     if (typeof saved.loopSafeBulk === 'boolean') state.export.loopSafeBulk = saved.loopSafeBulk;
     if (saved.loopSafeBulkStrategy != null) state.export.loopSafeBulkStrategy = canonicalLoopSafeBulkStrategy(saved.loopSafeBulkStrategy);
+    if (saved.moduleOpen && typeof saved.moduleOpen === 'object') state.ui.moduleOpen = Object.assign({}, saved.moduleOpen);
     if (isValidTabId(saved.lastOpenTab)) state.ui.lastOpenTab = String(saved.lastOpenTab);
     state.common.midiStatus = state.common.midiChannel === 'off' ? 'MIDI input off' : `MIDI channel restored: ${state.common.midiChannel === 'omni' ? 'OMNI' : 'ch ' + state.common.midiChannel}`;
   }
@@ -1026,6 +1078,26 @@ itself, impose GPL licensing on generated outputs.
     return peak > EPSILON;
   }
 
+  // TUTORIAL: Some legal-looking tap/window/type combinations can normalise into a
+  // TUTORIAL: nearly single-sample impulse or a near-DC table. Those are technically finite,
+  // TUTORIAL: but they can audition as silence or one sharp click per cycle, so the final
+  // TUTORIAL: safety gate treats them as collapsed and substitutes an audible fallback.
+  function tableHasUsefulShape(table) {
+    if (!tableIsUsable(table)) return false;
+    let sumSq = 0, active = 0, edgeCount = 0;
+    let prev = Number(table[TABLE_SIZE - 1]);
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const v = Number(table[i]);
+      const av = Math.abs(v);
+      sumSq += v * v;
+      if (av > 0.08) active += 1;
+      if (Math.abs(v - prev) > 0.025) edgeCount += 1;
+      prev = v;
+    }
+    const rms = Math.sqrt(sumSq / TABLE_SIZE);
+    return rms >= 0.055 && active >= 3 && edgeCount >= 2;
+  }
+
   // TUTORIAL: Reads a wavetable at continuous phase using linear interpolation, avoiding the stair-stepping
   // TUTORIAL: that would come from nearest-sample lookup.
   function readTableLinear(table, phase) {
@@ -1093,7 +1165,7 @@ itself, impose GPL licensing on generated outputs.
     if (!Number.isFinite(peak) || peak <= EPSILON) return windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength);
     const out = new Float32Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) out[i] = clampFloat(y[i], -1, 1);
-    return tableIsUsable(out) ? out : windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength);
+    return tableHasUsefulShape(out) ? out : windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength);
   }
 
   // TUTORIAL: Passes the fallback square through the same generation windows, so safety fallback still
@@ -1103,7 +1175,7 @@ itself, impose GPL licensing on generated outputs.
     if (!isFullWindow(beforeStart, beforeLength)) raw = windowTableLinear(raw, beforeStart, beforeLength);
     if (!isFullWindow(afterStart, afterLength)) raw = windowTableLinear(raw, afterStart, afterLength);
     const out = finaliseRawTableNoFallback(raw);
-    return out || fallbackTable();
+    return tableHasUsefulShape(out) ? out : fallbackTable();
   }
 
   // TUTORIAL: Normalises a raw table without recursively falling back; used internally while constructing a
@@ -1515,12 +1587,7 @@ itself, impose GPL licensing on generated outputs.
       a[i] = Math.tanh(drive * wa + crossAmt * wb);
       b[i] = Math.tanh(drive * wb - crossAmt * wa);
     }
-    let srcA = a, srcB = b;
-    if (!isFullWindow(beforeStart, beforeLength)) { srcA = windowTableLinear(srcA, beforeStart, beforeLength); srcB = windowTableLinear(srcB, beforeStart, beforeLength); }
-    let raw = combineSourceTables(srcA, srcB, wtType, seedMix);
-    if (smoothProfile) raw = circularSmoothTable(raw, 2);
-    if (!isFullWindow(afterStart, afterLength)) raw = windowTableLinear(raw, afterStart, afterLength);
-    return finaliseRawTable(raw, beforeStart, beforeLength, afterStart, afterLength);
+    return finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 2 : 0);
   }
 
   // TUTORIAL: Phase Lattice engine. This creates two sources from coupled sine/cosine phase warps,
@@ -1555,11 +1622,7 @@ itself, impose GPL licensing on generated outputs.
       a[i] = Math.tanh(driveA * (fundWeight * fundS + foldWeight * foldedA + overtoneWeight * Math.sin(2 * Math.PI * (2 * ph + warpB * 0.05))));
       b[i] = Math.tanh(driveB * (fundWeight * fundC + foldWeight * foldedB + overtoneWeight * Math.cos(2 * Math.PI * (3 * ph - warpA * 0.05))));
     }
-    let srcA = a, srcB = b;
-    if (!isFullWindow(beforeStart, beforeLength)) { srcA = windowTableLinear(srcA, beforeStart, beforeLength); srcB = windowTableLinear(srcB, beforeStart, beforeLength); }
-    let raw = combineSourceTables(srcA, srcB, wtType, seedMix);
-    if (!isFullWindow(afterStart, afterLength)) raw = windowTableLinear(raw, afterStart, afterLength);
-    return finaliseRawTable(raw, beforeStart, beforeLength, afterStart, afterLength);
+    return finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, 0);
   }
 
   // TUTORIAL: Wraps any phase value into the 0..1 oscillator cycle.
@@ -1693,12 +1756,7 @@ itself, impose GPL licensing on generated outputs.
       b[i] = Math.tanh(drive * (coreWeight * carrierB + accentMix * accentB - foldMix * foldedB - edgeMix * edgeB));
     }
 
-    let srcA = a, srcB = b;
-    if (!isFullWindow(beforeStart, beforeLength)) { srcA = windowTableLinear(srcA, beforeStart, beforeLength); srcB = windowTableLinear(srcB, beforeStart, beforeLength); }
-    let raw = combineSourceTables(srcA, srcB, wtType, seedMix);
-    if (smoothProfile) raw = circularSmoothTable(raw, 2);
-    if (!isFullWindow(afterStart, afterLength)) raw = windowTableLinear(raw, afterStart, afterLength);
-    return finaliseRawTable(raw, beforeStart, beforeLength, afterStart, afterLength);
+    return finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 2 : 0);
   }
 
 
@@ -1706,7 +1764,8 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: this helper applies source windows, Wavetable Type collision, optional smoothing,
   // TUTORIAL: result windows, and final safety normalisation.
   function finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, smoothPasses = 0) {
-    let srcA = a, srcB = b;
+    const selected = selectedSourceTables(a, b, seedMix);
+    let srcA = selected.srcA, srcB = selected.srcB;
     if (!isFullWindow(beforeStart, beforeLength)) { srcA = windowTableLinear(srcA, beforeStart, beforeLength); srcB = windowTableLinear(srcB, beforeStart, beforeLength); }
     let raw = combineSourceTables(srcA, srcB, wtType, seedMix);
     if (smoothPasses > 0) raw = circularSmoothTable(raw, smoothPasses);
@@ -1783,24 +1842,34 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: tables: moving edge positions, asymmetric duty cycle, notches, and sync-like offsets.
   function generatePulseWarpPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
-    const seedMix = pot1 / POT_MAX_12BIT, shapeA = pot2 / POT_MAX_12BIT, shapeB = pot3 / POT_MAX_12BIT;
+    const rawSeed = pot1 / POT_MAX_12BIT;
+    const rawShapeA = pot2 / POT_MAX_12BIT;
+    const rawShapeB = pot3 / POT_MAX_12BIT;
+    const seedMix = Math.pow(rawSeed, 0.74);
+    // v2.5g: avoid clamping pot3 into top/bottom dead zones. The wider response
+    // now comes from the formulas below, not from over-scaling then clipping.
+    const shapeA = Math.pow(rawShapeA, smoothStep01(rawSeed) > 0.55 ? 0.78 : 0.88);
+    const shapeB = Math.pow(rawShapeB, 0.82);
+    const bBipolar = (shapeB * 2) - 1;
     const smoothProfile = String(profile) === 'smooth';
-    const warp = smoothProfile ? (0.10 + 0.72 * seedMix) : (0.20 + 1.20 * seedMix);
-    const slope = smoothProfile ? (0.018 + 0.10 * (1 - shapeA)) : (0.003 + 0.030 * (1 - shapeA));
-    const widthA = clampFloat(0.50 + 0.43 * Math.sin(2 * Math.PI * (shapeA - 0.25)) * warp, 0.035, 0.965);
-    const widthB = clampFloat(0.50 + 0.43 * Math.cos(2 * Math.PI * (shapeB + 0.10)) * warp, 0.035, 0.965);
-    const notchA = 0.5 * shapeB + 0.25 * seedMix;
-    const notchB = 0.5 * shapeA + 0.25 + 0.17 * seedMix;
-    const notchAmt = smoothProfile ? (0.10 + 0.45 * seedMix) : (0.25 + 0.85 * seedMix);
+    const warp = smoothProfile ? (0.10 + 1.10 * seedMix) : (0.18 + 1.95 * seedMix);
+    const slope = smoothProfile ? (0.004 + 0.17 * Math.pow(1 - shapeA, 1.15)) : (0.00065 + 0.062 * Math.pow(1 - shapeA, 1.10));
+    const widthA = clampFloat(0.50 + (0.30 + 0.18 * seedMix) * Math.sin(2 * Math.PI * (shapeA - 0.25 + 0.18 * bBipolar)) * warp, 0.014, 0.986);
+    const widthB = clampFloat(0.50 + (0.31 + 0.17 * seedMix) * Math.cos(2 * Math.PI * (shapeB + 0.10 + 0.16 * shapeA)) * warp, 0.014, 0.986);
+    const notchA = wrapPhase01((smoothProfile ? 1.85 : 3.15) * shapeB + 0.37 * seedMix + 0.08 * Math.sin(2 * Math.PI * shapeB));
+    const notchB = wrapPhase01(0.25 + (smoothProfile ? 1.65 : 2.95) * shapeA + 0.31 * seedMix + 0.20 * bBipolar);
+    const notchAmtA = smoothProfile ? (0.05 + 0.60 * seedMix + 0.36 * shapeB) : (0.14 + 1.08 * seedMix + 0.72 * shapeB);
+    const notchAmtB = smoothProfile ? (0.05 + 0.54 * seedMix + 0.30 * (1 - shapeB)) : (0.14 + 0.96 * seedMix + 0.60 * (1 - shapeB));
     const a = new Float64Array(TABLE_SIZE), b = new Float64Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) {
       const ph = i / TABLE_SIZE;
-      const pa = ph + (smoothProfile ? 0.04 : 0.09) * Math.sin(2 * Math.PI * (ph * (1 + 5 * shapeB) + seedMix));
-      const pb = ph + (smoothProfile ? 0.04 : 0.10) * Math.cos(2 * Math.PI * (ph * (1 + 6 * shapeA) - seedMix));
-      const ya = pulseWarpValue(pa, widthA, slope, notchA, notchAmt, !smoothProfile);
-      const yb = pulseWarpValue(pb, widthB, slope * (smoothProfile ? 1.25 : 0.75), notchB, notchAmt * 0.85, !smoothProfile);
-      a[i] = smoothProfile ? Math.tanh(1.25 * ya) : clampFloat(foldBipolarValue(1.55 * ya) + 0.20 * Math.sign(ya), -1, 1);
-      b[i] = smoothProfile ? Math.tanh(1.20 * yb) : clampFloat(foldBipolarValue(1.45 * yb) - 0.18 * Math.sign(yb), -1, 1);
+      const bSweep = Math.sin(2 * Math.PI * (ph * (0.5 + 5.5 * shapeB) + shapeB));
+      const pa = ph + (smoothProfile ? 0.065 : 0.17) * Math.sin(2 * Math.PI * (ph * (1 + 9 * shapeB) + seedMix)) + (smoothProfile ? 0.020 : 0.045) * bBipolar * bSweep;
+      const pb = ph + (smoothProfile ? 0.065 : 0.18) * Math.cos(2 * Math.PI * (ph * (1 + 9 * shapeA) - seedMix)) - (smoothProfile ? 0.018 : 0.040) * bBipolar * Math.sin(2 * Math.PI * (ph * (1.0 + 3.0 * seedMix) + shapeA));
+      const ya = pulseWarpValue(pa, widthA, slope, notchA, notchAmtA, !smoothProfile);
+      const yb = pulseWarpValue(pb, widthB, slope * (smoothProfile ? 1.20 : 0.70), notchB, notchAmtB, !smoothProfile);
+      a[i] = smoothProfile ? Math.tanh(1.32 * ya + 0.14 * bSweep) : clampFloat(foldBipolarValue(1.70 * ya + 0.22 * bSweep) + 0.22 * Math.sign(ya), -1, 1);
+      b[i] = smoothProfile ? Math.tanh(1.28 * yb - 0.10 * bSweep) : clampFloat(foldBipolarValue(1.62 * yb - 0.18 * bSweep) - 0.20 * Math.sign(yb), -1, 1);
     }
     return finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 2 : 0);
   }
@@ -1965,35 +2034,51 @@ itself, impose GPL licensing on generated outputs.
   function generateBitcrushPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
 
-    const seedMix = pot1 / POT_MAX_12BIT, dec = pot2 / POT_MAX_12BIT, biasCtl = pot3 / POT_MAX_12BIT;
+    const seedMix = pot1 / POT_MAX_12BIT;
+    const dec = pot2 / POT_MAX_12BIT;
+    const biasCtl = pot3 / POT_MAX_12BIT;
     const smoothProfile = String(profile) === 'smooth';
 
-    // Bit-depth loss is perceptual/log-like: high level-count changes are subtle,
-    // while low level-count changes are very obvious. Map the knob exponentially
-    // so 0–50% already enters clearly crushed territory.
-    const crush = Math.pow(seedMix, smoothProfile ? 0.80 : 0.70);
+    const crush = Math.pow(seedMix, smoothProfile ? 0.44 : 0.34);
     const maxLevels = smoothProfile ? 96 : 64;
     const minLevels = smoothProfile ? 3 : 2;
     const levels = clampInt(maxLevels * Math.pow(minLevels / maxLevels, crush), minLevels, maxLevels);
 
-    const hold = clampInt(1 + dec * (smoothProfile ? 15 : 39), 1, 48);
+    // Pot 2 should not feel weak: use an early non-linear curve and a wider
+    // hold range, then feed decimation into phase damage and cross-memory too.
+    const decDrive = Math.pow(dec, smoothProfile ? 0.52 : 0.40);
+    const hold = clampInt(1 + decDrive * (smoothProfile ? 31 : 95), 1, smoothProfile ? 32 : 96);
     const dither = smoothProfile ? (0.5 / levels) : 0;
-
-    const sourceA = biasCtl * 6, sourceB = (1 - biasCtl) * 6;
+    const biasBipolar = (biasCtl * 2) - 1;
+    // Keep the useful middle sensitivity from v2.5g, but add a cubic edge
+    // component so the top and bottom thirds keep changing instead of flattening.
+    const biasTanh = Math.tanh(2.9 * biasBipolar) / Math.tanh(2.9);
+    const biasEdge = Math.sign(biasBipolar) * Math.pow(Math.abs(biasBipolar), 2.15);
+    const biasShape = clampFloat(0.62 * biasTanh + 0.38 * biasEdge, -1, 1);
+    const biasCurve = 0.5 + 0.5 * biasShape;
+    const edgeDrive = Math.pow(Math.abs(biasBipolar), 0.85);
+    const sourceA = biasCurve * 6;
+    const sourceB = (1 - biasCurve) * 6;
+    const phaseBend = (smoothProfile ? (0.018 + 0.040 * decDrive) : (0.038 + 0.110 * decDrive)) + (smoothProfile ? 0.020 : 0.065) * edgeDrive;
     const a = new Float64Array(TABLE_SIZE), b = new Float64Array(TABLE_SIZE);
     let lastA = 0, lastB = 0, errA = 0, errB = 0;
     for (let i = 0; i < TABLE_SIZE; i++) {
       const ph = i / TABLE_SIZE;
       const held = Math.floor(i / hold) * hold / TABLE_SIZE;
-      const phA = smoothProfile ? lerp(held, ph, 0.35) : held;
-      const phB = smoothProfile ? lerp(wrapPhase01(held + 0.17), wrapPhase01(ph + 0.17), 0.35) : wrapPhase01(held + 0.17);
-      const rawA = morphCommonWave(sourceA, phA, 0.5) + (smoothProfile ? 0 : 0.20 * lastB);
-      const rawB = morphCommonWave(sourceB, phB, 0.5) - (smoothProfile ? 0 : 0.18 * lastA);
-      const qA = Math.round((clampFloat(rawA + errA * (smoothProfile ? 0.15 : 0.45) + dither * Math.sin(2 * Math.PI * (i * 0.618 + biasCtl)), -1, 1) + 1) * (levels - 1) * 0.5) / ((levels - 1) * 0.5) - 1;
-      const qB = Math.round((clampFloat(rawB + errB * (smoothProfile ? 0.15 : 0.45) + dither * Math.cos(2 * Math.PI * (i * 0.414 + seedMix)), -1, 1) + 1) * (levels - 1) * 0.5) / ((levels - 1) * 0.5) - 1;
+      const stutter = (i % hold) / Math.max(1, hold - 1);
+      const phA = smoothProfile ? lerp(held, ph, 0.22 + 0.34 * (1 - decDrive)) : wrapPhase01(held + phaseBend * biasBipolar * Math.sin(2 * Math.PI * stutter));
+      const phB = smoothProfile ? lerp(wrapPhase01(held + 0.17), wrapPhase01(ph + 0.17), 0.22 + 0.34 * (1 - decDrive)) : wrapPhase01(held + 0.17 - phaseBend * biasBipolar * Math.cos(2 * Math.PI * stutter));
+      const wobbleScale = (0.45 + 0.55 * edgeDrive);
+      const wobbleA = (smoothProfile ? 0.025 : 0.080) * biasBipolar * wobbleScale * Math.sin(2 * Math.PI * (ph * (1 + 9 * decDrive + 5 * edgeDrive) + seedMix));
+      const wobbleB = (smoothProfile ? 0.025 : 0.080) * biasBipolar * wobbleScale * Math.cos(2 * Math.PI * (ph * (1 + 7 * decDrive + 4 * edgeDrive) - seedMix));
+      const rawA = morphCommonWave(sourceA, wrapPhase01(phA + wobbleA), clampFloat(0.12 + 0.76 * biasCurve, 0.04, 0.96)) + (smoothProfile ? (0.04 + 0.06 * edgeDrive) * lastB : (0.26 * decDrive + 0.16 * edgeDrive) * lastB);
+      const rawB = morphCommonWave(sourceB, wrapPhase01(phB + wobbleB), clampFloat(0.88 - 0.76 * biasCurve, 0.04, 0.96)) - (smoothProfile ? (0.04 + 0.06 * edgeDrive) * lastA : (0.24 * decDrive + 0.16 * edgeDrive) * lastA);
+      const qA = Math.round((clampFloat(rawA + errA * (smoothProfile ? 0.18 : 0.56) + dither * Math.sin(2 * Math.PI * (i * 0.618 + biasCtl)), -1, 1) + 1) * (levels - 1) * 0.5) / ((levels - 1) * 0.5) - 1;
+      const qB = Math.round((clampFloat(rawB + errB * (smoothProfile ? 0.18 : 0.56) + dither * Math.cos(2 * Math.PI * (i * 0.414 + seedMix)), -1, 1) + 1) * (levels - 1) * 0.5) / ((levels - 1) * 0.5) - 1;
       errA = rawA - qA; errB = rawB - qB; lastA = qA; lastB = qB;
-      a[i] = smoothProfile ? Math.tanh(1.10 * qA) : clampFloat(qA + 0.18 * foldBipolarValue(2 * errA), -1, 1);
-      b[i] = smoothProfile ? Math.tanh(1.10 * qB) : clampFloat(qB + 0.18 * foldBipolarValue(2 * errB), -1, 1);
+      const damage = 0.14 + 0.28 * crush + 0.22 * decDrive + 0.18 * edgeDrive;
+      a[i] = smoothProfile ? Math.tanh((1.10 + 0.26 * crush + 0.12 * decDrive) * (qA + 0.13 * crush * foldBipolarValue(2.5 * errA))) : clampFloat(qA + damage * foldBipolarValue(2.4 * errA + 0.25 * lastB), -1, 1);
+      b[i] = smoothProfile ? Math.tanh((1.10 + 0.26 * crush + 0.12 * decDrive) * (qB + 0.13 * crush * foldBipolarValue(2.5 * errB))) : clampFloat(qB + damage * foldBipolarValue(2.4 * errB - 0.25 * lastA), -1, 1);
     }
     return finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 1 : 0);
   }
@@ -2067,21 +2152,31 @@ itself, impose GPL licensing on generated outputs.
     pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
     const depth = pot1 / POT_MAX_12BIT, offset = pot2 / POT_MAX_12BIT, driveCtl = pot3 / POT_MAX_12BIT;
     const smoothProfile = String(profile) === 'smooth';
-    const feedback = smoothProfile ? (0.10 + 0.82 * depth) : (0.22 + 1.55 * depth);
-    const drive = smoothProfile ? (0.90 + 1.50 * driveCtl) : (1.20 + 3.60 * driveCtl);
+    const feedback = smoothProfile ? (0.18 + 1.35 * Math.pow(depth, 0.72)) : (0.34 + 2.85 * Math.pow(depth, 0.62));
+    const drive = smoothProfile ? (1.05 + 2.55 * Math.pow(driveCtl, 0.68)) : (1.45 + 6.80 * Math.pow(driveCtl, 0.56));
+    const foldMix = smoothProfile ? (0.05 + 0.28 * driveCtl + 0.18 * depth) : (0.26 + 0.82 * driveCtl + 0.45 * depth);
+    const phaseOffset = (offset * 2) - 1;
     const a = new Float64Array(TABLE_SIZE), b = new Float64Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) {
       const ph = i / TABLE_SIZE;
-      let xa = Math.sin(2 * Math.PI * (ph + 0.11 * offset));
-      let xb = Math.cos(2 * Math.PI * (ph - 0.09 * offset));
-      const iters = smoothProfile ? 2 : 4;
+      let xa = Math.sin(2 * Math.PI * (ph + 0.18 * phaseOffset));
+      let xb = Math.cos(2 * Math.PI * (ph - 0.16 * phaseOffset));
+      const iters = smoothProfile ? 3 : 6;
       for (let k = 0; k < iters; k++) {
-        xa = Math.sin(2 * Math.PI * (ph + feedback * xa * 0.115 + offset * 0.19 + k * 0.013));
-        xb = Math.cos(2 * Math.PI * (ph - feedback * xb * 0.105 - offset * 0.17 - k * 0.011));
+        const crossA = 0.18 * Math.sin(2 * Math.PI * (xb * 0.25 + ph * (1.0 + depth)));
+        const crossB = 0.18 * Math.cos(2 * Math.PI * (xa * 0.25 + ph * (1.0 + driveCtl)));
+        xa = Math.sin(2 * Math.PI * (ph + feedback * xa * 0.155 + crossA * depth + phaseOffset * 0.16 + k * 0.017));
+        xb = Math.cos(2 * Math.PI * (ph - feedback * xb * 0.145 - crossB * depth - phaseOffset * 0.15 - k * 0.015));
       }
-      if (!smoothProfile) { xa = foldBipolarValue(drive * xa + 0.25 * xb); xb = foldBipolarValue(drive * xb - 0.22 * xa); }
-      a[i] = Math.tanh(drive * xa);
-      b[i] = Math.tanh(drive * xb);
+      const fa = foldBipolarValue(drive * xa + foldMix * xb + 0.18 * Math.sin(4 * Math.PI * ph + 2 * Math.PI * offset));
+      const fb = foldBipolarValue(drive * xb - foldMix * xa - 0.16 * Math.cos(6 * Math.PI * ph - 2 * Math.PI * offset));
+      if (smoothProfile) {
+        a[i] = Math.tanh(1.25 * ((1 - foldMix * 0.45) * xa + foldMix * 0.45 * fa));
+        b[i] = Math.tanh(1.25 * ((1 - foldMix * 0.45) * xb + foldMix * 0.45 * fb));
+      } else {
+        a[i] = Math.tanh(1.35 * fa + 0.20 * foldBipolarValue(2.0 * xa));
+        b[i] = Math.tanh(1.35 * fb - 0.20 * foldBipolarValue(2.0 * xb));
+      }
     }
     return finishGeneratedSourcePair(a, b, wtType, depth, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 1 : 0);
   }
@@ -2089,23 +2184,34 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Public wavetable-generation dispatcher. UI/export code calls this rather than a
   // TUTORIAL: specific engine function. It applies source/result windows as generation-stage
   // TUTORIAL: remapping, then returns an audio-safe 256-sample Float32Array.
-  function generateWavetable(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, engine = DEFAULT_ENGINE) {
+  function generateWavetable(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, engine = DEFAULT_ENGINE, sourceInput1 = 'A', sourceInput2 = 'B') {
     const parts = enginePartsFor(engine || DEFAULT_ENGINE);
     const variant = parts.variant === 'Crunchy' ? 'crunchy' : 'smooth';
-    switch (parts.family) {
-      case 'Clean Chaos': return generateCleanChaosPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Phase Lattice': return generatePhaseLatticeChaos(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Phase Distortion': return generatePhaseDistortionPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'FM': return generateFmPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Pulse Warp': return generatePulseWarpPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Sync': return generateSyncPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Formant': return generateFormantPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Fold': return generateFoldPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Bitcrush': return generateBitcrushPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Harmonic Cluster': return generateHarmonicClusterPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Modal': return generateModalPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      case 'Feedback Sine': return generateFeedbackSinePair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
-      default: return generateCleanChaosPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, 'smooth');
+    const previousTapContext = ACTIVE_SOURCE_TAP_CONTEXT;
+    ACTIVE_SOURCE_TAP_CONTEXT = {
+      family: parts.family,
+      variant: parts.variant,
+      input1: canonicalSourceTap(sourceInput1, 'A'),
+      input2: canonicalSourceTap(sourceInput2, 'B'),
+    };
+    try {
+      switch (parts.family) {
+        case 'Clean Chaos': return generateCleanChaosPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Phase Lattice': return generatePhaseLatticeChaos(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Phase Distortion': return generatePhaseDistortionPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'FM': return generateFmPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Pulse Warp': return generatePulseWarpPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Sync': return generateSyncPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Formant': return generateFormantPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Fold': return generateFoldPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Bitcrush': return generateBitcrushPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Harmonic Cluster': return generateHarmonicClusterPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Modal': return generateModalPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Feedback Sine': return generateFeedbackSinePair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        default: return generateCleanChaosPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, 'smooth');
+      }
+    } finally {
+      ACTIVE_SOURCE_TAP_CONTEXT = previousTapContext;
     }
   }
 
@@ -2116,13 +2222,181 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Element-wise array scaling helper used before folding or blending operations.
   function scaleArray(a, s) { const o = new Float64Array(a.length); for (let i = 0; i < a.length; i++) o[i] = a[i] * s; return o; }
 
+  const SOURCE_TAP_KEYS = ['A', 'B', 'C', 'D'];
+
+  function canonicalSourceTap(value, fallback = 'A') {
+    const v = String(value || '').trim().toUpperCase();
+    return SOURCE_TAP_KEYS.includes(v) ? v : fallback;
+  }
+
+  function sourceTapLabel(key, family = '') {
+    const k = canonicalSourceTap(key);
+    const labels = sourceTapLabelsForFamily(family);
+    return labels[k] || `Tap ${k}`;
+  }
+
+  function sourceTapLabelsForFamily(family) {
+    switch (String(family || '')) {
+      case 'Clean Chaos':
+        return {A: 'A Chaos A', B: 'B Chaos B', C: 'C Blur blend', D: 'D Comb chaos'};
+      case 'Phase Lattice':
+        return {A: 'A Lattice A', B: 'B Lattice B', C: 'C Folded lattice', D: 'D Product lattice'};
+      case 'Phase Distortion':
+        return {A: 'A Phase body', B: 'B Wave colour', C: 'C Knee blend', D: 'D Warp edge'};
+      case 'FM':
+        return {A: 'A Carrier', B: 'B Modulator', C: 'C PM blend', D: 'D Sidebands'};
+      case 'Pulse Warp':
+        return {A: 'A Pulse body', B: 'B Notch/offset', C: 'C Held pulse', D: 'D Edge residue'};
+      case 'Sync':
+        return {A: 'A Sync body', B: 'B Reset colour', C: 'C Reset blend', D: 'D Reset edge'};
+      case 'Formant':
+        return {A: 'A Broad vowel', B: 'B Narrow grit', C: 'C Vowel body', D: 'D Nasal residue'};
+      case 'Fold':
+        return {A: 'A Pre-fold', B: 'B Folded', C: 'C Fold sum', D: 'D Fold residue'};
+      case 'Bitcrush':
+        return {A: 'A Quantised', B: 'B Crushed', C: 'C Sample-held', D: 'D Error residue'};
+      case 'Harmonic Cluster':
+        return {A: 'A Harmonic body', B: 'B Cluster colour', C: 'C Dense cluster', D: 'D Inharmonic residue'};
+      case 'Modal':
+        return {A: 'A Body', B: 'B Bright body', C: 'C Metallic body', D: 'D Strike/residue'};
+      case 'Feedback Sine':
+        return {A: 'A Sine feedback', B: 'B Saturated fb', C: 'C Folded fb', D: 'D Phase residue'};
+      default:
+        return {A: 'A Source', B: 'B Source', C: 'C Blend', D: 'D Difference'};
+    }
+  }
+
+  function sourceInputSummary(patch) {
+    const family = enginePartsFor(patch.engine || DEFAULT_ENGINE).family;
+    const i1 = canonicalSourceTap(patch.sourceInput1, 'A');
+    const i2 = canonicalSourceTap(patch.sourceInput2, 'B');
+    return `Input 1=${sourceTapLabel(i1, family)}, Input 2=${sourceTapLabel(i2, family)}`;
+  }
+
+  function sampleHoldTable(src, blockSize = 4) {
+    const n = src.length;
+    const block = Math.max(1, clampInt(blockSize, 1, n));
+    const out = new Float64Array(n);
+    for (let i = 0; i < n; i++) out[i] = src[Math.floor(i / block) * block];
+    return out;
+  }
+
+  function multiplyArrays(a, b) {
+    const out = new Float64Array(a.length);
+    for (let i = 0; i < a.length; i++) out[i] = a[i] * b[i];
+    return out;
+  }
+
+  function derivativeTable(src, scale = 1.0) {
+    const n = src.length;
+    const out = new Float64Array(n);
+    const gain = clampFloat(scale, 0.1, 8.0);
+    for (let i = 0; i < n; i++) out[i] = (src[(i + 1) % n] - src[(i - 1 + n) % n]) * gain;
+    return out;
+  }
+
+  function phaseOffsetBlendTable(a, b, offsetSamples = 32, amount = 0.5) {
+    const n = a.length;
+    const out = new Float64Array(n);
+    const off = clampInt(offsetSamples, 1, n - 1);
+    const mix = clampFloat(amount, 0, 1);
+    for (let i = 0; i < n; i++) out[i] = (1 - mix) * a[i] + mix * b[(i + off) & (n - 1)];
+    return out;
+  }
+
+  function sourceTapsForFamily(a, b, family, seedMix = 0.5) {
+    const an = normaliseBipolar(a);
+    const bn = normaliseBipolar(b);
+    const seed = clampFloat(seedMix, 0, 1);
+    const blend = normaliseBipolar(addArrays(scaleArray(an, 0.5), scaleArray(bn, 0.5)));
+    const diff = normaliseBipolar(subArrays(an, bn));
+    let c = circularSmoothTable(blend, 4);
+    let d = diff;
+    switch (String(family || '')) {
+      case 'Clean Chaos':
+        c = phaseBlurTable(blend);
+        d = cyclicCombTable(an, bn, seed, 0.65);
+        break;
+      case 'Phase Lattice':
+        c = foldBipolar(addArrays(scaleArray(an, 1.15), scaleArray(bn, 0.85)));
+        d = multiplyArrays(an, bn);
+        break;
+      case 'Phase Distortion':
+        c = foldBipolar(addArrays(an, scaleArray(circularSmoothTable(bn, 2), 0.72)));
+        d = derivativeTable(diff, 3.0);
+        break;
+      case 'FM':
+        c = foldBipolar(addArrays(an, scaleArray(bn, 0.62)));
+        d = cyclicCombTable(an, bn, seed, 0.85);
+        break;
+      case 'Pulse Warp':
+        c = sampleHoldTable(blend, 2 + Math.round(seed * 10));
+        d = derivativeTable(bn, 2.7);
+        break;
+      case 'Sync':
+        c = cyclicCombTable(an, bn, seed, 0.75);
+        d = derivativeTable(c, 2.2);
+        break;
+      case 'Formant':
+        c = lowHarmonicTable(addArrays(scaleArray(an, 0.55), scaleArray(bn, 0.45)), 9);
+        d = normaliseBipolar(subArrays(bn, lowHarmonicTable(bn, 5)));
+        break;
+      case 'Fold':
+        c = foldBipolar(addArrays(an, bn));
+        d = normaliseBipolar(subArrays(c, normaliseBipolar(addArrays(an, bn))));
+        break;
+      case 'Bitcrush':
+        c = sampleHoldTable(bn, 2 + Math.round(seed * 14));
+        d = normaliseBipolar(subArrays(bn, c));
+        break;
+      case 'Harmonic Cluster':
+        c = phaseBlurTable(addArrays(an, scaleArray(bn, 0.85)));
+        d = normaliseBipolar(subArrays(c, lowHarmonicTable(c, 7)));
+        break;
+      case 'Modal':
+        c = cyclicCombTable(an, bn, seed, 0.55);
+        d = circularSmoothTable(normaliseBipolar(subArrays(an, bn)), 2);
+        break;
+      case 'Feedback Sine':
+        c = foldBipolar(phaseOffsetBlendTable(an, bn, 17 + Math.round(seed * 47), 0.62));
+        d = cyclicCombTable(an, an, seed, 0.70);
+        break;
+      default:
+        c = circularSmoothTable(blend, 4);
+        d = diff;
+        break;
+    }
+    return {A: a, B: b, C: normaliseBipolar(c), D: normaliseBipolar(d)};
+  }
+
+  let ACTIVE_SOURCE_TAP_CONTEXT = {
+    family: DEFAULT_ENGINE_FAMILY,
+    variant: DEFAULT_ENGINE_VARIANT,
+    input1: 'A',
+    input2: 'B',
+  };
+
+  function selectedSourceTables(a, b, seedMix = 0.5) {
+    const ctx = ACTIVE_SOURCE_TAP_CONTEXT || {};
+    const taps = sourceTapsForFamily(a, b, ctx.family || DEFAULT_ENGINE_FAMILY, seedMix);
+    const input1 = canonicalSourceTap(ctx.input1, 'A');
+    const input2 = canonicalSourceTap(ctx.input2, 'B');
+    return {
+      input1,
+      input2,
+      srcA: taps[input1] || taps.A,
+      srcB: taps[input2] || taps.B,
+    };
+  }
+
+
   // TUTORIAL: Turns one patch object into its final generated wavetable by resolving engine, window, and type
   // TUTORIAL: settings.
   function tableForPatch(patch, wavetableType = null) {
     const bw = clampWindowPair(patch.beforeStart, patch.beforeEnd);
     const aw = clampWindowPair(patch.afterStart, patch.afterEnd);
     const wt = wavetableType == null ? patch.wavetableType : wavetableType;
-    return generateWavetable(patch.pot1, patch.pot2, patch.pot3, wt, bw.start, bw.length, aw.start, aw.length, patch.engine || DEFAULT_ENGINE);
+    return generateWavetable(patch.pot1, patch.pot2, patch.pot3, wt, bw.start, bw.length, aw.start, aw.length, patch.engine || DEFAULT_ENGINE, patch.sourceInput1 || 'A', patch.sourceInput2 || 'B');
   }
 
   // TUTORIAL: Morph-position shaping. These helpers turn a linear progress value into a bent,
@@ -2150,6 +2424,8 @@ itself, impose GPL licensing on generated outputs.
     const v = String(value || '');
     const labels = MORPH_RENDER_MODES.map(([label]) => label);
     if (labels.includes(v)) return v;
+    const idMatch = Object.entries(MORPH_RENDER_MODE_IDS).find(([, id]) => id === v);
+    if (idMatch) return idMatch[0];
     if (v === 'Full interpolation') return 'Full Interpolation (Favours Digital Noise)';
     if (v === 'Output crossfade') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Crossfade') return 'Crossfade (Favours Analogue Warmth)';
@@ -2158,6 +2434,15 @@ itself, impose GPL licensing on generated outputs.
     if (v === 'Comb Morph' || v === 'Comb Wavetable Morph' || v === 'Comb Wavetable Morph (Hollow Interference)') return 'Comb Wavetable Morph (Hollow Interference)';
     if (v === 'FFT Morph' || v === 'Spectral Morph' || v === 'FFT Spectral Morph (Digital Tone, Less Crunchy)') return 'FFT Spectral Morph (Digital Tone, Less Crunchy)';
     return DEFAULT_MORPH_RENDER_MODE;
+  }
+
+  function morphRenderModeMetadata(value) {
+    const label = canonicalMorphRenderMode(value);
+    return {
+      id: MORPH_RENDER_MODE_IDS[label] || 'full_interpolation',
+      name: label,
+      description: morphModeDescription(label),
+    };
   }
 
   // TUTORIAL: Finds the explanatory text for the selected morph mode.
@@ -2206,7 +2491,7 @@ itself, impose GPL licensing on generated outputs.
   function neutralFilterCutoffForType(type, sampleRate = DEFAULT_SAMPLE_RATE) {
     const sr = Math.max(8000, Number(sampleRate) || DEFAULT_SAMPLE_RATE);
     if (String(type || 'Off') === 'High-pass') return 20;
-    return Math.min(20000, sr * 0.45);
+    return Math.min(FILTER_MAX_CUTOFF, sr * 0.45);
   }
 
   // TUTORIAL: Extracts a safe cutoff value from an endpoint patch.
@@ -2280,11 +2565,34 @@ itself, impose GPL licensing on generated outputs.
     return clampFloat(2 ** (cents / 1200), MIN_FM_PHASE_SCALE, MAX_FM_PHASE_SCALE);
   }
 
-  // TUTORIAL: Maps the UI resonance range to a practical biquad Q value.
+  // TUTORIAL: Maps the normalised internal resonance value to a practical biquad Q.
+  // TUTORIAL: The public UI and JSON expose resonance as 0..127, but DSP remains floating-point.
   function filterQFromResonance(resonance) {
-    // The UI exposes resonance as 0..1; the DSP uses a moderate musical Q range.
     const r = clampFloat(resonance, 0, 1);
     return 0.5 + (r * r) * 11.5;
+  }
+
+  function filterResonanceToUi(resonance) {
+    return Math.round(clampFloat(resonance, 0, 1) * FILTER_RESONANCE_UI_MAX);
+  }
+
+  function filterResonanceFromUi(value) {
+    return clampFloat(value, 0, FILTER_RESONANCE_UI_MAX) / FILTER_RESONANCE_UI_MAX;
+  }
+
+  function cutoffToSliderValue(cutoffHz) {
+    const f = clampFloat(cutoffHz, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF);
+    return 1000 * (Math.log(f / FILTER_MIN_CUTOFF) / Math.log(FILTER_MAX_CUTOFF / FILTER_MIN_CUTOFF));
+  }
+
+  function sliderValueToCutoff(value) {
+    const t = clampFloat(value, 0, 1000) / 1000;
+    return FILTER_MIN_CUTOFF * ((FILTER_MAX_CUTOFF / FILTER_MIN_CUTOFF) ** t);
+  }
+
+  function formatCutoffHz(value) {
+    const f = clampFloat(value, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF);
+    return f >= 1000 ? String(Math.round(f)) : f.toFixed(1).replace(/\.0$/, '');
   }
 
   // TUTORIAL: Creates the delay-memory state for a single biquad filter instance.
@@ -2298,7 +2606,7 @@ itself, impose GPL licensing on generated outputs.
     type = String(type || 'Off');
     if (type === 'Off') return null;
     const sr = Math.max(8000, Number(sampleRate) || DEFAULT_SAMPLE_RATE);
-    const cutoff = clampFloat(cutoffHz ?? 8000, 20, Math.max(21, sr * 0.45));
+    const cutoff = clampFloat(cutoffHz ?? 8000, FILTER_MIN_CUTOFF, Math.max(FILTER_MIN_CUTOFF + 1, sr * 0.45));
     const q = filterQFromResonance(resonance ?? 0);
     const w0 = 2 * Math.PI * cutoff / sr;
     const cosw = Math.cos(w0), sinw = Math.sin(w0), alpha = sinw / (2 * q);
@@ -2334,7 +2642,7 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
-  // TUTORIAL: Ring Mod stage. v2.3j drops the experimental Ring Mod Tone behaviour for now.
+  // TUTORIAL: Ring Mod stage. The earlier experimental Ring Mod Tone control is intentionally absent.
   // TUTORIAL: The old internal field is still named `am` so older JSON and patch state remain
   // TUTORIAL: compatible, but the user-facing control is Ring Mod. The modulator is derived
   // TUTORIAL: from the same table at several integer phase ratios, so a single-cycle render
@@ -3775,9 +4083,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return riffChunk('LIST', payload);
   }
 
-  // TUTORIAL: JSON sidecar metadata. Schema v5 is the public export format: it keeps application
-  // TUTORIAL: provenance, file pairing, UUID identity, control scales, render settings, morph settings,
-  // TUTORIAL: and patch metadata separate so old internal names do not leak as current terminology.
+  // TUTORIAL: JSON sidecar metadata. Schema v7 keeps the sidecar focused on
+  // TUTORIAL: reproducible sound settings and compact provenance. UI mechanics such as
+  // TUTORIAL: slider curves belong in code/comments, not in every generated patch file.
   function metadataFor(direction, summary, notes, startPatch, endPatch, fileMeta = {}) {
     const basename = fileMeta.basename || `${safeName(state.export.prefix)}_${direction}_${compactTimestampUTC()}`;
     const wavFilename = fileMeta.wavFilename || `${basename}.wav`;
@@ -3788,16 +4096,16 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const renderStart = direction === 'reverse' ? forwardEnd : forwardStart;
     const renderEnd = direction === 'reverse' ? forwardStart : forwardEnd;
     return {
-      schema_version: 5,
+      schema_version: EXPORT_SCHEMA_VERSION,
       generator: 'Fractured Wavetable Generator',
       export_id: exportId,
       direction,
       created_utc: new Date().toISOString(),
       files: {basename, wav_filename: wavFilename, json_filename: jsonFilename},
       application: applicationMetadata(),
-      value_scales: valueScaleMetadata(),
+      control_ranges: controlRangeMetadata(),
       export_context: exportContextMetadata(direction, fileMeta.exportContext),
-      render_summary: summary,
+      render_summary: renderSummaryMetadata(summary),
       render_settings: renderSettingsMetadata(),
       morph_settings: morphSettingsMetadata(),
       patches: {
@@ -3806,7 +4114,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
         render_start: patchMetadata(renderStart),
         render_end: patchMetadata(renderEnd),
       },
-      export_writer: {mode: 'buffered-browser-blob', wav_metadata: ['LIST/INFO', 'FWID'], embedded_systems_note: 'Browser Blob export is simple but not memory-streaming; very long renders still stress RAM, CPU time, storage writes, filesystem limits, and RIFF/WAV size limits.'},
+      export_writer: {mode: 'buffered-browser-blob', wav_metadata: ['LIST/INFO', 'FWID']},
       notes,
     };
   }
@@ -3837,15 +4145,39 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       license: 'GPL-2.0-only',
     };
   }
-  // TUTORIAL: Centralised scales avoid repeating "scale: 4096" beside every control value and make
-  // TUTORIAL: clear that 256 table samples, 4096-step controls, and rendered samples-per-cycle are
-  // TUTORIAL: three different domains.
-  function valueScaleMetadata() {
+
+  // TUTORIAL: Control ranges are intentionally compact. They make exported values
+  // TUTORIAL: self-describing enough for reconstruction without storing UI-only details
+  // TUTORIAL: such as logarithmic slider curves, text-box limits, or explanatory prose.
+  function controlRangeMetadata() {
     return {
-      pot_controls: {min: 0, max: POT_MAX_12BIT, steps: POT_MAX_12BIT + 1},
-      window_controls: {min: 0, max: WINDOW_STEPS - 1, steps: WINDOW_STEPS, wraps: true},
-      modulation_depth: {min: 0, max: 255, steps: 256},
-      wavetable_audio: {internal_table_size: TABLE_SIZE},
+      generator_pots: {min: 0, max: POT_MAX_12BIT},
+      source_taps: {values: SOURCE_TAP_KEYS.slice()},
+      window_steps: {min: 0, max: WINDOW_STEPS, endpoint_wraps_to_zero: true},
+      modulation_depth: {min: 0, max: 255},
+      filter: {
+        cutoff_hz: {min: FILTER_MIN_CUTOFF, max: FILTER_MAX_CUTOFF},
+        resonance: {min: 0, max: FILTER_RESONANCE_UI_MAX},
+      },
+      pitch_hz: {min: MIN_FREQUENCY, max: MAX_FREQUENCY},
+      wavetable_samples: TABLE_SIZE,
+    };
+  }
+  // TUTORIAL: The render summary records what the exported file actually contains.
+  // TUTORIAL: It deliberately uses Hz for pitch and avoids nearest-note/cents data,
+  // TUTORIAL: because pitch labels are UI conveniences rather than render settings.
+  function renderSummaryMetadata(summary) {
+    return {
+      requested_mode: summary.requestedMode,
+      requested_value: summary.requestedValue,
+      sample_rate: summary.sampleRate,
+      bit_depth: summary.bitDepth,
+      frequency_hz: summary.frequency,
+      sample_count: summary.sampleCount,
+      duration_seconds: summary.durationSeconds,
+      nominal_cycles: summary.nominalCycles,
+      samples_per_cycle: summary.samplesPerCycle,
+      warnings: Array.isArray(summary.warnings) ? summary.warnings.slice() : [],
     };
   }
   // TUTORIAL: Settings are grouped by purpose rather than dumped as one state object.
@@ -3855,18 +4187,20 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       value: state.export.value,
       sample_rate: state.export.sampleRate,
       bit_depth: state.export.bitDepth,
-      frequency: state.common.frequency,
+      frequency_hz: state.common.frequency,
       dc_mode: state.export.dcMode,
       normalisation_mode: state.export.normMode,
       headroom_db: state.export.headroomDb,
     };
   }
   // TUTORIAL: Morph settings describe how START and END are turned into a rendered file. Bulk-only
-  // TUTORIAL: settings are intentionally excluded from ordinary Morph exports.
+  // TUTORIAL: settings are intentionally excluded from ordinary Morph exports. Schema v8 stores
+  // TUTORIAL: the morph render mode as an ID-backed object, not a label-only string, so renamed
+  // TUTORIAL: UI text will not break future readers.
   function morphSettingsMetadata() {
     const sharedWt = wavetableInfoFor(state.export.sharedType);
     return {
-      render_mode: state.export.morphRenderMode,
+      render_mode: morphRenderModeMetadata(state.export.morphRenderMode),
       spectral_states: state.export.spectralStates,
       curve: {amount: state.export.curveAmount, mode: state.export.curveMode},
       cycle_stepped: !!state.export.cycleStepped,
@@ -3878,8 +4212,32 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       },
     };
   }
-  // TUTORIAL: Serialises one patch into JSON-friendly metadata. The old internal am field is preserved
-  // TUTORIAL: only in legacy_internal; public schema v5 uses modulation.ring_mod.
+  // TUTORIAL: Source tap metadata keeps the short A/B/C/D keys machine-friendly while
+  // TUTORIAL: preserving the current human-facing labels for readers and future import tools.
+  function sourceInputMetadata(p, engineName) {
+    const family = enginePartsFor(engineName || DEFAULT_ENGINE).family;
+    const input1 = canonicalSourceTap(p.sourceInput1, 'A');
+    const input2 = canonicalSourceTap(p.sourceInput2, 'B');
+    return {
+      input_1: {tap: input1, label: sourceTapLabel(input1, family)},
+      input_2: {tap: input2, label: sourceTapLabel(input2, family)},
+    };
+  }
+
+  // TUTORIAL: Public filter metadata stores user-facing values only. The DSP still maps
+  // TUTORIAL: resonance through a floating-point Q curve, but that mapping is code behaviour,
+  // TUTORIAL: not patch data that must be repeated inside every JSON sidecar.
+  function filterMetadataForPatch(p) {
+    return {
+      type: p.filterType || 'Off',
+      cutoff_hz: clampFloat(p.filterCutoff ?? 8000, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF),
+      resonance: filterResonanceToUi(clampFloat(p.filterResonance ?? 0, 0, 1)),
+    };
+  }
+
+  // TUTORIAL: Serialises one patch into JSON-friendly metadata. Public schema v7 stores
+  // TUTORIAL: enough labelled values to rebuild the patch without duplicating a second
+  // TUTORIAL: legacy/internal copy of the same settings.
   function patchMetadata(p) {
     const engineName = canonicalEngineName(p.engine || DEFAULT_ENGINE);
     const parts = enginePartsFor(engineName);
@@ -3888,46 +4246,22 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return {
       engine: {name: engineName, family: parts.family, variant: parts.variant, description: parts.description || visibleEngineInfoFor(engineName)[1]},
       generator_controls: {
-        scale_ref: 'pot_controls',
         pot1: {label: labels.pot1, value: clampInt(p.pot1 || 0, 0, POT_MAX_12BIT)},
         pot2: {label: labels.pot2, value: clampInt(p.pot2 || 0, 0, POT_MAX_12BIT)},
         pot3: {label: labels.pot3, value: clampInt(p.pot3 || 0, 0, POT_MAX_12BIT)},
       },
+      source_inputs: sourceInputMetadata(p, engineName),
       wavetable: {id: wt.id, ui_number: wt.ui, name: wt.name, description: wt.description},
       modulation: {
-        depth_scale_ref: 'modulation_depth',
         fm: clampInt(p.fm || 0, 0, 255),
         pwm: clampInt(p.pwm || 0, 0, 255),
         ring_mod: clampInt(p.am || 0, 0, 255),
         fm_range: {label: p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL, cents: fmRangeLabelToCents(p.fmRangeLabel)},
       },
-      filter: {
-        type: p.filterType || 'Off',
-        cutoff_hz: clampFloat(p.filterCutoff ?? 8000, 20, 20000),
-        resonance: clampFloat(p.filterResonance ?? 0, 0, 1),
-      },
+      filter: filterMetadataForPatch(p),
       windows: {
-        scale_ref: 'window_controls',
         source: {start: clampInt(p.beforeStart || 0, 0, WINDOW_STEPS), end: clampInt(p.beforeEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS)},
         result: {start: clampInt(p.afterStart || 0, 0, WINDOW_STEPS), end: clampInt(p.afterEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS)},
-      },
-      legacy_internal: {
-        engine: engineName,
-        pot1: clampInt(p.pot1 || 0, 0, POT_MAX_12BIT),
-        pot2: clampInt(p.pot2 || 0, 0, POT_MAX_12BIT),
-        pot3: clampInt(p.pot3 || 0, 0, POT_MAX_12BIT),
-        wavetableType: wt.id,
-        fm: clampInt(p.fm || 0, 0, 255),
-        pwm: clampInt(p.pwm || 0, 0, 255),
-        am: clampInt(p.am || 0, 0, 255),
-        filterType: p.filterType || 'Off',
-        filterCutoff: clampFloat(p.filterCutoff ?? 8000, 20, 20000),
-        filterResonance: clampFloat(p.filterResonance ?? 0, 0, 1),
-        beforeStart: clampInt(p.beforeStart || 0, 0, WINDOW_STEPS),
-        beforeEnd: clampInt(p.beforeEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS),
-        afterStart: clampInt(p.afterStart || 0, 0, WINDOW_STEPS),
-        afterEnd: clampInt(p.afterEnd ?? WINDOW_STEPS, 0, WINDOW_STEPS),
-        fmRangeLabel: p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL,
       },
     };
   }
@@ -4180,15 +4514,15 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     ctx.fillText('-96 dB', w - pad - 52, h - pad - 4);
   }
 
-  // TUTORIAL: Remember each visualiser canvas's normal size so the Off mode can shrink it
-  // TUTORIAL: without permanently changing the drawing area for the other modes.
+  // TUTORIAL: Remember each visualiser canvas's normal size so any compact/legacy visual state
+  // TUTORIAL: can restore the drawing area cleanly.
   function rememberVisualCanvasSize(canvas) {
     if (!canvas) return;
     if (!canvas.dataset.baseWidth) canvas.dataset.baseWidth = String(canvas.width || 520);
     if (!canvas.dataset.baseHeight) canvas.dataset.baseHeight = String(canvas.height || 250);
   }
 
-  // TUTORIAL: Restores a visualiser canvas after the compact Off mode has changed its height.
+  // TUTORIAL: Restores a visualiser canvas after any compact/legacy visual state has changed its height.
   function restoreVisualCanvasSize(canvas) {
     if (!canvas) return;
     rememberVisualCanvasSize(canvas);
@@ -4198,8 +4532,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (canvas.height !== h) canvas.height = h;
   }
 
-  // TUTORIAL: Draws a compact framed replacement for the visualiser. This keeps a visible
-  // TUTORIAL: placeholder in the layout while giving the patch controls back their vertical room.
+  // TUTORIAL: Legacy compact placeholder retained so older saved/JSON visual-mode values fail softly.
   function drawVisualOff(canvas, label) {
     if (!canvas) return;
     rememberVisualCanvasSize(canvas);
@@ -4220,7 +4553,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     ctx.fillText(label || 'Visualiser Is Turned Off', 22, h / 2);
   }
 
-  // TUTORIAL: Chooses wave, spectrum, or compact-off drawing depending on the selected visual mode.
+  // TUTORIAL: Chooses wave or spectrum drawing depending on the selected visual mode.
   function drawVisual(canvas, visual, prefix = '') {
     const label = `${prefix}${visual.label}`;
     if (!canvas) return;
@@ -4310,8 +4643,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const mode = canonicalVisualMode(state.visualMode);
     if (!isAnimatedVisualMode(mode)) return false;
     const tab = activeTabId();
-    if (tab === 'playground') return patchHasVisualModulation(effectivePatchForKey('single'));
-    if (tab === 'morph') return patchHasVisualModulation(effectivePatchForKey('start')) || patchHasVisualModulation(effectivePatchForKey('end'));
+    if (tab === 'playground') return playgroundVisualiserPanelIsOpen() && patchHasVisualModulation(effectivePatchForKey('single'));
+    if (tab === 'morph') return (patchVisualiserPanelIsOpen('start') && patchHasVisualModulation(effectivePatchForKey('start'))) || (patchVisualiserPanelIsOpen('end') && patchHasVisualModulation(effectivePatchForKey('end')));
     return false;
   }
 
@@ -4330,7 +4663,6 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: the modulation-capable views show post-modulation previews while Base Table remains
   // TUTORIAL: a pre-modulation table view.
   function visualDataForPatch(patch, mode) {
-    if (mode === 'Off') return {kind: 'off', data: null, label: 'Visualiser Is Turned Off'};
     const table = tableForPatch(patch);
     const fmRange = fmRangeLabelToCents(patch.fmRangeLabel);
     if (mode === 'Phase-locked FM/PWM/Ring Mod') {
@@ -4369,15 +4701,21 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
     try {
       if (tab === 'playground') {
-        const visualMode = canonicalVisualMode(state.visualMode);
-        const v = visualDataForPatch(state.patches.single, visualMode);
-        drawVisual($('singleCanvas'), v);
+        if (playgroundVisualiserPanelIsOpen()) {
+          const visualMode = canonicalVisualMode(state.visualMode);
+          const v = visualDataForPatch(state.patches.single, visualMode);
+          drawVisual($('singleCanvas'), v);
+        }
       } else if (tab === 'morph') {
         const visualMode = canonicalVisualMode(state.visualMode);
-        let v = visualDataForPatch(effectivePatchForKey('start'), visualMode);
-        drawVisual($('startCanvas'), v, 'START ');
-        v = visualDataForPatch(effectivePatchForKey('end'), visualMode);
-        drawVisual($('endCanvas'), v, 'END ');
+        if (patchVisualiserPanelIsOpen('start')) {
+          const v = visualDataForPatch(effectivePatchForKey('start'), visualMode);
+          drawVisual($('startCanvas'), v, 'START ');
+        }
+        if (patchVisualiserPanelIsOpen('end')) {
+          const v = visualDataForPatch(effectivePatchForKey('end'), visualMode);
+          drawVisual($('endCanvas'), v, 'END ');
+        }
       }
     } catch (err) {
       visualError = err;
@@ -4909,22 +5247,26 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const holder = document.createElement('div');
     holder.className = 'variantChoiceGroup';
     const parts = enginePartsFor(value);
-    const boxes = {};
+    const buttons = {};
+    const setActive = activeVariant => {
+      for (const variant of ENGINE_VARIANTS) {
+        if (buttons[variant]) buttons[variant].classList.toggle('active', variant === activeVariant);
+      }
+    };
     for (const variant of ENGINE_VARIANTS) {
-      const label = document.createElement('label');
-      label.className = 'small';
-      const box = document.createElement('input');
-      box.type = 'checkbox';
-      box.checked = parts.variant === variant;
-      box.addEventListener('change', () => {
-        const next = box.checked ? variant : (variant === 'Smooth' ? 'Crunchy' : 'Smooth');
-        for (const other of ENGINE_VARIANTS) if (boxes[other]) boxes[other].checked = other === next;
-        onChange(next);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = variant;
+      btn.className = 'engineVariantButton';
+      btn.classList.toggle('active', parts.variant === variant);
+      btn.addEventListener('click', () => {
+        setActive(variant);
+        onChange(variant);
       });
-      boxes[variant] = box;
-      label.append(box, ` ${variant}`);
-      holder.appendChild(label);
+      buttons[variant] = btn;
+      holder.appendChild(btn);
     }
+    holder.update = engineName => setActive(enginePartsFor(engineName || DEFAULT_ENGINE).variant);
     return holder;
   }
 
@@ -4938,10 +5280,230 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return select;
   }
 
+
+  function defaultModuleOpen(moduleKey, fallback = true) {
+    const stored = state.ui?.moduleOpen?.[moduleKey];
+    return typeof stored === 'boolean' ? stored : !!fallback;
+  }
+
+  function addModulePanel(parent, moduleKey, title, summaryText = '', open = true) {
+    const details = document.createElement('details');
+    details.className = 'modulePanel';
+    details.open = defaultModuleOpen(moduleKey, open);
+    details.addEventListener('toggle', () => {
+      state.ui.moduleOpen = state.ui.moduleOpen || {};
+      state.ui.moduleOpen[moduleKey] = !!details.open;
+      persistGlobalSettings();
+    });
+    const summary = document.createElement('summary');
+    const label = document.createElement('span');
+    label.className = 'moduleTitle';
+    label.textContent = title;
+    const hint = document.createElement('span');
+    hint.className = 'moduleSummary';
+    hint.textContent = summaryText;
+    summary.append(label, hint);
+    const body = document.createElement('div');
+    body.className = 'moduleBody';
+    body._moduleDetails = details;
+    body._moduleHint = hint;
+    body._moduleTitle = label;
+    details.append(summary, body);
+    parent.appendChild(details);
+    return body;
+  }
+
+  function setModuleSummary(panelBody, text, status = '') {
+    if (!panelBody || !panelBody._moduleHint) return;
+    const hint = panelBody._moduleHint;
+    hint.textContent = text;
+    hint.classList.toggle('default', status === 'default');
+    hint.classList.toggle('changed', status === 'changed');
+  }
+
+  function patchDefaults() { return defaultPatch(); }
+  function modulationIsDefault(patch) {
+    const fm = clampInt(patch.fm || 0, 0, 255);
+    const d = patchDefaults();
+    return fm === d.fm
+      && clampInt(patch.pwm || 0, 0, 255) === d.pwm
+      && clampInt(patch.am || 0, 0, 255) === d.am;
+  }
+  function modulationSummaryText(patch) {
+    const fm = clampInt(patch.fm || 0, 0, 255);
+    const pwm = clampInt(patch.pwm || 0, 0, 255);
+    const ring = clampInt(patch.am || 0, 0, 255);
+    const range = String(patch.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
+    return fm > 0 ? `FM ${fm} (${range}), PWM ${pwm}, Ring ${ring}` : `FM ${fm}, PWM ${pwm}, Ring ${ring}`;
+  }
+  function filterIsDefault(patch) {
+    const type = String(patch.filterType || 'Off');
+    if (type === 'Off') return true;
+    const d = patchDefaults();
+    return type === d.filterType
+      && clampFloat(patch.filterCutoff || 0, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF) === d.filterCutoff
+      && clampFloat(patch.filterResonance || 0, 0, 1) === d.filterResonance;
+  }
+  function filterSummaryText(patch) {
+    const type = String(patch.filterType || 'Off');
+    if (type === 'Off') return 'Off';
+    return `${type}, ${Math.round(clampFloat(patch.filterCutoff || 8000, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF))} Hz, Res ${filterResonanceToUi(patch.filterResonance || 0)}`;
+  }
+  function setSummaryStatus(el, status = '') {
+    if (!el) return;
+    el.classList.toggle('default', status === 'default');
+    el.classList.toggle('changed', status === 'changed');
+  }
+  function initialiseStaticModulePanels() {
+    document.querySelectorAll('details.modulePanel[data-module-key]').forEach(details => {
+      if (details.dataset.moduleInitialised === '1') return;
+      const key = details.dataset.moduleKey;
+      details.open = defaultModuleOpen(key, details.hasAttribute('open'));
+      details.addEventListener('toggle', () => {
+        state.ui.moduleOpen = state.ui.moduleOpen || {};
+        state.ui.moduleOpen[key] = !!details.open;
+        persistGlobalSettings();
+        if (key === 'singleVisualiser' || key === 'startVisualiser' || key === 'endVisualiser') {
+          updateVisuals(false);
+          ensureVisualAnimationLoop();
+        }
+      });
+      details.dataset.moduleInitialised = '1';
+    });
+  }
+  function playgroundVisualiserPanelIsOpen() {
+    const panel = $('singleVisualiserPanel');
+    return !panel || !!panel.open;
+  }
+
+  function patchVisualiserPanelIsOpen(patchKey) {
+    const canvas = $(patchKey === 'end' ? 'endCanvas' : 'startCanvas');
+    const panel = canvas ? canvas.closest('details.modulePanel') : null;
+    return !panel || !!panel.open;
+  }
+
+  function visualSummaryText() {
+    const mode = canonicalVisualMode(state.visualMode);
+    return isAnimatedVisualMode(mode)
+      ? `${mode} · ${clampInt(state.visualFps || 12, 1, 60)} fps`
+      : mode;
+  }
+
+  function pitchSummaryText() {
+    const f = clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY);
+    const note = nearestNoteForFrequency(f);
+    const noteHz = noteToFrequency(note.note, note.octave);
+    const fText = f.toFixed(2);
+    const noteText = noteHz.toFixed(2);
+    const relation = fText === noteText ? '=' : '≈';
+    return `${fText}Hz ${relation} ${note.note}${note.octave}`;
+  }
+
+  function updateStaticModuleSummaries() {
+    const visualText = visualSummaryText();
+    const visual = $('singleVisualiserSummary');
+    if (visual) visual.textContent = visualText;
+    document.querySelectorAll('[data-visual-summary]').forEach(el => { el.textContent = visualText; });
+    const pitch = $('singlePitchSummary');
+    if (pitch) pitch.textContent = pitchSummaryText();
+  }
+  function windowsAreDefault(patch) {
+    const d = patchDefaults();
+    return Number(patch.beforeStart) === d.beforeStart
+      && Number(patch.beforeEnd) === d.beforeEnd
+      && Number(patch.afterStart) === d.afterStart
+      && Number(patch.afterEnd) === d.afterEnd;
+  }
+  function windowsSummaryText(patch) {
+    return windowsAreDefault(patch)
+      ? 'full source, full result'
+      : `source ${patch.beforeStart}→${patch.beforeEnd}, result ${patch.afterStart}→${patch.afterEnd}`;
+  }
+
+  function addTapSelector(parent, label, patch, field, fallback, afterChange) {
+    const row = document.createElement('div');
+    row.className = 'row wide tapInputRow';
+    const lab = document.createElement('label');
+    lab.textContent = label;
+    const group = document.createElement('div');
+    group.className = 'tapChoiceGroup';
+    const buttons = {};
+    patch[field] = canonicalSourceTap(patch[field], fallback);
+    for (const key of SOURCE_TAP_KEYS) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.dataset.tapKey = key;
+      btn.addEventListener('click', () => {
+        patch[field] = key;
+        update();
+        afterChange();
+      });
+      buttons[key] = btn;
+      group.appendChild(btn);
+    }
+    function update() {
+      const family = enginePartsFor(patch.engine || DEFAULT_ENGINE).family;
+      patch[field] = canonicalSourceTap(patch[field], fallback);
+      for (const key of SOURCE_TAP_KEYS) {
+        buttons[key].textContent = sourceTapLabel(key, family);
+        buttons[key].classList.toggle('active', patch[field] === key);
+      }
+    }
+    update();
+    row.append(lab, group);
+    parent.appendChild(row);
+    return {update};
+  }
+
+
+
   // TUTORIAL: Builds the wavetable-type dropdown from WT_MODE_INFO.
   // TUTORIAL: Option values are internal ids; the number at the front of the text is a display
   // TUTORIAL: number. Keeping those separate means later UI ordering changes do not redefine JSON ids.
   // TUTORIAL: v2.3 uses optgroups and a visible-mode filter so complementary/reciprocal modes stay adjacent while redundant legacy ids remain loadable.
+
+  function wavetableDisplayText(mode) {
+    const text = `${mode.ui} - ${mode.name} - ${mode.description}`;
+    return text
+      .replaceAll('Source A', 'Input 1')
+      .replaceAll('Source B', 'Input 2')
+      .replaceAll('source A', 'input 1')
+      .replaceAll('source B', 'input 2')
+      .replaceAll('A→B', 'I1→I2')
+      .replaceAll('B→A', 'I2→I1')
+      .replaceAll('A-Gated B', 'I1-Gated I2')
+      .replaceAll('B-Gated A', 'I2-Gated I1')
+      .replaceAll('A Divided by B', 'I1 Divided by I2')
+      .replaceAll('B Divided by A', 'I2 Divided by I1')
+      .replaceAll('Mostly A', 'Mostly Input 1')
+      .replaceAll('Mostly B', 'Mostly Input 2')
+      .replaceAll('Primary A/B Blend', 'Primary Input Blend')
+      .replaceAll('A Level Opens B', 'I1 Level Opens I2')
+      .replaceAll('B Level Opens A', 'I2 Level Opens I1')
+      .replaceAll('A Polarity Opens B', 'I1 Polarity Opens I2')
+      .replaceAll('B Polarity Opens A', 'I2 Polarity Opens I1')
+      .replaceAll('A Threshold Selects A', 'I1 Threshold Selects I1')
+      .replaceAll('A Threshold Selects B', 'I1 Threshold Selects I2')
+      .replaceAll('B Threshold Selects B', 'I2 Threshold Selects I2')
+      .replaceAll('B Threshold Selects A', 'I2 Threshold Selects I1')
+      .replaceAll('A Flips B Polarity', 'I1 Flips I2 Polarity')
+      .replaceAll('B Flips A Polarity', 'I2 Flips I1 Polarity')
+      .replaceAll(' A ', ' Input 1 ')
+      .replaceAll(' B ', ' Input 2 ')
+      .replaceAll(' A.', ' Input 1.')
+      .replaceAll(' B.', ' Input 2.')
+      .replaceAll(' A;', ' Input 1;')
+      .replaceAll(' B;', ' Input 2;')
+      .replaceAll(' A,', ' Input 1,')
+      .replaceAll(' B,', ' Input 2,');
+  }
+
+
+  function wavetableShortName(modeOrId) {
+    const mode = typeof modeOrId === 'object' ? modeOrId : wavetableInfoFor(modeOrId);
+    return wavetableDisplayText(mode).replace(/^\d+\s+-\s+/, '').replace(/\s+-\s+.*$/, '');
+  }
+
   function createWavetableSelect(value, onChange) {
     const select = document.createElement('select');
     const groups = new Map();
@@ -4964,7 +5526,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       }
       const opt = document.createElement('option');
       opt.value = mode.id;
-      opt.textContent = `${mode.ui} - ${mode.name} - ${mode.description}`;
+      opt.textContent = wavetableDisplayText(mode);
       parent.appendChild(opt);
     });
     select.value = selectedId;
@@ -5019,6 +5581,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     row.append(lab, range, num); parent.appendChild(row);
     const useInt = Number(step) >= 1 && Number.isInteger(Number(step)) && Number.isInteger(Number(min)) && Number.isInteger(Number(max));
     syncRangeNumber(range, num, v => patch[field] = useInt ? clampInt(v, min, max) : clampFloat(v, min, max), afterChange);
+    return {row, label: lab, range, number: num};
   }
 
   // TUTORIAL: Adds a paired slider+number control for values that need both fast dragging and exact entry.
@@ -5030,74 +5593,193 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     });
   }
 
+
+  // TUTORIAL: Adds a logarithmic Hz slider paired with a normal Hz number box.
+  // TUTORIAL: This keeps the ear-facing control evenly distributed by octave while
+  // TUTORIAL: still allowing exact numeric cutoff values.
+  function addLogCutoffSlider(parent, label, patch, field, afterChange = updateVisuals) {
+    const row = document.createElement('div'); row.className = 'row';
+    const lab = document.createElement('label'); lab.textContent = label;
+    const range = document.createElement('input');
+    range.type = 'range'; range.min = 0; range.max = 1000; range.step = 0.1;
+    const num = document.createElement('input');
+    num.type = 'number'; num.min = FILTER_MIN_CUTOFF; num.max = FILTER_MAX_CUTOFF; num.step = 0.1;
+    function sync(value, source = '') {
+      const f = clampFloat(value, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF);
+      patch[field] = f;
+      if (source !== 'range') range.value = cutoffToSliderValue(f);
+      if (source !== 'number' || num !== document.activeElement) num.value = formatCutoffHz(f);
+    }
+    sync(patch[field] ?? 8000);
+    range.addEventListener('input', () => { sync(sliderValueToCutoff(range.value), 'range'); afterChange(); });
+    num.addEventListener('input', () => {
+      const raw = num.value.trim();
+      const n = Number(raw);
+      if (raw === '' || !Number.isFinite(n) || n < FILTER_MIN_CUTOFF || n > FILTER_MAX_CUTOFF) return;
+      sync(n, 'number');
+      afterChange();
+    });
+    num.addEventListener('change', () => { const n = Number(num.value); sync(Number.isFinite(n) ? n : patch[field], ''); afterChange(); });
+    row.append(lab, range, num);
+    parent.appendChild(row);
+    return {row, label: lab, range, number: num};
+  }
+
+  // TUTORIAL: Presents filter resonance as a 0..127 synth/MIDI-style control while
+  // TUTORIAL: keeping internal DSP and older patch data on the existing 0..1 scale.
+  function addFilterResonanceSlider(parent, patch, afterChange = updateVisuals) {
+    const row = document.createElement('div'); row.className = 'row';
+    const lab = document.createElement('label'); lab.textContent = 'Filter Resonance';
+    const range = document.createElement('input');
+    range.type = 'range'; range.min = 0; range.max = FILTER_RESONANCE_UI_MAX; range.step = 1;
+    const num = document.createElement('input');
+    num.type = 'number'; num.min = 0; num.max = FILTER_RESONANCE_UI_MAX; num.step = 1;
+    function sync(uiValue, source = '') {
+      const ui = clampInt(uiValue, 0, FILTER_RESONANCE_UI_MAX);
+      patch.filterResonance = filterResonanceFromUi(ui);
+      if (source !== 'range') range.value = ui;
+      if (source !== 'number' || num !== document.activeElement) num.value = ui;
+    }
+    sync(filterResonanceToUi(patch.filterResonance || 0));
+    range.addEventListener('input', () => { sync(range.value, 'range'); afterChange(); });
+    num.addEventListener('input', () => {
+      const raw = num.value.trim();
+      const n = Number(raw);
+      if (raw === '' || !Number.isFinite(n) || n < 0 || n > FILTER_RESONANCE_UI_MAX) return;
+      sync(n, 'number');
+      afterChange();
+    });
+    num.addEventListener('change', () => { const n = Number(num.value); sync(Number.isFinite(n) ? n : filterResonanceToUi(patch.filterResonance || 0), ''); afterChange(); });
+    row.append(lab, range, num);
+    parent.appendChild(row);
+    return {row, label: lab, range, number: num};
+  }
+
   // TUTORIAL: Patch control builder. The same function creates Single, START, and END controls;
   // TUTORIAL: event handlers write back into state and then refresh audio/visual previews.
   function addPatchControls(id, patchKey) {
     const parent = $(id); parent.innerHTML = ''; const patch = state.patches[patchKey];
-    const afterPatchChange = () => { updateVisuals(); autoAuditionPatch(patchKey); };
+    let refreshPatchUi = () => {};
+    const afterPatchChange = () => { refreshPatchUi(); updateVisuals(); autoAuditionPatch(patchKey); };
     patch.engine = canonicalEngineName(patch.engine || DEFAULT_ENGINE);
-    const engineParts = enginePartsFor(patch.engine);
+    patch.sourceInput1 = canonicalSourceTap(patch.sourceInput1, 'A');
+    patch.sourceInput2 = canonicalSourceTap(patch.sourceInput2, 'B');
     const setEngineFromParts = (family, variant, opts = {}) => {
       // TUTORIAL: Changing the engine family changes the meaning of pot1/pot2/pot3.
       // TUTORIAL: Mouse/check-box changes rebuild immediately. Keyboard arrow navigation in
       // TUTORIAL: the Generator Family select defers the rebuild until Enter/blur so the
       // TUTORIAL: native dropdown can keep focus and scroll through options like other selects.
-      // TUTORIAL: If the controls are rebuilt, redraw after the rebuild. Drawing before the
-      // TUTORIAL: START/END canvas is replaced leaves the new non-animated Morph visualiser blank
-      // TUTORIAL: until another parameter change. Animated mode hid that bug because its frame loop
-      // TUTORIAL: redrew the new canvas a moment later.
       patch.engine = engineNameFromParts(family, variant);
       if (!opts.deferRebuild) addPatchControls(id, patchKey);
       afterPatchChange();
     };
+
+    const engineParts = enginePartsFor(patch.engine);
+    const moduleKey = part => `${patchKey}:${part}`;
+    const corePanel = addModulePanel(parent, moduleKey('core'), 'Core Generator', `${engineParts.family} ${engineParts.variant}`, true);
     const engineFamilyRow = document.createElement('div'); engineFamilyRow.className = 'row wide';
     const engineFamilyLab = document.createElement('label'); engineFamilyLab.textContent = 'Generator Family';
     const engineFamilySel = createEngineFamilySelect(patch.engine, (family, opts = {}) => setEngineFromParts(family, enginePartsFor(patch.engine).variant, opts));
-    engineFamilyRow.append(engineFamilyLab, engineFamilySel); parent.appendChild(engineFamilyRow);
+    engineFamilyRow.append(engineFamilyLab, engineFamilySel); corePanel.appendChild(engineFamilyRow);
     const engineVariantRow = document.createElement('div'); engineVariantRow.className = 'row wide';
     const engineVariantLab = document.createElement('label'); engineVariantLab.textContent = 'Engine Variant';
     const engineVariantBoxes = createEngineVariantCheckboxes(patch.engine, variant => setEngineFromParts(enginePartsFor(patch.engine).family, variant));
-    engineVariantRow.append(engineVariantLab, engineVariantBoxes); parent.appendChild(engineVariantRow);
+    engineVariantRow.append(engineVariantLab, engineVariantBoxes); corePanel.appendChild(engineVariantRow);
     const engineNote = document.createElement('p');
     engineNote.className = 'small';
     engineNote.textContent = engineUiNoteFor(patch.engine);
-    parent.appendChild(engineNote);
+    corePanel.appendChild(engineNote);
     const knobLabels = knobLabelsForEngine(patch.engine);
-    addSlider(parent, knobLabels.pot1, patch, 'pot1', 0, POT_MAX_12BIT, 1, afterPatchChange);
-    addSlider(parent, knobLabels.pot2, patch, 'pot2', 0, POT_MAX_12BIT, 1, afterPatchChange);
-    addSlider(parent, knobLabels.pot3, patch, 'pot3', 0, POT_MAX_12BIT, 1, afterPatchChange);
-    const wtRow = document.createElement('div'); wtRow.className = 'row wide'; const wtLab = document.createElement('label'); wtLab.textContent = 'Wavetable Type'; const wtSel = createWavetableSelect(patch.wavetableType, v => { patch.wavetableType = v; afterPatchChange(); }); wtSel.disabled = (patchKey === 'start' || patchKey === 'end') && !state.export.differentTypes; wtRow.append(wtLab, wtSel); parent.appendChild(wtRow);
-    addSlider(parent, 'FM', patch, 'fm', 0, 255, 1, afterPatchChange);
-    const fmRow = document.createElement('div'); fmRow.className = 'row wide'; const fmLab = document.createElement('label'); fmLab.textContent = 'FM Pitch Range'; const fmSel = document.createElement('select'); FM_RANGES.forEach(([label]) => { const opt = document.createElement('option'); opt.textContent = label; opt.value = label; fmSel.appendChild(opt); }); fmSel.value = patch.fmRangeLabel; fmSel.disabled = (patchKey === 'start' || patchKey === 'end') && !state.export.differentFmRanges; fmSel.addEventListener('change', () => { patch.fmRangeLabel = fmSel.value; afterPatchChange(); }); fmRow.append(fmLab, fmSel); parent.appendChild(fmRow);
-    addSlider(parent, 'PWM', patch, 'pwm', 0, 255, 1, afterPatchChange);
-    addSlider(parent, 'Ring Mod', patch, 'am', 0, 255, 1, afterPatchChange);
+    const knobLabelRefs = {};
+    const pot1Ctl = addSlider(corePanel, knobLabels.pot1, patch, 'pot1', 0, POT_MAX_12BIT, 1, afterPatchChange);
+    knobLabelRefs.pot1 = pot1Ctl.label;
+    const pot2Ctl = addSlider(corePanel, knobLabels.pot2, patch, 'pot2', 0, POT_MAX_12BIT, 1, afterPatchChange);
+    knobLabelRefs.pot2 = pot2Ctl.label;
+    const pot3Ctl = addSlider(corePanel, knobLabels.pot3, patch, 'pot3', 0, POT_MAX_12BIT, 1, afterPatchChange);
+    knobLabelRefs.pot3 = pot3Ctl.label;
+
+    const tapPanel = addModulePanel(parent, moduleKey('taps'), 'Generator Taps / Wavetable Inputs', sourceInputSummary(patch), true);
+    const tapSelector1 = addTapSelector(tapPanel, 'Input 1', patch, 'sourceInput1', 'A', afterPatchChange);
+    const tapSelector2 = addTapSelector(tapPanel, 'Input 2', patch, 'sourceInput2', 'B', afterPatchChange);
+    const tapNote = document.createElement('p');
+    tapNote.className = 'small';
+    tapNote.textContent = 'The selected inputs feed the Wavetable Type stage. A/B are the original generator pair; C/D are extra family-specific taps tuned per generator.';
+    tapPanel.appendChild(tapNote);
+
+    const wtRow = document.createElement('div'); wtRow.className = 'row wtInlineRow';
+    const wtLab = document.createElement('label'); wtLab.textContent = 'Wavetable Type';
+    const wtSel = createWavetableSelect(patch.wavetableType, v => { patch.wavetableType = v; afterPatchChange(); });
+    wtSel.disabled = (patchKey === 'start' || patchKey === 'end') && !state.export.differentTypes;
+    const wtSummary = document.createElement('div');
+    wtSummary.className = 'moduleSummary';
+    wtSummary.textContent = wavetableShortName(patch.wavetableType);
+    wtRow.append(wtLab, wtSel, wtSummary); parent.appendChild(wtRow);
+
+    const modPanel = addModulePanel(parent, moduleKey('modulation'), 'Playback Modulation', modulationSummaryText(patch), false);
+    addSlider(modPanel, 'FM', patch, 'fm', 0, 255, 1, afterPatchChange);
+    const fmRow = document.createElement('div'); fmRow.className = 'row wide';
+    const fmLab = document.createElement('label'); fmLab.textContent = 'FM Pitch Range';
+    const fmSel = document.createElement('select'); FM_RANGES.forEach(([label]) => { const opt = document.createElement('option'); opt.textContent = label; opt.value = label; fmSel.appendChild(opt); });
+    fmSel.value = patch.fmRangeLabel;
+    fmSel.disabled = (patchKey === 'start' || patchKey === 'end') && !state.export.differentFmRanges;
+    fmSel.addEventListener('change', () => { patch.fmRangeLabel = fmSel.value; afterPatchChange(); });
+    fmRow.append(fmLab, fmSel); modPanel.appendChild(fmRow);
+    addSlider(modPanel, 'PWM', patch, 'pwm', 0, 255, 1, afterPatchChange);
+    addSlider(modPanel, 'Ring Mod', patch, 'am', 0, 255, 1, afterPatchChange);
+
+    const filterPanel = addModulePanel(parent, moduleKey('filter'), 'Filter', filterSummaryText(patch), false);
     const filterRow = document.createElement('div'); filterRow.className = 'row wide';
     const filterLab = document.createElement('label'); filterLab.textContent = 'Filter Type';
     const filterSel = document.createElement('select'); FILTER_TYPES.forEach(v => filterSel.append(new Option(v, v)));
     filterSel.value = patch.filterType || 'Off';
     filterSel.onchange = () => { patch.filterType = filterSel.value; afterPatchChange(); };
-    filterRow.append(filterLab, filterSel); parent.appendChild(filterRow);
-    addSlider(parent, 'Filter Cutoff Hz', patch, 'filterCutoff', 20, 20000, 1, afterPatchChange);
-    addSlider(parent, 'Filter Resonance', patch, 'filterResonance', 0, 1, 0.01, afterPatchChange);
+    filterRow.append(filterLab, filterSel); filterPanel.appendChild(filterRow);
+    addLogCutoffSlider(filterPanel, 'Filter Cutoff Hz', patch, 'filterCutoff', afterPatchChange);
+    addFilterResonanceSlider(filterPanel, patch, afterPatchChange);
+
     if (patchKey === 'start' || patchKey === 'end') addPatchVisualiserCanvas(parent, patchKey);
-    addSlider(parent, 'Source Window Start', patch, 'beforeStart', 0, WINDOW_STEPS, 1, afterPatchChange);
-    addSlider(parent, 'Source Window End', patch, 'beforeEnd', 0, WINDOW_STEPS, 1, afterPatchChange);
-    addSlider(parent, 'Result Window Start', patch, 'afterStart', 0, WINDOW_STEPS, 1, afterPatchChange);
-    addSlider(parent, 'Result Window End', patch, 'afterEnd', 0, WINDOW_STEPS, 1, afterPatchChange);
+
+    const windowPanel = addModulePanel(parent, moduleKey('windows'), 'Source / Result Windows', windowsSummaryText(patch), false);
+    addSlider(windowPanel, 'Source Window Start', patch, 'beforeStart', 0, WINDOW_STEPS, 1, afterPatchChange);
+    addSlider(windowPanel, 'Source Window End', patch, 'beforeEnd', 0, WINDOW_STEPS, 1, afterPatchChange);
+    addSlider(windowPanel, 'Result Window Start', patch, 'afterStart', 0, WINDOW_STEPS, 1, afterPatchChange);
+    addSlider(windowPanel, 'Result Window End', patch, 'afterEnd', 0, WINDOW_STEPS, 1, afterPatchChange);
     if (patchKey === 'single') addPlaygroundMorphCopyButtons(parent);
+
+    refreshPatchUi = () => {
+      const parts = enginePartsFor(patch.engine || DEFAULT_ENGINE);
+      setModuleSummary(corePanel, `${parts.family} ${parts.variant}`);
+      engineNote.textContent = engineUiNoteFor(patch.engine);
+      if (engineVariantBoxes.update) engineVariantBoxes.update(patch.engine);
+      const labels = knobLabelsForEngine(patch.engine);
+      if (knobLabelRefs.pot1) knobLabelRefs.pot1.textContent = labels.pot1;
+      if (knobLabelRefs.pot2) knobLabelRefs.pot2.textContent = labels.pot2;
+      if (knobLabelRefs.pot3) knobLabelRefs.pot3.textContent = labels.pot3;
+      tapSelector1.update();
+      tapSelector2.update();
+      setModuleSummary(tapPanel, sourceInputSummary(patch), (patch.sourceInput1 === 'A' && patch.sourceInput2 === 'B') ? 'default' : 'changed');
+      if (wtSummary) wtSummary.textContent = wavetableShortName(patch.wavetableType);
+      setModuleSummary(modPanel, modulationSummaryText(patch), modulationIsDefault(patch) ? 'default' : 'changed');
+      setModuleSummary(filterPanel, filterSummaryText(patch), filterIsDefault(patch) ? 'default' : 'changed');
+      setModuleSummary(windowPanel, windowsSummaryText(patch), windowsAreDefault(patch) ? 'default' : 'changed');
+    };
+    refreshPatchUi();
   }
 
   // TUTORIAL: Inserts the START/END visualiser inside the patch-control flow. Keeping the
   // TUTORIAL: canvas below Filter Resonance makes filter edits and their visual effect easier
   // TUTORIAL: to read without scrolling past the source/result window controls.
   function addPatchVisualiserCanvas(parent, patchKey) {
+    const title = patchKey === 'end' ? 'END Visualiser' : 'START Visualiser';
+    const body = addModulePanel(parent, `${patchKey}Visualiser`, title, visualSummaryText(), true);
+    if (body._moduleHint) body._moduleHint.dataset.visualSummary = patchKey;
     const canvas = document.createElement('canvas');
     canvas.id = patchKey === 'end' ? 'endCanvas' : 'startCanvas';
     canvas.width = 520;
     canvas.height = 250;
     canvas.dataset.baseWidth = '520';
     canvas.dataset.baseHeight = '250';
-    parent.appendChild(canvas);
+    body.appendChild(canvas);
   }
 
   // TUTORIAL: Playground copy buttons turn a single patch idea into a START/END morph setup.
@@ -5826,7 +6508,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Converts a MIDI note number to equal-tempered frequency.
   function midiNoteToFrequency(midiNote) {
-    return 440 * (2 ** ((clampInt(midiNote, 0, 127) - 69) / 12));
+    return 440 * (2 ** ((clampInt(midiNote, -48, 143) - 69) / 12));
   }
 
   // TUTORIAL: Frequencies shown for loop-safe planning sometimes need more than
@@ -5846,7 +6528,13 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: messages elsewhere.
   function nearestNoteForFrequency(frequency) {
     const f = clampFloat(frequency, MIN_FREQUENCY, MAX_FREQUENCY);
-    const midi = clampInt(Math.round(69 + 12 * Math.log2(f / 440)), -48, 127);
+    const raw = 69 + 12 * Math.log2(f / 440);
+    const lower = Math.floor(raw);
+    const upper = lower + 1;
+    const lowerHz = 440 * (2 ** ((lower - 69) / 12));
+    const upperHz = 440 * (2 ** ((upper - 69) / 12));
+    const halfwayHz = Math.sqrt(lowerHz * upperHz);
+    const midi = clampInt(f < halfwayHz ? lower : upper, -48, 143);
     const noteIndex = ((midi % 12) + 12) % 12;
     return {midi, note: NOTE_NAMES[noteIndex], octave: Math.floor(midi / 12) - 1};
   }
@@ -5857,8 +6545,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const note = nearestNoteForFrequency(f);
     const selectedNoteFrequency = noteToFrequency(note.note, note.octave);
     const cents = 1200 * Math.log2(f / selectedNoteFrequency);
-    const detuneText = Math.abs(cents) < 0.01 ? 'exact' : `${cents >= 0 ? '+' : ''}${cents.toFixed(2)} cents`;
-    const noteFrequencyText = `${note.note}${note.octave} = ${formatFrequencyHz(selectedNoteFrequency, 3)} Hz`;
+    const detuneText = Math.abs(cents) < 0.01 ? '= 0.00 cents' : `${cents >= 0 ? '+' : ''}${cents.toFixed(2)} cents`;
+    const noteFrequencyText = `${note.note}${note.octave}`;
     document.querySelectorAll('[data-pitch="frequency-slider"]').forEach(el => el.value = frequencyToSliderValue(f));
     document.querySelectorAll('[data-pitch="frequency-hz"]').forEach(el => {
       // TUTORIAL: Leave the actively edited number box alone so partial values such as
@@ -5869,10 +6557,11 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     document.querySelectorAll('[data-pitch="note-name"]').forEach(el => el.value = note.note);
     document.querySelectorAll('[data-pitch="note-octave"]').forEach(el => el.value = String(note.octave));
     document.querySelectorAll('[data-pitch="selected-note-frequency"]').forEach(el => el.textContent = noteFrequencyText);
-    document.querySelectorAll('[data-pitch="frequency-note-reference"]').forEach(el => el.textContent = `${noteFrequencyText} (${detuneText})`);
+    document.querySelectorAll('[data-pitch="frequency-note-reference"]').forEach(el => el.textContent = `${note.note}${note.octave} ${detuneText}`);
     document.querySelectorAll('[data-pitch="volume"]').forEach(el => el.value = state.common.volume);
     document.querySelectorAll('[data-pitch="midi-channel"]').forEach(el => el.value = state.common.midiChannel || 'off');
     document.querySelectorAll('[data-pitch="midi-status"]').forEach(el => el.textContent = state.common.midiStatus || 'MIDI input off');
+    updateStaticModuleSummaries();
     refreshCalculatorOutputs();
   }
 
@@ -5951,20 +6640,17 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const noteLabel = document.createElement('label');
     noteLabel.textContent = 'Note';
     const noteHolder = document.createElement('div');
-    noteHolder.className = 'inlineTriple';
+    noteHolder.className = 'inlinePair';
     const noteSelect = document.createElement('select');
     noteSelect.dataset.pitch = 'note-name';
     NOTE_NAMES.forEach(n => { const opt = document.createElement('option'); opt.value = n; opt.textContent = n; noteSelect.appendChild(opt); });
     const octaveSelect = document.createElement('select');
     octaveSelect.dataset.pitch = 'note-octave';
     for (let o = -4; o <= 10; o++) { const opt = document.createElement('option'); opt.value = String(o); opt.textContent = `Octave ${o}`; octaveSelect.appendChild(opt); }
-    const noteFrequency = document.createElement('span');
-    noteFrequency.className = 'small';
-    noteFrequency.dataset.pitch = 'selected-note-frequency';
     const noteChanged = () => setCommonFrequency(noteToFrequency(noteSelect.value, octaveSelect.value));
     noteSelect.addEventListener('change', noteChanged);
     octaveSelect.addEventListener('change', noteChanged);
-    noteHolder.append(noteSelect, octaveSelect, noteFrequency);
+    noteHolder.append(noteSelect, octaveSelect);
     noteRow.append(noteLabel, noteHolder);
     parent.appendChild(noteRow);
 
@@ -6005,9 +6691,39 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     syncPitchControls();
   }
 
+  function addCommonVolumeControls(parentId) {
+    const parent = $(parentId);
+    if (!parent) return;
+    parent.innerHTML = '';
+    const heading = document.createElement('h3');
+    heading.textContent = 'Volume';
+    parent.appendChild(heading);
+    const volumeRow = document.createElement('div');
+    volumeRow.className = 'row';
+    const volumeLabel = document.createElement('label');
+    volumeLabel.textContent = 'Volume';
+    const volumeSlider = document.createElement('input');
+    volumeSlider.type = 'range';
+    volumeSlider.min = 0;
+    volumeSlider.max = 1;
+    volumeSlider.step = 0.01;
+    volumeSlider.dataset.pitch = 'volume';
+    const volumeNum = document.createElement('input');
+    volumeNum.type = 'number';
+    volumeNum.min = 0;
+    volumeNum.max = 1;
+    volumeNum.step = 0.01;
+    volumeNum.dataset.pitch = 'volume';
+    volumeSlider.addEventListener('input', () => setCommonVolume(volumeSlider.value));
+    volumeNum.addEventListener('change', () => setCommonVolume(volumeNum.value));
+    volumeRow.append(volumeLabel, volumeSlider, volumeNum);
+    parent.appendChild(volumeRow);
+  }
+
   // TUTORIAL: Builds the Playground copy of shared audio/pitch controls.
   function addCommonControls() {
-    addPitchControlsTo('commonControls', 'Pitch / MIDI');
+    addCommonVolumeControls('singleVolumeControls');
+    addPitchControlsTo('commonControls', 'Pitch', {includeVolume: false});
   }
 
   // TUTORIAL: Builds Morph-tab render/export controls.
@@ -6122,6 +6838,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const morphMode = $('morphVisualMode'); if (morphMode) morphMode.value = mode;
     const singleFps = $('singleAnimFps'); if (singleFps) singleFps.value = fps;
     const morphFps = $('morphAnimFps'); if (morphFps) morphFps.value = fps;
+    updateStaticModuleSummaries();
   }
 
   // TUTORIAL: Legacy wrapper retained for older code paths; FPS is now part of the shared visual controls.
@@ -6162,7 +6879,11 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const p = defaultPatch();
     p.engine = randomEngineName();
     p.pot1 = randInt(0, POT_MAX_12BIT); p.pot2 = randInt(0, POT_MAX_12BIT); p.pot3 = randInt(0, POT_MAX_12BIT);
-    p.wavetableType = WT_VISIBLE_MODE_INFO[randInt(0, WT_VISIBLE_MODE_INFO.length - 1)].id; p.fm = randInt(0, 255); p.pwm = randInt(0, 255); p.am = randInt(0, 255);
+    p.wavetableType = WT_VISIBLE_MODE_INFO[randInt(0, WT_VISIBLE_MODE_INFO.length - 1)].id;
+    p.sourceInput1 = SOURCE_TAP_KEYS[randInt(0, SOURCE_TAP_KEYS.length - 1)];
+    const secondTapChoices = SOURCE_TAP_KEYS.filter(k => k !== p.sourceInput1);
+    p.sourceInput2 = secondTapChoices[randInt(0, secondTapChoices.length - 1)];
+    p.fm = randInt(0, 255); p.pwm = randInt(0, 255); p.am = randInt(0, 255);
     [p.beforeStart, p.beforeEnd] = randomWindowPair(); [p.afterStart, p.afterEnd] = randomWindowPair();
     p.fmRangeLabel = FM_RANGES[randInt(0, FM_RANGES.length - 1)][0];
     p.filterType = 'Off';
@@ -6180,7 +6901,17 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Inclusive integer random helper.
   function randInt(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
   // TUTORIAL: Creates a random source/result window pair with legal start/end values.
-  function randomWindowPair() { const a = randInt(0, WINDOW_STEPS), len = randInt(64, WINDOW_STEPS); return [a, (a + len) % (WINDOW_STEPS + 1)]; }
+  function randomWindowPair() { const a = randInt(0, WINDOW_STEPS), len = randInt(4, WINDOW_STEPS); return [a, (a + len) % (WINDOW_STEPS + 1)]; }
+
+  function randomiseMorphEndpointAndPlay(key) {
+    state.patches[key] = randomPatch();
+    rebuildPatchControls();
+    state.audio.lastMorphTransport = 'morph-forward';
+    playMorphBuffer(false).catch(err => {
+      const status = $('morphStatus');
+      if (status) status.textContent = `Morph playback failed: ${err.message || err}`;
+    });
+  }
 
   // TUTORIAL: Rebuilds all generated control panels after reset, randomise, copy, or swap operations.
   function rebuildPatchControls() { addPatchControls('singleControls', 'single'); addPatchControls('startControls', 'start'); addPatchControls('endControls', 'end'); updateVisuals(); }
@@ -6345,6 +7076,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const p = {...defaultPatch(), ...patch};
     p.engine = canonicalEngineName(p.engine || DEFAULT_ENGINE);
     p.wavetableType = canonicalWavetableType(p.wavetableType);
+    p.sourceInput1 = canonicalSourceTap(p.sourceInput1, 'A');
+    p.sourceInput2 = canonicalSourceTap(p.sourceInput2, 'B');
     p.fmRangeLabel = p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL;
     return p;
   }
@@ -6483,14 +7216,16 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     $('auditionStart').onclick = () => toggleDronePatch('start'); $('auditionEnd').onclick = () => toggleDronePatch('end');
     $('randomStart').onclick = () => { state.patches.start = randomPatch(); rebuildPatchControls(); autoAuditionPatch('start'); };
     $('randomEnd').onclick = () => { state.patches.end = randomPatch(); rebuildPatchControls(); autoAuditionPatch('end'); };
+    $('randomMorphStart').onclick = () => randomiseMorphEndpointAndPlay('start');
+    $('randomMorphEnd').onclick = () => randomiseMorphEndpointAndPlay('end');
     $('copyStartToEnd').onclick = () => { state.patches.end = {...state.patches.start}; rebuildPatchControls(); autoAuditionPatch('end'); };
     $('copyEndToStart').onclick = () => { state.patches.start = {...state.patches.end}; rebuildPatchControls(); autoAuditionPatch('start'); };
     $('swapStartEnd').onclick = () => { const t = state.patches.start; state.patches.start = state.patches.end; state.patches.end = t; rebuildPatchControls(); autoAuditionCurrentContext(); };
     $('playMorph').onclick = () => toggleMorphPlayback(false);
     $('playReverse').onclick = () => toggleMorphPlayback(true);
-    $('exportForward').onclick = () => exportDirection('forward');
-    $('exportReverse').onclick = () => exportDirection('reverse');
-    $('exportBoth').onclick = exportBothDirections;
+    $('exportForward').onclick = () => { globalPanicStop(); exportDirection('forward'); };
+    $('exportReverse').onclick = () => { globalPanicStop(); exportDirection('reverse'); };
+    $('exportBoth').onclick = () => { globalPanicStop(); exportBothDirections(); };
     syncRangeNumber($('bulkCount'), $('bulkCountNum'), v => {});
     $('bulkExport').onclick = bulkExport;
   }
@@ -6583,11 +7318,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.ui.morphLoopSafetyExpanded = state.export.mode !== 'Seconds';
     const lastOpenTab = readLastOpenTabSetting();
     if (lastOpenTab) state.ui.lastOpenTab = lastOpenTab;
+    initialiseStaticModulePanels();
     addPatchControls('singleControls', 'single');
     addPatchControls('startControls', 'start');
     addPatchControls('endControls', 'end');
     addCommonControls();
-    addPitchControlsTo('morphPitchControls', 'Pitch / MIDI / audition');
+    addPitchControlsTo('morphPitchControls', 'Pitch');
     addPitchControlsTo('bulkPitchControls', 'Pitch / MIDI', {includeVolume: false});
     addExportControls();
     addBulkExportControls();
