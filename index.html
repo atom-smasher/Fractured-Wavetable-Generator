@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.6d
+Fractured Wavetable Generator v2.6e
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports.
+Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs.
 
 Recent v2.5 development summary: the v2.5 Source Taps Lab series added A/B/C/D taps, Input 1/Input 2 terminology, collapsible patch sections, logarithmic cutoff/frequency sliders, 0–127 resonance presentation, Morph visualiser collapse controls, and stronger per-engine tap tuning.
 
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.6d</title>
+<title>Fractured Wavetable Generator v2.6e</title>
 <style>
   :root {
     --bg: #101216;
@@ -161,7 +161,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.6d</h1>
+  <h1>Fractured Wavetable Generator v2.6e</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -401,7 +401,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.6d';
+  const APP_VERSION = 'v2.6e';
   const EXPORT_SCHEMA_VERSION = 8;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
@@ -2269,6 +2269,15 @@ itself, impose GPL licensing on generated outputs.
     return `Input 1=${sourceTapLabel(i1, family)}, Input 2=${sourceTapLabel(i2, family)}`;
   }
 
+  function sourceInputRouteDiffers(a, b) {
+    return canonicalSourceTap(a?.sourceInput1, 'A') !== canonicalSourceTap(b?.sourceInput1, 'A')
+      || canonicalSourceTap(a?.sourceInput2, 'B') !== canonicalSourceTap(b?.sourceInput2, 'B');
+  }
+
+  function morphedSourceInput(startTap, endTap, t, fallback) {
+    return canonicalSourceTap(t < 0.5 ? startTap : endTap, fallback);
+  }
+
   function sampleHoldTable(src, blockSize = 4) {
     const n = src.length;
     const block = Math.max(1, clampInt(blockSize, 1, n));
@@ -2510,7 +2519,7 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Patch interpolation. Continuous controls move numerically, while discrete choices
-  // TUTORIAL: such as engine/type/filter need explicit rules so they do not flicker unpredictably.
+  // TUTORIAL: such as engine/type/filter/input routing need explicit rules so they do not flicker unpredictably.
   function interpolatedPatch(start, end, t, sharedType = null) {
     const filterType = morphedFilterType(start.filterType, end.filterType, t);
     return {
@@ -2518,6 +2527,8 @@ itself, impose GPL licensing on generated outputs.
       pot2: lerpInt(start.pot2, end.pot2, t, 0, POT_MAX_12BIT),
       pot3: lerpInt(start.pot3, end.pot3, t, 0, POT_MAX_12BIT),
       engine: t < 0.5 ? (start.engine || DEFAULT_ENGINE) : (end.engine || DEFAULT_ENGINE),
+      sourceInput1: morphedSourceInput(start.sourceInput1, end.sourceInput1, t, 'A'),
+      sourceInput2: morphedSourceInput(start.sourceInput2, end.sourceInput2, t, 'B'),
       wavetableType: canonicalWavetableType(sharedType == null ? start.wavetableType : sharedType),
       fm: lerpInt(start.fm, end.fm, t, 0, 255), pwm: lerpInt(start.pwm, end.pwm, t, 0, 255), am: lerpInt(start.am, end.am, t, 0, 255),
       filterType,
@@ -2537,6 +2548,8 @@ itself, impose GPL licensing on generated outputs.
       pot2: lerpInt(start.pot2, end.pot2, t, 0, POT_MAX_12BIT),
       pot3: lerpInt(start.pot3, end.pot3, t, 0, POT_MAX_12BIT),
       engine: discretePatch.engine || DEFAULT_ENGINE,
+      sourceInput1: canonicalSourceTap(discretePatch.sourceInput1, 'A'),
+      sourceInput2: canonicalSourceTap(discretePatch.sourceInput2, 'B'),
       wavetableType: canonicalWavetableType(discretePatch.wavetableType),
       fm: lerpInt(start.fm, end.fm, t, 0, 255),
       pwm: lerpInt(start.pwm, end.pwm, t, 0, 255),
@@ -3177,10 +3190,12 @@ itself, impose GPL licensing on generated outputs.
       const t = curveValue(rawT, this.opts.curveAmount, this.opts.curveMode);
       let patch = interpolatedPatch(this.start, this.end, t, this.opts.differentTypes ? null : this.opts.sharedType);
       let table;
-      if (this.opts.differentTypes) {
-        const pa = interpolatedPatch(this.start, this.end, t, this.start.wavetableType);
-        const pb = interpolatedPatch(this.start, this.end, t, this.end.wavetableType);
-        const ta = tableForPatch(pa, this.start.wavetableType), tb = tableForPatch(pb, this.end.wavetableType);
+      if (this.opts.differentTypes || sourceInputRouteDiffers(this.start, this.end)) {
+        const startDiscrete = effectiveExportPatch(this.start, this.opts.differentTypes ? this.start.wavetableType : this.opts.sharedType);
+        const endDiscrete = effectiveExportPatch(this.end, this.opts.differentTypes ? this.end.wavetableType : this.opts.sharedType);
+        const pa = interpolatedPatchForDiscretePath(this.start, this.end, t, startDiscrete);
+        const pb = interpolatedPatchForDiscretePath(this.start, this.end, t, endDiscrete);
+        const ta = tableForPatch(pa, pa.wavetableType), tb = tableForPatch(pb, pb.wavetableType);
         const mix = new Float64Array(TABLE_SIZE);
         for (let i = 0; i < TABLE_SIZE; i++) mix[i] = (1 - t) * ta[i] + t * tb[i];
         table = finaliseRawTable(mix);
@@ -3242,6 +3257,7 @@ itself, impose GPL licensing on generated outputs.
     const b = effectiveExportPatch(end);
     return (a.engine || DEFAULT_ENGINE) !== (b.engine || DEFAULT_ENGINE)
       || canonicalWavetableType(a.wavetableType) !== canonicalWavetableType(b.wavetableType)
+      || sourceInputRouteDiffers(a, b)
       || String(a.filterType || 'Off') !== String(b.filterType || 'Off')
       || String(a.fmRangeLabel || DEFAULT_FM_RANGE_LABEL) !== String(b.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
   }
@@ -3463,7 +3479,7 @@ itself, impose GPL licensing on generated outputs.
     const endEff = effectiveExportPatch(end);
     for (let i = 0; i < anchorCount; i++) {
       const t = anchorCount <= 1 ? 0 : i / (anchorCount - 1);
-      if (state.export.differentTypes || (startEff.engine || DEFAULT_ENGINE) !== (endEff.engine || DEFAULT_ENGINE) || startEff.wavetableType !== endEff.wavetableType) {
+      if (state.export.differentTypes || sourceInputRouteDiffers(startEff, endEff) || (startEff.engine || DEFAULT_ENGINE) !== (endEff.engine || DEFAULT_ENGINE) || startEff.wavetableType !== endEff.wavetableType) {
         const aPatch = interpolatedPatchForDiscretePath(start, end, t, startEff);
         const bPatch = interpolatedPatchForDiscretePath(start, end, t, endEff);
         anchors.push(tableBlendNoFallback(tableForPatch(aPatch, aPatch.wavetableType), tableForPatch(bPatch, bPatch.wavetableType), t));
