@@ -312,11 +312,7 @@ This is the easiest way to try the browser version without downloading anything.
 
 ### Run it locally
 
-Download or clone the repository, then open the current HTML file in a modern browser:
-
-```text
-fractured_wavetable_generator_v2_4.html
-```
+Download or clone the repository, then open the latest `index.html` file in a modern browser:
 
 No build step is required. The browser version is a single-file HTML/JavaScript tool, so the local file and the hosted page should behave the same when the same build is deployed, except that cookie behaviour may differ for local `file://` testing. Local testing can use the `localStorage` fallback.
 
