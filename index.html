@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.6e
+Fractured Wavetable Generator v2.6g
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs.
+Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs. v2.6f cleans stale button/variant comments and keeps transport keyboard shortcuts active when ordinary controls such as buttons, sliders, checkboxes, and dropdowns have focus. v2.6g lets alphabet transport shortcuts work from numeric fields, keeps true text fields reserved for typing, and releases focus before browser-level Ctrl/Cmd+PageUp/PageDown tab shortcuts so sliders do not steal those keys.
 
 Recent v2.5 development summary: the v2.5 Source Taps Lab series added A/B/C/D taps, Input 1/Input 2 terminology, collapsible patch sections, logarithmic cutoff/frequency sliders, 0–127 resonance presentation, Morph visualiser collapse controls, and stronger per-engine tap tuning.
 
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.6e</title>
+<title>Fractured Wavetable Generator v2.6g</title>
 <style>
   :root {
     --bg: #101216;
@@ -161,7 +161,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.6e</h1>
+  <h1>Fractured Wavetable Generator v2.6g</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -355,7 +355,7 @@ itself, impose GPL licensing on generated outputs.
       <p class="note">Fractured Wavetable Generator is a browser-native wavetable and sound-design tool. It can make single-cycle oscillator material, evolving WAV files, drones, noisy transitions, morphs, and raw source material for further editing in samplers, synths, or DAWs.</p>
 
       <h3>Usage Notes</h3>
-      <p class="note">Pressing <code>ESC</code> stops audio and cancels active rendering. Leaving a tab also mutes the current audition. Keyboard shortcuts are ignored while an input, slider, dropdown, button, or editable field has focus. Space is left to the browser.</p>
+      <p class="note">Pressing <code>ESC</code> stops audio and cancels active rendering. Leaving a tab also mutes the current audition. Keyboard shortcuts still work while ordinary controls such as buttons, sliders, checkboxes, dropdowns, and numeric fields have focus. They are ignored while typing into true text fields, such as filename prefixes, or editable text areas. Browser-level shortcuts such as <code>Ctrl</code>/<code>Cmd</code> + <code>Page Up</code>/<code>Page Down</code> are left to the browser. Space is left to the browser.</p>
       <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider covers the normal audio range; typed frequency and note/octave controls can go down to 1 Hz for long-cycle and sub-audio exports. MIDI note input, when available, sets the same shared pitch.</p>
       <p class="note">The visualisers are previews of the generated sound path. Base table shows the generated wavetable; the modulation and spectrum views help show how FM, PWM, Ring Mod, filtering, and morphing affect the result.</p>
       <p class="note">Morph and Bulk exports create WAV files with optional JSON sidecars. The JSON is there so patches can be inspected or reconstructed later; ordinary users do not need to edit it.</p>
@@ -401,7 +401,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.6e';
+  const APP_VERSION = 'v2.6g';
   const EXPORT_SCHEMA_VERSION = 8;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
@@ -5253,8 +5253,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return select;
   }
 
-  // TUTORIAL: Builds paired Smooth/Crunchy check-boxes. They behave like radio buttons, but the
-  // TUTORIAL: check-box presentation makes the two available variants immediately visible.
+  // TUTORIAL: Builds paired Smooth/Crunchy buttons. They behave like radio buttons, but the
+  // TUTORIAL: side-by-side button presentation makes the two available variants immediately visible.
   function createEngineVariantCheckboxes(value, onChange) {
     const holder = document.createElement('div');
     holder.className = 'variantChoiceGroup';
@@ -5616,22 +5616,22 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     range.type = 'range'; range.min = 0; range.max = 1000; range.step = 0.1;
     const num = document.createElement('input');
     num.type = 'number'; num.min = FILTER_MIN_CUTOFF; num.max = FILTER_MAX_CUTOFF; num.step = 0.1;
-    function sync(value, source = '') {
+    function syncCutoff(value, source = '') {
       const f = clampFloat(value, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF);
       patch[field] = f;
       if (source !== 'range') range.value = cutoffToSliderValue(f);
       if (source !== 'number' || num !== document.activeElement) num.value = formatCutoffHz(f);
     }
-    sync(patch[field] ?? 8000);
-    range.addEventListener('input', () => { sync(sliderValueToCutoff(range.value), 'range'); afterChange(); });
+    syncCutoff(patch[field] ?? 8000);
+    range.addEventListener('input', () => { syncCutoff(sliderValueToCutoff(range.value), 'range'); afterChange(); });
     num.addEventListener('input', () => {
       const raw = num.value.trim();
       const n = Number(raw);
       if (raw === '' || !Number.isFinite(n) || n < FILTER_MIN_CUTOFF || n > FILTER_MAX_CUTOFF) return;
-      sync(n, 'number');
+      syncCutoff(n, 'number');
       afterChange();
     });
-    num.addEventListener('change', () => { const n = Number(num.value); sync(Number.isFinite(n) ? n : patch[field], ''); afterChange(); });
+    num.addEventListener('change', () => { const n = Number(num.value); syncCutoff(Number.isFinite(n) ? n : patch[field], ''); afterChange(); });
     row.append(lab, range, num);
     parent.appendChild(row);
     return {row, label: lab, range, number: num};
@@ -5646,22 +5646,22 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     range.type = 'range'; range.min = 0; range.max = FILTER_RESONANCE_UI_MAX; range.step = 1;
     const num = document.createElement('input');
     num.type = 'number'; num.min = 0; num.max = FILTER_RESONANCE_UI_MAX; num.step = 1;
-    function sync(uiValue, source = '') {
+    function syncResonance(uiValue, source = '') {
       const ui = clampInt(uiValue, 0, FILTER_RESONANCE_UI_MAX);
       patch.filterResonance = filterResonanceFromUi(ui);
       if (source !== 'range') range.value = ui;
       if (source !== 'number' || num !== document.activeElement) num.value = ui;
     }
-    sync(filterResonanceToUi(patch.filterResonance || 0));
-    range.addEventListener('input', () => { sync(range.value, 'range'); afterChange(); });
+    syncResonance(filterResonanceToUi(patch.filterResonance || 0));
+    range.addEventListener('input', () => { syncResonance(range.value, 'range'); afterChange(); });
     num.addEventListener('input', () => {
       const raw = num.value.trim();
       const n = Number(raw);
       if (raw === '' || !Number.isFinite(n) || n < 0 || n > FILTER_RESONANCE_UI_MAX) return;
-      sync(n, 'number');
+      syncResonance(n, 'number');
       afterChange();
     });
-    num.addEventListener('change', () => { const n = Number(num.value); sync(Number.isFinite(n) ? n : filterResonanceToUi(patch.filterResonance || 0), ''); afterChange(); });
+    num.addEventListener('change', () => { const n = Number(num.value); syncResonance(Number.isFinite(n) ? n : filterResonanceToUi(patch.filterResonance || 0), ''); afterChange(); });
     row.append(lab, range, num);
     parent.appendChild(row);
     return {row, label: lab, range, number: num};
@@ -6092,11 +6092,6 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return `${formatCalcNumber(b / (1024 ** 3), 2)} GiB`;
   }
 
-  // TUTORIAL: Labels a MIDI note as an equal-tempered note name for calculator planning.
-  function midiNoteLabel(midiNote) {
-    const midi = clampInt(midiNote, 0, 127);
-    return `${NOTE_NAMES[midi % 12]}${Math.floor(midi / 12) - 1}`;
-  }
 
   // TUTORIAL: Applies an absolute samples-per-cycle planning target. The calculator does not
   // TUTORIAL: separately multiply duration or file size; those are derived from samples/cycle,
@@ -7173,23 +7168,49 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
 
 
-  // TUTORIAL: Keyboard transport shortcuts are intentionally ignored while form controls have
-  // TUTORIAL: focus. This prevents typing or native select/slider interaction from starting audio.
-  function shortcutFocusIsEditable(target) {
-    const el = target instanceof Element ? target : document.activeElement;
+  // TUTORIAL: Keyboard transport shortcuts should keep working from ordinary controls
+  // TUTORIAL: such as buttons, sliders, checkboxes, dropdowns, and numeric fields. True text
+  // TUTORIAL: entry fields still block transport keys so names/prefixes can be typed safely.
+  function shortcutFocusBlocksTransport(ev) {
+    const el = ev?.target instanceof Element ? ev.target : document.activeElement;
     if (!el) return false;
     if (el.isContentEditable) return true;
     const tag = String(el.tagName || '').toLowerCase();
-    return ['input', 'textarea', 'select', 'button'].includes(tag);
+    if (tag === 'textarea') return true;
+    if (tag !== 'input') return false;
+    const type = String(el.getAttribute('type') || 'text').toLowerCase();
+    if (type === 'number') {
+      const key = String(ev?.key || '').toLowerCase();
+      const isMediaPlayPause = ev?.key === 'MediaPlayPause' || ev?.code === 'MediaPlayPause';
+      const isTransportLetter = ['p', 's', 'e', 'f', 'r'].includes(key);
+      // Numeric fields already own digits, decimal/minus, arrows, steppers, Enter, etc.
+      // Alphabet transport keys are deliberately allowed through.
+      return !(isTransportLetter || isMediaPlayPause);
+    }
+    return ['text', 'search', 'email', 'url', 'tel', 'password', 'date', 'datetime-local', 'month', 'week', 'time'].includes(type);
+  }
+
+  // TUTORIAL: Browser tab-switch shortcuts can otherwise be eaten by focused sliders/number
+  // TUTORIAL: fields as PageUp/PageDown value changes. Blurring before target/default handling
+  // TUTORIAL: leaves Ctrl/Cmd+PageUp/PageDown available to the browser instead of the control.
+  function releaseFocusForBrowserTabShortcut(ev) {
+    const key = String(ev.key || '');
+    if (!(ev.ctrlKey || ev.metaKey) || ev.altKey || (key !== 'PageUp' && key !== 'PageDown')) return;
+    const el = document.activeElement;
+    if (!(el instanceof HTMLElement)) return;
+    if (el.matches('input[type="range"], input[type="number"], input[type="checkbox"], input[type="radio"], select, button')) {
+      el.blur();
+    }
   }
 
   // TUTORIAL: Routes P/MediaPlayPause plus Morph-tab mnemonic keys to transport actions while
-  // TUTORIAL: leaving Space to the browser for normal page scrolling.
+  // TUTORIAL: leaving Space and modified browser/OS shortcuts alone.
   function handleTransportShortcut(ev) {
-    if (ev.defaultPrevented || shortcutFocusIsEditable(ev.target)) return;
+    const isMediaPlayPause = ev.key === 'MediaPlayPause' || ev.code === 'MediaPlayPause';
+    if (ev.defaultPrevented || shortcutFocusBlocksTransport(ev)) return;
+    if (!isMediaPlayPause && (ev.ctrlKey || ev.metaKey || ev.altKey)) return;
     const tab = activeTabId();
     const key = String(ev.key || '').toLowerCase();
-    const isMediaPlayPause = ev.key === 'MediaPlayPause' || ev.code === 'MediaPlayPause';
     let handled = false;
     if (tab === 'playground' && (key === 'p' || isMediaPlayPause)) {
       toggleCurrentContextTransport();
@@ -7214,7 +7235,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const escStop = ev => { if (ev.key === 'Escape' || ev.code === 'Escape') { ev.preventDefault(); ev.stopPropagation(); globalPanicStop(); } };
     document.addEventListener('keydown', escStop, {capture: true});
     window.addEventListener('keydown', escStop, {capture: true});
-    document.addEventListener('keydown', handleTransportShortcut);
+    document.addEventListener('keydown', releaseFocusForBrowserTabShortcut, {capture: true});
+    window.addEventListener('keydown', releaseFocusForBrowserTabShortcut, {capture: true});
+    document.addEventListener('keydown', handleTransportShortcut, {capture: true});
     installMediaSessionHandlers();
     if ($('bulkDownloadMode')) $('bulkDownloadMode').onchange = e => { state.export.zipDownloads = e.target.value === 'zip'; persistGlobalSettings(); syncDownloadModeControls(); updateStatusSummaries(); };
     $('singleVisualMode').onchange = e => setVisualMode(e.target.value);
