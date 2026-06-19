@@ -4,7 +4,8 @@
 
 Live online GPL v2 build is available here: https://atom-smasher.github.io/Fractured-Wavetable-Generator/
 
-<img width="416" height="263" alt="image" src="https://github.com/user-attachments/assets/c7ae4db5-d0d6-4e71-9669-983b323d027f" />
+<img width="416" height="263" alt="image" src="https://github.com/user-attachments/assets/11c11f14-0969-4a1c-b18d-b283d4b32e90" />
+
 
 Fractured Wavetable Generator is for making oscillator waves, morphing START→END sounds, drones, growls, clangs, transitions, texture beds, sampler sources, and raw material for further synthesis or resampling.
 
