@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.6g
+Fractured Wavetable Generator v2.6j
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs. v2.6f cleans stale button/variant comments and keeps transport keyboard shortcuts active when ordinary controls such as buttons, sliders, checkboxes, and dropdowns have focus. v2.6g lets alphabet transport shortcuts work from numeric fields, keeps true text fields reserved for typing, and releases focus before browser-level Ctrl/Cmd+PageUp/PageDown tab shortcuts so sliders do not steal those keys.
+Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs. v2.6f cleans stale button/variant comments and keeps transport keyboard shortcuts active when ordinary controls such as buttons, sliders, checkboxes, and dropdowns have focus. v2.6g lets alphabet transport shortcuts work from numeric fields, keeps true text fields reserved for typing, and releases focus before browser-level Ctrl/Cmd+PageUp/PageDown tab shortcuts so sliders do not steal those keys. v2.6h carries FM pitch-range changes through morph interpolation, cleans a stale loop-safety data-shape check, prevents numeric-field wheel scrolling from moving the page, tightens random window generation, hardens tab-switch audio muting, and tidies a Formant engine formatting/Source-B accumulation oversight.
 
 Recent v2.5 development summary: the v2.5 Source Taps Lab series added A/B/C/D taps, Input 1/Input 2 terminology, collapsible patch sections, logarithmic cutoff/frequency sliders, 0–127 resonance presentation, Morph visualiser collapse controls, and stronger per-engine tap tuning.
 
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.6g</title>
+<title>Fractured Wavetable Generator v2.6j</title>
 <style>
   :root {
     --bg: #101216;
@@ -161,7 +161,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.6g</h1>
+  <h1>Fractured Wavetable Generator v2.6j</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -401,8 +401,8 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.6g';
-  const EXPORT_SCHEMA_VERSION = 8;
+  const APP_VERSION = 'v2.6j';
+  const EXPORT_SCHEMA_VERSION = 9;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -796,12 +796,13 @@ itself, impose GPL licensing on generated outputs.
     export: {
       mode: 'Cycles', value: MORPH_DEFAULT_CYCLES, sampleRate: DEFAULT_SAMPLE_RATE, bitDepth: '16-bit PCM',
       morphRenderMode: DEFAULT_MORPH_RENDER_MODE, spectralStates: 3,
-      curveAmount: 127, curveMode: 'Bend', cycleStepped: false, loopSafeBulk: false, loopSafeBulkStrategy: '256',
+      curveAmount: 0, curveMode: 'Bend', cycleStepped: false, loopSafeBulk: false, loopSafeBulkStrategy: '256',
       differentTypes: false, sharedType: 3, differentFmRanges: false, sharedFmRange: DEFAULT_FM_RANGE_LABEL,
       dcMode: 'Per Cycle', normMode: 'Per Cycle Peak', headroomDb: -0.1, prefix: 'fractured_wt_morph', zipDownloads: true,
     },
     audio: {
       ctx: null, node: null, gain: null, source: null, sources: new Set(), playing: false, phase: 0,
+      nodeConnected: false, gainConnected: false,
       mode: 'single', livePatchKey: 'single', morph: null, playbackSerial: 0,
       table: fallbackTable(), sampleRate: DEFAULT_SAMPLE_RATE, filterState: null, filterSig: '', morphCache: null,
     },
@@ -858,6 +859,54 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Converts a user-facing FM range label into cents so modulation depth can be treated as musical
   // TUTORIAL: pitch deviation.
   function fmRangeLabelToCents(label) { return clampFloat(FM_RANGE_BY_LABEL[label] ?? 1200, 0, MAX_FM_RANGE_CENTS); }
+
+  // TUTORIAL: Finds the closest named FM range for metadata/patch objects that also carry
+  // TUTORIAL: a numeric cents value. The DSP should use the cents number; the label remains
+  // TUTORIAL: useful for UI summaries and JSON readability.
+  function fmRangeLabelForCents(cents) {
+    const target = clampFloat(cents, 0, MAX_FM_RANGE_CENTS);
+    let bestLabel = DEFAULT_FM_RANGE_LABEL;
+    let bestDistance = Infinity;
+    for (const [label, value] of FM_RANGES) {
+      const distance = Math.abs(value - target);
+      if (distance < bestDistance) { bestLabel = label; bestDistance = distance; }
+    }
+    return bestLabel;
+  }
+
+  // TUTORIAL: Resolves whether FM range is shared or endpoint-specific for a morph calculation.
+  // TUTORIAL: Several render paths build temporary patch objects; keeping the decision here
+  // TUTORIAL: prevents visual preview, live audition, and WAV export from using different rules.
+  function morphUsesDifferentFmRanges(options = {}) {
+    if (Object.prototype.hasOwnProperty.call(options, 'differentFmRanges')) return !!options.differentFmRanges;
+    return !!state.export.differentFmRanges;
+  }
+
+  // TUTORIAL: Interpolates FM pitch range in cents. FM range is a discrete UI label, but the
+  // TUTORIAL: oscillator needs a numeric cents span. When START/END ranges are different, morphs
+  // TUTORIAL: move smoothly between their cents values instead of carrying START's label through
+  // TUTORIAL: the whole render.
+  function morphedFmRangeCents(start, end, t, options = {}) {
+    const amount = clampFloat(t, 0, 1);
+    if (morphUsesDifferentFmRanges(options)) {
+      return lerp(
+        fmRangeLabelToCents(start?.fmRangeLabel || DEFAULT_FM_RANGE_LABEL),
+        fmRangeLabelToCents(end?.fmRangeLabel || DEFAULT_FM_RANGE_LABEL),
+        amount
+      );
+    }
+    const sharedLabel = options.sharedFmRangeLabel ?? options.sharedFmRange ?? state.export.sharedFmRange ?? DEFAULT_FM_RANGE_LABEL;
+    return fmRangeLabelToCents(sharedLabel);
+  }
+
+  // TUTORIAL: Label companion for morphedFmRangeCents(). The label is approximate when ranges
+  // TUTORIAL: are interpolated, so render code should prefer the numeric fmRangeCents property.
+  function morphedFmRangeLabel(start, end, t, options = {}) {
+    if (!morphUsesDifferentFmRanges(options)) {
+      return options.sharedFmRangeLabel ?? options.sharedFmRange ?? state.export.sharedFmRange ?? DEFAULT_FM_RANGE_LABEL;
+    }
+    return fmRangeLabelForCents(morphedFmRangeCents(start, end, t, options));
+  }
 
   // TUTORIAL: Visual mode is deliberately universal. Playground and Morph have their own dropdowns only
   // TUTORIAL: because they are in different parts of the page; both dropdowns read/write this one state value.
@@ -1992,7 +2041,12 @@ itself, impose GPL licensing on generated outputs.
         const rollA = 1 / (h ** (smoothProfile ? 0.96 : 0.72));
         const rollB = 1 / (h ** (smoothProfile ? 1.08 : 0.82));
         const ridgeA = 0.35 + 0.65 * Math.sin(Math.PI * clampFloat(h / Math.max(1, harmonics), 0, 1));
+        const ridgeB = 0.42 + 0.58 * Math.cos(Math.PI * clampFloat(h / Math.max(1, harmonics), 0, 1) * 0.5);
         ya += wa * rollA * ridgeA * Math.sin(2 * Math.PI * (h * ph + 0.030 * h * spacingCtl + 0.035 * vowel * Math.sin(2 * Math.PI * ph)));
+        // TUTORIAL: Source B uses its own peak map. v2.6g calculated wb/rollB but did not
+        // TUTORIAL: accumulate them, so B mostly shadowed A instead of carrying a distinct
+        // TUTORIAL: vowel/formant bank into the Wavetable Type stage.
+        yb += wb * rollB * ridgeB * Math.sin(2 * Math.PI * (h * ph - 0.026 * h * spacingCtl + 0.040 * grit * Math.cos(2 * Math.PI * ph + Math.PI * vowel)));
       }
       const nasalA = Math.sin(2 * Math.PI * ((2.0 + 5.5 * vowel + 2.0 * spacingCtl) * ph + 0.55 * spacingCtl));
       const breathA = smoothProfile ? 0 : foldBipolarValue(1.45 * ya + 0.45 * nasalA);
@@ -2000,7 +2054,7 @@ itself, impose GPL licensing on generated outputs.
       b[i] = Math.tanh((smoothProfile ? 0.98 : 1.80) * yb + (smoothProfile ? 0.06 * ya : 0.18 * foldBipolarValue(ya)));
     }
     return finishGeneratedSourcePair(a, b, wtType, spacingCtl, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 2 : 0);
-}
+  }
 
   // TUTORIAL: Fold generator engine. This is table-generation wavefolding, distinct from
   // TUTORIAL: the Wavetable Type fold modes that happen later in the combine stage.
@@ -2406,16 +2460,47 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Morph-position shaping. These helpers turn a linear progress value into a bent,
   // TUTORIAL: eased, stepped, or otherwise shaped value before interpolating patch controls.
-  function curveValue(x, amount = 127, mode = 'Bend') {
-    const t = clampFloat(x, 0, 1), a = clampInt(amount, 1, 255);
-    if (a === 127) return t;
+  // TUTORIAL: The UI stores Curve Amount as a signed -127..+127 value with 0 as neutral.
+  // TUTORIAL: v2.6j deliberately applies a soft-centred control taper before the curve math: small
+  // TUTORIAL: values near 0 make finer changes, while the outer third of the slider still has
+  // TUTORIAL: enough travel to remain audible instead of collapsing into one extreme curve.
+  const CURVE_AMOUNT_TAPER = 1.7;
+  const BEND_MAX_POWER = 8.0;
+  const SCURVE_MAX_POWER = 4.5;
+
+  // TUTORIAL: Converts the signed UI amount to a signed -1..+1 strength. The exponent is the
+  // TUTORIAL: important part: it reduces Bend sensitivity around the centre and moves useful
+  // TUTORIAL: resolution toward stronger Curve Amount settings.
+  function signedCurveStrength(amount) {
+    const a = clampInt(amount, -127, 127);
+    if (a === 0) return 0;
+    const normal = Math.min(Math.abs(a) / 127, 1);
+    return Math.sign(a) * (normal ** CURVE_AMOUNT_TAPER);
+  }
+
+  // TUTORIAL: Symmetric S-shape around the midpoint. power > 1 gives a conventional S curve:
+  // TUTORIAL: slower near START/END and faster through the middle. power < 1 gives the inverse
+  // TUTORIAL: timing: faster near the ends and flatter around the midpoint.
+  function symmetricPowerSCurve(t, power) {
+    const p = Math.max(0.05, Number(power) || 1);
+    if (t <= 0.5) return 0.5 * ((2 * t) ** p);
+    return 1 - 0.5 * ((2 * (1 - t)) ** p);
+  }
+
+  function curveValue(x, amount = 0, mode = 'Bend') {
+    const t = clampFloat(x, 0, 1);
+    const strength = signedCurveStrength(amount);
+    if (Math.abs(strength) <= 1e-9) return t;
+
     if (String(mode).startsWith('S')) {
-      const strength = Math.min(Math.abs(a - 127) / 128, 1);
-      const smooth = t * t * t * (t * (t * 6 - 15) + 10);
-      return clampFloat((1 - strength) * t + strength * smooth, 0, 1);
+      const power = SCURVE_MAX_POWER ** Math.abs(strength);
+      const signedPower = strength >= 0 ? power : (1 / power);
+      return clampFloat(symmetricPowerSCurve(t, signedPower), 0, 1);
     }
-    if (a < 127) { const power = 2 ** ((127 - a) / 32); return clampFloat(t ** power, 0, 1); }
-    const power = 2 ** ((a - 127) / 32); return clampFloat(1 - ((1 - t) ** power), 0, 1);
+
+    const power = BEND_MAX_POWER ** Math.abs(strength);
+    if (strength < 0) return clampFloat(t ** power, 0, 1);
+    return clampFloat(1 - ((1 - t) ** power), 0, 1);
   }
 
   // TUTORIAL: Linear interpolation helper for continuous morph parameters.
@@ -2522,6 +2607,8 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: such as engine/type/filter/input routing need explicit rules so they do not flicker unpredictably.
   function interpolatedPatch(start, end, t, sharedType = null) {
     const filterType = morphedFilterType(start.filterType, end.filterType, t);
+    const fmRangeCents = morphedFmRangeCents(start, end, t);
+    const fmRangeLabel = morphedFmRangeLabel(start, end, t);
     return {
       pot1: lerpInt(start.pot1, end.pot1, t, 0, POT_MAX_12BIT),
       pot2: lerpInt(start.pot2, end.pot2, t, 0, POT_MAX_12BIT),
@@ -2536,13 +2623,16 @@ itself, impose GPL licensing on generated outputs.
       filterResonance: lerp(endpointFilterResonance(start), endpointFilterResonance(end), t),
       beforeStart: lerpInt(start.beforeStart, end.beforeStart, t, 0, WINDOW_STEPS), beforeEnd: lerpInt(start.beforeEnd, end.beforeEnd, t, 0, WINDOW_STEPS),
       afterStart: lerpInt(start.afterStart, end.afterStart, t, 0, WINDOW_STEPS), afterEnd: lerpInt(start.afterEnd, end.afterEnd, t, 0, WINDOW_STEPS),
-      fmRangeLabel: start.fmRangeLabel,
+      fmRangeLabel,
+      fmRangeCents,
     };
   }
 
   // TUTORIAL: Interpolates controls while holding selected discrete choices to either the START or END path.
   function interpolatedPatchForDiscretePath(start, end, t, discretePatch) {
     const activeType = String(discretePatch.filterType || 'Off');
+    const fmRangeLabel = discretePatch.fmRangeLabel || start.fmRangeLabel || DEFAULT_FM_RANGE_LABEL;
+    const fmRangeCents = fmRangeLabelToCents(fmRangeLabel);
     return {
       pot1: lerpInt(start.pot1, end.pot1, t, 0, POT_MAX_12BIT),
       pot2: lerpInt(start.pot2, end.pot2, t, 0, POT_MAX_12BIT),
@@ -2561,7 +2651,8 @@ itself, impose GPL licensing on generated outputs.
       beforeEnd: lerpInt(start.beforeEnd, end.beforeEnd, t, 0, WINDOW_STEPS),
       afterStart: lerpInt(start.afterStart, end.afterStart, t, 0, WINDOW_STEPS),
       afterEnd: lerpInt(start.afterEnd, end.afterEnd, t, 0, WINDOW_STEPS),
-      fmRangeLabel: discretePatch.fmRangeLabel || start.fmRangeLabel || DEFAULT_FM_RANGE_LABEL,
+      fmRangeLabel,
+      fmRangeCents,
     };
   }
 
@@ -3202,9 +3293,9 @@ itself, impose GPL licensing on generated outputs.
       } else {
         table = tableForPatch(patch, patch.wavetableType);
       }
-      let fmRangeCents;
-      if (this.opts.differentFmRanges) fmRangeCents = lerp(fmRangeLabelToCents(this.start.fmRangeLabel), fmRangeLabelToCents(this.end.fmRangeLabel), t);
-      else fmRangeCents = fmRangeLabelToCents(this.opts.sharedFmRangeLabel || DEFAULT_FM_RANGE_LABEL);
+      const fmRangeCents = Number.isFinite(Number(patch.fmRangeCents))
+        ? clampFloat(patch.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
+        : morphedFmRangeCents(this.start, this.end, t, this.opts);
       const value = {table, fm: patch.fm, pwm: patch.pwm, am: patch.am, fmRangeCents, filterType: patch.filterType || 'Off', filterCutoff: patch.filterCutoff ?? neutralFilterCutoffForType(patch.filterType, this.summary.sampleRate), filterResonance: patch.filterResonance ?? 0};
       this.cache.set(idx, value);
       if (this.cache.size > MORPH_TABLE_CACHE_LIMIT) this.cache.delete(this.cache.keys().next().value);
@@ -3500,6 +3591,7 @@ itself, impose GPL licensing on generated outputs.
     else if (!state.export.differentTypes) p.wavetableType = canonicalWavetableType(state.export.sharedType);
     if (fmRangeLabelOverride != null) p.fmRangeLabel = fmRangeLabelOverride;
     else if (!state.export.differentFmRanges) p.fmRangeLabel = state.export.sharedFmRange;
+    p.fmRangeCents = fmRangeLabelToCents(p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
     return p;
   }
 
@@ -3677,9 +3769,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
           if (variant === 'soft') table = finaliseRawTableNoFallback(softenTableForMorph(table, t, 1.0)) || table;
         }
         const interp = interpolatedPatch(start, end, t, state.export.differentTypes ? null : state.export.sharedType);
-        let fmRangeCents;
-        if (state.export.differentFmRanges) fmRangeCents = lerp(fmRangeLabelToCents(start.fmRangeLabel), fmRangeLabelToCents(end.fmRangeLabel), t);
-        else fmRangeCents = fmRangeLabelToCents(state.export.sharedFmRange || DEFAULT_FM_RANGE_LABEL);
+        const fmRangeCents = Number.isFinite(Number(interp.fmRangeCents))
+          ? clampFloat(interp.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
+          : morphedFmRangeCents(start, end, t);
         frame = {
           table,
           fm: interp.fm,
@@ -3774,9 +3866,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
         filterFrameIndex = pos.idx;
         const t = pos.fade;
         const interp = interpolatedPatch(start, end, t, state.export.differentTypes ? null : state.export.sharedType);
-        let fmRangeCents;
-        if (state.export.differentFmRanges) fmRangeCents = lerp(fmRangeLabelToCents(start.fmRangeLabel), fmRangeLabelToCents(end.fmRangeLabel), t);
-        else fmRangeCents = fmRangeLabelToCents(state.export.sharedFmRange || DEFAULT_FM_RANGE_LABEL);
+        const fmRangeCents = Number.isFinite(Number(interp.fmRangeCents))
+          ? clampFloat(interp.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
+          : morphedFmRangeCents(start, end, t);
         frame = {
           table: spectralMorphTableNoFallback(morpher, t, variant),
           fm: interp.fm,
@@ -4206,15 +4298,16 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     };
   }
   // TUTORIAL: Morph settings describe how START and END are turned into a rendered file. Bulk-only
-  // TUTORIAL: settings are intentionally excluded from ordinary Morph exports. Schema v8 stores
-  // TUTORIAL: the morph render mode as an ID-backed object, not a label-only string, so renamed
-  // TUTORIAL: UI text will not break future readers.
+  // TUTORIAL: settings are intentionally excluded from ordinary Morph exports. Schema v9 stores
+  // TUTORIAL: the morph render mode as an ID-backed object, and stores Curve Amount as the
+  // TUTORIAL: signed UI value (-127..+127, neutral 0), so exported metadata matches what the
+  // TUTORIAL: user saw while keeping the render math deterministic.
   function morphSettingsMetadata() {
     const sharedWt = wavetableInfoFor(state.export.sharedType);
     return {
       render_mode: morphRenderModeMetadata(state.export.morphRenderMode),
       spectral_states: state.export.spectralStates,
-      curve: {amount: state.export.curveAmount, mode: state.export.curveMode},
+      curve: {amount: state.export.curveAmount, range: 'signed_-127_to_127', neutral: 0, mode: state.export.curveMode},
       cycle_stepped: !!state.export.cycleStepped,
       endpoint_routing: {
         different_wavetable_types: !!state.export.differentTypes,
@@ -4676,7 +4769,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: a pre-modulation table view.
   function visualDataForPatch(patch, mode) {
     const table = tableForPatch(patch);
-    const fmRange = fmRangeLabelToCents(patch.fmRangeLabel);
+    const fmRange = Number.isFinite(Number(patch.fmRangeCents))
+      ? clampFloat(patch.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
+      : fmRangeLabelToCents(patch.fmRangeLabel);
     if (mode === 'Phase-locked FM/PWM/Ring Mod') {
       const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
       return {kind: 'wave', data: wave, label: `phase-locked — ${modulationCaptionSuffix()}`};
@@ -4834,7 +4929,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const parts = morphLoopSafetyMessageParts(findings);
     const summary = renderLengthSummary();
     const expanded = state.ui.morphLoopSafetyExpanded !== false;
-    const hasSamplesPerCycleWarning = findings.some(finding => finding?.kind === 'samples_per_cycle' || finding?.meta?.kind === 'samples_per_cycle');
+    const hasSamplesPerCycleWarning = findings.some(finding => finding?.kind === 'samples_per_cycle');
     box.classList.remove('safe', 'warn', 'caution');
     box.classList.add(parts.className);
     const suggestionHtml = hasSamplesPerCycleWarning ? morphLoopSafeFrequencySuggestionsHtml(summary) : '';
@@ -4931,6 +5026,35 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     autoAuditionPatch(activeTabId() === 'morph' ? preferredMorphAuditionKey() : 'single');
   }
 
+  // TUTORIAL: Web Audio graph connection helpers. The graph has two independent links:
+  // TUTORIAL: (1) ScriptProcessor/BufferSource -> gain, and (2) gain -> destination.
+  // TUTORIAL: Tracking both links avoids repeated connects after retuning and lets tab changes
+  // TUTORIAL: fully mute the graph without closing the AudioContext.
+  function connectOutputGain() {
+    if (!state.audio.ctx || !state.audio.gain || state.audio.gainConnected) return;
+    state.audio.gain.connect(state.audio.ctx.destination);
+    state.audio.gainConnected = true;
+  }
+
+  function disconnectOutputGain() {
+    if (!state.audio.gain) { state.audio.gainConnected = false; return; }
+    try { state.audio.gain.disconnect(); } catch (_) {}
+    state.audio.gainConnected = false;
+  }
+
+  function connectLiveAudioNode() {
+    if (!state.audio.node || !state.audio.gain || state.audio.nodeConnected) return;
+    connectOutputGain();
+    state.audio.node.connect(state.audio.gain);
+    state.audio.nodeConnected = true;
+  }
+
+  function disconnectLiveAudioNode() {
+    if (!state.audio.node) { state.audio.nodeConnected = false; return; }
+    try { state.audio.node.disconnect(); } catch (_) {}
+    state.audio.nodeConnected = false;
+  }
+
   // TUTORIAL: Browser audio bootstrap. Web Audio contexts normally have to start from a user
   // TUTORIAL: gesture, so audio setup is delayed until the user asks to play or drone a patch.
   async function ensureAudio() {
@@ -4939,11 +5063,16 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) throw new Error('Web Audio is not available in this browser.');
       const ctx = new AudioCtx({sampleRate: state.export.sampleRate || DEFAULT_SAMPLE_RATE});
-      const gain = ctx.createGain(); gain.gain.value = state.common.volume; gain.connect(ctx.destination);
+      const gain = ctx.createGain(); gain.gain.value = state.common.volume;
       const node = ctx.createScriptProcessor(1024, 0, 2);
       node.onaudioprocess = audioProcess;
       state.audio.ctx = ctx; state.audio.node = node; state.audio.gain = gain; state.audio.sampleRate = ctx.sampleRate;
       state.audio.sources = new Set();
+      state.audio.nodeConnected = false;
+      state.audio.gainConnected = false;
+      connectOutputGain();
+    } else {
+      connectOutputGain();
     }
     if (state.audio.ctx.state !== 'running') await state.audio.ctx.resume();
   }
@@ -4993,8 +5122,11 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Starts or retunes a continuous audition drone for a selected patch.
   async function dronePatch(key) {
-    await ensureAudio(); cancelCancellableWork(); stopBufferSourceOnly(); state.audio.mode = 'single'; state.audio.livePatchKey = key; updateLiveAudioFromPatch(effectivePatchForKey(key));
-    state.audio.node.connect(state.audio.gain); state.audio.playing = true; state.audio.phase = 0;
+    const requestedSerial = state.audio.playbackSerial || 0;
+    await ensureAudio();
+    if (requestedSerial !== (state.audio.playbackSerial || 0)) return;
+    cancelCancellableWork(); stopBufferSourceOnly(); state.audio.mode = 'single'; state.audio.livePatchKey = key; updateLiveAudioFromPatch(effectivePatchForKey(key));
+    connectLiveAudioNode(); state.audio.playing = true; state.audio.phase = 0;
     state.audio.transportTarget = key;
     if (key === 'start' || key === 'end') state.audio.lastMorphTransport = key;
     updateStatusSummaries();
@@ -5100,14 +5232,15 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.audio.playbackSerial = (state.audio.playbackSerial || 0) + 1;
     state.audio.playing = false;
     state.audio.mode = 'single';
-    if (state.audio.node) { try { state.audio.node.disconnect(); } catch (_) {} }
+    disconnectLiveAudioNode();
     state.audio.transportTarget = null;
     updateTransportButtons();
     if (options.hard && state.audio.ctx) {
       const ctx = state.audio.ctx;
-      try { if (state.audio.gain) state.audio.gain.disconnect(); } catch (_) {}
+      disconnectOutputGain();
       try { ctx.close(); } catch (_) {}
       state.audio.ctx = null; state.audio.node = null; state.audio.gain = null; state.audio.source = null; state.audio.sources = new Set();
+      state.audio.nodeConnected = false; state.audio.gainConnected = false;
     }
   }
 
@@ -5119,7 +5252,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.audio.mode = 'single';
     state.audio.transportTarget = null;
     updateTransportButtons();
-    if (state.audio.node) { try { state.audio.node.disconnect(); } catch (_) {} }
+    disconnectLiveAudioNode();
+    disconnectOutputGain();
   }
 
 
@@ -5164,6 +5298,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Plays a pre-rendered morph buffer through Web Audio.
   function playRenderedMorphAudio(rendered, transportTarget = 'morph-forward') {
+    connectOutputGain();
     const buffer = state.audio.ctx.createBuffer(1, rendered.audio.length, rendered.summary.sampleRate);
     buffer.copyToChannel(rendered.audio, 0);
     const src = state.audio.ctx.createBufferSource();
@@ -5569,10 +5704,14 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
         apply(num.value);
       }
     });
-    num.addEventListener('wheel', () => {
+    num.addEventListener('wheel', ev => {
+      // TUTORIAL: Number inputs step on wheel in most browsers. preventDefault keeps that
+      // TUTORIAL: intentional value change from also scrolling the page or triggering zoom
+      // TUTORIAL: gestures while the focused field is being edited.
+      ev.preventDefault();
       commitNextNumberInput = true;
       setTimeout(() => apply(num.value), 0);
-    });
+    }, {passive: false});
     num.addEventListener('input', ev => {
       const inputType = String(ev.inputType || '');
       const looksLikeTyping = inputType.startsWith('insert') || inputType.startsWith('delete') || inputType.includes('Composition');
@@ -5727,7 +5866,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     wtSummary.textContent = wavetableShortName(patch.wavetableType);
     wtRow.append(wtLab, wtSel, wtSummary); parent.appendChild(wtRow);
 
-    const modPanel = addModulePanel(parent, moduleKey('modulation'), 'Playback Modulation', modulationSummaryText(patch), false);
+    const modPanel = addModulePanel(parent, moduleKey('modulation'), 'Modulation', modulationSummaryText(patch), false);
     addSlider(modPanel, 'FM', patch, 'fm', 0, 255, 1, afterPatchChange);
     const fmRow = document.createElement('div'); fmRow.className = 'row wide';
     const fmLab = document.createElement('label'); fmLab.textContent = 'FM Pitch Range';
@@ -5968,22 +6107,27 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Builds morph curve controls used to bend the transition position.
+  // TUTORIAL: The UI is signed because that communicates the musical action better:
+  // TUTORIAL: 0 is neutral, negative bends delay the START→END movement, and positive
+  // TUTORIAL: bends pull the movement earlier. The renderer reads the same signed value.
   function makeCurveAmountControl() {
     const holder = document.createElement('div');
     holder.className = 'variantChoiceGroup';
     const range = document.createElement('input');
     range.type = 'range';
-    range.min = 1;
-    range.max = 255;
+    range.min = -127;
+    range.max = 127;
     range.step = 1;
+    range.dataset.exportSetting = 'curve-amount';
     range.value = state.export.curveAmount;
     const num = document.createElement('input');
     num.type = 'number';
-    num.min = 1;
-    num.max = 255;
+    num.min = -127;
+    num.max = 127;
     num.step = 1;
+    num.dataset.exportSetting = 'curve-amount';
     num.value = state.export.curveAmount;
-    syncRangeNumber(range, num, v => { state.export.curveAmount = clampInt(v, 1, 255); }, () => { updateStatusSummaries(); syncExportSettingControls(); });
+    syncRangeNumber(range, num, v => { state.export.curveAmount = clampInt(v, -127, 127); }, () => { updateStatusSummaries(); syncExportSettingControls(); });
     holder.append(range, num);
     return holder;
   }
@@ -6476,6 +6620,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     document.querySelectorAll('[data-export-setting="bit-depth"]').forEach(el => el.value = state.export.bitDepth);
     document.querySelectorAll('[data-export-setting="morph-render-mode"]').forEach(el => el.value = canonicalMorphRenderMode(state.export.morphRenderMode));
     document.querySelectorAll('[data-export-setting="spectral-states"]').forEach(el => el.value = String(normaliseSpectralStates(state.export.spectralStates || 3)));
+    document.querySelectorAll('[data-export-setting="curve-amount"]').forEach(el => el.value = String(clampInt(state.export.curveAmount, -127, 127)));
+    document.querySelectorAll('[data-export-setting="curve-mode"]').forEach(el => el.value = state.export.curveMode || 'Bend');
     document.querySelectorAll('[data-export-setting="dc-mode"]').forEach(el => el.value = state.export.dcMode);
     document.querySelectorAll('[data-export-setting="norm-mode"]').forEach(el => el.value = state.export.normMode);
     document.querySelectorAll('[data-export-setting="headroom-db"]').forEach(el => el.value = state.export.headroomDb);
@@ -6767,7 +6913,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const sharedFm = document.createElement('select');
     sharedFm.dataset.exportSetting = 'shared-fm-range';
     FM_RANGES.forEach(([label]) => sharedFm.append(new Option(label, label))); sharedFm.value = state.export.sharedFmRange; sharedFm.onchange = () => { state.export.sharedFmRange = sharedFm.value; state.patches.start.fmRangeLabel = sharedFm.value; state.patches.end.fmRangeLabel = sharedFm.value; persistGlobalSettings(); updateVisuals(); updateStatusSummaries(); }; row('Shared FM Pitch Range', sharedFm);
-    const curveMode = document.createElement('select'); ['Bend','S-curve'].forEach(v => curveMode.append(new Option(v, v))); curveMode.value = state.export.curveMode; curveMode.onchange = () => state.export.curveMode = curveMode.value; row('Curve Mode', curveMode);
+    const curveMode = document.createElement('select'); ['Bend','S-curve'].forEach(v => curveMode.append(new Option(v, v))); curveMode.dataset.exportSetting = 'curve-mode'; curveMode.value = state.export.curveMode; curveMode.onchange = () => { state.export.curveMode = curveMode.value; updateStatusSummaries(); syncExportSettingControls(); }; row('Curve Mode', curveMode);
     row('Curve Amount', makeCurveAmountControl());
     row('DC Removal', makeDcControl());
     row('Normalise', makeNormControl());
@@ -6908,7 +7054,16 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Inclusive integer random helper.
   function randInt(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
   // TUTORIAL: Creates a random source/result window pair with legal start/end values.
-  function randomWindowPair() { const a = randInt(0, WINDOW_STEPS), len = randInt(4, WINDOW_STEPS); return [a, (a + len) % (WINDOW_STEPS + 1)]; }
+  // TUTORIAL: Window endpoints are shown as 0..256, but 256 is only useful as the
+  // TUTORIAL: special full-cycle end marker. Random starts therefore use 0..255, and
+  // TUTORIAL: wrapped ends use modulo 256 so short windows crossing the cycle boundary
+  // TUTORIAL: remain short instead of becoming accidental near-full or zero-length windows.
+  function randomWindowPair() {
+    const a = randInt(0, WINDOW_STEPS - 1);
+    const len = randInt(4, WINDOW_STEPS);
+    if (len >= WINDOW_STEPS) return [0, WINDOW_STEPS];
+    return [a, (a + len) % WINDOW_STEPS];
+  }
 
   function randomiseMorphEndpointAndPlay(key) {
     state.patches[key] = randomPatch();
@@ -7086,6 +7241,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     p.sourceInput1 = canonicalSourceTap(p.sourceInput1, 'A');
     p.sourceInput2 = canonicalSourceTap(p.sourceInput2, 'B');
     p.fmRangeLabel = p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL;
+    p.fmRangeCents = fmRangeLabelToCents(p.fmRangeLabel);
     return p;
   }
 
