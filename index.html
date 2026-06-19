@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.6s
+Fractured Wavetable Generator v2.6za
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,7 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs. v2.6f cleans stale button/variant comments and keeps transport keyboard shortcuts active when ordinary controls such as buttons, sliders, checkboxes, and dropdowns have focus. v2.6g lets alphabet transport shortcuts work from numeric fields, keeps true text fields reserved for typing, and releases focus before browser-level Ctrl/Cmd+PageUp/PageDown tab shortcuts so sliders do not steal those keys. v2.6h carries FM pitch-range changes through morph interpolation, cleans a stale loop-safety data-shape check, prevents numeric-field wheel scrolling from moving the page, tightens random window generation, hardens tab-switch audio muting, and tidies a Formant engine formatting/Source-B accumulation oversight. v2.6i presents Curve Amount as a signed -127..+127 control with 0 as neutral. v2.6j retunes the morph curve response so Bend is less twitchy near centre and S-curve responds audibly. v2.6k makes the shared/different FM pitch-range toggle update the visible controls, live audition, visualisers, and effective render state consistently without requiring another control change. v2.6l treats START as the effective shared source when endpoint settings are not different, v2.6m keeps disabled END controls visibly dormant instead of mirroring START, v2.6n moves that explanation into Notes while exposing the same START/END morph-routing and cycle-stepped controls in Bulk, v2.6o exposes morph curve controls in Bulk and clarifies loop-safe frequency substitution, v2.6p adds reproducibility/performance comments and fixes START FM shared-control enabling, v2.6q caches low-harmonic trigonometry, v2.6r refreshes dependent START/END summaries when shared routing changes, and v2.6s documents the late-bound patch UI refresher closure used by patch controls.
+Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs. v2.6f cleans stale button/variant comments and keeps transport keyboard shortcuts active when ordinary controls such as buttons, sliders, checkboxes, and dropdowns have focus. v2.6g lets alphabet transport shortcuts work from numeric fields, keeps true text fields reserved for typing, and releases focus before browser-level Ctrl/Cmd+PageUp/PageDown tab shortcuts so sliders do not steal those keys. v2.6h carries FM pitch-range changes through morph interpolation, cleans a stale loop-safety data-shape check, prevents numeric-field wheel scrolling from moving the page, tightens random window generation, hardens tab-switch audio muting, and tidies a Formant engine formatting/Source-B accumulation oversight. v2.6i presents Curve Amount as a signed -127..+127 control with 0 as neutral. v2.6j retunes the morph curve response so Bend is less twitchy near centre and S-curve responds audibly. v2.6k makes the shared/different FM pitch-range toggle update the visible controls, live audition, visualisers, and effective render state consistently without requiring another control change. v2.6l treats START as the effective shared source when endpoint settings are not different, v2.6m keeps disabled END controls visibly dormant instead of mirroring START, v2.6n moves that explanation into Notes while exposing the same START/END morph-routing and cycle-stepped controls in Bulk, v2.6o exposes morph curve controls in Bulk and clarifies loop-safe frequency substitution, v2.6p adds reproducibility/performance comments and fixes START FM shared-control enabling, v2.6q caches low-harmonic trigonometry, v2.6r refreshes dependent START/END summaries when shared routing changes, v2.6s documents the late-bound patch UI refresher closure used by patch controls, v2.6t adds a per-patch Drawn Waveform source that can be routed through the existing tap/input stage while Bulk random export remains generator-only, v2.6u improves live drawing response, full-scale drawing reach, tap labels, Drawn settings spacing, and non-destructive seam/smoothing preview behaviour, and v2.6v releases focused controls on ESC/browser-tab shortcuts while excluding untouched sine/flat Drawn tables from ordinary random tap assignment, v2.6w fixes the visible/exported version label, deduplicates Drawn Waveform JSON data through a top-level drawn_waveforms registry, records Drawn seam/smoothing settings for reconstruction, and notes that Per Cycle Peak normalisation can flatten cycle-to-cycle beating, and v2.6x adds a stationary-morph render path so copied START→END patches render as one fixed patch instead of passing through the interpolation cache, and v2.6y routes live endpoint audition and stationary morph rendering through one shared oscillator-frame helper so copied endpoints cannot diverge because of duplicated live/render setup code, and v2.6z fixes stale visible version labels and updates comments around the shared oscillator stage so future edits keep FM, PWM, and Ring Mod together, and v2.6za fixes the ESC focus-release helper so it blurs the active ordinary control instead of recursing.
 
 Recent v2.5 development summary: the v2.5 Source Taps Lab series added A/B/C/D taps, Input 1/Input 2 terminology, collapsible patch sections, logarithmic cutoff/frequency sliders, 0–127 resonance presentation, Morph visualiser collapse controls, and stronger per-engine tap tuning.
 
@@ -37,7 +37,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.6s</title>
+<title>Fractured Wavetable Generator v2.6za</title>
 <style>
   :root {
     --bg: #101216;
@@ -96,6 +96,12 @@ itself, impose GPL licensing on generated outputs.
   .moduleSummary { color: var(--muted); font-weight: 400; font-size: 12px; text-align: right; margin-left: auto; }
   .moduleSummary.default { color: var(--ok); }
   .moduleSummary.changed { color: var(--warn); }
+  .moduleSummary.bad { color: var(--bad); }
+  .drawnCanvas { touch-action: none; cursor: crosshair; }
+  .drawnCanvas.flatWarning { border-color: var(--bad); }
+  .drawnSettingGrid { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin: 7px 0; }
+  .drawnSettingRow { display: inline-grid; grid-template-columns: auto minmax(130px, 170px); gap: 6px; align-items: center; }
+  .drawnSettingRow label { color: var(--muted); font-size: 13px; }
   .row.wide.tapInputRow { grid-template-columns: 64px minmax(200px, 1fr); gap: 6px; }
   .tapChoiceGroup { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .tapChoiceGroup button { padding: 5px 8px; font-size: 12px; }
@@ -162,7 +168,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.6s</h1>
+  <h1>Fractured Wavetable Generator v2.6za</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -405,8 +411,8 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.6s';
-  const EXPORT_SCHEMA_VERSION = 9;
+  const APP_VERSION = 'v2.6za';
+  const EXPORT_SCHEMA_VERSION = 11;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 48000;
   const DEFAULT_FREQUENCY = 110.0;
@@ -861,7 +867,16 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Creates a complete patch object with safe defaults. New random patches and resets start from
   // TUTORIAL: this shape so later code can assume every field exists.
   function defaultPatch() {
-    return { engine: DEFAULT_ENGINE, pot1: 0, pot2: 2048, pot3: 0, sourceInput1: 'A', sourceInput2: 'B', wavetableType: 3, fm: 0, pwm: 0, am: 0, filterType: 'Off', filterCutoff: 8000, filterResonance: 0, beforeStart: 0, beforeEnd: WINDOW_STEPS, afterStart: 0, afterEnd: WINDOW_STEPS, fmRangeLabel: DEFAULT_FM_RANGE_LABEL };
+    return {
+      engine: DEFAULT_ENGINE,
+      pot1: 0, pot2: 2048, pot3: 0,
+      sourceInput1: 'A', sourceInput2: 'B', wavetableType: 3,
+      drawnTable: defaultDrawnTable(), drawnSeamMode: 'Smooth Wrap', drawnSmoothing: 'Light',
+      fm: 0, pwm: 0, am: 0,
+      filterType: 'Off', filterCutoff: 8000, filterResonance: 0,
+      beforeStart: 0, beforeEnd: WINDOW_STEPS, afterStart: 0, afterEnd: WINDOW_STEPS,
+      fmRangeLabel: DEFAULT_FM_RANGE_LABEL,
+    };
   }
 
   // TUTORIAL: Sanitises numeric input from sliders, number boxes, JSON-like state, and DSP calculations before
@@ -1189,6 +1204,79 @@ itself, impose GPL licensing on generated outputs.
     const t = new Float32Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) t[i] = i < TABLE_SIZE / 2 ? 1 : -1;
     return t;
+  }
+
+  // TUTORIAL: The drawn source starts as a plain sine. It is not a special preset after that;
+  // TUTORIAL: it is simply the editable 256-sample table that lives inside each patch.
+  function defaultDrawnTable() {
+    const t = new Float32Array(TABLE_SIZE);
+    for (let i = 0; i < TABLE_SIZE; i++) t[i] = Math.sin(2 * Math.PI * i / TABLE_SIZE);
+    return t;
+  }
+
+  function sanitiseDrawnTable(table) {
+    if (!table || typeof table.length !== 'number' || table.length !== TABLE_SIZE) return defaultDrawnTable();
+    const out = new Float32Array(TABLE_SIZE);
+    for (let i = 0; i < TABLE_SIZE; i++) out[i] = clampFloat(Number(table[i]), -1, 1);
+    return out;
+  }
+
+  function cloneDrawnTable(table) {
+    return Float32Array.from(sanitiseDrawnTable(table));
+  }
+
+  function drawnTableStats(table) {
+    const t = sanitiseDrawnTable(table);
+    let mean = 0;
+    for (let i = 0; i < TABLE_SIZE; i++) mean += t[i];
+    mean /= TABLE_SIZE;
+    let peak = 0, sumSq = 0;
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const centred = t[i] - mean;
+      peak = Math.max(peak, Math.abs(centred));
+      sumSq += centred * centred;
+    }
+    return {peak, rms: Math.sqrt(sumSq / TABLE_SIZE), mean};
+  }
+
+  function drawnTableIsFlat(table) {
+    const stats = drawnTableStats(table);
+    return stats.peak < DRAWN_FLAT_PEAK || stats.rms < DRAWN_FLAT_RMS;
+  }
+
+  function drawnTableMatchesDefaultSine(table) {
+    const t = sanitiseDrawnTable(table);
+    const d = defaultDrawnTable();
+    let peakDiff = 0, sumSq = 0;
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const diff = t[i] - d[i];
+      peakDiff = Math.max(peakDiff, Math.abs(diff));
+      sumSq += diff * diff;
+    }
+    return peakDiff < 0.002 || Math.sqrt(sumSq / TABLE_SIZE) < 0.001;
+  }
+
+  function drawnTableIsRandomEligible(table) {
+    return !drawnTableIsFlat(table) && !drawnTableMatchesDefaultSine(table);
+  }
+
+  function safeDrawnSourceTable(table) {
+    return drawnTableIsFlat(table) ? defaultDrawnTable() : sanitiseDrawnTable(table);
+  }
+
+  function drawnTableToInt16(table) {
+    const t = sanitiseDrawnTable(table);
+    const out = [];
+    for (let i = 0; i < TABLE_SIZE; i++) out.push(clampInt(t[i] * 32767, -32767, 32767));
+    return out;
+  }
+
+  function blendDrawnTables(a, b, t) {
+    const aa = sanitiseDrawnTable(a), bb = sanitiseDrawnTable(b);
+    const amount = clampFloat(t, 0, 1);
+    const out = new Float32Array(TABLE_SIZE);
+    for (let i = 0; i < TABLE_SIZE; i++) out[i] = (1 - amount) * aa[i] + amount * bb[i];
+    return out;
   }
 
   // TUTORIAL: Checks that a table has the expected size, finite samples, and non-zero amplitude before it is
@@ -2338,7 +2426,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Public wavetable-generation dispatcher. UI/export code calls this rather than a
   // TUTORIAL: specific engine function. It applies source/result windows as generation-stage
   // TUTORIAL: remapping, then returns an audio-safe 256-sample Float32Array.
-  function generateWavetable(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, engine = DEFAULT_ENGINE, sourceInput1 = 'A', sourceInput2 = 'B') {
+  function generateWavetable(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, engine = DEFAULT_ENGINE, sourceInput1 = 'A', sourceInput2 = 'B', drawnTable = null, drawnSeamMode = 'Smooth Wrap', drawnSmoothing = 'Light') {
     const parts = enginePartsFor(engine || DEFAULT_ENGINE);
     const variant = parts.variant === 'Crunchy' ? 'crunchy' : 'smooth';
     const previousTapContext = ACTIVE_SOURCE_TAP_CONTEXT;
@@ -2347,6 +2435,9 @@ itself, impose GPL licensing on generated outputs.
       variant: parts.variant,
       input1: canonicalSourceTap(sourceInput1, 'A'),
       input2: canonicalSourceTap(sourceInput2, 'B'),
+      drawnTable: drawnTable ? sanitiseDrawnTable(drawnTable) : null,
+      drawnSeamMode: canonicalDrawnSeamMode(drawnSeamMode),
+      drawnSmoothing: canonicalDrawnSmoothing(drawnSmoothing),
     };
     try {
       switch (parts.family) {
@@ -2376,7 +2467,11 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Element-wise array scaling helper used before folding or blending operations.
   function scaleArray(a, s) { const o = new Float64Array(a.length); for (let i = 0; i < a.length; i++) o[i] = a[i] * s; return o; }
 
-  const SOURCE_TAP_KEYS = ['A', 'B', 'C', 'D'];
+  const DRAWN_TAP_KEY = 'DRAWN';
+  const GENERATOR_TAP_KEYS = ['A', 'B', 'C', 'D'];
+  const SOURCE_TAP_KEYS = [...GENERATOR_TAP_KEYS, DRAWN_TAP_KEY];
+  const DRAWN_FLAT_PEAK = 0.001;
+  const DRAWN_FLAT_RMS = 0.0005;
 
   function canonicalSourceTap(value, fallback = 'A') {
     const v = String(value || '').trim().toUpperCase();
@@ -2385,6 +2480,7 @@ itself, impose GPL licensing on generated outputs.
 
   function sourceTapLabel(key, family = '') {
     const k = canonicalSourceTap(key);
+    if (k === DRAWN_TAP_KEY) return 'Drawn';
     const labels = sourceTapLabelsForFamily(family);
     return labels[k] || `Tap ${k}`;
   }
@@ -2392,31 +2488,31 @@ itself, impose GPL licensing on generated outputs.
   function sourceTapLabelsForFamily(family) {
     switch (String(family || '')) {
       case 'Clean Chaos':
-        return {A: 'A Chaos A', B: 'B Chaos B', C: 'C Blur blend', D: 'D Comb chaos'};
+        return {A: 'A: Chaos A', B: 'B: Chaos B', C: 'C: Blur blend', D: 'D: Comb chaos'};
       case 'Phase Lattice':
-        return {A: 'A Lattice A', B: 'B Lattice B', C: 'C Folded lattice', D: 'D Product lattice'};
+        return {A: 'A: Lattice A', B: 'B: Lattice B', C: 'C: Folded lattice', D: 'D: Product lattice'};
       case 'Phase Distortion':
-        return {A: 'A Phase body', B: 'B Wave colour', C: 'C Knee blend', D: 'D Warp edge'};
+        return {A: 'A: Phase body', B: 'B: Wave colour', C: 'C: Knee blend', D: 'D: Warp edge'};
       case 'FM':
-        return {A: 'A Carrier', B: 'B Modulator', C: 'C PM blend', D: 'D Sidebands'};
+        return {A: 'A: Carrier', B: 'B: Modulator', C: 'C: PM blend', D: 'D: Sidebands'};
       case 'Pulse Warp':
-        return {A: 'A Pulse body', B: 'B Notch/offset', C: 'C Held pulse', D: 'D Edge residue'};
+        return {A: 'A: Pulse body', B: 'B: Notch/offset', C: 'C: Held pulse', D: 'D: Edge residue'};
       case 'Sync':
-        return {A: 'A Sync body', B: 'B Reset colour', C: 'C Reset blend', D: 'D Reset edge'};
+        return {A: 'A: Sync body', B: 'B: Reset colour', C: 'C: Reset blend', D: 'D: Reset edge'};
       case 'Formant':
-        return {A: 'A Broad vowel', B: 'B Narrow grit', C: 'C Vowel body', D: 'D Nasal residue'};
+        return {A: 'A: Broad vowel', B: 'B: Narrow grit', C: 'C: Vowel body', D: 'D: Nasal residue'};
       case 'Fold':
-        return {A: 'A Pre-fold', B: 'B Folded', C: 'C Fold sum', D: 'D Fold residue'};
+        return {A: 'A: Pre-fold', B: 'B: Folded', C: 'C: Fold sum', D: 'D: Fold residue'};
       case 'Bitcrush':
-        return {A: 'A Quantised', B: 'B Crushed', C: 'C Sample-held', D: 'D Error residue'};
+        return {A: 'A: Quantised', B: 'B: Crushed', C: 'C: Sample-held', D: 'D: Error residue'};
       case 'Harmonic Cluster':
-        return {A: 'A Harmonic body', B: 'B Cluster colour', C: 'C Dense cluster', D: 'D Inharmonic residue'};
+        return {A: 'A: Harmonic body', B: 'B: Cluster colour', C: 'C: Dense cluster', D: 'D: Inharmonic residue'};
       case 'Modal':
-        return {A: 'A Body', B: 'B Bright body', C: 'C Metallic body', D: 'D Strike/residue'};
+        return {A: 'A: Body', B: 'B: Bright body', C: 'C: Metallic body', D: 'D: Strike/residue'};
       case 'Feedback Sine':
-        return {A: 'A Sine feedback', B: 'B Saturated fb', C: 'C Folded fb', D: 'D Phase residue'};
+        return {A: 'A: Sine feedback', B: 'B: Saturated fb', C: 'C: Folded fb', D: 'D: Phase residue'};
       default:
-        return {A: 'A Source', B: 'B Source', C: 'C Blend', D: 'D Difference'};
+        return {A: 'A: Source', B: 'B: Source', C: 'C: Blend', D: 'D: Difference'};
     }
   }
 
@@ -2537,11 +2633,15 @@ itself, impose GPL licensing on generated outputs.
     variant: DEFAULT_ENGINE_VARIANT,
     input1: 'A',
     input2: 'B',
+    drawnTable: null,
+    drawnSeamMode: 'Smooth Wrap',
+    drawnSmoothing: 'Light',
   };
 
   function selectedSourceTables(a, b, seedMix = 0.5) {
     const ctx = ACTIVE_SOURCE_TAP_CONTEXT || {};
     const taps = sourceTapsForFamily(a, b, ctx.family || DEFAULT_ENGINE_FAMILY, seedMix);
+    if (ctx.drawnTable) taps[DRAWN_TAP_KEY] = effectiveDrawnSourceTable(ctx.drawnTable, ctx.drawnSeamMode, ctx.drawnSmoothing);
     const input1 = canonicalSourceTap(ctx.input1, 'A');
     const input2 = canonicalSourceTap(ctx.input2, 'B');
     return {
@@ -2559,7 +2659,7 @@ itself, impose GPL licensing on generated outputs.
     const bw = clampWindowPair(patch.beforeStart, patch.beforeEnd);
     const aw = clampWindowPair(patch.afterStart, patch.afterEnd);
     const wt = wavetableType == null ? patch.wavetableType : wavetableType;
-    return generateWavetable(patch.pot1, patch.pot2, patch.pot3, wt, bw.start, bw.length, aw.start, aw.length, patch.engine || DEFAULT_ENGINE, patch.sourceInput1 || 'A', patch.sourceInput2 || 'B');
+    return generateWavetable(patch.pot1, patch.pot2, patch.pot3, wt, bw.start, bw.length, aw.start, aw.length, patch.engine || DEFAULT_ENGINE, patch.sourceInput1 || 'A', patch.sourceInput2 || 'B', patch.drawnTable, patch.drawnSeamMode, patch.drawnSmoothing);
   }
 
   // TUTORIAL: Morph-position shaping. These helpers turn a linear progress value into a bent,
@@ -2720,6 +2820,9 @@ itself, impose GPL licensing on generated outputs.
       engine: t < 0.5 ? (start.engine || DEFAULT_ENGINE) : (end.engine || DEFAULT_ENGINE),
       sourceInput1: morphedSourceInput(start.sourceInput1, end.sourceInput1, t, 'A'),
       sourceInput2: morphedSourceInput(start.sourceInput2, end.sourceInput2, t, 'B'),
+      drawnTable: blendDrawnTables(start.drawnTable, end.drawnTable, t),
+      drawnSeamMode: t < 0.5 ? canonicalDrawnSeamMode(start.drawnSeamMode) : canonicalDrawnSeamMode(end.drawnSeamMode),
+      drawnSmoothing: t < 0.5 ? canonicalDrawnSmoothing(start.drawnSmoothing) : canonicalDrawnSmoothing(end.drawnSmoothing),
       wavetableType: canonicalWavetableType(sharedType == null ? start.wavetableType : sharedType),
       fm: lerpInt(start.fm, end.fm, t, 0, 255), pwm: lerpInt(start.pwm, end.pwm, t, 0, 255), am: lerpInt(start.am, end.am, t, 0, 255),
       filterType,
@@ -2744,6 +2847,9 @@ itself, impose GPL licensing on generated outputs.
       engine: discretePatch.engine || DEFAULT_ENGINE,
       sourceInput1: canonicalSourceTap(discretePatch.sourceInput1, 'A'),
       sourceInput2: canonicalSourceTap(discretePatch.sourceInput2, 'B'),
+      drawnTable: cloneDrawnTable(discretePatch.drawnTable),
+      drawnSeamMode: canonicalDrawnSeamMode(discretePatch.drawnSeamMode),
+      drawnSmoothing: canonicalDrawnSmoothing(discretePatch.drawnSmoothing),
       wavetableType: canonicalWavetableType(discretePatch.wavetableType),
       fm: lerpInt(start.fm, end.fm, t, 0, 255),
       pwm: lerpInt(start.pwm, end.pwm, t, 0, 255),
@@ -2856,10 +2962,12 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Ring Mod stage. The earlier experimental Ring Mod Tone control is intentionally absent.
-  // TUTORIAL: The old internal field is still named `am` so older JSON and patch state remain
-  // TUTORIAL: compatible, but the user-facing control is Ring Mod. The modulator is derived
-  // TUTORIAL: from the same table at several integer phase ratios, so a single-cycle render
-  // TUTORIAL: remains loopable while the audible result is much less like ordinary volume AM.
+  // TUTORIAL: The old internal patch field is still named `am` so existing patch state remains
+  // TUTORIAL: compatible, while JSON/export metadata exposes the user-facing name `ring_mod`.
+  // TUTORIAL: Treat `am` as the Ring Mod amount inside the DSP path; do not bypass it in
+  // TUTORIAL: morph or export renderers just because the UI label changed. The modulator is
+  // TUTORIAL: derived from the same table at several integer phase ratios, so a single-cycle
+  // TUTORIAL: render remains loopable while the audible result is less like ordinary volume AM.
   function ringModStage(table, phase, amount, depthScale = 1) {
     const depth = clampFloat((clampFloat(amount, 0, 255) / 255) * depthScale, 0, 1);
     const ph = ((Number(phase) || 0) % 1 + 1) % 1;
@@ -2963,9 +3071,19 @@ itself, impose GPL licensing on generated outputs.
     return Math.abs(n - Math.round(n)) <= tolerance;
   }
 
-  // TUTORIAL: Makes a shallow copy of a patch before temporary loop-safe overrides are applied.
+  // TUTORIAL: Makes an independent copy of a patch before temporary overrides or START/END copy operations.
   function clonePatch(patch) {
-    return {...patch};
+    const p = {...defaultPatch(), ...(patch || {})};
+    p.engine = canonicalEngineName(p.engine || DEFAULT_ENGINE);
+    p.wavetableType = canonicalWavetableType(p.wavetableType);
+    p.sourceInput1 = canonicalSourceTap(p.sourceInput1, 'A');
+    p.sourceInput2 = canonicalSourceTap(p.sourceInput2, 'B');
+    p.drawnTable = cloneDrawnTable(p.drawnTable);
+    p.drawnSeamMode = canonicalDrawnSeamMode(p.drawnSeamMode);
+    p.drawnSmoothing = canonicalDrawnSmoothing(p.drawnSmoothing);
+    p.fmRangeLabel = canonicalFmRangeLabel(p.fmRangeLabel);
+    p.fmRangeCents = fmRangeLabelToCents(p.fmRangeLabel);
+    return p;
   }
 
   // TUTORIAL: Creates the neutral audition/export version of a patch for phase-accurate
@@ -3368,6 +3486,14 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Turns export length settings into sample/frame/cycle counts and a human-readable summary.
+  // TUTORIAL: Export cleanup can be a sound-design choice. Per-cycle peak normalisation is useful
+  // TUTORIAL: for single-cycle wavetable material, but it can flatten cycle-to-cycle amplitude
+  // TUTORIAL: movement such as beating, tremolo-like motion, or slow level swells.
+  function normalisationDynamicsNotes() {
+    if (canonicalNormMode(state.export.normMode) !== 'Per Cycle Peak') return [];
+    return ['Per Cycle Peak normalisation can flatten cycle-to-cycle amplitude beating; use Whole File Peak or Off when that beating should be preserved.'];
+  }
+
   function renderLengthSummary() {
     const sr = clampInt(state.export.sampleRate, 8000, 384000);
     const freq = clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY);
@@ -3470,8 +3596,11 @@ itself, impose GPL licensing on generated outputs.
       || String(a.fmRangeLabel || DEFAULT_FM_RANGE_LABEL) !== String(b.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
   }
 
-  // TUTORIAL: One-sample oscillator render. This is the inner DSP loop: read the table, apply Ring Mod,
-  // TUTORIAL: warp phase width for PWM, apply bounded self-FM, then optionally filter the output.
+  // TUTORIAL: One-sample oscillator render. This is the canonical oscillator-stage order:
+  // TUTORIAL: build the Ring Mod stage, use its modulation signal for PWM/FM, read the warped
+  // TUTORIAL: table phase, apply Ring Mod, then optionally filter the output. Live audition,
+  // TUTORIAL: preview, and WAV export should share this behaviour; duplicated render loops
+  // TUTORIAL: must keep Ring Mod, PWM, FM, and phase advance together.
   function renderFrameSample(frame, phase, baseInc, filterState, filterCoeffs) {
     const ringStage = ringModStage(frame.table, phase.value, frame.am);
     const modSignal = ringStage.modSignal;
@@ -3725,6 +3854,28 @@ itself, impose GPL licensing on generated outputs.
     return clampInt(desiredFrames, 1, MORPH_MAX_TABLE_FRAMES);
   }
 
+  // TUTORIAL: Builds the compact oscillator frame consumed by live audition and stationary
+  // TUTORIAL: offline render. It resolves the table plus FM, PWM, Ring Mod (`am` internally),
+  // TUTORIAL: and FM range in one place so START/END drone playback and copied-START→END
+  // TUTORIAL: morph rendering cannot drift apart when patch fields are renamed or added.
+  function oscillatorFrameForPatch(patch, wavetableTypeOverride = null) {
+    const p = patch || defaultPatch();
+    const wt = wavetableTypeOverride == null ? p.wavetableType : wavetableTypeOverride;
+    const fmRangeCents = Number.isFinite(Number(p.fmRangeCents))
+      ? clampFloat(p.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
+      : fmRangeLabelToCents(p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
+    return {
+      table: tableForPatch(p, wt),
+      fm: clampFloat(p.fm ?? 0, 0, 255),
+      pwm: clampFloat(p.pwm ?? 0, 0, 255),
+      am: clampFloat(p.am ?? 0, 0, 255),
+      fmRangeCents,
+      filterType: p.filterType || 'Off',
+      filterCutoff: p.filterCutoff ?? 8000,
+      filterResonance: p.filterResonance ?? 0,
+    };
+  }
+
   // TUTORIAL: Renders one endpoint sample for crossfade paths that need complete START and END audio streams.
   function renderFixedEndpointSample(endpoint, phase, filterState, filterCoeffs) {
     const ringStage = ringModStage(endpoint.table, phase.value, endpoint.patch.am);
@@ -3737,6 +3888,95 @@ itself, impose GPL licensing on generated outputs.
     phase.value += Math.min(endpoint.baseInc * boundedFmPhaseScale(modSignal, endpoint.patch.fm, endpoint.fmRangeCents), 0.49);
     if (phase.value >= 1) phase.value -= Math.floor(phase.value);
     return sample;
+  }
+
+  // TUTORIAL: Compares numbers with a tiny tolerance so effective START/END checks
+  // TUTORIAL: are not defeated by harmless floating point formatting differences.
+  function approxEqual(a, b, epsilon = 1e-9) {
+    const x = Number(a), y = Number(b);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return x === y;
+    return Math.abs(x - y) <= epsilon;
+  }
+
+  // TUTORIAL: Drawn tables are small, so exact-ish comparison is cheap. This is used only
+  // TUTORIAL: to detect copied START→END morphs, not in the real-time audio path.
+  function drawnTablesEquivalent(a, b) {
+    const aa = a ? sanitiseDrawnTable(a) : null;
+    const bb = b ? sanitiseDrawnTable(b) : null;
+    if (!aa && !bb) return true;
+    if (!aa || !bb) return false;
+    if (aa.length !== bb.length) return false;
+    for (let i = 0; i < aa.length; i++) {
+      if (!approxEqual(aa[i], bb[i], 1e-7)) return false;
+    }
+    return true;
+  }
+
+  // TUTORIAL: A copied START→END patch should not become a "morph" internally. Rendering it
+  // TUTORIAL: through one fixed endpoint better matches the Drone audition path and avoids
+  // TUTORIAL: interpolation-cache side effects from muting endpoint dynamics such as beating.
+  function patchesEquivalentForStaticRender(a, b) {
+    const pa = effectiveExportPatch(a);
+    const pb = effectiveExportPatch(b);
+    return String(pa.engine || DEFAULT_ENGINE) === String(pb.engine || DEFAULT_ENGINE)
+      && clampInt(pa.pot1, 0, POT_MAX_12BIT) === clampInt(pb.pot1, 0, POT_MAX_12BIT)
+      && clampInt(pa.pot2, 0, POT_MAX_12BIT) === clampInt(pb.pot2, 0, POT_MAX_12BIT)
+      && clampInt(pa.pot3, 0, POT_MAX_12BIT) === clampInt(pb.pot3, 0, POT_MAX_12BIT)
+      && canonicalSourceTap(pa.sourceInput1, 'A') === canonicalSourceTap(pb.sourceInput1, 'A')
+      && canonicalSourceTap(pa.sourceInput2, 'B') === canonicalSourceTap(pb.sourceInput2, 'B')
+      && canonicalWavetableType(pa.wavetableType) === canonicalWavetableType(pb.wavetableType)
+      && clampInt(pa.fm, 0, 255) === clampInt(pb.fm, 0, 255)
+      && clampInt(pa.pwm, 0, 255) === clampInt(pb.pwm, 0, 255)
+      && clampInt(pa.am, 0, 255) === clampInt(pb.am, 0, 255)
+      && canonicalFmRangeLabel(pa.fmRangeLabel) === canonicalFmRangeLabel(pb.fmRangeLabel)
+      && String(pa.filterType || 'Off') === String(pb.filterType || 'Off')
+      && approxEqual(pa.filterCutoff ?? 8000, pb.filterCutoff ?? 8000, 1e-6)
+      && approxEqual(pa.filterResonance ?? 0, pb.filterResonance ?? 0, 1e-6)
+      && approxEqual(pa.beforeStart ?? 0, pb.beforeStart ?? 0, 1e-6)
+      && approxEqual(pa.beforeEnd ?? WINDOW_STEPS, pb.beforeEnd ?? WINDOW_STEPS, 1e-6)
+      && approxEqual(pa.afterStart ?? 0, pb.afterStart ?? 0, 1e-6)
+      && approxEqual(pa.afterEnd ?? WINDOW_STEPS, pb.afterEnd ?? WINDOW_STEPS, 1e-6)
+      && canonicalDrawnSeamMode(pa.drawnSeamMode) === canonicalDrawnSeamMode(pb.drawnSeamMode)
+      && canonicalDrawnSmoothing(pa.drawnSmoothing) === canonicalDrawnSmoothing(pb.drawnSmoothing)
+      && drawnTablesEquivalent(pa.drawnTable, pb.drawnTable);
+  }
+
+  // TUTORIAL: Renders a copied START→END morph as a stationary patch. This deliberately uses
+  // TUTORIAL: oscillatorFrameForPatch() plus renderFrameSample(), matching endpoint drone audition
+  // TUTORIAL: instead of stepping through morph frames or blending identical tables. This path was
+  // TUTORIAL: added after Ring Mod exposed a live-vs-render drift bug.
+  async function renderStaticPatchAudio(patch, reverse = false, progress = null, token = state.cancelToken) {
+    throwIfCancelled(token);
+    const summary = renderLengthSummary();
+    const n = summary.sampleCount, sr = summary.sampleRate, freq = summary.frequency;
+    const p = effectiveExportPatch(patch);
+    const frame = oscillatorFrameForPatch(p, p.wavetableType);
+    const filterState = makeBiquadState();
+    const filterCoeffs = biquadCoeffs(frame.filterType, frame.filterCutoff, frame.filterResonance, sr);
+    const out = new Float32Array(n);
+    const phase = {value: 0};
+    const baseInc = freq / sr;
+    for (let i = 0; i < n; i++) {
+      if ((i & 16383) === 0) {
+        throwIfCancelled(token);
+        if (progress) progress(i / Math.max(1, n));
+        if ((i & 65535) === 0) await nextFrame();
+      }
+      out[i] = renderFrameSample(frame, phase, baseInc, filterState, filterCoeffs);
+    }
+    throwIfCancelled(token);
+    if (progress) progress(0.70);
+    await nextFrame();
+    const audio = applyDcAndNormalise(out, freq, sr, state.export.dcMode, state.export.normMode, state.export.headroomDb);
+    throwIfCancelled(token);
+    if (progress) progress(0.78);
+    return {
+      audio,
+      summary,
+      notes: summary.warnings.concat([
+        'Stationary morph: START and END are identical, so the render uses one fixed patch instead of interpolating between matching endpoints.'
+      ], normalisationDynamicsNotes()),
+    };
   }
 
 
@@ -3831,6 +4071,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const notes = summary.warnings.slice();
     notes.push(`${notePrefix}: continuous controls interpolate for the whole render while START and END type/filter/engine paths fade across the whole render.`);
     notes.push(`${notePrefix}: branch DC removal/normalisation happens before the fade, so Per Cycle Peak does not erase the crossfade curve.`);
+    notes.push(...normalisationDynamicsNotes());
     return {audio, summary, notes};
   }
 
@@ -3949,6 +4190,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     else if (variant === 'comb') notes.push('Comb Wavetable Morph: START and END tables are blended as one oscillator, then a cyclic feed-forward phase-offset comb is applied to the intermediate table before playback.');
     else notes.push('Wavetable Morph: START and END tables are blended before one oscillator path; final WAV output uses the selected DC removal and normalisation mode.');
     if (fadeFilters) notes.push('Wavetable Morph: START and END filter types are faded as separate filter paths so there is no midpoint type switch.');
+    notes.push(...normalisationDynamicsNotes());
     return {audio, summary, notes};
   }
 
@@ -4030,6 +4272,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     else notes.push(`FFT Spectral Morph: ${normaliseSpectralStates(state.export.spectralStates || 3)} spectral anchor states are analysed into harmonic magnitude/phase, blended, rebuilt as one table, then rendered through the usual oscillator path.`);
     notes.push('Spectral morph: final WAV output uses the selected DC removal and normalisation mode.');
     if (fadeFilters) notes.push('FFT Spectral Morph: different START/END filter types are faded as separate filter paths so there is no midpoint type switch.');
+    notes.push(...normalisationDynamicsNotes());
     return {audio, summary, notes};
   }
 
@@ -4095,6 +4338,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     }
     notes.push('Crossfade mode: all START and END parameters are rendered as two complete endpoint signals, then crossfaded by the morph curve.');
     notes.push('Crossfade mode: branch DC removal/normalisation happens before the fade, so Per Cycle Peak does not erase the crossfade curve.');
+    notes.push(...normalisationDynamicsNotes());
     return {audio, summary, notes};
   }
 
@@ -4106,6 +4350,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     start = routed.start;
     end = routed.end;
     const mode = canonicalMorphRenderMode(state.export.morphRenderMode);
+    if (patchesEquivalentForStaticRender(start, end)) {
+      return renderStaticPatchAudio(reverse ? end : start, reverse, progress, token);
+    }
     if (mode === 'Crossfade (Favours Analogue Warmth)') {
       return renderMorphAudioCrossfade(start, end, reverse, progress, token, {fadeLaw: 'equal-power'});
     }
@@ -4181,6 +4428,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
         idx = clampInt(cycle, 0, frameCount - 1);
       } else idx = clampInt(Math.round(rawPos * (frameCount - 1)), 0, frameCount - 1);
       const fr = cache.frame(idx);
+      // TUTORIAL: Full Interpolation uses cached morph frames rather than oscillatorFrameForPatch(),
+      // TUTORIAL: but the sample loop below intentionally mirrors renderFrameSample(). Keep the
+      // TUTORIAL: Ring Mod (`fr.am`), PWM, FM, and phase-advance ordering in sync with that helper.
       if (idx !== filterFrameIndex) {
         filterFrameIndex = idx;
         filterCoeffs = biquadCoeffs(fr.filterType, fr.filterCutoff, fr.filterResonance, sr);
@@ -4202,7 +4452,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const audio = applyDcAndNormalise(out, freq, sr, state.export.dcMode, state.export.normMode, state.export.headroomDb);
     throwIfCancelled(token);
     if (progress) progress(0.78);
-    return {audio, summary, notes: summary.warnings};
+    return {audio, summary, notes: summary.warnings.concat(normalisationDynamicsNotes())};
   }
 
   // TUTORIAL: Final export cleanup. DC removal and normalisation can be applied per cycle or over
@@ -4324,6 +4574,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const forwardEnd = effectiveExportPatch(routed.end);
     const renderStart = direction === 'reverse' ? forwardEnd : forwardStart;
     const renderEnd = direction === 'reverse' ? forwardStart : forwardEnd;
+    const drawnWaveforms = createDrawnWaveformRegistry();
+    const patchOptions = {drawnWaveforms};
+    const designStartMeta = patchMetadata(startPatch, patchOptions);
+    const designEndMeta = patchMetadata(endPatch, patchOptions);
+    const renderStartMeta = patchMetadata(renderStart, patchOptions);
+    const renderEndMeta = patchMetadata(renderEnd, patchOptions);
     return {
       schema_version: EXPORT_SCHEMA_VERSION,
       generator: 'Fractured Wavetable Generator',
@@ -4337,11 +4593,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       render_summary: renderSummaryMetadata(summary),
       render_settings: renderSettingsMetadata(),
       morph_settings: morphSettingsMetadata(startPatch),
+      drawn_waveforms: drawnWaveformRegistryMetadata(drawnWaveforms),
       patches: {
-        design_start: patchMetadata(startPatch),
-        design_end: patchMetadata(endPatch),
-        render_start: patchMetadata(renderStart),
-        render_end: patchMetadata(renderEnd),
+        design_start: designStartMeta,
+        design_end: designEndMeta,
+        render_start: renderStartMeta,
+        render_end: renderEndMeta,
       },
       export_writer: {mode: 'buffered-browser-blob', wav_metadata: ['LIST/INFO', 'FWID']},
       notes,
@@ -4381,7 +4638,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   function controlRangeMetadata() {
     return {
       generator_pots: {min: 0, max: POT_MAX_12BIT},
-      source_taps: {values: SOURCE_TAP_KEYS.slice()},
+      source_taps: {values: SOURCE_TAP_KEYS.slice(), generator_model_taps: GENERATOR_TAP_KEYS.slice()},
       window_steps: {min: 0, max: WINDOW_STEPS, endpoint_wraps_to_zero: true},
       modulation_depth: {min: 0, max: 255},
       filter: {
@@ -4455,6 +4712,58 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     };
   }
 
+  function roundedMetadataNumber(value, digits = 6) {
+    const x = Number(value);
+    if (!Number.isFinite(x)) return 0;
+    return Number(x.toFixed(digits));
+  }
+
+  function createDrawnWaveformRegistry() {
+    return {keyToId: new Map(), records: []};
+  }
+
+  function drawnWaveformRecordForPatch(p) {
+    const values = drawnTableToInt16(p.drawnTable);
+    const stats = drawnTableStats(p.drawnTable);
+    const flat = drawnTableIsFlat(p.drawnTable);
+    return {
+      source: 'Drawn',
+      format: 'int16_bipolar',
+      size: TABLE_SIZE,
+      flat_or_silent: flat,
+      fallback_used: flat,
+      peak_after_dc: roundedMetadataNumber(stats.peak),
+      rms_after_dc: roundedMetadataNumber(stats.rms),
+      values,
+    };
+  }
+
+  function drawnWaveformMetadataForPatch(p, registry = null) {
+    if (!drawnSourceIsRouted(p)) return null;
+    const record = drawnWaveformRecordForPatch(p);
+    const refData = {
+      source: 'Drawn',
+      seam_mode: canonicalDrawnSeamMode(p.drawnSeamMode),
+      smoothing: canonicalDrawnSmoothing(p.drawnSmoothing),
+      flat_or_silent: record.flat_or_silent,
+      fallback_used: record.fallback_used,
+    };
+    if (!registry) return {...record, seam_mode: refData.seam_mode, smoothing: refData.smoothing};
+    const key = record.values.join(',');
+    let ref = registry.keyToId.get(key);
+    if (!ref) {
+      ref = `drawn_${registry.records.length + 1}`;
+      registry.keyToId.set(key, ref);
+      registry.records.push([ref, record]);
+    }
+    return {...refData, ref};
+  }
+
+  function drawnWaveformRegistryMetadata(registry) {
+    if (!registry || !registry.records.length) return {};
+    return Object.fromEntries(registry.records);
+  }
+
   // TUTORIAL: Public filter metadata stores user-facing values only. The DSP still maps
   // TUTORIAL: resonance through a floating-point Q curve, but that mapping is code behaviour,
   // TUTORIAL: not patch data that must be repeated inside every JSON sidecar.
@@ -4469,7 +4778,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Serialises one patch into JSON-friendly metadata. Public schema v7 stores
   // TUTORIAL: enough labelled values to rebuild the patch without duplicating a second
   // TUTORIAL: legacy/internal copy of the same settings.
-  function patchMetadata(p) {
+  function patchMetadata(p, options = {}) {
     const engineName = canonicalEngineName(p.engine || DEFAULT_ENGINE);
     const parts = enginePartsFor(engineName);
     const wt = wavetableInfoFor(p.wavetableType);
@@ -4482,6 +4791,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
         pot3: {label: labels.pot3, value: clampInt(p.pot3 || 0, 0, POT_MAX_12BIT)},
       },
       source_inputs: sourceInputMetadata(p, engineName),
+      drawn_waveform: drawnWaveformMetadataForPatch(p, options.drawnWaveforms || null),
       wavetable: {id: wt.id, ui_number: wt.ui, name: wt.name, description: wt.description},
       modulation: {
         fm: clampInt(p.fm || 0, 0, 255),
@@ -4511,7 +4821,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Returns a temporary effective patch for preview/audition/render paths.
   function effectivePatchForKey(key) {
-    const patch = {...state.patches[key]};
+    const patch = clonePatch(state.patches[key]);
     if ((key === 'start' || key === 'end')) {
       if (!state.export.differentTypes) patch.wavetableType = sharedWavetableType();
       patch.fmRangeLabel = effectiveFmRangeLabelForPatch(patch, key);
@@ -5208,19 +5518,19 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Rebuilds the live wavetable/filter state from a patch while keeping the audio graph running.
   function updateLiveAudioFromPatch(patch) {
-    state.audio.table = tableForPatch(patch);
-    state.audio.fm = patch.fm; state.audio.pwm = patch.pwm; state.audio.am = patch.am;
-    state.audio.fmRangeCents = Number.isFinite(Number(patch.fmRangeCents))
-      ? clampFloat(patch.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
-      : fmRangeLabelToCents(effectiveFmRangeLabelForPatch(patch));
-    const filterSig = `${patch.filterType || 'Off'}|${patch.filterCutoff ?? 8000}|${patch.filterResonance ?? 0}`;
+    const frame = oscillatorFrameForPatch(patch);
+    state.audio.frame = frame;
+    state.audio.table = frame.table;
+    state.audio.fm = frame.fm; state.audio.pwm = frame.pwm; state.audio.am = frame.am;
+    state.audio.fmRangeCents = frame.fmRangeCents;
+    const filterSig = `${frame.filterType}|${frame.filterCutoff}|${frame.filterResonance}`;
     if (state.audio.filterSig !== filterSig) {
       state.audio.filterState = makeBiquadState();
       state.audio.filterSig = filterSig;
     }
-    state.audio.filterType = patch.filterType || 'Off';
-    state.audio.filterCutoff = patch.filterCutoff ?? 8000;
-    state.audio.filterResonance = patch.filterResonance ?? 0;
+    state.audio.filterType = frame.filterType;
+    state.audio.filterCutoff = frame.filterCutoff;
+    state.audio.filterResonance = frame.filterResonance;
     state.audio.frequency = clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY);
     if (state.audio.gain) state.audio.gain.gain.value = clampFloat(state.common.volume, 0, 1);
   }
@@ -5230,25 +5540,25 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   function audioProcess(ev) {
     const outL = ev.outputBuffer.getChannelData(0), outR = ev.outputBuffer.getChannelData(1);
     if (!state.audio.playing || state.audio.mode !== 'single') { outL.fill(0); outR.fill(0); return; }
-    const table = state.audio.table || fallbackTable();
-    let phase = state.audio.phase || 0;
+    const frame = state.audio.frame || {
+      table: state.audio.table || fallbackTable(),
+      fm: state.audio.fm || 0,
+      pwm: state.audio.pwm || 0,
+      am: state.audio.am || 0,
+      fmRangeCents: Number.isFinite(Number(state.audio.fmRangeCents)) ? state.audio.fmRangeCents : fmRangeLabelToCents(DEFAULT_FM_RANGE_LABEL),
+      filterType: state.audio.filterType || 'Off',
+      filterCutoff: state.audio.filterCutoff ?? 8000,
+      filterResonance: state.audio.filterResonance ?? 0,
+    };
+    const phase = {value: state.audio.phase || 0};
     const baseInc = clampFloat(state.audio.frequency || DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY) / state.audio.ctx.sampleRate;
-    const pwmDepth = clampFloat(state.audio.pwm || 0, 0, 255) / 255 * 0.48;
-    const fm = clampFloat(state.audio.fm || 0, 0, 255), fmRangeCents = clampFloat(state.audio.fmRangeCents || 1200, 0, MAX_FM_RANGE_CENTS);
-    const filterCoeffs = biquadCoeffs(state.audio.filterType, state.audio.filterCutoff, state.audio.filterResonance, state.audio.ctx.sampleRate);
+    const filterCoeffs = biquadCoeffs(frame.filterType, frame.filterCutoff, frame.filterResonance, state.audio.ctx.sampleRate);
     const filterState = state.audio.filterState || (state.audio.filterState = makeBiquadState());
     for (let i = 0; i < outL.length; i++) {
-      const ringStage = ringModStage(table, phase, state.audio.am || 0);
-      const modSignal = ringStage.modSignal;
-      const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
-      const readPhase = phase < width ? (phase / width) * 0.5 : 0.5 + ((phase - width) / (1 - width)) * 0.5;
-      let sample = applyRingMod(readTableLinear(table, readPhase), ringStage);
-      sample = clampFloat(processBiquadSample(sample, filterCoeffs, filterState), -1, 1);
+      const sample = renderFrameSample(frame, phase, baseInc, filterState, filterCoeffs);
       outL[i] = sample; outR[i] = sample;
-      phase += Math.min(baseInc * boundedFmPhaseScale(modSignal, fm, fmRangeCents), 0.49);
-      if (phase >= 1) phase -= Math.floor(phase);
     }
-    state.audio.phase = phase;
+    state.audio.phase = phase.value;
   }
 
   // TUTORIAL: Starts or retunes a continuous audition drone for a selected patch.
@@ -5597,6 +5907,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     hint.textContent = text;
     hint.classList.toggle('default', status === 'default');
     hint.classList.toggle('changed', status === 'changed');
+    hint.classList.toggle('bad', status === 'bad');
   }
 
   function patchDefaults() { return defaultPatch(); }
@@ -5631,6 +5942,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (!el) return;
     el.classList.toggle('default', status === 'default');
     el.classList.toggle('changed', status === 'changed');
+    el.classList.toggle('bad', status === 'bad');
   }
   function initialiseStaticModulePanels() {
     document.querySelectorAll('details.modulePanel[data-module-key]').forEach(details => {
@@ -5730,6 +6042,275 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     update();
     row.append(lab, group);
     parent.appendChild(row);
+    return {update};
+  }
+
+  function canonicalDrawnSeamMode(value) {
+    return String(value || 'Smooth Wrap') === 'Free' ? 'Free' : 'Smooth Wrap';
+  }
+
+  function canonicalDrawnSmoothing(value) {
+    const v = String(value || 'Light');
+    return ['Off', 'Light', 'Medium'].includes(v) ? v : 'Light';
+  }
+
+  function drawnSourceIsRouted(patch) {
+    return canonicalSourceTap(patch?.sourceInput1, 'A') === DRAWN_TAP_KEY
+      || canonicalSourceTap(patch?.sourceInput2, 'B') === DRAWN_TAP_KEY;
+  }
+
+  function drawnWaveformSummaryText(patch) {
+    const flat = drawnTableIsFlat(patch.drawnTable);
+    const input1 = canonicalSourceTap(patch.sourceInput1, 'A') === DRAWN_TAP_KEY;
+    const input2 = canonicalSourceTap(patch.sourceInput2, 'B') === DRAWN_TAP_KEY;
+    if (flat) return (input1 || input2) ? 'Flat / silent — fallback used' : 'Flat / silent';
+    if (input1 && input2) return 'Inputs 1+2';
+    if (input1) return 'Input 1';
+    if (input2) return 'Input 2';
+    return 'Not routed';
+  }
+
+  function drawnWaveformSummaryStatus(patch) {
+    return drawnTableIsFlat(patch.drawnTable) ? 'bad' : (drawnSourceIsRouted(patch) ? 'changed' : 'default');
+  }
+
+  function smoothDrawnSeam(table, radius = 6) {
+    const out = Float32Array.from(table);
+    const r = clampInt(radius, 1, 24);
+    for (let i = 0; i < r; i++) {
+      const a = i;
+      const b = TABLE_SIZE - 1 - i;
+      const w = (r - i) / (r + 1);
+      const avg = 0.5 * (out[a] + out[b]);
+      out[a] = (1 - w) * out[a] + w * avg;
+      out[b] = (1 - w) * out[b] + w * avg;
+    }
+    return out;
+  }
+
+  function linearSmoothTable(src, radius = 1) {
+    const input = sanitiseDrawnTable(src);
+    const r = clampInt(radius, 1, 12);
+    const out = new Float32Array(TABLE_SIZE);
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      let sum = 0, count = 0;
+      for (let j = -r; j <= r; j++) {
+        const k = i + j;
+        if (k < 0 || k >= TABLE_SIZE) continue;
+        sum += input[k];
+        count++;
+      }
+      out[i] = count ? sum / count : input[i];
+    }
+    return out;
+  }
+
+  function effectiveDrawnSourceTable(table, seamMode = 'Smooth Wrap', smoothing = 'Light') {
+    if (drawnTableIsFlat(table)) return defaultDrawnTable();
+    const seam = canonicalDrawnSeamMode(seamMode);
+    let t = sanitiseDrawnTable(table);
+    if (seam === 'Smooth Wrap') t = smoothDrawnSeam(t, 6);
+    const smooth = canonicalDrawnSmoothing(smoothing);
+    if (smooth === 'Light') t = seam === 'Free' ? linearSmoothTable(t, 1) : Float32Array.from(circularSmoothTable(t, 1));
+    else if (smooth === 'Medium') t = seam === 'Free' ? linearSmoothTable(t, 3) : Float32Array.from(circularSmoothTable(t, 3));
+    return sanitiseDrawnTable(t);
+  }
+
+  function applyDrawnPostProcessFromSettings(patch) {
+    // Drawn seam/smoothing settings are preview/render settings, not destructive edits.
+    // Keep the saved drawing intact so switching Free/Smooth Wrap does not permanently
+    // erase a deliberately hard seam.
+    patch.drawnTable = sanitiseDrawnTable(patch.drawnTable);
+  }
+
+  function setPatchStatusMessage(patchKey, message) {
+    const target = patchKey === 'single' ? $('singleStatus') : $('morphStatus');
+    if (target) target.textContent = message;
+  }
+
+  function drawDrawnWaveformCanvas(canvas, patch) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height, pad = 18;
+    const plotW = Math.max(1, w - 2 * pad), plotH = Math.max(1, h - 2 * pad);
+    const midY = pad + plotH / 2;
+    const amp = plotH / 2;
+    const rawTable = sanitiseDrawnTable(patch.drawnTable);
+    const seam = canonicalDrawnSeamMode(patch.drawnSeamMode);
+    const table = effectiveDrawnSourceTable(rawTable, patch.drawnSeamMode, patch.drawnSmoothing);
+    const flat = drawnTableIsFlat(rawTable);
+    const routed = drawnSourceIsRouted(patch);
+    canvas.classList.toggle('flatWarning', flat);
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#030405'; ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = '#333b4a'; ctx.lineWidth = 1; ctx.strokeRect(pad, pad, plotW, plotH);
+    ctx.strokeStyle = '#333333'; ctx.beginPath(); ctx.moveTo(pad, midY); ctx.lineTo(pad + plotW, midY); ctx.stroke();
+    ctx.strokeStyle = '#151923';
+    for (let x = 0; x <= 4; x++) { const xx = pad + plotW * x / 4; ctx.beginPath(); ctx.moveTo(xx, pad); ctx.lineTo(xx, pad + plotH); ctx.stroke(); }
+    function strokeTable(data, colour, width = 2, dashed = false, wrap = true) {
+      ctx.save();
+      ctx.strokeStyle = colour; ctx.lineWidth = width;
+      ctx.setLineDash(dashed ? [7, 5] : []);
+      ctx.beginPath();
+      const last = wrap ? TABLE_SIZE : TABLE_SIZE - 1;
+      for (let i = 0; i <= last; i++) {
+        const sampleIndex = i % TABLE_SIZE;
+        const denom = wrap ? TABLE_SIZE : TABLE_SIZE - 1;
+        const v = clampFloat(data[sampleIndex], -1, 1);
+        const x = pad + plotW * (i / Math.max(denom, 1));
+        const y = midY - v * amp;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+    strokeTable(flat ? rawTable : table, '#73d7ff', 2, false, seam !== 'Free');
+    if (flat && routed) strokeTable(defaultDrawnTable(), '#ff6f7d', 1.5, true, true);
+    if (seam === 'Free' && !flat) {
+      ctx.save();
+      ctx.strokeStyle = '#4d5668'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad + plotW, pad); ctx.lineTo(pad + plotW, pad + plotH); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.fillStyle = flat ? '#ff6f7d' : '#aab3c2';
+    ctx.font = '12px system-ui, -apple-system, Segoe UI, sans-serif';
+    ctx.fillText(flat && routed ? 'flat / silent — fallback preview' : 'drawn source, 256 samples', pad, h - 6);
+  }
+
+  function addDrawnWaveformModule(parent, patch, patchKey, moduleKey, afterChange) {
+    const panel = addModulePanel(parent, moduleKey('drawn'), 'Drawn Waveform', drawnWaveformSummaryText(patch), false);
+    const canvas = document.createElement('canvas');
+    canvas.className = 'drawnCanvas';
+    canvas.width = 720;
+    canvas.height = 220;
+    panel.appendChild(canvas);
+
+    const settingsRow = document.createElement('div'); settingsRow.className = 'drawnSettingGrid';
+    const seamRow = document.createElement('div'); seamRow.className = 'drawnSettingRow';
+    const seamLab = document.createElement('label'); seamLab.textContent = 'Loop seam';
+    const seamSel = document.createElement('select'); ['Smooth Wrap', 'Free'].forEach(v => seamSel.append(new Option(v, v)));
+    seamSel.value = canonicalDrawnSeamMode(patch.drawnSeamMode);
+    seamRow.append(seamLab, seamSel);
+    const smoothRow = document.createElement('div'); smoothRow.className = 'drawnSettingRow';
+    const smoothLab = document.createElement('label'); smoothLab.textContent = 'Smoothing';
+    const smoothSel = document.createElement('select'); ['Off', 'Light', 'Medium'].forEach(v => smoothSel.append(new Option(v, v)));
+    smoothSel.value = canonicalDrawnSmoothing(patch.drawnSmoothing);
+    smoothRow.append(smoothLab, smoothSel);
+    settingsRow.append(seamRow, smoothRow);
+    panel.appendChild(settingsRow);
+
+    const buttons = document.createElement('div'); buttons.className = 'buttonbar';
+    const mkButton = text => { const b = document.createElement('button'); b.type = 'button'; b.textContent = text; buttons.appendChild(b); return b; };
+    const copyBtn = mkButton('Copy Base Table → Drawn');
+    const resetBtn = mkButton('Reset to Sine');
+    const clearBtn = mkButton('Clear');
+    const invertBtn = mkButton('Invert');
+    const normBtn = mkButton('Normalise');
+    const dcBtn = mkButton('DC Remove');
+    const smoothBtn = mkButton('Smooth');
+    const undoBtn = mkButton('Undo');
+    undoBtn.disabled = true;
+    panel.appendChild(buttons);
+
+    let undoTable = null;
+    const pushUndo = () => { undoTable = cloneDrawnTable(patch.drawnTable); undoBtn.disabled = false; };
+    const commit = (message = '') => {
+      patch.drawnTable = sanitiseDrawnTable(patch.drawnTable);
+      update();
+      afterChange();
+      if (message) setPatchStatusMessage(patchKey, message);
+    };
+
+    seamSel.addEventListener('change', () => { patch.drawnSeamMode = canonicalDrawnSeamMode(seamSel.value); update(); afterChange(); });
+    smoothSel.addEventListener('change', () => { patch.drawnSmoothing = canonicalDrawnSmoothing(smoothSel.value); update(); afterChange(); });
+    copyBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = sanitiseDrawnTable(tableForPatch(patch)); commit('Copied Base Table → Drawn.'); });
+    resetBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = defaultDrawnTable(); commit('Reset Drawn to sine.'); });
+    clearBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = new Float32Array(TABLE_SIZE); commit('Cleared Drawn waveform.'); });
+    invertBtn.addEventListener('click', () => { pushUndo(); const t = sanitiseDrawnTable(patch.drawnTable); for (let i = 0; i < TABLE_SIZE; i++) t[i] = -t[i]; patch.drawnTable = t; commit('Inverted Drawn waveform.'); });
+    normBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = Float32Array.from(normaliseBipolar(sanitiseDrawnTable(patch.drawnTable))); commit('Normalised Drawn waveform.'); });
+    dcBtn.addEventListener('click', () => { pushUndo(); const t = sanitiseDrawnTable(patch.drawnTable); const mean = meanOf(t); for (let i = 0; i < TABLE_SIZE; i++) t[i] = clampFloat(t[i] - mean, -1, 1); patch.drawnTable = t; commit('Removed DC from Drawn waveform.'); });
+    smoothBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = Float32Array.from(circularSmoothTable(sanitiseDrawnTable(patch.drawnTable), 1)); commit('Smoothed Drawn waveform.'); });
+    undoBtn.addEventListener('click', () => { if (!undoTable) return; const current = cloneDrawnTable(patch.drawnTable); patch.drawnTable = undoTable; undoTable = current; commit('Undid Drawn waveform edit.'); });
+
+    let drawing = false, lastIndex = null, lastValue = 0, liveDrawRaf = 0, lastLiveDrawMs = 0;
+    function pointerToSample(ev) {
+      const rect = canvas.getBoundingClientRect();
+      const padX = 18 / Math.max(canvas.width, 1) * rect.width;
+      const padY = 18 / Math.max(canvas.height, 1) * rect.height;
+      const left = rect.left + padX;
+      const top = rect.top + padY;
+      const plotW = Math.max(1, rect.width - 2 * padX);
+      const plotH = Math.max(1, rect.height - 2 * padY);
+      const xNorm = clampFloat((ev.clientX - left) / plotW, 0, 0.999999);
+      const yNorm = clampFloat((ev.clientY - top) / plotH, 0, 1);
+      return {index: clampInt(Math.floor(xNorm * TABLE_SIZE), 0, TABLE_SIZE - 1), value: clampFloat(1 - 2 * yNorm, -1, 1)};
+    }
+    function writeSegment(i0, v0, i1, v1) {
+      const t = sanitiseDrawnTable(patch.drawnTable);
+      const delta = i1 - i0;
+      const steps = Math.max(1, Math.abs(delta));
+      const dir = delta < 0 ? -1 : 1;
+      for (let s = 0; s <= steps; s++) {
+        const idx = clampInt(i0 + dir * s, 0, TABLE_SIZE - 1);
+        const amount = s / steps;
+        t[idx] = (1 - amount) * v0 + amount * v1;
+      }
+      patch.drawnTable = t;
+    }
+    function liveDrawChanged(immediate = false) {
+      update();
+      const run = () => {
+        liveDrawRaf = 0;
+        lastLiveDrawMs = performance.now();
+        afterChange();
+      };
+      const now = performance.now();
+      if (immediate || now - lastLiveDrawMs > 45) {
+        if (liveDrawRaf) { cancelAnimationFrame(liveDrawRaf); liveDrawRaf = 0; }
+        run();
+      } else if (!liveDrawRaf) {
+        liveDrawRaf = requestAnimationFrame(run);
+      }
+    }
+    canvas.addEventListener('pointerdown', ev => {
+      ev.preventDefault();
+      canvas.setPointerCapture?.(ev.pointerId);
+      pushUndo();
+      drawing = true;
+      const pnt = pointerToSample(ev);
+      lastIndex = pnt.index; lastValue = pnt.value;
+      const t = sanitiseDrawnTable(patch.drawnTable); t[pnt.index] = pnt.value; patch.drawnTable = t;
+      liveDrawChanged(true);
+    });
+    canvas.addEventListener('pointermove', ev => {
+      if (!drawing) return;
+      ev.preventDefault();
+      const pnt = pointerToSample(ev);
+      writeSegment(lastIndex, lastValue, pnt.index, pnt.value);
+      lastIndex = pnt.index; lastValue = pnt.value;
+      liveDrawChanged(false);
+    });
+    const finishDrawing = ev => {
+      if (!drawing) return;
+      ev.preventDefault();
+      drawing = false;
+      applyDrawnPostProcessFromSettings(patch);
+      commit('Updated Drawn waveform.');
+    };
+    canvas.addEventListener('pointerup', finishDrawing);
+    canvas.addEventListener('pointercancel', finishDrawing);
+    canvas.addEventListener('lostpointercapture', () => { if (drawing) { drawing = false; applyDrawnPostProcessFromSettings(patch); commit('Updated Drawn waveform.'); } });
+
+    function update() {
+      patch.drawnTable = sanitiseDrawnTable(patch.drawnTable);
+      patch.drawnSeamMode = canonicalDrawnSeamMode(patch.drawnSeamMode);
+      patch.drawnSmoothing = canonicalDrawnSmoothing(patch.drawnSmoothing);
+      seamSel.value = patch.drawnSeamMode;
+      smoothSel.value = patch.drawnSmoothing;
+      drawDrawnWaveformCanvas(canvas, patch);
+      setModuleSummary(panel, drawnWaveformSummaryText(patch), drawnWaveformSummaryStatus(patch));
+    }
+    update();
     return {update};
   }
 
@@ -5964,6 +6545,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     patch.engine = canonicalEngineName(patch.engine || DEFAULT_ENGINE);
     patch.sourceInput1 = canonicalSourceTap(patch.sourceInput1, 'A');
     patch.sourceInput2 = canonicalSourceTap(patch.sourceInput2, 'B');
+    patch.drawnTable = sanitiseDrawnTable(patch.drawnTable);
+    patch.drawnSeamMode = canonicalDrawnSeamMode(patch.drawnSeamMode);
+    patch.drawnSmoothing = canonicalDrawnSmoothing(patch.drawnSmoothing);
     const setEngineFromParts = (family, variant, opts = {}) => {
       // TUTORIAL: Changing the engine family changes the meaning of pot1/pot2/pot3.
       // TUTORIAL: Mouse/check-box changes rebuild immediately. Keyboard arrow navigation in
@@ -5998,12 +6582,14 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const pot3Ctl = addSlider(corePanel, knobLabels.pot3, patch, 'pot3', 0, POT_MAX_12BIT, 1, afterPatchChange);
     knobLabelRefs.pot3 = pot3Ctl.label;
 
+    const drawnPanel = addDrawnWaveformModule(parent, patch, patchKey, moduleKey, afterPatchChange);
+
     const tapPanel = addModulePanel(parent, moduleKey('taps'), 'Generator Taps / Wavetable Inputs', sourceInputSummary(patch), true);
     const tapSelector1 = addTapSelector(tapPanel, 'Input 1', patch, 'sourceInput1', 'A', afterPatchChange);
     const tapSelector2 = addTapSelector(tapPanel, 'Input 2', patch, 'sourceInput2', 'B', afterPatchChange);
     const tapNote = document.createElement('p');
     tapNote.className = 'small';
-    tapNote.textContent = 'The selected inputs feed the Wavetable Type stage. A/B are the original generator pair; C/D are extra family-specific taps tuned per generator.';
+    tapNote.textContent = 'Each generator model has four taps: A, B, C, and D. “Drawn” adds a drawn/editable waveform.';
     tapPanel.appendChild(tapNote);
 
     const wtRow = document.createElement('div'); wtRow.className = 'row wtInlineRow';
@@ -6057,6 +6643,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       if (knobLabelRefs.pot1) knobLabelRefs.pot1.textContent = labels.pot1;
       if (knobLabelRefs.pot2) knobLabelRefs.pot2.textContent = labels.pot2;
       if (knobLabelRefs.pot3) knobLabelRefs.pot3.textContent = labels.pot3;
+      drawnPanel.update();
       tapSelector1.update();
       tapSelector2.update();
       setModuleSummary(tapPanel, sourceInputSummary(patch), (patch.sourceInput1 === 'A' && patch.sourceInput2 === 'B') ? 'default' : 'changed');
@@ -7275,14 +7862,16 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
 
   // TUTORIAL: Randomisation intentionally targets sound-design parameters, not global render
   // TUTORIAL: length or sample format. Filters are forced Off elsewhere for random bulk safety.
-  function randomPatch() {
-    const p = defaultPatch();
+  function randomPatch(basePatch = null, options = {}) {
+    const p = clonePatch(basePatch || defaultPatch());
+    const includeDrawn = !!options.includeDrawn && drawnTableIsRandomEligible(p.drawnTable);
+    const tapKeys = includeDrawn ? SOURCE_TAP_KEYS : GENERATOR_TAP_KEYS;
     p.engine = randomEngineName();
     p.pot1 = randInt(0, POT_MAX_12BIT); p.pot2 = randInt(0, POT_MAX_12BIT); p.pot3 = randInt(0, POT_MAX_12BIT);
     p.wavetableType = WT_VISIBLE_MODE_INFO[randInt(0, WT_VISIBLE_MODE_INFO.length - 1)].id;
-    p.sourceInput1 = SOURCE_TAP_KEYS[randInt(0, SOURCE_TAP_KEYS.length - 1)];
-    const secondTapChoices = SOURCE_TAP_KEYS.filter(k => k !== p.sourceInput1);
-    p.sourceInput2 = secondTapChoices[randInt(0, secondTapChoices.length - 1)];
+    p.sourceInput1 = tapKeys[randInt(0, tapKeys.length - 1)];
+    const secondTapChoices = tapKeys.filter(k => k !== p.sourceInput1);
+    p.sourceInput2 = secondTapChoices[randInt(0, secondTapChoices.length - 1)] || tapKeys[0];
     p.fm = randInt(0, 255); p.pwm = randInt(0, 255); p.am = randInt(0, 255);
     [p.beforeStart, p.beforeEnd] = randomWindowPair(); [p.afterStart, p.afterEnd] = randomWindowPair();
     p.fmRangeLabel = FM_RANGES[randInt(0, FM_RANGES.length - 1)][0];
@@ -7313,7 +7902,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   function randomiseMorphEndpointAndPlay(key) {
-    state.patches[key] = randomPatch();
+    state.patches[key] = randomPatch(state.patches[key], {includeDrawn: true});
     rebuildPatchControls();
     state.audio.lastMorphTransport = 'morph-forward';
     playMorphBuffer(false).catch(err => {
@@ -7482,14 +8071,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Creates an independent patch copy and re-applies canonical defaults. This avoids
   // TUTORIAL: START/END sharing the same object when a Playground patch is copied into Morph.
   function clonePatchForMorph(patch) {
-    const p = {...defaultPatch(), ...patch};
-    p.engine = canonicalEngineName(p.engine || DEFAULT_ENGINE);
-    p.wavetableType = canonicalWavetableType(p.wavetableType);
-    p.sourceInput1 = canonicalSourceTap(p.sourceInput1, 'A');
-    p.sourceInput2 = canonicalSourceTap(p.sourceInput2, 'B');
-    p.fmRangeLabel = canonicalFmRangeLabel(p.fmRangeLabel);
-    p.fmRangeCents = fmRangeLabelToCents(p.fmRangeLabel);
-    return p;
+    return clonePatch(patch);
   }
 
   // TUTORIAL: Programmatic tab switch used by both tab buttons and Playground→Morph copy buttons.
@@ -7593,6 +8175,17 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return ['text', 'search', 'email', 'url', 'tel', 'password', 'date', 'datetime-local', 'month', 'week', 'time'].includes(type);
   }
 
+  // TUTORIAL: ESC is a transport/panic key, not a slider-edit key.  After stopping
+  // TUTORIAL: audio, blur ordinary form controls so the browser no longer treats
+  // TUTORIAL: later PageUp/PageDown keys as value changes for the focused control.
+  function releaseOrdinaryControlFocus() {
+    const el = document.activeElement;
+    if (!(el instanceof HTMLElement)) return;
+    if (el.matches('input[type="range"], input[type="number"], input[type="checkbox"], input[type="radio"], select, button')) {
+      el.blur();
+    }
+  }
+
   // TUTORIAL: Browser tab-switch shortcuts can otherwise be eaten by focused sliders/number
   // TUTORIAL: fields as PageUp/PageDown value changes. Blurring before target/default handling
   // TUTORIAL: leaves Ctrl/Cmd+PageUp/PageDown available to the browser instead of the control.
@@ -7635,7 +8228,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: declarative and the code path from button/slider to state update is easier to trace.
   function wireUi() {
     document.querySelectorAll('.tabButton').forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
-    const escStop = ev => { if (ev.key === 'Escape' || ev.code === 'Escape') { ev.preventDefault(); ev.stopPropagation(); globalPanicStop(); } };
+    const escStop = ev => { if (ev.key === 'Escape' || ev.code === 'Escape') { ev.preventDefault(); ev.stopPropagation(); globalPanicStop(); releaseOrdinaryControlFocus(); } };
     document.addEventListener('keydown', escStop, {capture: true});
     window.addEventListener('keydown', escStop, {capture: true});
     document.addEventListener('keydown', releaseFocusForBrowserTabShortcut, {capture: true});
@@ -7649,15 +8242,15 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if ($('morphAnimFps')) $('morphAnimFps').onchange = e => setAnimationFps(e.target.value);
     $('singleDrone').onclick = () => toggleDronePatch('single');
     $('stopAudio').onclick = globalPanicStop; $('stopAudio2').onclick = globalPanicStop;
-    $('singleRandom').onclick = () => { state.patches.single = randomPatch(); rebuildPatchControls(); autoAuditionPatch('single'); };
+    $('singleRandom').onclick = () => { state.patches.single = randomPatch(state.patches.single, {includeDrawn: true}); rebuildPatchControls(); autoAuditionPatch('single'); };
     $('singleReset').onclick = () => { state.patches.single = defaultPatch(); rebuildPatchControls(); autoAuditionPatch('single'); };
     $('auditionStart').onclick = () => toggleDronePatch('start'); $('auditionEnd').onclick = () => toggleDronePatch('end');
-    $('randomStart').onclick = () => { state.patches.start = randomPatch(); rebuildPatchControls(); autoAuditionPatch('start'); };
-    $('randomEnd').onclick = () => { state.patches.end = randomPatch(); rebuildPatchControls(); autoAuditionPatch('end'); };
+    $('randomStart').onclick = () => { state.patches.start = randomPatch(state.patches.start, {includeDrawn: true}); rebuildPatchControls(); autoAuditionPatch('start'); };
+    $('randomEnd').onclick = () => { state.patches.end = randomPatch(state.patches.end, {includeDrawn: true}); rebuildPatchControls(); autoAuditionPatch('end'); };
     $('randomMorphStart').onclick = () => randomiseMorphEndpointAndPlay('start');
     $('randomMorphEnd').onclick = () => randomiseMorphEndpointAndPlay('end');
-    $('copyStartToEnd').onclick = () => { state.patches.end = {...state.patches.start}; rebuildPatchControls(); autoAuditionPatch('end'); };
-    $('copyEndToStart').onclick = () => { state.patches.start = {...state.patches.end}; rebuildPatchControls(); autoAuditionPatch('start'); };
+    $('copyStartToEnd').onclick = () => { state.patches.end = clonePatch(state.patches.start); rebuildPatchControls(); autoAuditionPatch('end'); };
+    $('copyEndToStart').onclick = () => { state.patches.start = clonePatch(state.patches.end); rebuildPatchControls(); autoAuditionPatch('start'); };
     $('swapStartEnd').onclick = () => { const t = state.patches.start; state.patches.start = state.patches.end; state.patches.end = t; rebuildPatchControls(); autoAuditionCurrentContext(); };
     $('playMorph').onclick = () => toggleMorphPlayback(false);
     $('playReverse').onclick = () => toggleMorphPlayback(true);
@@ -7700,7 +8293,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     try {
       for (let i = 0; i < count; i++) {
         throwIfCancelled(token);
-        const rawStart = randomPatch(), rawEnd = randomPatch();
+        const rawStart = randomPatch(null, {includeDrawn: false}), rawEnd = randomPatch(null, {includeDrawn: false});
         const start = loopSafe ? neutralisePatchForLoopSafety(rawStart) : rawStart;
         const end = loopSafe ? neutralisePatchForLoopSafety(rawEnd) : rawEnd;
         for (const dir of dirs) {
