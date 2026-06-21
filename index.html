@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.7a
+Fractured Wavetable Generator v2.7l
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -13,6 +13,20 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
+
+Release note: v2.7l fixes unsigned 8-bit WAV full-scale mapping, renames loop-safe Bulk active-state helpers, documents intentionally identical cancellation-token helpers, compacts Drawn Waveform data in morph-audition cache signatures, and keeps Morph render-mode/spectral changes in the most recently used morph direction.
+
+Release note: v2.7k refines MPC Wavetable Mode naming: the editable MPC prefix now includes its own separator by default (fwg_), blank prefixes produce names beginning mpc_ instead of _mpc_, the MPC panel shows generated name previews from the current CxS settings, and Notes labels MPC exports as experimental.
+
+Release note: v2.7g is an AudioWorklet transport-lifecycle test build based on v2.7b. It keeps MPC Wavetable Mode unchanged, restores AudioWorklet as the preferred live-audition path, makes AudioContext/AudioWorklet initialisation single-flight, tracks the context before awaiting addModule(), and routes every drone/morph-preview start through an exclusive transport gate so slider auto-audition, Drone buttons, Morph preview, ESC, and Stop cannot stack live audio graphs.
+
+Release note: v2.7h fixes the v2.7g startup regression by keeping MPC constants available before state initialisation, while retaining the v2.7g AudioWorklet transport-lifecycle test: exclusive audition transport, single-flight worklet setup, and hard Stop/ESC cleanup.
+
+Release note: v2.7j keeps the v2.7h AudioWorklet transport fix and fixes the v2.7i MPC prefix UI: the dedicated MPC File Prefix field is now visible inside MPC Wavetable Mode, and disabled ordinary prefix fields are visibly dimmed.
+
+Release note: v2.7i keeps the v2.7h AudioWorklet transport fix and refines MPC Wavetable Mode: it adds a dedicated MPC File Prefix, uses that prefix for MPC folder/ZIP/WAV/JSON names, and disables the ordinary File Prefix controls while MPC Mode is active so the active naming path is visible.
+
+Release note: v2.7b adds an opt-in MPC Wavetable Mode for Morph and Bulk exports. MPC Mode keeps its UI messages hidden until enabled, validates the mechanical MPC wavetable-folder requirements beside the affected controls, offers CxS cycle×samples naming, exports a minimal format.json, and packs MPC Bulk/Morph ZIPs with a clean WAV+format.json folder plus an optional separate FWG sidecar JSON folder. It also treats 12-bit quantised audio in a 16-bit WAV container as a 16-bit WAV container for MPC compatibility checks.
 
 Release note: v2.7a is a maintenance update: it revokes the AudioWorklet Blob URL even if addModule() fails; sends live worklet frame+frequency together so full patch updates are atomic; and omits an empty drawn_waveforms object from JSON sidecars when no Drawn Waveform source is used.
 
@@ -41,7 +55,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.7a</title>
+<title>Fractured Wavetable Generator v2.7l</title>
 <style>
   :root {
     --bg: #101216;
@@ -82,6 +96,7 @@ itself, impose GPL licensing on generated outputs.
   .row label { color: var(--muted); font-size: 13px; }
   input[type="range"] { width: 100%; }
   input[type="number"], input[type="text"], select { width: 100%; background: #0f131a; color: var(--text); border: 1px solid var(--line); border-radius: 7px; padding: 5px 7px; }
+  input:disabled, select:disabled, button:disabled { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.35); }
   input[type="checkbox"] { transform: translateY(1px); }
   canvas { width: 100%; height: auto; background: #030405; border: 1px solid var(--line); border-radius: 10px; display: block; }
   .buttonbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 8px 0; }
@@ -154,6 +169,16 @@ itself, impose GPL licensing on generated outputs.
   .ok { color: var(--ok); }
   .bad { color: var(--bad); }
   .small { font-size: 12px; color: var(--muted); }
+  .mpcInlineWarning { display: none; margin-top: 4px; color: var(--bad); font-size: 12px; line-height: 1.35; }
+  .mpcInlineWarning.show { display: block; }
+  .mpcSettingWarn { border-color: var(--bad) !important; box-shadow: 0 0 0 1px rgba(255,111,125,0.22) inset; }
+  .mpcModePanel { display: none; border-color: rgba(115,215,255,0.45); }
+  .mpcModePanel.active { display: block; }
+  .mpcCheckList { display: grid; gap: 4px; margin-top: 6px; }
+  .mpcCheckItem { display: grid; grid-template-columns: 1.8em minmax(0, 1fr); gap: 4px; align-items: start; }
+  .mpcCheckItem.ok { color: var(--ok); }
+  .mpcCheckItem.bad { color: var(--bad); }
+  .mpcCheckItem.note { color: var(--muted); }
   .hr { border-top: 1px solid var(--line); margin: 10px 0; }
   .calcBox { border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin: 10px 0; background: #11161d; }
   .calcBox h3 { margin: 0 0 8px; font-size: 19px; font-weight: 750; color: var(--accent); }
@@ -193,7 +218,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.7a</h1>
+  <h1>Fractured Wavetable Generator v2.7l</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -325,7 +350,7 @@ itself, impose GPL licensing on generated outputs.
         <p class="note">Bulk export runs random iterations. Each iteration creates a random START/END pair, then renders the selected direction(s).</p>
         <div class="row"><label>Random iterations</label><input id="bulkCount" type="range" min="1" max="50" value="5"><input id="bulkCountNum" type="number" min="1" max="200" value="5"></div>
         <div class="row wide"><label>Directions</label><select id="bulkDirections"><option>Forward only</option><option>Reverse only</option><option>Forward + Reverse</option></select></div>
-        <div class="row wide"><label>Prefix</label><input id="bulkPrefix" type="text" value="fractured_wt_bulk"></div>
+        <div class="row wide"><label>Prefix</label><input id="bulkPrefix" type="text" value="fractured_wt_bulk" data-export-setting="file-prefix"></div>
         <div id="bulkPitchControls" class="compactSettingGroup"></div>
         <div id="bulkExportControls" class="compactSettingGroup"></div>
         <div class="row wide"><label>Download Mode</label><select id="bulkDownloadMode"><option value="zip" selected>One ZIP file</option><option value="separate">Separate WAV+JSON files</option></select></div>
@@ -417,6 +442,7 @@ itself, impose GPL licensing on generated outputs.
       <h3>Export and browser limits</h3>
       <ul class="noteList">
         <li>Morph and Bulk exports always create a WAV file and a matching JSON sidecar. There is no option to export WAV-only.</li>
+        <li>MPC Wavetable Mode is experimental. It creates MPC-style WAV folders and a minimal <code>format.json</code>, but the exact hardware display/sorting behaviour and the musical usefulness of each frame still need real MPC testing.</li>
         <li>Bulk random export uses the shared pitch and render controls unless Phase-accurate loop-safe export is enabled.</li>
         <li>In loop-safe Bulk mode, frequency, render length, morph mode, cycle-stepping, oscillator modulation, filters, and source/result windows may be temporarily overridden so the exported file lands on a clean cycle boundary.</li>
         <li>Very long browser renders can use a lot of RAM. For unusually long exports, smaller test renders are recommended before committing to a large file.</li>
@@ -462,7 +488,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.7a';
+  const APP_VERSION = 'v2.7l';
   const EXPORT_SCHEMA_VERSION = 11;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 44100;
@@ -507,6 +533,18 @@ itself, impose GPL licensing on generated outputs.
   const GLOBAL_SETTINGS_LOCALSTORAGE = 'fractal_wavetable_global_settings_v1';
   const LAST_OPEN_TAB_LOCALSTORAGE = 'fractured_wavetable_last_open_tab_v1';
   const GLOBAL_SETTINGS_MAX_AGE_DAYS = 365;
+
+  // TUTORIAL: MPC user wavetable folders use format.json to declare a fixed grid of
+  // TUTORIAL: cycles/frames and samples per cycle. These are mechanical file-layout limits,
+  // TUTORIAL: separate from the softer loop-safety/sound-design guidance elsewhere.
+  const MPC_SAMPLES_PER_CYCLE_OPTIONS = [512, 1024, 2048, 4096, 8192, 16384];
+  const MPC_DEFAULT_SAMPLES_PER_CYCLE = 2048;
+  const MPC_DEFAULT_CYCLES = 16;
+  const MPC_MIN_SAMPLE_RATE = 22050;
+  const MPC_MAX_SAMPLE_RATE = 96000;
+  const MPC_MIN_CYCLES = 2;
+  const MPC_MAX_CYCLES = 2048;
+  const MPC_MAX_FILES_PER_FOLDER = 512;
 
   // TUTORIAL: Wavetable mode metadata. Each mode now has an explicit internal id and
   // TUTORIAL: an explicit UI number. The internal id is what patches and JSON store; the UI
@@ -881,6 +919,7 @@ itself, impose GPL licensing on generated outputs.
       mode: 'Cycles', value: MORPH_DEFAULT_CYCLES, sampleRate: DEFAULT_SAMPLE_RATE, bitDepth: '16-bit PCM',
       morphRenderMode: DEFAULT_MORPH_RENDER_MODE, spectralStates: 3,
       curveAmount: 0, curveMode: 'Bend', cycleStepped: false, loopSafeBulk: false, loopSafeBulkStrategy: '256',
+      mpcWavetableMode: false, mpcSamplesPerCycle: MPC_DEFAULT_SAMPLES_PER_CYCLE, mpcCycles: MPC_DEFAULT_CYCLES, mpcIncludeSidecars: true, mpcPrefix: 'fwg_',
       differentTypes: false, sharedType: 3, differentFmRanges: false, sharedFmRange: DEFAULT_FM_RANGE_LABEL,
       dcMode: 'Per Cycle', normMode: 'Per Cycle Peak', headroomDb: -0.1, prefix: 'fractured_wt_morph', zipDownloads: true,
     },
@@ -888,7 +927,7 @@ itself, impose GPL licensing on generated outputs.
       ctx: null, node: null, gain: null, source: null, sources: new Set(), playing: false, phase: 0,
       nodeConnected: false, gainConnected: false,
       mode: 'single', livePatchKey: 'single', morph: null, playbackSerial: 0,
-      table: fallbackTable(), sampleRate: DEFAULT_SAMPLE_RATE, filterState: null, filterSig: '', morphCache: null,
+      table: fallbackTable(), sampleRate: DEFAULT_SAMPLE_RATE, filterState: null, filterSig: '', morphCache: {forward: null, reverse: null},
     },
     visualMode: 'Base table',
     visualAnim: 0,
@@ -918,10 +957,12 @@ itself, impose GPL licensing on generated outputs.
   const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
 
   // TUTORIAL: Starts a render/export operation by advancing the cancellation token and returning the token
-  // TUTORIAL: this job must keep checking.
+  // TUTORIAL: this job must keep checking. This intentionally has the same body as
+  // TUTORIAL: cancelCancellableWork(); the difference is the caller's intent.
   function beginCancellableWork() { state.cancelToken = (state.cancelToken || 0) + 1; return state.cancelToken; }
   // TUTORIAL: Invalidates the current cancellation token so long-running renders can stop cleanly at their
-  // TUTORIAL: next checkpoint.
+  // TUTORIAL: next checkpoint. This intentionally has the same body as beginCancellableWork();
+  // TUTORIAL: the difference is the caller's intent.
   function cancelCancellableWork() { state.cancelToken = (state.cancelToken || 0) + 1; return state.cancelToken; }
   // TUTORIAL: Turns a stale token into an AbortError, which lets shared render/export code distinguish user
   // TUTORIAL: cancellation from a real failure.
@@ -1169,6 +1210,11 @@ itself, impose GPL licensing on generated outputs.
       cycleStepped: !!state.export.cycleStepped,
       loopSafeBulk: !!state.export.loopSafeBulk,
       loopSafeBulkStrategy: canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy),
+      mpcWavetableMode: !!state.export.mpcWavetableMode,
+      mpcSamplesPerCycle: canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle),
+      mpcCycles: canonicalMpcCycles(state.export.mpcCycles),
+      mpcIncludeSidecars: !!state.export.mpcIncludeSidecars,
+      mpcPrefix: canonicalMpcPrefix(state.export.mpcPrefix),
       moduleOpen: Object.assign({}, state.ui?.moduleOpen || {}),
       lastOpenTab: String(state.ui?.lastOpenTab || activeTabId()),
     };
@@ -1210,6 +1256,11 @@ itself, impose GPL licensing on generated outputs.
     if (typeof saved.cycleStepped === 'boolean') state.export.cycleStepped = saved.cycleStepped;
     if (typeof saved.loopSafeBulk === 'boolean') state.export.loopSafeBulk = saved.loopSafeBulk;
     if (saved.loopSafeBulkStrategy != null) state.export.loopSafeBulkStrategy = canonicalLoopSafeBulkStrategy(saved.loopSafeBulkStrategy);
+    if (typeof saved.mpcWavetableMode === 'boolean') state.export.mpcWavetableMode = saved.mpcWavetableMode;
+    if (saved.mpcSamplesPerCycle != null) state.export.mpcSamplesPerCycle = canonicalMpcSamplesPerCycle(saved.mpcSamplesPerCycle);
+    if (saved.mpcCycles != null) state.export.mpcCycles = canonicalMpcCycles(saved.mpcCycles);
+    if (typeof saved.mpcIncludeSidecars === 'boolean') state.export.mpcIncludeSidecars = saved.mpcIncludeSidecars;
+    if (saved.mpcPrefix != null) state.export.mpcPrefix = migratedMpcPrefix(saved.mpcPrefix);
     if (saved.moduleOpen && typeof saved.moduleOpen === 'object') state.ui.moduleOpen = Object.assign({}, saved.moduleOpen);
     if (isValidTabId(saved.lastOpenTab)) state.ui.lastOpenTab = String(saved.lastOpenTab);
     state.common.midiStatus = state.common.midiChannel === 'off' ? 'MIDI input off' : `MIDI channel restored: ${state.common.midiChannel === 'omni' ? 'OMNI' : 'ch ' + state.common.midiChannel}`;
@@ -3603,7 +3654,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: This text is deliberately explicit about frequency replacement: in loop-safe
   // TUTORIAL: mode, the selected Hz value is a planning input, not the final render Hz. The
   // TUTORIAL: final Hz is derived from sample rate, samples-per-cycle target, and length.
-  function loopSafeBulkDisabledLines(plan = loopSafeBulkPlan()) {
+  function loopSafeBulkActiveLines(plan = loopSafeBulkPlan()) {
     const delta = Math.abs(plan.durationDelta) > 1e-9 ? ` Duration difference: ${plan.durationDelta >= 0 ? '+' : ''}${plan.durationDelta.toFixed(6)} s.` : '';
     return [
       'For wavetable-developer loop safety, Bulk temporarily disables or overrides oscillator FM, PWM, Ring Mod, filters, source/result windows, phase-offset morphing, continuous non-cycle-stepped morphing, and render length/frequency relationships that would not close on a whole-cycle file.',
@@ -3698,14 +3749,14 @@ itself, impose GPL licensing on generated outputs.
     updateLoopSafetyNoticesSafely();
   }
 
-  // TUTORIAL: Plain-text version of the Bulk loop-safe explanation for export metadata.
-  function loopSafeBulkDisabledText(plan = loopSafeBulkPlan()) {
-    return loopSafeBulkDisabledLines(plan).join('\n\n');
+  // TUTORIAL: Plain-text version of the active Bulk loop-safe explanation for export metadata.
+  function loopSafeBulkActiveText(plan = loopSafeBulkPlan()) {
+    return loopSafeBulkActiveLines(plan).join('\n\n');
   }
 
-  // TUTORIAL: HTML version of the Bulk loop-safe explanation for the on-page status box.
-  function loopSafeBulkDisabledHtml(plan = loopSafeBulkPlan()) {
-    return paragraphHtml(loopSafeBulkDisabledLines(plan));
+  // TUTORIAL: HTML version of the active Bulk loop-safe explanation for the on-page status box.
+  function loopSafeBulkActiveHtml(plan = loopSafeBulkPlan()) {
+    return paragraphHtml(loopSafeBulkActiveLines(plan));
   }
 
   // TUTORIAL: Plain-text explanation shown when Bulk loop-safe mode is off.
@@ -4734,7 +4785,7 @@ itself, impose GPL licensing on generated outputs.
     let o = 0;
     for (let i = 0; i < audio.length; i++) {
       let x = clampFloat(audio[i], -1, 1);
-      if (bits === 8) { dataView.setUint8(o, clampInt(x * 127 + 128, 0, 255)); o += 1; }
+      if (bits === 8) { dataView.setUint8(o, clampInt(Math.round(x * 127.5 + 127.5), 0, 255)); o += 1; }
       else if (bits === 12) { const q = Math.round(x * 2047) / 2047; dataView.setInt16(o, clampInt(q * 32767, -32768, 32767), true); o += 2; }
       else if (bits === 16) { dataView.setInt16(o, clampInt(x * 32767, -32768, 32767), true); o += 2; }
       else if (bits === 24) { let v = clampInt(x * 8388607, -8388608, 8388607); if (v < 0) v += 1 << 24; dataView.setUint8(o++, v & 255); dataView.setUint8(o++, (v >> 8) & 255); dataView.setUint8(o++, (v >> 16) & 255); }
@@ -5487,7 +5538,7 @@ itself, impose GPL licensing on generated outputs.
       await nextFrame();
       throwIfCancelled(token);
       const stamp = options.timestamp || compactTimestampUTC();
-      const base = `${safeName(prefix)}_${direction}_${stamp}`;
+      const base = options.baseName || `${safeName(prefix)}_${direction}_${stamp}`;
       const exportId = makeExportId();
       const wavFilename = `${base}.wav`;
       const jsonFilename = `${base}.json`;
@@ -5495,7 +5546,10 @@ itself, impose GPL licensing on generated outputs.
       const wavBlob = encodeWavMono(rendered.audio, rendered.summary.sampleRate, rendered.summary.bitDepth, fileMeta);
       const meta = metadataFor(direction, rendered.summary, rendered.notes, startPatch, endPatch, fileMeta);
       const jsonBlob = new Blob([JSON.stringify(meta, null, 2)], {type: 'application/json'});
-      const files = [{name: wavFilename, data: wavBlob}, {name: jsonFilename, data: jsonBlob}];
+      const wavEntryName = options.wavFolder ? `${String(options.wavFolder).replace(/\/+$/,'')}/${wavFilename}` : wavFilename;
+      const jsonEntryName = options.jsonFolder ? `${String(options.jsonFolder).replace(/\/+$/,'')}/${jsonFilename}` : jsonFilename;
+      const files = [{name: wavEntryName, data: wavBlob}];
+      if (options.includeJson !== false) files.push({name: jsonEntryName, data: jsonBlob});
       if (shouldDownload) {
         if (shouldZip) {
           statusEl.textContent = `Packing ${direction} ZIP…`;
@@ -5519,6 +5573,96 @@ itself, impose GPL licensing on generated outputs.
       }
       progressEl.value = 0;
       statusEl.textContent = `${direction} render failed: ${err.message || err}`;
+      throw err;
+    }
+  }
+
+  function ensureMpcExportReady(statusEl, fileCount = 1) {
+    if (!state.export.mpcWavetableMode) return true;
+    const failureText = currentMpcFailureText(fileCount);
+    if (!failureText) return true;
+    if (statusEl) statusEl.textContent = `MPC Wavetable Mode export blocked until these settings are fixed:\n${failureText}\n\nUse Apply MPC Settings, or uncheck MPC Wavetable Mode for ordinary FWG export.`;
+    updateMpcModeUi(fileCount);
+    return false;
+  }
+
+  async function exportMpcDirection(direction) {
+    const token = beginCancellableWork();
+    const statusEl = $('morphStatus');
+    const progressEl = $('exportProgress');
+    if (!ensureMpcExportReady(statusEl, 1)) return null;
+    const stamp = compactTimestampUTC();
+    const names = mpcFolderNames('morph', stamp);
+    const files = [{name: `${names.wavFolder}/format.json`, data: mpcFormatJsonText()}];
+    try {
+      const result = await exportDirection(direction, state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
+        download: false, zip: false, token, timestamp: stamp, cache: direction !== 'reverse', progressOffset: 0, progressScale: 0.90,
+        baseName: `${names.fileStem}_${direction}_${stamp}`,
+        wavFolder: names.wavFolder,
+        jsonFolder: state.export.mpcIncludeSidecars ? names.jsonFolder : '',
+        includeJson: !!state.export.mpcIncludeSidecars,
+        exportContext: {kind: 'mpc_morph', source_tab: 'START→END Morph Export', mpc_wavetable_mode: true, mpc_layout: {cycles: canonicalMpcCycles(state.export.mpcCycles), samples_per_cycle: canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle)}},
+      });
+      if (!result) throwIfCancelled(token);
+      files.push(...result.files);
+      progressEl.value = 0.94;
+      statusEl.textContent = `Packing MPC Morph ZIP…`;
+      const zipBlob = await makeZipBlob(files, token);
+      throwIfCancelled(token);
+      downloadBlob(zipBlob, names.zipName);
+      progressEl.value = 1;
+      statusEl.innerHTML = `<strong>Exported MPC Morph ${escapeHtml(direction)}</strong>\nZIP: ${escapeHtml(names.zipName)}\nMPC folder: ${escapeHtml(names.wavFolder)}\nLayout: ${escapeHtml(names.cxs)}.`;
+      return result;
+    } catch (err) {
+      if (isAbortError(err)) { progressEl.value = 0; statusEl.textContent = 'MPC Morph export cancelled.'; return null; }
+      progressEl.value = 0;
+      statusEl.textContent = `MPC Morph export failed: ${err.message || err}`;
+      throw err;
+    }
+  }
+
+  async function exportMpcBothDirections() {
+    const token = beginCancellableWork();
+    const statusEl = $('morphStatus');
+    const progressEl = $('exportProgress');
+    const directionCount = 2;
+    if (!ensureMpcExportReady(statusEl, directionCount)) return;
+    const stamp = compactTimestampUTC();
+    const names = mpcFolderNames('morph', stamp);
+    const files = [{name: `${names.wavFolder}/format.json`, data: mpcFormatJsonText()}];
+    try {
+      progressEl.value = 0;
+      const forward = await exportDirection('forward', state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
+        download: false, zip: false, token, timestamp: stamp, progressOffset: 0.00, progressScale: 0.43,
+        baseName: `${names.fileStem}_forward_${stamp}`,
+        wavFolder: names.wavFolder,
+        jsonFolder: state.export.mpcIncludeSidecars ? names.jsonFolder : '',
+        includeJson: !!state.export.mpcIncludeSidecars,
+        exportContext: {kind: 'mpc_morph', source_tab: 'START→END Morph Export', mpc_wavetable_mode: true, direction_count: directionCount, mpc_layout: {cycles: canonicalMpcCycles(state.export.mpcCycles), samples_per_cycle: canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle)}},
+      });
+      if (!forward) throwIfCancelled(token);
+      files.push(...forward.files);
+      const reverse = await exportDirection('reverse', state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
+        download: false, zip: false, token, timestamp: stamp, progressOffset: 0.43, progressScale: 0.43, cache: false,
+        baseName: `${names.fileStem}_reverse_${stamp}`,
+        wavFolder: names.wavFolder,
+        jsonFolder: state.export.mpcIncludeSidecars ? names.jsonFolder : '',
+        includeJson: !!state.export.mpcIncludeSidecars,
+        exportContext: {kind: 'mpc_morph', source_tab: 'START→END Morph Export', mpc_wavetable_mode: true, direction_count: directionCount, mpc_layout: {cycles: canonicalMpcCycles(state.export.mpcCycles), samples_per_cycle: canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle)}},
+      });
+      if (!reverse) throwIfCancelled(token);
+      files.push(...reverse.files);
+      progressEl.value = 0.92;
+      statusEl.textContent = `Packing MPC Morph ZIP with ${files.length} file(s)…`;
+      const zipBlob = await makeZipBlob(files, token);
+      throwIfCancelled(token);
+      downloadBlob(zipBlob, names.zipName);
+      progressEl.value = 1;
+      statusEl.innerHTML = `<strong>Exported MPC Morph forward + reverse</strong>\nZIP: ${escapeHtml(names.zipName)}\nMPC folder: ${escapeHtml(names.wavFolder)}\nLayout: ${escapeHtml(names.cxs)}.`;
+    } catch (err) {
+      if (isAbortError(err)) { progressEl.value = 0; statusEl.textContent = 'MPC Morph export cancelled.'; return; }
+      progressEl.value = 0;
+      statusEl.textContent = `MPC Morph export failed: ${err.message || err}`;
       throw err;
     }
   }
@@ -5939,7 +6083,7 @@ itself, impose GPL licensing on generated outputs.
     if (strategyRow) strategyRow.style.display = state.export.loopSafeBulk ? '' : 'none';
     if (strategySelect) strategySelect.disabled = !state.export.loopSafeBulk;
     if (state.export.loopSafeBulk) {
-      box.innerHTML = loopSafeBulkDisabledHtml();
+      box.innerHTML = loopSafeBulkActiveHtml();
     } else {
       box.innerHTML = loopSafeBulkOffHtml();
     }
@@ -5965,6 +6109,11 @@ itself, impose GPL licensing on generated outputs.
       console.error('Bulk loop-safe notice failed', err);
       const box = $('bulkLoopSafeDetails');
       if (box) box.textContent = `Bulk loop-safe details could not be updated: ${err && err.message ? err.message : err}`;
+    }
+    try {
+      updateMpcModeUi();
+    } catch (err) {
+      console.error('MPC mode UI failed', err);
     }
   }
 
@@ -6137,16 +6286,45 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
 `;
 
   let _workletModuleReady = false; // true once addModule() has resolved for this AudioContext
+  let _audioInitPromise = null; // shared in-flight AudioContext/AudioWorklet setup promise
 
   // TUTORIAL: Browser audio bootstrap. Web Audio contexts normally have to start from a user
   // TUTORIAL: gesture, so audio setup is delayed until the user asks to play or drone a patch.
+  // TUTORIAL: AudioWorklet setup is asynchronous; this function is deliberately single-flight.
+  // TUTORIAL: The AudioContext/GainNode are stored before awaiting addModule(), so Stop/ESC can
+  // TUTORIAL: still close the half-built graph and later continuations can detect that it was cancelled.
   async function ensureAudio() {
     installMediaSessionHandlers();
-    if (!state.audio.ctx || state.audio.ctx.state === 'closed') {
+    if (state.audio.ctx && state.audio.ctx.state !== 'closed' && state.audio.node && state.audio.gain) {
+      connectOutputGain();
+      if (state.audio.ctx.state !== 'running') await state.audio.ctx.resume();
+      return;
+    }
+    if (_audioInitPromise) {
+      await _audioInitPromise;
+      if (state.audio.ctx && state.audio.ctx.state !== 'closed') {
+        connectOutputGain();
+        if (state.audio.ctx.state !== 'running') await state.audio.ctx.resume();
+      }
+      return;
+    }
+
+    const initPromise = _audioInitPromise = (async () => {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) throw new Error('Web Audio is not available in this browser.');
       const ctx = new AudioCtx({sampleRate: state.export.sampleRate || DEFAULT_SAMPLE_RATE});
-      const gain = ctx.createGain(); gain.gain.value = state.common.volume;
+      const gain = ctx.createGain();
+      gain.gain.value = state.common.volume;
+
+      state.audio.ctx = ctx;
+      state.audio.gain = gain;
+      state.audio.node = null;
+      state.audio.sampleRate = ctx.sampleRate;
+      state.audio.sources = new Set();
+      state.audio.nodeConnected = false;
+      state.audio.gainConnected = false;
+      _workletModuleReady = false;
+      connectOutputGain();
 
       // AudioWorklet path (v2.6ze): serialise processor code as a Blob URL so no
       // separate file is needed. Falls back to createScriptProcessor in environments
@@ -6161,30 +6339,41 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
           } finally {
             URL.revokeObjectURL(url);
           }
+          if (state.audio.ctx !== ctx || ctx.state === 'closed') return;
           _workletModuleReady = true;
           node = new AudioWorkletNode(ctx, 'fractured-oscillator', {numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [2]});
           node.port.onmessage = null; // processor sends nothing back
         } catch (workletErr) {
+          if (state.audio.ctx !== ctx || ctx.state === 'closed') return;
           console.warn('AudioWorklet setup failed, falling back to ScriptProcessor:', workletErr);
           _workletModuleReady = false;
           node = ctx.createScriptProcessor(1024, 0, 2);
           node.onaudioprocess = audioProcess;
         }
       } else {
+        if (state.audio.ctx !== ctx || ctx.state === 'closed') return;
         _workletModuleReady = false;
         node = ctx.createScriptProcessor(1024, 0, 2);
         node.onaudioprocess = audioProcess;
       }
 
-      state.audio.ctx = ctx; state.audio.node = node; state.audio.gain = gain; state.audio.sampleRate = ctx.sampleRate;
-      state.audio.sources = new Set();
+      if (state.audio.ctx !== ctx || ctx.state === 'closed') {
+        try { node?.disconnect(); } catch (_) {}
+        return;
+      }
+      state.audio.node = node;
       state.audio.nodeConnected = false;
-      state.audio.gainConnected = false;
-      connectOutputGain();
-    } else {
-      connectOutputGain();
+    })();
+
+    try {
+      await initPromise;
+    } finally {
+      if (_audioInitPromise === initPromise) _audioInitPromise = null;
     }
-    if (state.audio.ctx.state !== 'running') await state.audio.ctx.resume();
+    if (state.audio.ctx && state.audio.ctx.state !== 'closed') {
+      connectOutputGain();
+      if (state.audio.ctx.state !== 'running') await state.audio.ctx.resume();
+    }
   }
 
   // TUTORIAL: Rebuilds the live wavetable/filter state from a patch while keeping the audio graph running.
@@ -6252,11 +6441,19 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
 
   // TUTORIAL: Starts or retunes a continuous audition drone for a selected patch.
   async function dronePatch(key) {
+    // Any drone start, including slider-triggered auto-audition, is exclusive.
+    // Kill buffer playback, morph previews, and any other drone before starting this target.
+    stopAudio({cancel: false});
     const requestedSerial = state.audio.playbackSerial || 0;
     await ensureAudio();
     if (requestedSerial !== (state.audio.playbackSerial || 0)) return;
-    cancelCancellableWork(); stopBufferSourceOnly(); state.audio.mode = 'single'; state.audio.livePatchKey = key; updateLiveAudioFromPatch(effectivePatchForKey(key));
-    connectLiveAudioNode(); state.audio.playing = true; state.audio.phase = 0;
+    if (!state.audio.ctx || !state.audio.node || !state.audio.gain) return;
+    state.audio.mode = 'single';
+    state.audio.livePatchKey = key;
+    updateLiveAudioFromPatch(effectivePatchForKey(key));
+    connectLiveAudioNode();
+    state.audio.playing = true;
+    state.audio.phase = 0;
     if (_workletModuleReady && state.audio.node?.port) state.audio.node.port.postMessage({type: 'playing', playing: true});
     state.audio.transportTarget = key;
     if (key === 'start' || key === 'end') state.audio.lastMorphTransport = key;
@@ -6276,6 +6473,13 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       const target = key === 'single' ? $('singleStatus') : $('morphStatus');
       if (target) target.textContent = `Drone failed: ${err.message || err}`;
     });
+  }
+
+  // TUTORIAL: True only when the most recent Morph buffer transport was the reverse one.
+  // TUTORIAL: Endpoint drones still count as their own targets, so render-mode edits fall back
+  // TUTORIAL: to forward morph unless reverse was explicitly the last morph direction.
+  function lastMorphPlaybackIsReverse() {
+    return state.audio.lastMorphTransport === 'morph-reverse';
   }
 
   // TUTORIAL: Toggles one-shot Morph playback. Pressing the same transport again stops it;
@@ -6372,6 +6576,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       disconnectOutputGain();
       try { ctx.close(); } catch (_) {}
       _workletModuleReady = false;
+      _audioInitPromise = null;
       state.audio.ctx = null; state.audio.node = null; state.audio.gain = null; state.audio.source = null; state.audio.sources = new Set();
       state.audio.nodeConnected = false; state.audio.gainConnected = false;
     }
@@ -6391,12 +6596,51 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   }
 
 
+  // TUTORIAL: Compact Drawn Waveform signature helper for morph-audition cache keys.
+  // TUTORIAL: JSON.stringify(Float32Array) expands into an object with numeric string keys;
+  // TUTORIAL: the same int16 representation used by JSON export is shorter and stable enough
+  // TUTORIAL: for cache invalidation because it tracks the audible Drawn table resolution.
+  function drawnTableSignatureForCache(table) {
+    return drawnTableToInt16(table).join(',');
+  }
+
+  // TUTORIAL: Builds a compact, normalised patch description for morph-audition cache keys.
+  // TUTORIAL: It avoids stringifying the whole patch object directly, especially Drawn
+  // TUTORIAL: Float32Array data, while still including every stored field that affects render.
+  function patchSignatureForMorphCache(patch) {
+    const p = clonePatch(patch);
+    return {
+      engine: p.engine,
+      pot1: clampInt(p.pot1, 0, POT_MAX_12BIT),
+      pot2: clampInt(p.pot2, 0, POT_MAX_12BIT),
+      pot3: clampInt(p.pot3, 0, POT_MAX_12BIT),
+      sourceInput1: canonicalSourceTap(p.sourceInput1, 'A'),
+      sourceInput2: canonicalSourceTap(p.sourceInput2, 'B'),
+      wavetableType: canonicalWavetableType(p.wavetableType),
+      fm: clampInt(p.fm, 0, 255),
+      pwm: clampInt(p.pwm, 0, 255),
+      am: clampInt(p.am, 0, 255),
+      fmRangeLabel: canonicalFmRangeLabel(p.fmRangeLabel),
+      filterType: FILTER_TYPES.includes(String(p.filterType || 'Off')) ? String(p.filterType || 'Off') : 'Off',
+      filterCutoff: clampFloat(p.filterCutoff, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF),
+      filterResonance: clampFloat(p.filterResonance, 0, FILTER_RESONANCE_UI_MAX),
+      beforeStart: clampFloat(p.beforeStart, 0, WINDOW_STEPS),
+      beforeEnd: clampFloat(p.beforeEnd, 0, WINDOW_STEPS),
+      afterStart: clampFloat(p.afterStart, 0, WINDOW_STEPS),
+      afterEnd: clampFloat(p.afterEnd, 0, WINDOW_STEPS),
+      drawnSeamMode: canonicalDrawnSeamMode(p.drawnSeamMode),
+      drawnSmoothing: canonicalDrawnSmoothing(p.drawnSmoothing),
+      drawnTableI16: drawnTableSignatureForCache(p.drawnTable),
+    };
+  }
+
   // TUTORIAL: Builds a cache key from all settings that affect a rendered morph audition.
   function morphRenderSignature(startPatch = state.patches.start, endPatch = state.patches.end, reverse = false) {
     const ex = state.export;
+    const effectivePair = effectivePatchPairForRender(startPatch, endPatch);
     return JSON.stringify({
-      start: startPatch,
-      end: endPatch,
+      start: patchSignatureForMorphCache(effectivePair.start),
+      end: patchSignatureForMorphCache(effectivePair.end),
       reverse,
       common: {frequency: state.common.frequency},
       export: {
@@ -6404,8 +6648,8 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
         morphRenderMode: canonicalMorphRenderMode(ex.morphRenderMode),
         spectralStates: normaliseSpectralStates(ex.spectralStates || 3),
         curveAmount: ex.curveAmount, curveMode: ex.curveMode, cycleStepped: ex.cycleStepped,
-        differentTypes: ex.differentTypes, sharedType: ex.differentTypes ? ex.sharedType : (startPatch?.wavetableType ?? sharedWavetableType()),
-        differentFmRanges: ex.differentFmRanges, sharedFmRange: ex.differentFmRanges ? ex.sharedFmRange : (startPatch?.fmRangeLabel ?? sharedFmRangeLabel()),
+        differentTypes: ex.differentTypes,
+        differentFmRanges: ex.differentFmRanges,
         dcMode: ex.dcMode, normMode: ex.normMode, headroomDb: ex.headroomDb,
       },
     });
@@ -6415,7 +6659,12 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   // TUTORIAL: the same audio buffer when the user presses play without changing relevant settings.
   function cacheRenderedMorph(rendered, signature) {
     if (!rendered || !rendered.audio || !rendered.summary) return;
-    state.audio.morphCache = {
+    // TUTORIAL: The cache has two independent slots so a cached forward render is not
+    // evicted when the user plays reverse (and vice versa). The slot is chosen from
+    // the signature, which already encodes the reverse flag.
+    const slot = signature.includes('"reverse":true') ? 'reverse' : 'forward';
+    if (!state.audio.morphCache || typeof state.audio.morphCache !== 'object') state.audio.morphCache = {forward: null, reverse: null};
+    state.audio.morphCache[slot] = {
       signature,
       audio: Float32Array.from(rendered.audio),
       summary: {...rendered.summary},
@@ -6425,7 +6674,9 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
 
   // TUTORIAL: Looks up a previously rendered morph buffer if the relevant settings have not changed.
   function cachedRenderedMorph(signature) {
-    const cache = state.audio.morphCache;
+    if (!state.audio.morphCache || typeof state.audio.morphCache !== 'object') return null;
+    const slot = signature.includes('"reverse":true') ? 'reverse' : 'forward';
+    const cache = state.audio.morphCache[slot];
     if (!cache || cache.signature !== signature || !cache.audio || !cache.summary) return null;
     return {audio: cache.audio, summary: cache.summary, notes: cache.notes || [], fromCache: true};
   }
@@ -6459,9 +6710,12 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
 
   // TUTORIAL: Renders or reuses a morph audition buffer, then plays it forward or reverse.
   async function playMorphBuffer(reverse = false) {
-    await ensureAudio();
+    // Morph preview is also exclusive: stop drones and any existing preview before rendering/playing.
     stopAudio({cancel: false});
     const playbackSerial = state.audio.playbackSerial || 0;
+    await ensureAudio();
+    if (playbackSerial !== (state.audio.playbackSerial || 0)) return;
+    if (!state.audio.ctx || !state.audio.gain) return;
     const signature = morphRenderSignature(state.patches.start, state.patches.end, !!reverse);
     const cached = cachedRenderedMorph(signature);
     const label = reverse ? 'reverse morph' : 'morph';
@@ -7624,7 +7878,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       persistGlobalSettings();
       updateStatusSummaries();
       syncExportSettingControls();
-      if (activeTabId() === 'morph') playMorphBuffer(false);
+      if (activeTabId() === 'morph') playMorphBuffer(lastMorphPlaybackIsReverse());
     };
     holder.append(select, desc);
     return holder;
@@ -7647,7 +7901,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       persistGlobalSettings();
       updateStatusSummaries();
       syncExportSettingControls();
-      if (activeTabId() === 'morph' && isSpectralMorphMode(state.export.morphRenderMode)) playMorphBuffer(false);
+      if (activeTabId() === 'morph' && isSpectralMorphMode(state.export.morphRenderMode)) playMorphBuffer(lastMorphPlaybackIsReverse());
     };
     holder.append(select, desc);
     return holder;
@@ -7834,6 +8088,250 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     if (s.startsWith('24-bit')) return 3;
     if (s.startsWith('32-bit')) return 4;
     return 2;
+  }
+
+  // TUTORIAL: MPC wavetable helpers. These validate only the mechanical import layout
+  // TUTORIAL: required by MPC user wavetable folders. Phase, zero-crossing usefulness, and
+  // TUTORIAL: whether each cycle is musically useful remain sound-design judgements.
+  function canonicalMpcSamplesPerCycle(value) {
+    const requested = clampInt(value, MPC_SAMPLES_PER_CYCLE_OPTIONS[0], MPC_SAMPLES_PER_CYCLE_OPTIONS[MPC_SAMPLES_PER_CYCLE_OPTIONS.length - 1]);
+    return MPC_SAMPLES_PER_CYCLE_OPTIONS.includes(requested) ? requested : nearestByLogRatio(MPC_SAMPLES_PER_CYCLE_OPTIONS, requested);
+  }
+
+  function canonicalMpcCycles(value) {
+    return clampInt(value, MPC_MIN_CYCLES, MPC_MAX_CYCLES);
+  }
+
+  function mpcContainerBitDepth(bitDepthLabel = state.export.bitDepth) {
+    return bitDepthBytes(bitDepthLabel) * 8;
+  }
+
+  function mpcCxS(samplesPerCycle = state.export.mpcSamplesPerCycle, cycles = state.export.mpcCycles) {
+    return `${canonicalMpcCycles(cycles)}x${canonicalMpcSamplesPerCycle(samplesPerCycle)}`;
+  }
+
+  function mpcFormatJsonText(samplesPerCycle = state.export.mpcSamplesPerCycle, cycles = state.export.mpcCycles) {
+    return JSON.stringify({formatInfo: {numSamplesPerSingleCycle: canonicalMpcSamplesPerCycle(samplesPerCycle), numSingleCycles: canonicalMpcCycles(cycles)}}, null, 2) + '\n';
+  }
+
+  function canonicalMpcPrefix(value = state.export.mpcPrefix) {
+    // TUTORIAL: MPC prefix is optional and includes its own separator. The default
+    // TUTORIAL: is "fwg_", but a blank prefix should produce names beginning
+    // TUTORIAL: "mpc_", not "_mpc_". Unlike safeName(), this helper must
+    // TUTORIAL: therefore allow an empty result and preserve a trailing underscore.
+    return String(value ?? '').trim().replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+/, '');
+  }
+
+  function migratedMpcPrefix(value) {
+    // TUTORIAL: v2.7i/v2.7j saved prefixes did not include the separator because
+    // TUTORIAL: the old name builder injected "_mpc_". Add a separator when
+    // TUTORIAL: loading non-empty legacy values so "fwg" keeps producing
+    // TUTORIAL: "fwg_mpc_..." rather than "fwgmpc_...".
+    const cleaned = canonicalMpcPrefix(value);
+    if (!cleaned) return '';
+    return /[._-]$/.test(cleaned) ? cleaned : `${cleaned}_`;
+  }
+
+  function mpcFolderNames(kind, stamp = compactTimestampUTC()) {
+    const safeKind = String(kind || 'morph').replace(/[^a-z0-9_-]+/gi, '_').toLowerCase();
+    const prefix = canonicalMpcPrefix();
+    const cxs = mpcCxS();
+    const fileStem = `${prefix}mpc_${safeKind}_${cxs}`;
+    return {
+      cxs,
+      stamp,
+      prefix,
+      fileStem,
+      wavFolder: `${fileStem}_${stamp}`,
+      jsonFolder: `${prefix}mpc_${safeKind}_json_${cxs}_${stamp}`,
+      zipName: `${fileStem}_${stamp}.zip`,
+    };
+  }
+
+  function mpcNamePreview(kind) {
+    const names = mpcFolderNames(kind || 'morph', 'YYYYMMDD-HHMMSS');
+    if (kind === 'bulk') return `${names.wavFolder}/\n  ${names.fileStem}_0001_YYYYMMDD-HHMMSS.wav`;
+    return `${names.wavFolder}/\n  ${names.fileStem}_forward_YYYYMMDD-HHMMSS.wav`;
+  }
+
+  function currentMpcFindings(fileCount = 1) {
+    const summary = renderLengthSummary();
+    const targetSpp = canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle);
+    const targetCycles = canonicalMpcCycles(state.export.mpcCycles);
+    const targetSamples = targetSpp * targetCycles;
+    const containerBits = mpcContainerBitDepth(summary.bitDepth);
+    const findings = [];
+    const add = (key, ok, text, level = ok ? 'ok' : 'bad') => findings.push({key, ok: !!ok, text, level});
+    add('sampleRate', summary.sampleRate >= MPC_MIN_SAMPLE_RATE && summary.sampleRate <= MPC_MAX_SAMPLE_RATE, `Sample rate ${summary.sampleRate} Hz ${summary.sampleRate >= MPC_MIN_SAMPLE_RATE && summary.sampleRate <= MPC_MAX_SAMPLE_RATE ? 'is within' : 'must be within'} MPC’s ${MPC_MIN_SAMPLE_RATE}–${MPC_MAX_SAMPLE_RATE} Hz range.`);
+    add('bitDepth', [16, 24, 32].includes(containerBits), `WAV container bit depth is ${containerBits}-bit${String(summary.bitDepth).startsWith('12-bit') ? ' (12-bit quantised audio inside a 16-bit WAV)' : ''}. MPC lists 16/24/32-bit WAV.`);
+    add('render', state.export.mode === 'Cycles' && nearlyInteger(Number(state.export.value), 1e-9) && canonicalMpcCycles(state.export.value) === targetCycles, `Render length should be ${targetCycles} Cycles for the selected ${mpcCxS(targetSpp, targetCycles)} layout.`);
+    add('samplesPerCycle', Math.abs(summary.samplesPerCycle - targetSpp) <= 1e-6, `Current pitch/sample-rate gives ${summary.samplesPerCycle.toFixed(6)} samples/cycle; MPC Mode target is ${targetSpp}.`);
+    add('sampleCount', summary.sampleCount === targetSamples, `WAV sample count should be ${targetCycles} × ${targetSpp} = ${targetSamples}; current render is ${summary.sampleCount}.`);
+    add('fileCount', fileCount <= MPC_MAX_FILES_PER_FOLDER, `MPC LibraryFolder file count: ${fileCount}/${MPC_MAX_FILES_PER_FOLDER} WAV file(s).`);
+    findings.push({key: 'soundDesign', ok: true, level: 'note', text: 'MPC Mode checks file layout only; zero-crossings, phase landmarks, and useful cycle subsets are sound-design decisions.'});
+    return {summary, findings, ok: findings.filter(f => f.level === 'bad').every(f => f.ok), targetSpp, targetCycles, targetSamples, containerBits};
+  }
+
+  function currentMpcFailureText(fileCount = 1) {
+    const bad = currentMpcFindings(fileCount).findings.filter(f => f.level === 'bad' && !f.ok);
+    return bad.map(f => f.text).join('\n');
+  }
+
+  function applyMpcSettings() {
+    const spp = canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle);
+    const cycles = canonicalMpcCycles(state.export.mpcCycles);
+    let sr = clampInt(state.export.sampleRate, MPC_MIN_SAMPLE_RATE, MPC_MAX_SAMPLE_RATE);
+    if (!COMMON_SAMPLE_RATES.includes(sr)) sr = DEFAULT_SAMPLE_RATE;
+    if (sr > MPC_MAX_SAMPLE_RATE) sr = 96000;
+    if (sr < MPC_MIN_SAMPLE_RATE) sr = DEFAULT_SAMPLE_RATE;
+    setExportSampleRate(sr);
+    if (![16, 24, 32].includes(mpcContainerBitDepth(state.export.bitDepth))) state.export.bitDepth = '16-bit PCM';
+    state.export.mode = 'Cycles';
+    state.export.value = cycles;
+    state.export.cycleStepped = true;
+    setCommonFrequency(sr / spp, {audition: false});
+    persistGlobalSettings();
+    syncPitchControls();
+    syncExportSettingControls();
+    updateStatusSummaries();
+  }
+
+  function mpcFindingsHtml(fileCount = 1) {
+    const {findings, ok, targetSpp, targetCycles, targetSamples} = currentMpcFindings(fileCount);
+    const rows = findings.map(f => {
+      const cls = f.level === 'note' ? 'note' : (f.ok ? 'ok' : 'bad');
+      const mark = f.level === 'note' ? '!' : (f.ok ? '✓' : '✕');
+      return `<div class="mpcCheckItem ${cls}"><span>${mark}</span><span>${escapeHtml(f.text)}</span></div>`;
+    }).join('');
+    const header = ok ? 'MPC Wavetable Mode: ready' : 'MPC Wavetable Mode: settings need attention';
+    return `<div class="mpcCheckList"><p><strong>${escapeHtml(header)}</strong></p><p class="small">format.json will declare ${targetCycles} cycle(s) × ${targetSpp} samples/cycle (${targetSamples} samples/file).</p>${rows}</div>`;
+  }
+
+  function updateMpcModeUi(fileCount = 1) {
+    const enabled = !!state.export.mpcWavetableMode;
+    document.querySelectorAll('[data-export-setting="mpc-mode"]').forEach(el => { el.checked = enabled; });
+    document.querySelectorAll('[data-export-setting="mpc-samples-per-cycle"]').forEach(el => { el.value = String(canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle)); });
+    document.querySelectorAll('[data-export-setting="mpc-cycles"]').forEach(el => { el.value = String(canonicalMpcCycles(state.export.mpcCycles)); });
+    document.querySelectorAll('[data-export-setting="mpc-include-sidecars"]').forEach(el => { el.checked = !!state.export.mpcIncludeSidecars; });
+    document.querySelectorAll('[data-export-setting="mpc-prefix"]').forEach(el => { el.value = canonicalMpcPrefix(); });
+    document.querySelectorAll('[data-mpc-name-preview]').forEach(el => { el.textContent = mpcNamePreview(el.dataset.mpcNamePreview || 'morph'); });
+    document.querySelectorAll('[data-export-setting="file-prefix"]').forEach(el => {
+      el.disabled = enabled;
+      el.title = enabled ? 'MPC Wavetable Mode uses the dedicated MPC File Prefix below.' : '';
+    });
+    document.querySelectorAll('.mpcModePanel').forEach(el => el.classList.toggle('active', enabled));
+    document.querySelectorAll('[data-mpc-warning]').forEach(el => { el.classList.remove('show'); el.textContent = ''; });
+    document.querySelectorAll('.mpcSettingWarn').forEach(el => el.classList.remove('mpcSettingWarn'));
+    document.querySelectorAll('[data-mpc-summary]').forEach(el => { el.innerHTML = enabled ? mpcFindingsHtml(fileCount) : ''; });
+    if (!enabled) return;
+    const byKey = new Map(currentMpcFindings(fileCount).findings.filter(f => f.level === 'bad' && !f.ok).map(f => [f.key, f.text]));
+    const warningMap = {render: 'render', sampleRate: 'sample-rate', bitDepth: 'bit-depth', samplesPerCycle: 'pitch', sampleCount: 'render'};
+    for (const [key, warnKey] of Object.entries(warningMap)) {
+      if (!byKey.has(key)) continue;
+      document.querySelectorAll(`[data-mpc-warning="${warnKey}"]`).forEach(el => { el.textContent = `MPC Mode: ${byKey.get(key)}`; el.classList.add('show'); });
+      document.querySelectorAll(`[data-mpc-control="${warnKey}"]`).forEach(el => el.classList.add('mpcSettingWarn'));
+    }
+  }
+
+  function withMpcWarning(control, warningKey) {
+    const holder = document.createElement('div');
+    holder.appendChild(control);
+    control.dataset.mpcControl = warningKey;
+    const warning = document.createElement('div');
+    warning.className = 'mpcInlineWarning';
+    warning.dataset.mpcWarning = warningKey;
+    holder.appendChild(warning);
+    return holder;
+  }
+
+  function makeMpcWavetableModeControls(kind = 'morph') {
+    const box = document.createElement('div');
+    box.className = 'compactSettingGroup';
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.dataset.exportSetting = 'mpc-mode';
+    checkbox.checked = !!state.export.mpcWavetableMode;
+    checkbox.onchange = () => { state.export.mpcWavetableMode = checkbox.checked; persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    label.append(checkbox, ' MPC Wavetable Mode');
+    box.appendChild(label);
+
+    const panel = document.createElement('div');
+    panel.className = 'mpcModePanel';
+
+    const prefixRow = document.createElement('div');
+    prefixRow.className = 'row wide';
+    const prefixLabel = document.createElement('label');
+    prefixLabel.textContent = 'MPC filename prefix';
+    const prefixInput = document.createElement('input');
+    prefixInput.type = 'text';
+    prefixInput.dataset.exportSetting = 'mpc-prefix';
+    prefixInput.value = canonicalMpcPrefix();
+    prefixInput.oninput = () => { state.export.mpcPrefix = canonicalMpcPrefix(prefixInput.value); syncExportSettingControls(); updateStatusSummaries(); };
+    prefixInput.onchange = () => { state.export.mpcPrefix = canonicalMpcPrefix(prefixInput.value); persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    prefixRow.append(prefixLabel, prefixInput);
+
+    const prefixNote = document.createElement('div');
+    prefixNote.className = 'small';
+    prefixNote.textContent = 'Optional. Default is fwg_. Leave blank for names starting mpc_.';
+
+    const preview = document.createElement('div');
+    preview.className = 'status small';
+    preview.dataset.mpcNamePreview = kind;
+    preview.textContent = mpcNamePreview(kind);
+
+    const sppRow = document.createElement('div');
+    sppRow.className = 'row wide';
+    const sppLabel = document.createElement('label');
+    sppLabel.textContent = 'MPC samples/cycle';
+    const spp = document.createElement('select');
+    spp.dataset.exportSetting = 'mpc-samples-per-cycle';
+    MPC_SAMPLES_PER_CYCLE_OPTIONS.forEach(v => spp.append(new Option(String(v), String(v))));
+    spp.value = String(canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle));
+    spp.onchange = () => { state.export.mpcSamplesPerCycle = canonicalMpcSamplesPerCycle(spp.value); persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    sppRow.append(sppLabel, spp);
+
+    const cyclesRow = document.createElement('div');
+    cyclesRow.className = 'row wide';
+    const cyclesLabel = document.createElement('label');
+    cyclesLabel.textContent = 'MPC cycles / frames';
+    const cycles = document.createElement('input');
+    cycles.type = 'number'; cycles.min = MPC_MIN_CYCLES; cycles.max = MPC_MAX_CYCLES; cycles.step = 1;
+    cycles.dataset.exportSetting = 'mpc-cycles';
+    cycles.value = String(canonicalMpcCycles(state.export.mpcCycles));
+    cycles.onchange = () => { state.export.mpcCycles = canonicalMpcCycles(cycles.value); persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    cyclesRow.append(cyclesLabel, cycles);
+
+    const sidecarLabel = document.createElement('label');
+    const sidecar = document.createElement('input');
+    sidecar.type = 'checkbox';
+    sidecar.dataset.exportSetting = 'mpc-include-sidecars';
+    sidecar.checked = !!state.export.mpcIncludeSidecars;
+    sidecar.onchange = () => { state.export.mpcIncludeSidecars = sidecar.checked; persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    sidecarLabel.append(sidecar, ' Include FWG sidecar JSON folder in ZIP');
+
+    const buttons = document.createElement('div');
+    buttons.className = 'buttonbar';
+    const apply = document.createElement('button');
+    apply.type = 'button';
+    apply.textContent = 'Apply MPC Settings';
+    apply.onclick = applyMpcSettings;
+    const downloadFormat = document.createElement('button');
+    downloadFormat.type = 'button';
+    downloadFormat.textContent = 'Download format.json';
+    downloadFormat.onclick = () => downloadBlob(new Blob([mpcFormatJsonText()], {type: 'application/json'}), 'format.json');
+    buttons.append(apply, downloadFormat);
+
+    const hint = document.createElement('div');
+    hint.className = 'small';
+    hint.textContent = kind === 'bulk'
+      ? 'Bulk MPC ZIPs put WAVs + format.json in one MPC-ready folder, with optional FWG sidecars in a separate sibling folder. The MPC filename prefix controls the folder, ZIP, WAV, and sidecar names.'
+      : 'Morph MPC ZIPs put exported WAVs + format.json in one MPC-ready folder, with optional FWG sidecars in a separate sibling folder. The MPC filename prefix controls the folder, ZIP, WAV, and sidecar names.';
+    const summary = document.createElement('div');
+    summary.dataset.mpcSummary = kind;
+    panel.append(prefixRow, prefixNote, preview, sppRow, cyclesRow, sidecarLabel, buttons, hint, summary);
+    box.appendChild(panel);
+    return box;
   }
 
   // TUTORIAL: Converts a byte count into a readable file-size estimate.
@@ -8258,6 +8756,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     });
     const bulkLoopSafe = $('bulkLoopSafe'); if (bulkLoopSafe) bulkLoopSafe.checked = !!state.export.loopSafeBulk;
     document.querySelectorAll('[data-export-setting="loop-safe-bulk-strategy"]').forEach(el => el.value = canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy));
+    updateMpcModeUi();
     syncDownloadModeControls();
     updateLoopSafetyNoticesSafely();
     refreshCalculatorOutputs();
@@ -8395,8 +8894,12 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const frequencyRef = document.createElement('div');
     frequencyRef.className = 'small';
     frequencyRef.dataset.pitch = 'frequency-note-reference';
+    const frequencyWarning = document.createElement('div');
+    frequencyWarning.className = 'mpcInlineWarning';
+    frequencyWarning.dataset.mpcWarning = 'pitch';
     const frequencyBox = document.createElement('div');
-    frequencyBox.append(frequencyHz, frequencyRef);
+    frequencyBox.dataset.mpcControl = 'pitch';
+    frequencyBox.append(frequencyHz, frequencyRef, frequencyWarning);
     frequencySlider.addEventListener('input', () => setCommonFrequency(sliderValueToFrequency(frequencySlider.value)));
     // TUTORIAL: Do not clamp/format the number box while the user is still typing.
     // TUTORIAL: Earlier versions called setCommonFrequency() for any finite intermediate
@@ -8575,10 +9078,11 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     fileRenderBox.appendChild(fileRenderTitle);
     parent.appendChild(fileRenderBox);
 
-    const prefix = document.createElement('input'); prefix.type = 'text'; prefix.value = state.export.prefix; prefix.oninput = () => state.export.prefix = prefix.value; row('File Prefix', prefix, fileRenderBox);
-    row('Render unit / length', makeRenderLengthControl(), fileRenderBox);
-    row('Sample Rate', makeSampleRateControl(), fileRenderBox);
-    row('Bit Depth', makeBitDepthControl(), fileRenderBox);
+    const prefix = document.createElement('input'); prefix.type = 'text'; prefix.dataset.exportSetting = 'file-prefix'; prefix.value = state.export.prefix; prefix.oninput = () => state.export.prefix = prefix.value; row('File Prefix', prefix, fileRenderBox);
+    row('Render unit / length', withMpcWarning(makeRenderLengthControl(), 'render'), fileRenderBox);
+    row('Sample Rate', withMpcWarning(makeSampleRateControl(), 'sample-rate'), fileRenderBox);
+    row('Bit Depth', withMpcWarning(makeBitDepthControl(), 'bit-depth'), fileRenderBox);
+    fileRenderBox.appendChild(makeMpcWavetableModeControls('morph'));
 
     row('Morph Render Mode', makeMorphRenderModeControl());
     row('FFT Anchor States / CPU', makeSpectralStatesControl());
@@ -8635,9 +9139,10 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     loopSafeInput.onchange = () => { state.export.loopSafeBulk = loopSafeInput.checked; persistGlobalSettings(); updateBulkLoopSafeNotice(); updateStatusSummaries(); };
     strategySelect.onchange = () => { state.export.loopSafeBulkStrategy = canonicalLoopSafeBulkStrategy(strategySelect.value); persistGlobalSettings(); updateBulkLoopSafeNotice(); updateStatusSummaries(); };
     updateBulkLoopSafeNotice();
-    makeRow(parent, 'Render unit / length', makeRenderLengthControl());
-    makeRow(parent, 'Sample Rate', makeSampleRateControl());
-    makeRow(parent, 'Bit Depth', makeBitDepthControl());
+    makeRow(parent, 'Render unit / length', withMpcWarning(makeRenderLengthControl(), 'render'));
+    makeRow(parent, 'Sample Rate', withMpcWarning(makeSampleRateControl(), 'sample-rate'));
+    makeRow(parent, 'Bit Depth', withMpcWarning(makeBitDepthControl(), 'bit-depth'));
+    parent.appendChild(makeMpcWavetableModeControls('bulk'));
     makeRow(parent, 'Morph Render Mode', makeMorphRenderModeControl());
     makeRow(parent, 'FFT Anchor States / CPU', makeSpectralStatesControl());
     makeRow(parent, 'START/END options', makeEndpointRelationControls('bulk'));
@@ -9108,9 +9613,9 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     $('randomMorphEnd').onclick = () => randomiseMorphEndpointAndPlay('end');
     $('playMorph').onclick = () => toggleMorphPlayback(false);
     $('playReverse').onclick = () => toggleMorphPlayback(true);
-    $('exportForward').onclick = () => { globalPanicStop(); exportDirection('forward'); };
-    $('exportReverse').onclick = () => { globalPanicStop(); exportDirection('reverse'); };
-    $('exportBoth').onclick = () => { globalPanicStop(); exportBothDirections(); };
+    $('exportForward').onclick = () => { globalPanicStop(); state.export.mpcWavetableMode ? exportMpcDirection('forward') : exportDirection('forward'); };
+    $('exportReverse').onclick = () => { globalPanicStop(); state.export.mpcWavetableMode ? exportMpcDirection('reverse') : exportDirection('reverse'); };
+    $('exportBoth').onclick = () => { globalPanicStop(); state.export.mpcWavetableMode ? exportMpcBothDirections() : exportBothDirections(); };
     syncRangeNumber($('bulkCount'), $('bulkCountNum'), v => {});
     $('bulkExport').onclick = bulkExport;
   }
@@ -9122,11 +9627,13 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const count = clampInt($('bulkCountNum').value, 1, 200);
     const dirs = $('bulkDirections').value === 'Forward + Reverse' ? ['forward','reverse'] : $('bulkDirections').value === 'Reverse only' ? ['reverse'] : ['forward'];
     const total = count * dirs.length; let done = 0;
-    const zipMode = !!state.export.zipDownloads;
+    const mpcMode = !!state.export.mpcWavetableMode;
+    const zipMode = mpcMode ? true : !!state.export.zipDownloads;
     const zipEntries = [];
     const renderProgressPortion = zipMode ? 0.90 : 1.00;
-    const loopSafe = !!state.export.loopSafeBulk;
+    const loopSafe = !mpcMode && !!state.export.loopSafeBulk;
     const loopSafePlan = loopSafe ? loopSafeBulkPlan() : null;
+    const mpcNames = mpcMode ? mpcFolderNames('bulk', compactTimestampUTC()) : null;
     const originalRender = loopSafe ? {
       frequency: state.common.frequency,
       mode: state.export.mode,
@@ -9134,6 +9641,10 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       morphRenderMode: state.export.morphRenderMode,
       cycleStepped: state.export.cycleStepped,
     } : null;
+    if (mpcMode && !ensureMpcExportReady($('bulkStatus'), total)) return;
+    if (mpcMode) {
+      zipEntries.push({name: `${mpcNames.wavFolder}/format.json`, data: mpcFormatJsonText()});
+    }
     if (loopSafe) {
       state.common.frequency = loopSafePlan.frequency;
       state.export.mode = 'Cycles';
@@ -9143,7 +9654,9 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       syncPitchControls();
       syncExportSettingControls();
     }
-    $('bulkProgress').value = 0; $('bulkStatus').textContent = `Bulk rendering ${count} random iteration(s), ${total} direction render(s)${zipMode ? ' into one ZIP' : ''}${loopSafe ? '\nLoop-safe mode: ' + loopSafeBulkDisabledText(loopSafePlan) : ''}`;
+    $('bulkProgress').value = 0; $('bulkStatus').textContent = mpcMode
+      ? `Bulk rendering ${count} MPC iteration(s), ${total} WAV file(s) into ${mpcNames.wavFolder}/`
+      : `Bulk rendering ${count} random iteration(s), ${total} direction render(s)${zipMode ? ' into one ZIP' : ''}${loopSafe ? '\nLoop-safe mode: ' + loopSafeBulkActiveText(loopSafePlan) : ''}`;
     try {
       for (let i = 0; i < count; i++) {
         throwIfCancelled(token);
@@ -9152,12 +9665,20 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
         const end = loopSafe ? neutralisePatchForLoopSafety(rawEnd) : rawEnd;
         for (const dir of dirs) {
           throwIfCancelled(token);
-          const prefix = `${safeName($('bulkPrefix').value)}_${String(i + 1).padStart(3, '0')}`;
+          const indexText = String(i + 1).padStart(4, '0');
+          const prefix = mpcMode
+            ? `${mpcNames.fileStem}_${indexText}${dirs.length > 1 ? '_' + dir : ''}`
+            : `${safeName($('bulkPrefix').value)}_${String(i + 1).padStart(3, '0')}`;
           const offset = renderProgressPortion * (done / total);
           const scale = renderProgressPortion / total;
           const result = await exportDirection(dir, start, end, prefix, $('bulkStatus'), $('bulkProgress'), {
             download: !zipMode, zip: false, token, cache: false, progressOffset: offset, progressScale: scale,
-            exportContext: {kind: 'bulk', source_tab: 'Bulk Random Export', batch_index: i + 1, batch_count: count},
+            timestamp: mpcMode ? mpcNames.stamp : undefined,
+            baseName: mpcMode ? `${prefix}_${mpcNames.stamp}` : undefined,
+            wavFolder: mpcMode ? mpcNames.wavFolder : '',
+            jsonFolder: (mpcMode && state.export.mpcIncludeSidecars) ? mpcNames.jsonFolder : '',
+            includeJson: mpcMode ? !!state.export.mpcIncludeSidecars : true,
+            exportContext: {kind: mpcMode ? 'mpc_bulk' : 'bulk', source_tab: 'Bulk Random Export', batch_index: i + 1, batch_count: count, mpc_wavetable_mode: mpcMode, mpc_layout: mpcMode ? {cycles: canonicalMpcCycles(state.export.mpcCycles), samples_per_cycle: canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle)} : undefined},
             onProgress: (_local, global) => { $('bulkStatus').textContent = `Bulk rendering iteration ${i + 1}/${count}, ${dir} (${Math.round(global * 100)}%)…`; }
           });
           if (!result) throwIfCancelled(token);
@@ -9168,13 +9689,15 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       }
       if (zipMode) {
         $('bulkProgress').value = 0.92;
-        $('bulkStatus').textContent = `Packing ZIP with ${zipEntries.length} files…`;
+        $('bulkStatus').textContent = `Packing ZIP with ${zipEntries.length} file(s)…`;
         const zipBlob = await makeZipBlob(zipEntries, token);
         throwIfCancelled(token);
-        const name = `${safeName($('bulkPrefix').value)}_${compactTimestampUTC()}.zip`;
+        const name = mpcMode ? mpcNames.zipName : `${safeName($('bulkPrefix').value)}_${compactTimestampUTC()}.zip`;
         downloadBlob(zipBlob, name);
         zipEntries.length = 0;
-        $('bulkStatus').textContent = `Bulk ZIP export complete: ${done}/${total} WAV+JSON pairs in ${name}.`;
+        $('bulkStatus').textContent = mpcMode
+          ? `MPC Bulk ZIP export complete: ${done}/${total} WAV file(s) in ${mpcNames.wavFolder}/, plus ${state.export.mpcIncludeSidecars ? 'separate FWG JSON sidecar folder' : 'no FWG sidecar folder'}.`
+          : `Bulk ZIP export complete: ${done}/${total} WAV+JSON pairs in ${name}.`;
       } else {
         $('bulkStatus').textContent = `Bulk export complete: ${done}/${total} WAV+JSON pairs requested.`;
       }
