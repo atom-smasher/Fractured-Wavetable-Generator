@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.6za
+Fractured Wavetable Generator v2.7a
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,11 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Release note: v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs. v2.6f cleans stale button/variant comments and keeps transport keyboard shortcuts active when ordinary controls such as buttons, sliders, checkboxes, and dropdowns have focus. v2.6g lets alphabet transport shortcuts work from numeric fields, keeps true text fields reserved for typing, and releases focus before browser-level Ctrl/Cmd+PageUp/PageDown tab shortcuts so sliders do not steal those keys. v2.6h carries FM pitch-range changes through morph interpolation, cleans a stale loop-safety data-shape check, prevents numeric-field wheel scrolling from moving the page, tightens random window generation, hardens tab-switch audio muting, and tidies a Formant engine formatting/Source-B accumulation oversight. v2.6i presents Curve Amount as a signed -127..+127 control with 0 as neutral. v2.6j retunes the morph curve response so Bend is less twitchy near centre and S-curve responds audibly. v2.6k makes the shared/different FM pitch-range toggle update the visible controls, live audition, visualisers, and effective render state consistently without requiring another control change. v2.6l treats START as the effective shared source when endpoint settings are not different, v2.6m keeps disabled END controls visibly dormant instead of mirroring START, v2.6n moves that explanation into Notes while exposing the same START/END morph-routing and cycle-stepped controls in Bulk, v2.6o exposes morph curve controls in Bulk and clarifies loop-safe frequency substitution, v2.6p adds reproducibility/performance comments and fixes START FM shared-control enabling, v2.6q caches low-harmonic trigonometry, v2.6r refreshes dependent START/END summaries when shared routing changes, v2.6s documents the late-bound patch UI refresher closure used by patch controls, v2.6t adds a per-patch Drawn Waveform source that can be routed through the existing tap/input stage while Bulk random export remains generator-only, v2.6u improves live drawing response, full-scale drawing reach, tap labels, Drawn settings spacing, and non-destructive seam/smoothing preview behaviour, and v2.6v releases focused controls on ESC/browser-tab shortcuts while excluding untouched sine/flat Drawn tables from ordinary random tap assignment, v2.6w fixes the visible/exported version label, deduplicates Drawn Waveform JSON data through a top-level drawn_waveforms registry, records Drawn seam/smoothing settings for reconstruction, and notes that Per Cycle Peak normalisation can flatten cycle-to-cycle beating, and v2.6x adds a stationary-morph render path so copied START→END patches render as one fixed patch instead of passing through the interpolation cache, and v2.6y routes live endpoint audition and stationary morph rendering through one shared oscillator-frame helper so copied endpoints cannot diverge because of duplicated live/render setup code, and v2.6z fixes stale visible version labels and updates comments around the shared oscillator stage so future edits keep FM, PWM, and Ring Mod together, and v2.6za fixes the ESC focus-release helper so it blurs the active ordinary control instead of recursing.
+Release note: v2.7a is a maintenance update: it revokes the AudioWorklet Blob URL even if addModule() fails; sends live worklet frame+frequency together so full patch updates are atomic; and omits an empty drawn_waveforms object from JSON sidecars when no Drawn Waveform source is used.
+
+v2.7 is the public release of the v2.6za–v2.6zk development chain. Key additions since v2.6za: per-patch Drawn Waveform source (hand-drawn or audio-imported, routeable through the tap/input stage with seam and smoothing options); JSON patch import (schema v7+, resolves drawn_waveform registry refs, structured three-section dialog for Playground / Morph / Cross-load targets); audio-file-to-Drawn import (any browser-decodable file → 256-sample Drawn table, with mono mixdown, linear resample, DC removal, and normalisation); four RAM-only per-patch save slots across Playground, START, and END; live audio engine migrated from the deprecated ScriptProcessor to AudioWorklet (processor serialised as an inline Blob URL, no separate file required, falls back to ScriptProcessor on very old browsers); morph curve controls now available in Bulk; stationary-morph render path so copied START→END patches export as a single fixed patch instead of passing through the interpolation cache; 44.1 kHz session default with 88.2 kHz and 176.4 kHz export options; live audition restarts automatically when the export sample rate changes; and a rebuilt Import Patch dialog with three explicit sections that cannot produce duplicate Load START+END buttons.
+
+v2.6 development history (retained for provenance): v2.6 promotes the Source Taps work into the public branch. Each generator now exposes four related taps, Input 1 and Input 2 choose which taps feed the Wavetable Type stage, window controls use a 0–256 endpoint scale to match the 256-sample table, and collapsible UI sections reduce visual clutter in Playground and Morph. v2.6a trims JSON sidecars to reproducible sound settings, compact control ranges, and useful provenance instead of exporting UI-control documentation. v2.6b makes Morph render-mode metadata ID-based for future compatibility and mutes audition audio before Morph exports. v2.6e carries START/END source-tap routing through morph interpolation so tap-only morphs do not collapse back to default A/B inputs. v2.6f cleans stale button/variant comments and keeps transport keyboard shortcuts active when ordinary controls such as buttons, sliders, checkboxes, and dropdowns have focus. v2.6g lets alphabet transport shortcuts work from numeric fields, keeps true text fields reserved for typing, and releases focus before browser-level Ctrl/Cmd+PageUp/PageDown tab shortcuts so sliders do not steal those keys. v2.6h carries FM pitch-range changes through morph interpolation, cleans a stale loop-safety data-shape check, prevents numeric-field wheel scrolling from moving the page, tightens random window generation, hardens tab-switch audio muting, and tidies a Formant engine formatting/Source-B accumulation oversight. v2.6i presents Curve Amount as a signed -127..+127 control with 0 as neutral. v2.6j retunes the morph curve response so Bend is less twitchy near centre and S-curve responds audibly. v2.6k makes the shared/different FM pitch-range toggle update the visible controls, live audition, visualisers, and effective render state consistently without requiring another control change. v2.6l treats START as the effective shared source when endpoint settings are not different, v2.6m keeps disabled END controls visibly dormant instead of mirroring START, v2.6n moves that explanation into Notes while exposing the same START/END morph-routing and cycle-stepped controls in Bulk, v2.6o exposes morph curve controls in Bulk and clarifies loop-safe frequency substitution, v2.6p adds reproducibility/performance comments and fixes START FM shared-control enabling, v2.6q caches low-harmonic trigonometry, v2.6r refreshes dependent START/END summaries when shared routing changes, v2.6s documents the late-bound patch UI refresher closure used by patch controls, v2.6t adds a per-patch Drawn Waveform source that can be routed through the existing tap/input stage while Bulk random export remains generator-only, v2.6u improves live drawing response, full-scale drawing reach, tap labels, Drawn settings spacing, and non-destructive seam/smoothing preview behaviour, and v2.6v releases focused controls on ESC/browser-tab shortcuts while excluding untouched sine/flat Drawn tables from ordinary random tap assignment, v2.6w fixes the visible/exported version label, deduplicates Drawn Waveform JSON data through a top-level drawn_waveforms registry, records Drawn seam/smoothing settings for reconstruction, and notes that Per Cycle Peak normalisation can flatten cycle-to-cycle beating, and v2.6x adds a stationary-morph render path so copied START→END patches render as one fixed patch instead of passing through the interpolation cache, and v2.6y routes live endpoint audition and stationary morph rendering through one shared oscillator-frame helper so copied endpoints cannot diverge because of duplicated live/render setup code, and v2.6z fixes stale visible version labels and updates comments around the shared oscillator stage so future edits keep FM, PWM, and Ring Mod together, and v2.6za fixes the ESC focus-release helper so it blurs the active ordinary control instead of recursing, and v2.6zb persists morph curve settings, cleans render-path tutorial comments and dead Drawn helper code, hard-stops live audio when the export sample rate changes, and records TODO notes for JSON import, patch save slots, WAV-to-Drawn import, and AudioWorklet migration, and v2.6zc restarts the active live audition after a sample-rate change so the new AudioContext rate is heard immediately. v2.6zd defaults new sessions to 44.1 kHz and adds 88.2/176.4 kHz options. v2.6ze works through the recorded TODO list: renames applyDrawnPostProcessFromSettings to sanitisePatchDrawnTable to match its narrower behaviour, splits loopSafetyFindingsForSettings into a pure computeLoopSafetyFindings helper and a thin state-updating wrapper, implements JSON patch import (schema v7+ required; prefers design_* over render_*; resolves drawn_waveforms refs; dialog asks for load target), adds four RAM-only per-patch save slots across all three patch contexts, migrates the live audio engine from the deprecated createScriptProcessor to AudioWorklet with a serialised processor blob and MessagePort patch updates, and adds WAV-to-Drawn import (Web Audio decode, mono mixdown, linear resample to 256 samples, DC removal, normalise). v2.6zf moves Morph copy/load controls under their patch generators, expands JSON import targets with explicit START/END routing labels, and switches to/auditions the destination tab after import. v2.6zg removes the stale duplicate Morph header copy/load controls, makes Playground copy actions open Morph and drone the requested endpoint, makes Import Patch Escape act as Cancel, keeps Load START + END visible as a single primary import choice, forces cross-loaded JSON endpoints to drone the actual target endpoint, and clears transient file-input references after JSON/WAV imports. v2.6zh rewrites Notes into skimmable bullet lists, documents WAV-to-Drawn import behaviour, corrects WAV import resampling/comments for long and short files, refreshes stale audio/copy comments, and keeps Playground copy-to-Morph actions audibly focused on their destination endpoint. v2.6zi trims the Notes tab back toward user-facing guidance, recognises browser-supported audio import beyond WAV where the browser decoder allows it, makes Import Error Escape act as Close, hardens Import Patch Escape as Cancel, and builds the import-target button list from one de-duplicated source so Load START + END appears once when an END patch is available. v2.6zj fixes Escape handling at the global keydown layer so Import Error and Import Patch overlays close/cancel even when the transport Escape handler is installed first. v2.6zk rebuilds the Import Patch dialog as three explicit sections — Playground, Morph, and Cross-load — so Load START + END is created exactly once and the visible target list cannot drift from duplicate label code.
 
 Recent v2.5 development summary: the v2.5 Source Taps Lab series added A/B/C/D taps, Input 1/Input 2 terminology, collapsible patch sections, logarithmic cutoff/frequency sliders, 0–127 resonance presentation, Morph visualiser collapse controls, and stronger per-engine tap tuning.
 
@@ -37,7 +41,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.6za</title>
+<title>Fractured Wavetable Generator v2.7a</title>
 <style>
   :root {
     --bg: #101216;
@@ -136,6 +140,9 @@ itself, impose GPL licensing on generated outputs.
   .loopSafeDetails p:last-child { margin-bottom: 0; }
   .note { color: var(--muted); font-size: 13px; line-height: 1.45; }
   .note code { display: inline-block; min-width: 1.8em; text-align: center; color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
+  .noteList { color: var(--muted); font-size: 13px; line-height: 1.45; margin: 6px 0 12px 1.2em; padding: 0; }
+  .noteList li { margin: 0.25em 0; }
+  .noteList code { display: inline-block; min-width: 1.8em; text-align: center; color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
   .shortcutTable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 13px; }
   .shortcutTable th, .shortcutTable td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
   .shortcutTable th { color: var(--accent); background: #11161d; }
@@ -164,11 +171,29 @@ itself, impose GPL licensing on generated outputs.
   .glossaryTable code { color: var(--text); background: #0f131a; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
   progress { width: 100%; height: 18px; }
   @media (max-width: 1180px) { .grid, .grid3, .two { grid-template-columns: 1fr; } }
+  /* Save slots */
+  .saveSlotBar { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0 2px; }
+  .saveSlotBar label { width: 100%; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .saveSlotBtn { flex: 1 1 calc(25% - 4px); min-width: 70px; padding: 4px 5px; font-size: 11px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-radius: 6px; background: var(--btn, var(--panel2)); border: 1px solid var(--line); color: var(--text); cursor: pointer; }
+  .saveSlotBtn.occupied { border-color: var(--accent); color: var(--accent); }
+  .saveSlotBtn:hover { border-color: var(--text); }
+  /* Overlay dialogs (save slot confirmation, import target, import error) */
+  .fwOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+  .fwDialog { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; min-width: 240px; max-width: 420px; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.6); }
+  .fwDialog h3 { margin: 0 0 10px; font-size: 14px; color: var(--text); }
+  .fwDialog .fwDialogInfo { font-size: 12px; color: var(--muted); margin: 0 0 12px; word-break: break-all; }
+  .fwDialog .fwDialogErr { font-size: 12px; color: #f87171; margin: 0 0 12px; }
+  .fwDialog .buttonbar { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .fwDialog .buttonbar button { width: 100%; text-align: left; }
+  .fwDialog .buttonbar button.fwCancel { color: var(--muted); border-color: transparent; margin-top: 4px; text-align: center; }
+  .fwDialogSection { border-top: 1px solid var(--line); padding-top: 8px; margin-top: 8px; }
+  .fwDialogSection:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+  .fwDialogSectionTitle { color: var(--accent); font-size: 12px; font-weight: 650; margin: 0 0 5px; }
 </style>
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.6za</h1>
+  <h1>Fractured Wavetable Generator v2.7a</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -239,8 +264,6 @@ itself, impose GPL licensing on generated outputs.
           <button id="auditionStart">Drone</button>
           <button id="randomStart">Randomise</button>
           <button id="randomMorphStart">Randomise &amp; Morph</button>
-          <button id="copyStartToEnd">Copy → END</button>
-          <button id="swapStartEnd">Swap</button>
         </div>
         <div id="startControls"></div>
       </div>
@@ -250,7 +273,6 @@ itself, impose GPL licensing on generated outputs.
           <button id="auditionEnd">Drone</button>
           <button id="randomEnd">Randomise</button>
           <button id="randomMorphEnd">Randomise &amp; Morph</button>
-          <button id="copyEndToStart">Copy → START</button>
         </div>
         <div id="endControls"></div>
       </div>
@@ -362,20 +384,49 @@ itself, impose GPL licensing on generated outputs.
       <p class="note">Fractured Wavetable Generator is a browser-native wavetable and sound-design tool. It can make single-cycle oscillator material, evolving WAV files, drones, noisy transitions, morphs, and raw source material for further editing in samplers, synths, or DAWs.</p>
 
       <h3>Usage Notes</h3>
-      <p class="note">Pressing <code>ESC</code> stops audio and cancels active rendering. Leaving a tab also mutes the current audition. Keyboard shortcuts still work while ordinary controls such as buttons, sliders, checkboxes, dropdowns, and numeric fields have focus. They are ignored while typing into true text fields, such as filename prefixes, or editable text areas. Browser-level shortcuts such as <code>Ctrl</code>/<code>Cmd</code> + <code>Page Up</code>/<code>Page Down</code> are left to the browser. Space is left to the browser.</p>
-      <p class="note">Pitch is shared across Playground, Morph, and Bulk. The frequency slider covers the normal audio range; typed frequency and note/octave controls can go down to 1 Hz for long-cycle and sub-audio exports. MIDI note input, when available, sets the same shared pitch.</p>
-      <p class="note">The visualisers are previews of the generated sound path. Base table shows the generated wavetable; the modulation and spectrum views help show how FM, PWM, Ring Mod, filtering, and morphing affect the result.</p>
-      <p class="note">In Morph and Bulk, unchecked <code>Different START/END Wavetable Types</code> or <code>Different START/END FM Pitch Range</code> means START supplies the effective value used for both endpoints. The END control is disabled and ignored for rendering, but its stored value is not overwritten, so it is still available when the option is checked again. Bulk applies the same rule to each random START/END pair: that iteration’s START patch supplies the shared value.</p>
-      <p class="note"><code>Cycle-stepped transition</code> is also shared by Morph and Bulk. It makes the morph move in per-cycle steps instead of continuously across individual samples. Bulk’s phase-accurate loop-safe mode temporarily forces it on during the batch, then restores the previous setting afterward.</p>
-      <p class="note">Morph and Bulk exports create WAV files with optional JSON sidecars. The JSON is there so patches can be inspected or reconstructed later; ordinary users do not need to edit it.</p>
-      <p class="note">Bulk random export uses the shared pitch and render controls unless Phase-accurate loop-safe export is enabled. In loop-safe Bulk mode, frequency, render length, morph mode, cycle-stepping, oscillator modulation, filters, and source/result windows may be temporarily overridden so the exported file lands on a clean cycle boundary.</p>
-      <p class="note">Very long browser renders can use a lot of RAM. For unusually long exports, smaller test renders are recommended before committing to a large file.</p>
+      <ul class="noteList">
+        <li><code>ESC</code> closes the topmost open dialog or import overlay; if no overlay is open, it stops audio and cancels active rendering.</li>
+        <li>Leaving a tab mutes the current audition so drones do not continue unnoticed behind another workspace.</li>
+        <li>Keyboard shortcuts still work while ordinary controls such as buttons, sliders, checkboxes, dropdowns, and numeric fields have focus.</li>
+        <li>Keyboard shortcuts are ignored while typing into true text fields, such as filename prefixes, or editable text areas.</li>
+        <li>Browser-level shortcuts such as <code>Ctrl</code>/<code>Cmd</code> + <code>Page Up</code>/<code>Page Down</code> are left to the browser. Space is also left to the browser.</li>
+      </ul>
+
+      <h3>Pitch, visualisers, and shared Morph settings</h3>
+      <ul class="noteList">
+        <li>Pitch is shared across Playground, Morph, and Bulk.</li>
+        <li>The frequency slider covers the normal audio range; typed frequency and note/octave controls can go down to 1 Hz for long-cycle and sub-audio exports.</li>
+        <li>MIDI note input, when available, sets the same shared pitch.</li>
+        <li>The visualisers are previews of the generated sound path. Base table shows the generated wavetable; the modulation and spectrum views help show how FM, PWM, Ring Mod, filtering, and morphing affect the result.</li>
+        <li>In Morph and Bulk, unchecked <code>Different START/END Wavetable Types</code> or <code>Different START/END FM Pitch Range</code> means START supplies the effective value used for both endpoints.</li>
+        <li>The disabled END control is ignored for rendering, but its stored value is not overwritten, so it is still available when the option is checked again.</li>
+        <li><code>Cycle-stepped transition</code> is shared by Morph and Bulk. It makes the morph move in per-cycle steps instead of continuously across individual samples.</li>
+      </ul>
+
+      <h3>JSON and audio import</h3>
+      <ul class="noteList">
+        <li>JSON import reads a previously exported sidecar, asks where the patch should be loaded, then switches to and auditions the destination tab.</li>
+        <li>JSON exports store enough patch information to reconstruct the sound later. Ordinary users do not need to edit them by hand.</li>
+        <li><strong>Import Audio…</strong> is available from each patch’s Drawn Waveform section. It turns an audio file into that patch’s 256-sample Drawn source table.</li>
+        <li>WAV is the main intended source, but MP3 and other audio files may also work when your browser can decode them.</li>
+        <li>Longer files are squeezed across the full 256-sample Drawn table. This can capture an overall tone or texture, but it is not meant to preserve a whole rhythm, phrase, or transient sequence.</li>
+        <li>Shorter files are stretched across the full 256-sample Drawn table instead of being padded with silence.</li>
+        <li>Silent or effectively flat imports are rejected so the previous Drawn waveform is not accidentally destroyed.</li>
+      </ul>
+
+      <h3>Export and browser limits</h3>
+      <ul class="noteList">
+        <li>Morph and Bulk exports always create a WAV file and a matching JSON sidecar. There is no option to export WAV-only.</li>
+        <li>Bulk random export uses the shared pitch and render controls unless Phase-accurate loop-safe export is enabled.</li>
+        <li>In loop-safe Bulk mode, frequency, render length, morph mode, cycle-stepping, oscillator modulation, filters, and source/result windows may be temporarily overridden so the exported file lands on a clean cycle boundary.</li>
+        <li>Very long browser renders can use a lot of RAM. For unusually long exports, smaller test renders are recommended before committing to a large file.</li>
+      </ul>
 
       <h3>Keyboard Shortcuts</h3>
       <table class="shortcutTable">
         <thead><tr><th>Context</th><th>Shortcut</th><th>Action</th></tr></thead>
         <tbody>
-          <tr><td>Global</td><td><code>ESC</code></td><td>Stop all audio and cancel active rendering</td></tr>
+          <tr><td>Global</td><td><code>ESC</code></td><td>Close top dialog/overlay; otherwise stop all audio and cancel active rendering</td></tr>
           <tr><td>Playground &amp; Morph</td><td><code>Media Play/Pause</code></td><td>Same action as <code>P</code>, where supported by the browser</td></tr>
           <tr><td>Playground</td><td><code>P</code></td><td>Play/Pause Playground Drone</td></tr>
           <tr><td>Morph</td><td><code>S</code></td><td>Play/Pause Drone START</td></tr>
@@ -411,10 +462,15 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.6za';
+  const APP_VERSION = 'v2.7a';
   const EXPORT_SCHEMA_VERSION = 11;
   const TABLE_SIZE = 256;
-  const DEFAULT_SAMPLE_RATE = 48000;
+  const DEFAULT_SAMPLE_RATE = 44100;
+  // TUTORIAL: Common export/audition sample-rate choices. 44.1 kHz is the default
+  // TUTORIAL: because it is lightest among the ordinary music/video rates and therefore
+  // TUTORIAL: friendlier for first-run browser audition on older computers. 88.2/176.4
+  // TUTORIAL: are the 2×/4× 44.1-family rates; 48/96/192 are the video/pro-audio family.
+  const COMMON_SAMPLE_RATES = [44100, 48000, 88200, 96000, 176400, 192000];
   const DEFAULT_FREQUENCY = 110.0;
   const MIN_FREQUENCY = 1.0;
   const MIN_SLIDER_FREQUENCY = 20.0;
@@ -792,11 +848,20 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Central runtime state. UI controls, live audio, render/export settings, MIDI,
   // TUTORIAL: and visualiser animation all read and write this object. Keeping state explicit
   // TUTORIAL: avoids hidden globals scattered through event handlers.
+  // TUTORIAL: saveSlots holds four RAM-only patch snapshots per patch context (Playground,
+  // TUTORIAL: START, END). Slots survive engine rebuilds inside addPatchControls because the
+  // TUTORIAL: data lives here rather than inside the DOM. Slots are not persisted to localStorage:
+  // TUTORIAL: they are scratch memory for the current session only.
   const state = {
     patches: {
       single: defaultPatch(),
       start: defaultPatch(),
       end: defaultPatch(),
+    },
+    saveSlots: {
+      single: [null, null, null, null],
+      start:  [null, null, null, null],
+      end:    [null, null, null, null],
     },
     ui: {
       lastOpenTab: 'playground',
@@ -1012,9 +1077,15 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Cookie reader kept small and dependency-free. Values are URL-encoded JSON blobs.
+  // TUTORIAL: document.cookie access is wrapped in try/catch because Chromium throws
+  // TUTORIAL: "Access is denied for this document" in restricted/opaque contexts (e.g. certain
+  // TUTORIAL: sandboxed iframes). Returning '' on error lets readSavedGlobalSettings() fall
+  // TUTORIAL: through to the localStorage path, which does work in those contexts.
   function readCookieValue(name) {
+    let cookieText = '';
+    try { cookieText = document.cookie || ''; } catch (_) { return ''; }
     const target = `${encodeURIComponent(name)}=`;
-    const parts = String(document.cookie || '').split(';');
+    const parts = String(cookieText).split(';');
     for (const part of parts) {
       const trimmed = part.trim();
       if (trimmed.startsWith(target)) return trimmed.slice(target.length);
@@ -1085,6 +1156,8 @@ itself, impose GPL licensing on generated outputs.
       bitDepth: String(state.export.bitDepth || '16-bit PCM'),
       morphRenderMode: canonicalMorphRenderMode(state.export.morphRenderMode),
       spectralStates: normaliseSpectralStates(state.export.spectralStates || 3),
+      curveAmount: clampInt(state.export.curveAmount ?? 0, -127, 127),
+      curveMode: ['Bend', 'S-curve'].includes(state.export.curveMode) ? state.export.curveMode : 'Bend',
       zipDownloads: !!state.export.zipDownloads,
       dcMode: canonicalDcMode(state.export.dcMode),
       normMode: canonicalNormMode(state.export.normMode),
@@ -1120,10 +1193,12 @@ itself, impose GPL licensing on generated outputs.
     if (saved.midiChannel != null) state.common.midiChannel = String(saved.midiChannel || 'off').toLowerCase();
     if (['Cycles', 'Seconds', 'Samples'].includes(saved.renderMode)) state.export.mode = saved.renderMode;
     if (isFiniteNumber(saved.renderValue)) state.export.value = Math.max(0, Number(saved.renderValue));
-    if ([44100, 48000, 96000, 192000].includes(Number(saved.sampleRate))) state.export.sampleRate = Number(saved.sampleRate);
+    if (COMMON_SAMPLE_RATES.includes(Number(saved.sampleRate))) state.export.sampleRate = Number(saved.sampleRate);
     if (['8-bit PCM', '12-bit PCM in 16-bit WAV', '16-bit PCM', '24-bit PCM', '32-bit PCM'].includes(saved.bitDepth)) state.export.bitDepth = saved.bitDepth;
     if (saved.morphRenderMode != null) state.export.morphRenderMode = canonicalMorphRenderMode(saved.morphRenderMode);
     if (saved.spectralStates != null) state.export.spectralStates = normaliseSpectralStates(saved.spectralStates);
+    if (isFiniteNumber(saved.curveAmount)) state.export.curveAmount = clampInt(saved.curveAmount, -127, 127);
+    if (['Bend', 'S-curve'].includes(saved.curveMode)) state.export.curveMode = saved.curveMode;
     if (typeof saved.zipDownloads === 'boolean') state.export.zipDownloads = saved.zipDownloads;
     if (saved.dcMode != null) state.export.dcMode = canonicalDcMode(saved.dcMode);
     if (saved.normMode != null) state.export.normMode = canonicalNormMode(saved.normMode);
@@ -1138,6 +1213,54 @@ itself, impose GPL licensing on generated outputs.
     if (saved.moduleOpen && typeof saved.moduleOpen === 'object') state.ui.moduleOpen = Object.assign({}, saved.moduleOpen);
     if (isValidTabId(saved.lastOpenTab)) state.ui.lastOpenTab = String(saved.lastOpenTab);
     state.common.midiStatus = state.common.midiChannel === 'off' ? 'MIDI input off' : `MIDI channel restored: ${state.common.midiChannel === 'omni' ? 'OMNI' : 'ch ' + state.common.midiChannel}`;
+  }
+
+  // TUTORIAL: Captures the currently sounding transport before an AudioContext rebuild.
+  // TUTORIAL: Sample-rate changes need a hard context close because an existing browser
+  // TUTORIAL: AudioContext keeps its original actual sample rate. Capturing the transport
+  // TUTORIAL: lets the app resume the same drone or morph audition after the new context is made.
+  function activeAudioTransportSnapshot() {
+    if (!state.audio.playing || !state.audio.transportTarget) return null;
+    return {
+      target: state.audio.transportTarget,
+      mode: state.audio.mode,
+      livePatchKey: state.audio.livePatchKey,
+      lastMorphTransport: state.audio.lastMorphTransport,
+    };
+  }
+
+  // TUTORIAL: Restarts the transport captured by activeAudioTransportSnapshot(). Live drones
+  // TUTORIAL: resume immediately against a fresh AudioContext. One-shot morph playback is
+  // TUTORIAL: re-rendered/replayed from the start because the rendered buffer itself depends
+  // TUTORIAL: on the selected export sample rate.
+  function resumeAudioTransportSnapshot(snapshot) {
+    if (!snapshot || !snapshot.target) return;
+    const target = snapshot.target;
+    const status = target === 'single' ? $('singleStatus') : $('morphStatus');
+    const reportFailure = err => {
+      if (status) status.textContent = `Audio restart after sample-rate change failed: ${err?.message || err}`;
+    };
+    if (target === 'single' || target === 'start' || target === 'end') {
+      dronePatch(target).catch(reportFailure);
+    } else if (target === 'morph-forward' || target === 'morph-reverse') {
+      if (activeTabId() === 'morph') playMorphBuffer(target === 'morph-reverse').catch(reportFailure);
+    }
+  }
+
+  // TUTORIAL: Applies a new export sample rate and rebuilds any active live audition.
+  // TUTORIAL: Browser AudioContexts keep their actual sample rate after creation, so changing
+  // TUTORIAL: the render selector must close the old context. If audio was already sounding,
+  // TUTORIAL: the same transport is queued to restart after the current UI change finishes.
+  function setExportSampleRate(value, {hardStopAudio = true, resumeActiveAudio = true} = {}) {
+    const next = clampInt(value, 8000, 384000);
+    const changed = next !== state.export.sampleRate;
+    const resumeSnapshot = changed && hardStopAudio && resumeActiveAudio ? activeAudioTransportSnapshot() : null;
+    state.export.sampleRate = next;
+    if (changed && hardStopAudio) stopAudio({hard: true});
+    if (resumeSnapshot) {
+      Promise.resolve().then(() => resumeAudioTransportSnapshot(resumeSnapshot));
+    }
+    return changed;
   }
 
   // TUTORIAL: Protects against missing or stale engine names by falling back to a known engine instead of
@@ -1214,6 +1337,102 @@ itself, impose GPL licensing on generated outputs.
     return t;
   }
 
+  // ── Audio-to-Drawn import (v2.6ze; clarified/optimised in v2.6zh; renamed in v2.6zj) ─────────
+  // TUTORIAL: Audio import is a bridge from ordinary browser-decodable files into the Drawn Waveform
+  // TUTORIAL: source. The result is always exactly TABLE_SIZE samples because Drawn waves
+  // TUTORIAL: are routed like any other 256-sample tap inside the generator.
+  // TUTORIAL:
+  // TUTORIAL: The browser's Web Audio decoder handles file/container/codec details. After
+  // TUTORIAL: decode, the importer avoids building a full-length mono copy: it samples the
+  // TUTORIAL: decoded channel buffers directly, averages channels at each requested source
+  // TUTORIAL: position, and writes only one Float32Array(TABLE_SIZE).
+  // TUTORIAL:
+  // TUTORIAL: Long files are downsampled/compressed across their full decoded duration into
+  // TUTORIAL: one cycle. Short files are stretched across the full 256-sample table with
+  // TUTORIAL: interpolation. Either way, the table is DC-removed and peak-normalised, and
+  // TUTORIAL: silent/flat imports leave the existing Drawn table untouched.
+  async function importWavIntoDrawnTable(patch, patchKey, {pushUndo, commit, showErr}) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'audio/*,.wav,.aiff,.aif,.flac,.ogg,.mp3';
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) { input.onchange = null; input.value = ''; return; }
+      const filename = file.name || 'Unknown audio file';
+      try {
+        const arrayBuf = await file.arrayBuffer();
+        // Decode with a temporary context and close it immediately afterward. The
+        // File, ArrayBuffer, and AudioBuffer references stay local to this callback;
+        // the hidden input is cleared in finally so the browser can release its File handle.
+        const tmpCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let decoded;
+        try {
+          decoded = await tmpCtx.decodeAudioData(arrayBuf);
+        } finally {
+          try { tmpCtx.close(); } catch (_) {}
+        }
+        if (!decoded || decoded.length === 0 || decoded.numberOfChannels < 1) {
+          showErr('Could not decode audio from this file.');
+          return;
+        }
+
+        const nCh = decoded.numberOfChannels;
+        const nSmp = decoded.length;
+        const channels = [];
+        for (let c = 0; c < nCh; c++) channels.push(decoded.getChannelData(c));
+
+        // Resample the whole decoded duration into one 256-sample wavetable.
+        // For a 256-sample single-cycle file this maps sample-for-sample. Longer
+        // files are compressed into a timbral snapshot; shorter files are stretched
+        // instead of being padded with silence or a held final sample.
+        //
+        // Scale: (nSmp - 1) / (TABLE_SIZE - 1) ensures output index 0 → source sample 0
+        // and output index 255 → source sample nSmp-1, so the full duration is used.
+        // The previous nSmp/TABLE_SIZE scale placed the last output point at
+        // nSmp*(255/256), leaving the final ~1/256 of longer files unreached.
+        const out = new Float32Array(TABLE_SIZE);
+        const scale = nSmp <= 1 ? 0 : (nSmp - 1) / (TABLE_SIZE - 1);
+        for (let i = 0; i < TABLE_SIZE; i++) {
+          const srcPos = Math.min(i * scale, nSmp - 1);
+          const i0 = Math.min(Math.floor(srcPos), nSmp - 1);
+          const i1 = Math.min(i0 + 1, nSmp - 1);
+          const frac = srcPos - Math.floor(srcPos);
+          let sample = 0;
+          for (let c = 0; c < nCh; c++) {
+            const ch = channels[c];
+            sample += ch[i0] * (1 - frac) + ch[i1] * frac;
+          }
+          out[i] = sample / nCh;
+        }
+
+        // DC removal makes imported material behave more like an oscillator source.
+        let mean = 0; for (let i = 0; i < TABLE_SIZE; i++) mean += out[i]; mean /= TABLE_SIZE;
+        for (let i = 0; i < TABLE_SIZE; i++) out[i] -= mean;
+
+        // Peak normalisation gives the imported Drawn source full useful range without
+        // changing the user's master volume. A flat/silent result is rejected so the
+        // previous patch table is not destroyed by a bad import.
+        let peak = 0; for (let i = 0; i < TABLE_SIZE; i++) peak = Math.max(peak, Math.abs(out[i]));
+        if (peak > 1e-9) for (let i = 0; i < TABLE_SIZE; i++) out[i] = clampFloat(out[i] / peak, -1, 1);
+        else { showErr('Audio file appears to be silent or has no usable content.'); return; }
+
+        pushUndo();
+        patch.drawnTable = out;
+        commit(`Imported "${filename}" as Drawn waveform.`);
+        setPatchStatusMessage(patchKey, `Audio imported from "${filename}".`);
+      } catch (err) {
+        showErr(`Import failed: ${err.message}`);
+      } finally {
+        input.onchange = null;
+        input.value = '';
+      }
+    };
+    input.click();
+  }
+  // TUTORIAL: Sanitises an arbitrary array-like value into a bounded 256-sample Drawn table.
+  // TUTORIAL: It always returns a fresh Float32Array so callers never share a reference to a
+  // TUTORIAL: patch's internal buffer. Drawing, undo, export metadata, and morph interpolation
+  // TUTORIAL: all depend on that copy boundary to avoid silent aliasing bugs.
   function sanitiseDrawnTable(table) {
     if (!table || typeof table.length !== 'number' || table.length !== TABLE_SIZE) return defaultDrawnTable();
     const out = new Float32Array(TABLE_SIZE);
@@ -1221,6 +1440,8 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
+  // TUTORIAL: Explicit clone helper for call sites that want the same safety contract as
+  // TUTORIAL: sanitiseDrawnTable(), but where the reader should see that ownership is being split.
   function cloneDrawnTable(table) {
     return Float32Array.from(sanitiseDrawnTable(table));
   }
@@ -1258,10 +1479,6 @@ itself, impose GPL licensing on generated outputs.
 
   function drawnTableIsRandomEligible(table) {
     return !drawnTableIsFlat(table) && !drawnTableMatchesDefaultSine(table);
-  }
-
-  function safeDrawnSourceTable(table) {
-    return drawnTableIsFlat(table) ? defaultDrawnTable() : sanitiseDrawnTable(table);
   }
 
   function drawnTableToInt16(table) {
@@ -1603,6 +1820,8 @@ itself, impose GPL licensing on generated outputs.
     const knots = clampInt(5 + roughness * 27, 5, 32);
     const values = new Float64Array(knots + 1);
     for (let i = 0; i < knots; i++) values[i] = rng() * 2 - 1;
+    // TUTORIAL: Copying the first knot to the extra endpoint makes the cubic interpolation
+    // TUTORIAL: wrap seamlessly instead of jumping at the cycle boundary.
     values[knots] = values[0];
     const out = new Float64Array(count);
     for (let i = 0; i < count; i++) {
@@ -2628,6 +2847,10 @@ itself, impose GPL licensing on generated outputs.
     return {A: a, B: b, C: normaliseBipolar(c), D: normaliseBipolar(d)};
   }
 
+  // TUTORIAL: Thread-local-like context for source tap selection. The engine generators share
+  // TUTORIAL: a fixed signature inherited from the dispatcher; passing one more context argument
+  // TUTORIAL: through every family would touch all generators. generateWavetable() therefore sets
+  // TUTORIAL: this module-level context with try/finally restore around each dispatch.
   let ACTIVE_SOURCE_TAP_CONTEXT = {
     family: DEFAULT_ENGINE_FAMILY,
     variant: DEFAULT_ENGINE_VARIANT,
@@ -3175,7 +3398,9 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Collects whole-render loop-safety findings across pitch/sample-rate math,
   // TUTORIAL: morph mode, shared START/END options, and both endpoint patches.
-  function loopSafetyFindingsForSettings(startPatch = state.patches.start, endPatch = state.patches.end) {
+  // Pure compute path: returns findings without touching state, enabling testability and
+  // debugger inspection without side effects.
+  function computeLoopSafetyFindings(startPatch = state.patches.start, endPatch = state.patches.end) {
     const findings = [];
     const summary = renderLengthSummary();
     const mode = canonicalMorphRenderMode(state.export.morphRenderMode);
@@ -3205,6 +3430,14 @@ itself, impose GPL licensing on generated outputs.
     findings.push(...loopSafetyFindingsForPatch(startPatch, 'start'));
     findings.push(...loopSafetyFindingsForPatch(endPatch, 'end'));
 
+    return findings;
+  }
+
+  // TUTORIAL: State-updating wrapper around computeLoopSafetyFindings. UI and render code
+  // TUTORIAL: call this so state.loopSafetyFindings/state.loopSafetyFlags stay fresh.
+  // TUTORIAL: Pure callers (console inspection, future tests) use computeLoopSafetyFindings().
+  function loopSafetyFindingsForSettings(startPatch = state.patches.start, endPatch = state.patches.end) {
+    const findings = computeLoopSafetyFindings(startPatch, endPatch);
     state.loopSafetyFindings = findings;
     state.loopSafetyFlags = findings.map(finding => finding.flag);
     return findings;
@@ -3915,6 +4148,9 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: A copied START→END patch should not become a "morph" internally. Rendering it
   // TUTORIAL: through one fixed endpoint better matches the Drone audition path and avoids
   // TUTORIAL: interpolation-cache side effects from muting endpoint dynamics such as beating.
+  // TUTORIAL: renderMorphAudio() calls effectivePatchPairForRender() before this comparison,
+  // TUTORIAL: so shared START/END wavetable type and FM range have already been resolved into
+  // TUTORIAL: the temporary patches being compared.
   function patchesEquivalentForStaticRender(a, b) {
     const pa = effectiveExportPatch(a);
     const pb = effectiveExportPatch(b);
@@ -4022,8 +4258,7 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
-  
-async function renderMorphAudioDualPath(start, end, reverse = false, progress = null, token = state.cancelToken, notePrefix = 'Dual-Path Interpolation') {
+  async function renderMorphAudioDualPath(start, end, reverse = false, progress = null, token = state.cancelToken, notePrefix = 'Dual-Path Interpolation') {
     throwIfCancelled(token);
     const summary = renderLengthSummary();
     const n = summary.sampleCount, sr = summary.sampleRate, freq = summary.frequency;
@@ -4079,9 +4314,6 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Wavetable morph export path. It blends START/END tables before running one oscillator
   // TUTORIAL: path, which keeps the transition continuous as a table rather than a crossfade of
   // TUTORIAL: two complete audio streams.
-  // TUTORIAL: Main export dispatcher. It chooses the correct renderer for the selected morph mode,
-  // TUTORIAL: applies render-length/sample-rate settings, and reports progress without blocking
-  // TUTORIAL: the browser for the whole render.
   async function renderMorphAudioWavetable(start, end, reverse = false, progress = null, token = state.cancelToken, variant = 'linear') {
     throwIfCancelled(token);
     const summary = renderLengthSummary();
@@ -4343,8 +4575,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
 
-  // TUTORIAL: renderMorphAudio — helper for render morph audio; kept as a named function so the data flow is
-  // TUTORIAL: easier to inspect and debug.
+  // TUTORIAL: Main export dispatcher. It resolves shared patch routing, detects stationary
+  // TUTORIAL: START/END copies, then delegates to the correct renderer for the selected morph
+  // TUTORIAL: mode, applying render-length/sample-rate settings and reporting progress.
   async function renderMorphAudio(start, end, reverse = false, progress = null, token = state.cancelToken) {
     const routed = effectivePatchPairForRender(start, end);
     start = routed.start;
@@ -4561,7 +4794,309 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return riffChunk('LIST', payload);
   }
 
-  // TUTORIAL: JSON sidecar metadata. Schema v7 keeps the sidecar focused on
+  // ── JSON patch import (v2.6ze) ─────────────────────────────────────────────
+  // Policy: schema_version must be a finite number ≥ 7. design_* preferred over render_* (design
+  // reflects the user's intent; render_* adds morph routing that shouldn't become
+  // the stored patch). Drawn waveform `ref` keys are resolved through the top-level
+  // drawn_waveforms registry and converted from int16_bipolar back to Float32.
+  // Unrecognised fields are silently skipped. A dialog always asks the user which
+  // slot to load into before any patch data is modified.
+  const IMPORT_MIN_SCHEMA_VERSION = 7;
+
+  // TUTORIAL: Reconstructs a patch object from one metadata block inside an imported JSON file.
+  // TUTORIAL: It reads design_start / design_end rather than render_start / render_end because
+  // TUTORIAL: the design blocks hold the user's actual settings; render blocks add morph-routing
+  // TUTORIAL: overrides that would incorrectly become permanent patch state if loaded directly.
+  // TUTORIAL: handleImportedJson() enforces schema_version ≥ 7 before this function is reached,
+  // TUTORIAL: so patchFromMetadata() can assume a structurally valid export object.
+  // TUTORIAL: Drawn waveform samples arrive as int16_bipolar arrays (or via a `ref` into the
+  // TUTORIAL: top-level registry) and are converted back to Float32 before storage.
+  // TUTORIAL: Fields that are missing or unrecognised are silently skipped so old exports remain
+  // TUTORIAL: loadable even when new patch fields have been added since the file was created.
+  function patchFromMetadata(meta, drawnWaveformsRegistry) {
+    if (!meta || typeof meta !== 'object') return null;
+    const patch = defaultPatch();
+    // Engine
+    if (meta.engine?.name) patch.engine = canonicalEngineName(meta.engine.name);
+    // Generator controls
+    const gc = meta.generator_controls || {};
+    if (Number.isFinite(gc.pot1?.value)) patch.pot1 = clampInt(gc.pot1.value, 0, POT_MAX_12BIT);
+    if (Number.isFinite(gc.pot2?.value)) patch.pot2 = clampInt(gc.pot2.value, 0, POT_MAX_12BIT);
+    if (Number.isFinite(gc.pot3?.value)) patch.pot3 = clampInt(gc.pot3.value, 0, POT_MAX_12BIT);
+    // Source taps
+    const si = meta.source_inputs || {};
+    if (si.input_1?.tap) patch.sourceInput1 = canonicalSourceTap(si.input_1.tap, 'A');
+    if (si.input_2?.tap) patch.sourceInput2 = canonicalSourceTap(si.input_2.tap, 'B');
+    // Wavetable type
+    if (meta.wavetable?.id != null) patch.wavetableType = canonicalWavetableType(meta.wavetable.id);
+    // Modulation
+    const mod = meta.modulation || {};
+    if (Number.isFinite(mod.fm))       patch.fm  = clampInt(mod.fm,       0, 255);
+    if (Number.isFinite(mod.pwm))      patch.pwm = clampInt(mod.pwm,      0, 255);
+    if (Number.isFinite(mod.ring_mod)) patch.am  = clampInt(mod.ring_mod, 0, 255);
+    if (mod.fm_range?.label)           patch.fmRangeLabel = canonicalFmRangeLabel(mod.fm_range.label);
+    // Filter
+    const filt = meta.filter || {};
+    if (FILTER_TYPES.includes(filt.type)) patch.filterType = filt.type;
+    if (Number.isFinite(filt.cutoff_hz))  patch.filterCutoff = clampFloat(filt.cutoff_hz, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF);
+    if (Number.isFinite(filt.resonance))  patch.filterResonance = filterResonanceFromUi(clampFloat(filt.resonance, 0, FILTER_RESONANCE_UI_MAX));
+    // Windows
+    const wins = meta.windows || {};
+    if (Number.isFinite(wins.source?.start)) patch.beforeStart = clampFloat(wins.source.start, 0, WINDOW_STEPS);
+    if (Number.isFinite(wins.source?.end))   patch.beforeEnd   = clampFloat(wins.source.end,   0, WINDOW_STEPS);
+    if (Number.isFinite(wins.result?.start)) patch.afterStart  = clampFloat(wins.result.start,  0, WINDOW_STEPS);
+    if (Number.isFinite(wins.result?.end))   patch.afterEnd    = clampFloat(wins.result.end,    0, WINDOW_STEPS);
+    // Drawn waveform
+    const dw = meta.drawn_waveform;
+    if (dw) {
+      if (dw.seam_mode)  patch.drawnSeamMode  = canonicalDrawnSeamMode(dw.seam_mode);
+      if (dw.smoothing)  patch.drawnSmoothing = canonicalDrawnSmoothing(dw.smoothing);
+      // Resolve ref → full record from registry, or use inline record
+      let record = dw;
+      if (dw.ref && drawnWaveformsRegistry && drawnWaveformsRegistry[dw.ref]) {
+        record = drawnWaveformsRegistry[dw.ref];
+      }
+      if (record.format === 'int16_bipolar' && Array.isArray(record.values) && record.values.length === TABLE_SIZE) {
+        const t = new Float32Array(TABLE_SIZE);
+        for (let i = 0; i < TABLE_SIZE; i++) t[i] = clampFloat(record.values[i] / 32767, -1, 1);
+        patch.drawnTable = t;
+      }
+    }
+    return patch;
+  }
+
+  // Opens a file-picker, reads the JSON, and hands off to handleImportedJson.
+  // TUTORIAL: The hidden file input is one-shot. After the file is read, its
+  // TUTORIAL: onchange handler and value are cleared so the browser can release
+  // TUTORIAL: the File object; the dialog receives only parsed patch data plus
+  // TUTORIAL: a filename string, not the original file or raw JSON text.
+  function importJsonPatchFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,application/json';
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) { input.onchange = null; input.value = ''; return; }
+      const filename = file.name || 'Unknown file';
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        handleImportedJson(data, filename);
+      } catch (err) {
+        showImportError(`Could not parse JSON: ${err.message}`);
+      } finally {
+        input.onchange = null;
+        input.value = '';
+      }
+    };
+    input.click();
+  }
+
+  function handleImportedJson(data, filename) {
+    if (!data || typeof data !== 'object') { showImportError('File does not contain a JSON object.'); return; }
+    const ver = data.schema_version;
+    // Reject missing, non-numeric, or too-old schema versions. typeof-number alone would
+    // silently accept files with no schema_version field (ver === undefined passes the old guard).
+    if (!Number.isFinite(Number(ver)) || Number(ver) < IMPORT_MIN_SCHEMA_VERSION) {
+      const verDesc = Number.isFinite(Number(ver))
+        ? `Schema version ${Number(ver)}`
+        : `Missing or non-numeric schema_version (${JSON.stringify(ver)})`;
+      showImportError(`${verDesc}. Minimum supported is ${IMPORT_MIN_SCHEMA_VERSION}. Re-export from a recent version.`);
+      return;
+    }
+    const patches = data.patches || {};
+    const reg = data.drawn_waveforms || {};
+    // Prefer design_* (user intent) over render_* (effective routing)
+    const startMeta = patches.design_start || patches.render_start;
+    const endMeta   = patches.design_end   || patches.render_end;
+    if (!startMeta) { showImportError('No patch data found in this JSON file.'); return; }
+    const startPatch = patchFromMetadata(startMeta, reg);
+    const endPatch   = endMeta ? patchFromMetadata(endMeta, reg) : null;
+    showImportTargetDialog(startPatch, endPatch, filename);
+  }
+
+  // TUTORIAL: Modal overlays are ordinary DOM, not native dialogs. The global
+  // TUTORIAL: Escape transport handler is installed before these overlays are
+  // TUTORIAL: created, so overlay Escape handling has to be visible to that
+  // TUTORIAL: global path as well as to the overlay's own listener. Keeping
+  // TUTORIAL: the close/cancel action on the overlay object gives both paths
+  // TUTORIAL: one shared source of truth.
+  function clearImportOverlays() {
+    document.querySelectorAll('.fwOverlay').forEach(overlay => overlay.remove());
+  }
+
+  function topModalOverlay() {
+    const overlays = Array.from(document.querySelectorAll('.fwOverlay'));
+    return overlays.length ? overlays[overlays.length - 1] : null;
+  }
+
+  function closeModalOverlayFromEscape(overlay) {
+    if (!overlay || !document.body.contains(overlay)) return false;
+    if (typeof overlay._fwEscapeAction === 'function') overlay._fwEscapeAction();
+    overlay.remove();
+    return true;
+  }
+
+  function installOverlayEscapeCancel(overlay, cancelAction = null) {
+    overlay._fwEscapeAction = cancelAction || null;
+    overlay.tabIndex = -1;
+    const onKey = ev => {
+      if (ev.key !== 'Escape' && ev.code !== 'Escape') return;
+      if (topModalOverlay() !== overlay) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      closeModalOverlayFromEscape(overlay);
+    };
+    window.addEventListener('keydown', onKey, true);
+    document.addEventListener('keydown', onKey, true);
+    overlay.addEventListener('keydown', onKey);
+    const cleanup = () => {
+      window.removeEventListener('keydown', onKey, true);
+      document.removeEventListener('keydown', onKey, true);
+      overlay.removeEventListener('keydown', onKey);
+    };
+    const observer = new MutationObserver(() => {
+      if (!document.body.contains(overlay)) { cleanup(); observer.disconnect(); }
+    });
+    observer.observe(document.body, {childList: true});
+    requestAnimationFrame(() => {
+      if (document.body.contains(overlay)) overlay.focus({preventScroll: true});
+    });
+    return cleanup;
+  }
+
+  function showImportError(message) {
+    const overlay = document.createElement('div');
+    overlay.className = 'fwOverlay';
+    const dlg = document.createElement('div'); dlg.className = 'fwDialog';
+    dlg.innerHTML = `<h3>Import Error</h3><p class="fwDialogErr">${escapeHtml(message)}</p>`;
+    const bar = document.createElement('div'); bar.className = 'buttonbar';
+    const closeBtn = document.createElement('button'); closeBtn.type = 'button'; closeBtn.textContent = 'Close'; closeBtn.className = 'fwCancel';
+    closeBtn.onclick = () => overlay.remove();
+    bar.appendChild(closeBtn); dlg.appendChild(bar); overlay.appendChild(dlg);
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    document.body.appendChild(overlay);
+    installOverlayEscapeCancel(overlay);
+  }
+
+  function showImportTargetDialog(startPatch, endPatch, filename) {
+    // TUTORIAL: Import target dialog (rebuilt in v2.7 / v2.6zk). Actions are declared as a
+    // TUTORIAL: data array grouped into three named sections — Playground, Morph, and Cross-load
+    // TUTORIAL: — then rendered by a single loop. This prevents the previous bug where a flat
+    // TUTORIAL: sequence of mkBtn() calls silently produced duplicate "Load START + END" buttons
+    // TUTORIAL: when the hasEnd condition appeared in two separate blocks.
+    clearImportOverlays();
+    const overlay = document.createElement('div'); overlay.className = 'fwOverlay';
+    const dlg = document.createElement('div'); dlg.className = 'fwDialog';
+    const hasEnd = !!endPatch;
+    dlg.innerHTML = `<h3>Import Patch</h3><p class="fwDialogInfo">${escapeHtml(filename || 'Unknown file')}</p>`;
+
+    const groupedActions = [
+      {
+        heading: 'Playground',
+        actions: [
+          {label: 'Load START → Playground', action: {source: 'start', target: 'single'}},
+          ...(hasEnd ? [{label: 'Load END → Playground', action: {source: 'end', target: 'single'}}] : []),
+        ],
+      },
+      {
+        heading: 'Morph',
+        actions: [
+          {label: 'Load START → START', action: {source: 'start', target: 'start'}},
+          ...(hasEnd ? [
+            {label: 'Load END → END', action: {source: 'end', target: 'end'}},
+            {label: 'Load START + END', action: {source: 'both', target: 'both'}},
+          ] : []),
+        ],
+      },
+      {
+        heading: 'Cross-load',
+        actions: [
+          {label: 'Load START → END', action: {source: 'start', target: 'end'}},
+          ...(hasEnd ? [{label: 'Load END → START', action: {source: 'end', target: 'start'}}] : []),
+        ],
+      },
+    ];
+
+    const seenLabels = new Set();
+    for (const sectionInfo of groupedActions) {
+      const actions = sectionInfo.actions.filter(item => item && item.label && !seenLabels.has(item.label));
+      if (!actions.length) continue;
+      const section = document.createElement('div'); section.className = 'fwDialogSection';
+      const title = document.createElement('div'); title.className = 'fwDialogSectionTitle'; title.textContent = sectionInfo.heading;
+      const bar = document.createElement('div'); bar.className = 'buttonbar';
+      section.appendChild(title);
+      section.appendChild(bar);
+      for (const item of actions) {
+        seenLabels.add(item.label);
+        const b = document.createElement('button'); b.type = 'button'; b.textContent = item.label;
+        b.onclick = () => { overlay.remove(); applyImportedPatch(startPatch, endPatch, item.action); };
+        bar.appendChild(b);
+      }
+      dlg.appendChild(section);
+    }
+
+    const cancelBar = document.createElement('div'); cancelBar.className = 'buttonbar';
+    const cancelBtn = document.createElement('button'); cancelBtn.type = 'button'; cancelBtn.textContent = 'Cancel'; cancelBtn.className = 'fwCancel';
+    cancelBtn.onclick = () => overlay.remove(); cancelBar.appendChild(cancelBtn);
+    dlg.appendChild(cancelBar); overlay.appendChild(dlg);
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    document.body.appendChild(overlay);
+    installOverlayEscapeCancel(overlay);
+  }
+
+  function importedPatchBySource(startPatch, endPatch, source) {
+    if (source === 'end') return endPatch || null;
+    return startPatch || null;
+  }
+
+  function applyImportedPatch(startPatch, endPatch, action) {
+    const source = String(action?.source || 'start');
+    const target = String(action?.target || 'single');
+    let tabToOpen = 'playground';
+    let audition = 'single';
+
+    state.audio.morphCache = null;
+    if (target === 'both') {
+      if (startPatch) state.patches.start = clonePatch(startPatch);
+      if (endPatch) state.patches.end = clonePatch(endPatch);
+      addPatchControls('startControls', 'start');
+      addPatchControls('endControls', 'end');
+      tabToOpen = 'morph';
+      audition = 'morph-forward';
+    } else if (target === 'single') {
+      const patch = importedPatchBySource(startPatch, endPatch, source);
+      if (!patch) { showImportError(`The JSON file does not contain a ${source.toUpperCase()} patch.`); return; }
+      state.patches.single = clonePatch(patch);
+      addPatchControls('singleControls', 'single');
+      tabToOpen = 'playground';
+      audition = 'single';
+    } else if (target === 'start' || target === 'end') {
+      const patch = importedPatchBySource(startPatch, endPatch, source);
+      if (!patch) { showImportError(`The JSON file does not contain a ${source.toUpperCase()} patch.`); return; }
+      state.patches[target] = clonePatch(patch);
+      addPatchControls(target === 'start' ? 'startControls' : 'endControls', target);
+      tabToOpen = 'morph';
+      audition = target;
+    } else {
+      showImportError(`Unknown import target: ${target}`);
+      return;
+    }
+
+    updateStatusSummaries();
+    updateVisuals?.();
+    activateTab(tabToOpen);
+    if (audition === 'morph-forward') {
+      state.audio.lastMorphTransport = 'morph-forward';
+      playMorphBuffer(false).catch(err => {
+        const status = $('morphStatus');
+        if (status) status.textContent = `Imported patches, but morph playback failed: ${err.message || err}`;
+      });
+    } else {
+      autoAuditionPatch(audition);
+    }
+  }
+  // TUTORIAL: JSON sidecar metadata builder. The schema keeps each sidecar focused on
   // TUTORIAL: reproducible sound settings and compact provenance. UI mechanics such as
   // TUTORIAL: slider curves belong in code/comments, not in every generated patch file.
   function metadataFor(direction, summary, notes, startPatch, endPatch, fileMeta = {}) {
@@ -4580,6 +5115,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const designEndMeta = patchMetadata(endPatch, patchOptions);
     const renderStartMeta = patchMetadata(renderStart, patchOptions);
     const renderEndMeta = patchMetadata(renderEnd, patchOptions);
+    const drawnWaveformMeta = drawnWaveformRegistryMetadata(drawnWaveforms);
     return {
       schema_version: EXPORT_SCHEMA_VERSION,
       generator: 'Fractured Wavetable Generator',
@@ -4593,7 +5129,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       render_summary: renderSummaryMetadata(summary),
       render_settings: renderSettingsMetadata(),
       morph_settings: morphSettingsMetadata(startPatch),
-      drawn_waveforms: drawnWaveformRegistryMetadata(drawnWaveforms),
+      ...(Object.keys(drawnWaveformMeta).length ? {drawn_waveforms: drawnWaveformMeta} : {}),
       patches: {
         design_start: designStartMeta,
         design_end: designEndMeta,
@@ -4718,6 +5254,14 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return Number(x.toFixed(digits));
   }
 
+  // TUTORIAL: Drawn waveform registry — deduplication for JSON exports (added in v2.6w).
+  // TUTORIAL: Multiple patches in one export (e.g. START + END) can reference the same
+  // TUTORIAL: hand-drawn or audio-imported 256-sample table. Instead of embedding the
+  // TUTORIAL: full int16 array in every patch block, a registry accumulates one entry per
+  // TUTORIAL: unique table (key = comma-joined int16 values), assigns each a stable
+  // TUTORIAL: ref label like "drawn_1", and each patch stores only that ref.
+  // TUTORIAL: Import reconstructs the tables from the top-level drawn_waveforms map.
+  // TUTORIAL: The registry lives only for the duration of one export call.
   function createDrawnWaveformRegistry() {
     return {keyToId: new Map(), records: []};
   }
@@ -5466,7 +6010,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Web Audio graph connection helpers. The graph has two independent links:
-  // TUTORIAL: (1) ScriptProcessor/BufferSource -> gain, and (2) gain -> destination.
+  // TUTORIAL: (1) live oscillator node or one-shot BufferSource -> gain, and (2) gain -> destination.
   // TUTORIAL: Tracking both links avoids repeated connects after retuning and lets tab changes
   // TUTORIAL: fully mute the graph without closing the AudioContext.
   function connectOutputGain() {
@@ -5494,6 +6038,106 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.audio.nodeConnected = false;
   }
 
+  // ── AudioWorklet processor (v2.6ze) ──────────────────────────────────────
+  // The processor code is serialised as a string so no external file or server
+  // is required. All DSP helpers are re-declared inside the module scope because
+  // AudioWorklet processors run on a dedicated thread with no access to the main
+  // thread's closure. State messages flow through the MessagePort.
+  const WORKLET_PROCESSOR_CODE = `
+const _TS = 256, _EPS = 1e-20, _MAX_FM_C = 4800, _MIN_FMPS = 0.02, _MAX_FMPS = 16,
+      _F_MIN = 20, _DEF_SR = 44100;
+function _cf(x,lo,hi){x=Number(x);if(!Number.isFinite(x))x=lo;return x<lo?lo:x>hi?hi:x;}
+function _rtl(tbl,ph){
+  ph=((ph%1)+1)%1;const idx=ph*_TS;const i0=Math.floor(idx)&(_TS-1);
+  const i1=(i0+1)&(_TS-1);const fr=idx-Math.floor(idx);
+  return tbl[i0]+(tbl[i1]-tbl[i0])*fr;
+}
+function _fQ(r){const v=_cf(r,0,1);return 0.5+v*v*11.5;}
+function _mkBQ(){return{x1:0,x2:0,y1:0,y2:0};}
+function _bqC(type,hz,res,sr){
+  if(type==='Off')return null;
+  const s=Math.max(8000,sr||_DEF_SR),c=_cf(hz??8000,_F_MIN,Math.max(_F_MIN+1,s*0.45)),
+        q=_fQ(res??0),w=2*Math.PI*c/s,cw=Math.cos(w),sw=Math.sin(w),al=sw/(2*q);
+  let b0,b1,b2,a0,a1,a2;
+  if(type==='High-pass'){b0=(1+cw)/2;b1=-(1+cw);b2=(1+cw)/2;a0=1+al;a1=-2*cw;a2=1-al;}
+  else if(type==='Band-pass'){b0=al;b1=0;b2=-al;a0=1+al;a1=-2*cw;a2=1-al;}
+  else{b0=(1-cw)/2;b1=1-cw;b2=(1-cw)/2;a0=1+al;a1=-2*cw;a2=1-al;}
+  return{b0:b0/a0,b1:b1/a0,b2:b2/a0,a1:a1/a0,a2:a2/a0};
+}
+function _bqS(x,co,st){
+  if(!co)return x;
+  const y=co.b0*x+co.b1*st.x1+co.b2*st.x2-co.a1*st.y1-co.a2*st.y2;
+  st.x2=st.x1;st.x1=x;st.y2=st.y1;st.y1=Number.isFinite(y)?y:0;
+  return _cf(st.y1,-4,4);
+}
+function _fmScale(sig,fm,cents){
+  const amt=_cf(fm,0,255)/255;
+  return _cf(2**(_cf(sig,-1,1)*_cf(cents,0,_MAX_FM_C)*amt/1200),_MIN_FMPS,_MAX_FMPS);
+}
+function _rmStage(tbl,ph,amt){
+  const d=_cf(_cf(amt,0,255)/255,0,1),p=((Number(ph)||0)%1+1)%1;
+  const src=_cf(_rtl(tbl,p),-1,1);
+  if(d<=_EPS)return{depth:0,modSignal:src,modulator:1,src,edge:0};
+  const m2=_cf(_rtl(tbl,p*2+0.25),-1,1),m3=_cf(_rtl(tbl,p*3+0.125),-1,1),m5=_cf(_rtl(tbl,p*5+0.0625),-1,1);
+  const raw=Math.tanh((m2*.78+m3*.58+m5*.36)*(1.10+1.35*d));
+  const se=Math.sign(raw||1)*Math.pow(Math.abs(raw),.58-.18*d);
+  const re=_cf(Math.abs(m3-m5)*1.35-.45,-1,1);
+  const mod=_cf(raw*(1-.42*d)+se*(.58*d)+re*(.24*d),-1,1);
+  return{depth:d,modSignal:_cf(src*(1-.45*d)+mod*(.45*d),-1,1),modulator:mod,src,edge:re};
+}
+function _applyRM(s,st){
+  s=_cf(s,-1,1);if(!st||st.depth<=_EPS)return s;
+  const d=_cf(st.depth,0,1),mod=_cf(st.modulator,-1,1),edge=_cf(st.edge||0,-1,1);
+  const ring=_cf(s*mod,-1,1),rEdge=_cf(Math.abs(ring)*2-1,-1,1);
+  const fold=Math.sin(_cf(ring+s*(.22+.18*d)+edge*.18*d,-1.6,1.6)*Math.PI*(.58+1.04*d));
+  const driv=Math.tanh((ring*2.35+fold*.82*d+rEdge*.48*d)*(1+.72*d));
+  return _cf(s*(1-d)+_cf(driv*(.86+.12*d)+fold*(.18*d)+rEdge*(.10*d),-1,1)*d,-1,1);
+}
+function _renderSample(fr,ph,inc,fst,fco){
+  const rs=_rmStage(fr.table,ph.value,fr.am),sig=rs.modSignal;
+  const pw=_cf(fr.pwm,0,255)/255*.48,w=_cf(.5+pw*sig,.02,.98);
+  const rph=ph.value<w?(ph.value/w)*.5:.5+((ph.value-w)/(1-w))*.5;
+  let smp=_applyRM(_rtl(fr.table,rph),rs);
+  smp=_cf(_bqS(smp,fco,fst),-1,1);
+  ph.value+=Math.min(inc*_fmScale(sig,fr.fm,fr.fmRangeCents),.49);
+  if(ph.value>=1)ph.value-=Math.floor(ph.value);
+  return smp;
+}
+class FracturedOscillatorProcessor extends AudioWorkletProcessor {
+  constructor(){
+    super();
+    this._playing=false;this._phase=0;this._freq=110;
+    this._frame=null;this._fst=_mkBQ();this._fco=null;this._fsig='';
+    this.port.onmessage=({data})=>{
+      if(!data)return;
+      if(data.type==='frame'){
+        this._frame=data.frame;
+        if(Number.isFinite(Number(data.frame.frequency)))this._freq=Number(data.frame.frequency);
+        const sig=data.frame.filterType+'|'+data.frame.filterCutoff+'|'+data.frame.filterResonance;
+        if(this._fsig!==sig){this._fst=_mkBQ();this._fsig=sig;this._fco=_bqC(data.frame.filterType,data.frame.filterCutoff,data.frame.filterResonance,sampleRate);}
+      }else if(data.type==='playing'){
+        this._playing=data.playing;
+        if(!data.playing){this._phase=0;this._fst=_mkBQ();}
+      }else if(data.type==='frequency'){
+        this._freq=data.value;
+      }
+    };
+  }
+  process(inputs,outputs){
+    const out=outputs[0];if(!out||!out[0])return true;
+    const L=out[0],R=out[1]||null;
+    if(!this._playing||!this._frame){L.fill(0);if(R)R.fill(0);return true;}
+    const inc=_cf(this._freq,1,20000)/sampleRate,ph={value:this._phase};
+    for(let i=0;i<L.length;i++){const s=_renderSample(this._frame,ph,inc,this._fst,this._fco);L[i]=s;if(R)R[i]=s;}
+    this._phase=ph.value;
+    return true;
+  }
+}
+registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
+`;
+
+  let _workletModuleReady = false; // true once addModule() has resolved for this AudioContext
+
   // TUTORIAL: Browser audio bootstrap. Web Audio contexts normally have to start from a user
   // TUTORIAL: gesture, so audio setup is delayed until the user asks to play or drone a patch.
   async function ensureAudio() {
@@ -5503,8 +6147,35 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       if (!AudioCtx) throw new Error('Web Audio is not available in this browser.');
       const ctx = new AudioCtx({sampleRate: state.export.sampleRate || DEFAULT_SAMPLE_RATE});
       const gain = ctx.createGain(); gain.gain.value = state.common.volume;
-      const node = ctx.createScriptProcessor(1024, 0, 2);
-      node.onaudioprocess = audioProcess;
+
+      // AudioWorklet path (v2.6ze): serialise processor code as a Blob URL so no
+      // separate file is needed. Falls back to createScriptProcessor in environments
+      // that don't expose audioWorklet (e.g. very old mobile browsers).
+      let node;
+      if (ctx.audioWorklet) {
+        try {
+          const blob = new Blob([WORKLET_PROCESSOR_CODE], {type: 'application/javascript'});
+          const url  = URL.createObjectURL(blob);
+          try {
+            await ctx.audioWorklet.addModule(url);
+          } finally {
+            URL.revokeObjectURL(url);
+          }
+          _workletModuleReady = true;
+          node = new AudioWorkletNode(ctx, 'fractured-oscillator', {numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [2]});
+          node.port.onmessage = null; // processor sends nothing back
+        } catch (workletErr) {
+          console.warn('AudioWorklet setup failed, falling back to ScriptProcessor:', workletErr);
+          _workletModuleReady = false;
+          node = ctx.createScriptProcessor(1024, 0, 2);
+          node.onaudioprocess = audioProcess;
+        }
+      } else {
+        _workletModuleReady = false;
+        node = ctx.createScriptProcessor(1024, 0, 2);
+        node.onaudioprocess = audioProcess;
+      }
+
       state.audio.ctx = ctx; state.audio.node = node; state.audio.gain = gain; state.audio.sampleRate = ctx.sampleRate;
       state.audio.sources = new Set();
       state.audio.nodeConnected = false;
@@ -5517,6 +6188,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Rebuilds the live wavetable/filter state from a patch while keeping the audio graph running.
+  // For the AudioWorklet path the frame is also posted to the processor via MessagePort so the
+  // real-time thread has a consistent snapshot. The ScriptProcessor fallback still reads state directly.
   function updateLiveAudioFromPatch(patch) {
     const frame = oscillatorFrameForPatch(patch);
     state.audio.frame = frame;
@@ -5533,6 +6206,22 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     state.audio.filterResonance = frame.filterResonance;
     state.audio.frequency = clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY);
     if (state.audio.gain) state.audio.gain.gain.value = clampFloat(state.common.volume, 0, 1);
+    // AudioWorklet path: send a serialisable snapshot (Float32Array goes as a transferable).
+    if (_workletModuleReady && state.audio.node?.port) {
+      const tableTransfer = new Float32Array(frame.table);
+      state.audio.node.port.postMessage({
+        type: 'frame',
+        frame: {
+          table: tableTransfer,
+          fm: frame.fm, pwm: frame.pwm, am: frame.am,
+          fmRangeCents: frame.fmRangeCents,
+          filterType: frame.filterType,
+          filterCutoff: frame.filterCutoff,
+          filterResonance: frame.filterResonance,
+          frequency: state.audio.frequency,
+        },
+      }, [tableTransfer.buffer]);
+    }
   }
 
   // TUTORIAL: Live-audition callback. It is intentionally compact and allocation-light because it
@@ -5568,6 +6257,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     if (requestedSerial !== (state.audio.playbackSerial || 0)) return;
     cancelCancellableWork(); stopBufferSourceOnly(); state.audio.mode = 'single'; state.audio.livePatchKey = key; updateLiveAudioFromPatch(effectivePatchForKey(key));
     connectLiveAudioNode(); state.audio.playing = true; state.audio.phase = 0;
+    if (_workletModuleReady && state.audio.node?.port) state.audio.node.port.postMessage({type: 'playing', playing: true});
     state.audio.transportTarget = key;
     if (key === 'start' || key === 'end') state.audio.lastMorphTransport = key;
     updateStatusSummaries();
@@ -5672,6 +6362,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     stopBufferSourceOnly();
     state.audio.playbackSerial = (state.audio.playbackSerial || 0) + 1;
     state.audio.playing = false;
+    if (_workletModuleReady && state.audio.node?.port) state.audio.node.port.postMessage({type: 'playing', playing: false});
     state.audio.mode = 'single';
     disconnectLiveAudioNode();
     state.audio.transportTarget = null;
@@ -5680,6 +6371,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       const ctx = state.audio.ctx;
       disconnectOutputGain();
       try { ctx.close(); } catch (_) {}
+      _workletModuleReady = false;
       state.audio.ctx = null; state.audio.node = null; state.audio.gain = null; state.audio.source = null; state.audio.sources = new Set();
       state.audio.nodeConnected = false; state.audio.gainConnected = false;
     }
@@ -5690,6 +6382,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     stopBufferSourceOnly();
     state.audio.playbackSerial = (state.audio.playbackSerial || 0) + 1;
     state.audio.playing = false;
+    if (_workletModuleReady && state.audio.node?.port) state.audio.node.port.postMessage({type: 'playing', playing: false});
     state.audio.mode = 'single';
     state.audio.transportTarget = null;
     updateTransportButtons();
@@ -6116,7 +6809,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     return sanitiseDrawnTable(t);
   }
 
-  function applyDrawnPostProcessFromSettings(patch) {
+  // TUTORIAL: Renamed from applyDrawnPostProcessFromSettings (v2.6ze). The old name implied that
+  // TUTORIAL: seam/smoothing post-processing happened here, but those are applied non-destructively
+  // TUTORIAL: at render/audition time by effectiveDrawnSourceTable(). This function only sanitises
+  // TUTORIAL: the stored raw Drawn table bytes inside the patch, keeping the saved drawing intact
+  // TUTORIAL: so toggling Free/Smooth Wrap does not permanently overwrite a deliberate hard seam.
+  function sanitisePatchDrawnTable(patch) {
     // Drawn seam/smoothing settings are preview/render settings, not destructive edits.
     // Keep the saved drawing intact so switching Free/Smooth Wrap does not permanently
     // erase a deliberately hard seam.
@@ -6209,6 +6907,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     const dcBtn = mkButton('DC Remove');
     const smoothBtn = mkButton('Smooth');
     const undoBtn = mkButton('Undo');
+    const wavImportBtn = mkButton('Import Audio…');
+    wavImportBtn.title = 'Load audio file (WAV, AIFF, MP3, FLAC…) and resample it into the Drawn table';
     undoBtn.disabled = true;
     panel.appendChild(buttons);
 
@@ -6231,6 +6931,13 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     dcBtn.addEventListener('click', () => { pushUndo(); const t = sanitiseDrawnTable(patch.drawnTable); const mean = meanOf(t); for (let i = 0; i < TABLE_SIZE; i++) t[i] = clampFloat(t[i] - mean, -1, 1); patch.drawnTable = t; commit('Removed DC from Drawn waveform.'); });
     smoothBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = Float32Array.from(circularSmoothTable(sanitiseDrawnTable(patch.drawnTable), 1)); commit('Smoothed Drawn waveform.'); });
     undoBtn.addEventListener('click', () => { if (!undoTable) return; const current = cloneDrawnTable(patch.drawnTable); patch.drawnTable = undoTable; undoTable = current; commit('Undid Drawn waveform edit.'); });
+    wavImportBtn.addEventListener('click', () => {
+      importWavIntoDrawnTable(patch, patchKey, {
+        pushUndo,
+        commit,
+        showErr: msg => showImportError(msg),
+      });
+    });
 
     let drawing = false, lastIndex = null, lastValue = 0, liveDrawRaf = 0, lastLiveDrawMs = 0;
     function pointerToSample(ev) {
@@ -6294,12 +7001,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       if (!drawing) return;
       ev.preventDefault();
       drawing = false;
-      applyDrawnPostProcessFromSettings(patch);
+      sanitisePatchDrawnTable(patch);
       commit('Updated Drawn waveform.');
     };
     canvas.addEventListener('pointerup', finishDrawing);
     canvas.addEventListener('pointercancel', finishDrawing);
-    canvas.addEventListener('lostpointercapture', () => { if (drawing) { drawing = false; applyDrawnPostProcessFromSettings(patch); commit('Updated Drawn waveform.'); } });
+    canvas.addEventListener('lostpointercapture', () => { if (drawing) { drawing = false; sanitisePatchDrawnTable(patch); commit('Updated Drawn waveform.'); } });
 
     function update() {
       patch.drawnTable = sanitiseDrawnTable(patch.drawnTable);
@@ -6633,6 +7340,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     addSlider(windowPanel, 'Result Window Start', patch, 'afterStart', 0, WINDOW_STEPS, 1, afterPatchChange);
     addSlider(windowPanel, 'Result Window End', patch, 'afterEnd', 0, WINDOW_STEPS, 1, afterPatchChange);
     if (patchKey === 'single') addPlaygroundMorphCopyButtons(parent);
+    if (patchKey === 'start' || patchKey === 'end') addMorphEndpointActionButtons(parent, patchKey);
 
     refreshPatchUi = () => {
       const parts = enginePartsFor(patch.engine || DEFAULT_ENGINE);
@@ -6663,6 +7371,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
       setModuleSummary(windowPanel, windowsSummaryText(patch), windowsAreDefault(patch) ? 'default' : 'changed');
     };
     patchUiRefreshers[patchKey] = refreshPatchUi;
+    addPatchSaveSlots(parent, patchKey);
     refreshPatchUi();
   }
 
@@ -6683,8 +7392,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Playground copy buttons turn a single patch idea into a START/END morph setup.
-  // TUTORIAL: They deliberately mute audition before switching tabs, so copied settings do not
-  // TUTORIAL: leave the Playground drone running behind the Morph tab.
+  // TUTORIAL: They mute any Playground audition before switching tabs, then the copy
+  // TUTORIAL: handler starts the requested Morph destination drone.
   function addPlaygroundMorphCopyButtons(parent) {
     const bar = document.createElement('div');
     bar.className = 'buttonbar';
@@ -6700,10 +7409,137 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     toBoth.textContent = 'Copy → Both';
     toBoth.type = 'button';
     toBoth.onclick = () => copyPlaygroundPatchToMorph('both');
-    bar.append(toStart, toEnd, toBoth);
+    const importBtn = document.createElement('button');
+    importBtn.textContent = 'Load JSON…';
+    importBtn.type = 'button';
+    importBtn.title = 'Load a patch from a previously exported JSON sidecar file';
+    importBtn.onclick = () => importJsonPatchFile();
+    bar.append(toStart, toEnd, toBoth, importBtn);
     parent.appendChild(bar);
   }
 
+  // TUTORIAL: Morph patch movement/load buttons live below each generator, matching
+  // TUTORIAL: the Playground layout. These controls rebuild with their patch panel,
+  // TUTORIAL: so their event handlers are attached here rather than only in wireUi().
+  function addMorphEndpointActionButtons(parent, patchKey) {
+    const bar = document.createElement('div');
+    bar.className = 'buttonbar';
+    const copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.textContent = patchKey === 'start' ? 'Copy → END' : 'Copy → START';
+    copyBtn.onclick = () => copyMorphEndpoint(patchKey, patchKey === 'start' ? 'end' : 'start');
+    bar.appendChild(copyBtn);
+    if (patchKey === 'start') {
+      const swapBtn = document.createElement('button');
+      swapBtn.type = 'button';
+      swapBtn.textContent = 'Swap START/END';
+      swapBtn.onclick = swapMorphEndpoints;
+      bar.appendChild(swapBtn);
+    }
+    const importBtn = document.createElement('button');
+    importBtn.type = 'button';
+    importBtn.textContent = 'Load JSON…';
+    importBtn.title = 'Load a patch from a previously exported JSON sidecar file';
+    importBtn.onclick = () => importJsonPatchFile();
+    bar.appendChild(importBtn);
+    parent.appendChild(bar);
+  }
+
+  function copyMorphEndpoint(sourceKey, targetKey) {
+    if (!['start', 'end'].includes(sourceKey) || !['start', 'end'].includes(targetKey)) return;
+    state.patches[targetKey] = clonePatch(state.patches[sourceKey]);
+    state.audio.morphCache = null;
+    rebuildPatchControls();
+    autoAuditionPatch(targetKey);
+  }
+
+  function swapMorphEndpoints() {
+    const t = state.patches.start;
+    state.patches.start = state.patches.end;
+    state.patches.end = t;
+    state.audio.morphCache = null;
+    rebuildPatchControls();
+    autoAuditionCurrentContext();
+  }
+
+
+  // TUTORIAL: Creates the four RAM-only save-slot buttons for one patch context. Slots survive
+  // TUTORIAL: engine rebuilds because data lives in state.saveSlots, not in the DOM.
+  // TUTORIAL: Empty slot → save immediately. Occupied slot → overlay offers Load or Overwrite.
+  function addPatchSaveSlots(parent, patchKey) {
+    const bar = document.createElement('div'); bar.className = 'saveSlotBar';
+    const lbl = document.createElement('label'); lbl.textContent = 'Quick save slots (RAM only — lost on page reload)';
+    bar.appendChild(lbl);
+    const slots = state.saveSlots[patchKey];
+    for (let i = 0; i < 4; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'saveSlotBtn' + (slots[i] ? ' occupied' : '');
+      btn.textContent = slots[i] ? slotLabel(slots[i], i) : `Slot ${i + 1}`;
+      btn.title = slots[i] ? `Slot ${i + 1}: ${slotLabel(slots[i], i)} — click to load or overwrite` : `Slot ${i + 1}: empty — click to save current patch`;
+      btn.onclick = () => {
+        if (!slots[i]) {
+          slots[i] = clonePatch(state.patches[patchKey]);
+          btn.className = 'saveSlotBtn occupied';
+          btn.textContent = slotLabel(slots[i], i);
+          btn.title = `Slot ${i + 1}: ${slotLabel(slots[i], i)} — click to load or overwrite`;
+          setPatchStatusMessage(patchKey, `Saved to Slot ${i + 1}.`);
+        } else {
+          showSlotOverlay(patchKey, i, btn);
+        }
+      };
+      bar.appendChild(btn);
+    }
+    parent.appendChild(bar);
+  }
+
+  function slotLabel(patch, slotIndex) {
+    if (!patch) return `Slot ${slotIndex + 1}`;
+    const parts = enginePartsFor(canonicalEngineName(patch.engine || DEFAULT_ENGINE));
+    return `${slotIndex + 1}: ${parts.family} ${parts.variant}`.slice(0, 28);
+  }
+
+  function showSlotOverlay(patchKey, slotIndex, triggerBtn) {
+    const slots = state.saveSlots[patchKey];
+    const overlay = document.createElement('div'); overlay.className = 'fwOverlay';
+    const dlg = document.createElement('div'); dlg.className = 'fwDialog';
+    dlg.innerHTML = `<h3>Slot ${slotIndex + 1}</h3><p class="fwDialogInfo">${escapeHtml(slotLabel(slots[slotIndex], slotIndex))}</p>`;
+    const bar = document.createElement('div'); bar.className = 'buttonbar';
+
+    const loadBtn = document.createElement('button'); loadBtn.type = 'button'; loadBtn.textContent = 'Load into patch';
+    loadBtn.onclick = () => {
+      overlay.remove();
+      state.patches[patchKey] = clonePatch(slots[slotIndex]);
+      const idMap = {single: 'singleControls', start: 'startControls', end: 'endControls'};
+      if (idMap[patchKey]) addPatchControls(idMap[patchKey], patchKey);
+      updateStatusSummaries(); updateVisuals?.(); autoAuditionPatch(patchKey);
+      setPatchStatusMessage(patchKey, `Loaded Slot ${slotIndex + 1}.`);
+    };
+    const overwriteBtn = document.createElement('button'); overwriteBtn.type = 'button'; overwriteBtn.textContent = 'Overwrite slot with current patch';
+    overwriteBtn.onclick = () => {
+      overlay.remove();
+      slots[slotIndex] = clonePatch(state.patches[patchKey]);
+      triggerBtn.textContent = slotLabel(slots[slotIndex], slotIndex);
+      triggerBtn.title = `Slot ${slotIndex + 1}: ${slotLabel(slots[slotIndex], slotIndex)} — click to load or overwrite`;
+      setPatchStatusMessage(patchKey, `Slot ${slotIndex + 1} overwritten.`);
+    };
+    const clearBtn = document.createElement('button'); clearBtn.type = 'button'; clearBtn.textContent = 'Clear slot';
+    clearBtn.onclick = () => {
+      overlay.remove();
+      slots[slotIndex] = null;
+      triggerBtn.className = 'saveSlotBtn';
+      triggerBtn.textContent = `Slot ${slotIndex + 1}`;
+      triggerBtn.title = `Slot ${slotIndex + 1}: empty — click to save current patch`;
+      setPatchStatusMessage(patchKey, `Slot ${slotIndex + 1} cleared.`);
+    };
+    const cancelBtn = document.createElement('button'); cancelBtn.type = 'button'; cancelBtn.textContent = 'Cancel'; cancelBtn.className = 'fwCancel';
+    cancelBtn.onclick = () => overlay.remove();
+    bar.append(loadBtn, overwriteBtn, clearBtn, cancelBtn);
+    dlg.appendChild(bar); overlay.appendChild(dlg);
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    installOverlayEscapeCancel(overlay); // sets tabIndex, auto-focuses, consistent with all other overlays
+    document.body.appendChild(overlay);
+  }
 
   // TUTORIAL: Creates a standard two-column settings row.
   function makeRow(parent, label, control, className = 'row wide') {
@@ -6748,10 +7584,10 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Builds the export sample-rate selector.
   function makeSampleRateControl() {
     const sr = document.createElement('select');
-    [44100,48000,96000,192000].forEach(v => sr.append(new Option(String(v), String(v))));
+    COMMON_SAMPLE_RATES.forEach(v => sr.append(new Option(String(v), String(v))));
     sr.dataset.exportSetting = 'sample-rate';
     sr.value = String(state.export.sampleRate);
-    sr.onchange = () => { state.export.sampleRate = Number(sr.value); persistGlobalSettings(); updateStatusSummaries(); updateBulkLoopSafeNotice(); syncExportSettingControls(); };
+    sr.onchange = () => { setExportSampleRate(Number(sr.value)); persistGlobalSettings(); updateStatusSummaries(); updateBulkLoopSafeNotice(); syncExportSettingControls(); };
     return sr;
   }
 
@@ -6761,7 +7597,12 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     ['8-bit PCM','12-bit PCM in 16-bit WAV','16-bit PCM','24-bit PCM','32-bit PCM'].forEach(v => bd.append(new Option(v, v)));
     bd.dataset.exportSetting = 'bit-depth';
     bd.value = state.export.bitDepth;
-    bd.onchange = () => { state.export.bitDepth = bd.value; persistGlobalSettings(); updateStatusSummaries(); syncExportSettingControls(); };
+    bd.onchange = () => {
+      // TUTORIAL: Bit depth is different from sample rate. It only affects WAV encoding
+      // TUTORIAL: during export; live audition and morph playback stay as float AudioContext
+      // TUTORIAL: audio, so there is no context rebuild or transport restart here.
+      state.export.bitDepth = bd.value; persistGlobalSettings(); updateStatusSummaries(); syncExportSettingControls();
+    };
     return bd;
   }
 
@@ -7043,8 +7884,8 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Writes the calculator plan into the shared Morph/Bulk render settings.
   function applyCalculatorPlan(renderMode) {
     const plan = calculatorPlan();
-    state.export.sampleRate = plan.sampleRate;
     setCommonFrequency(plan.recommendedFrequency, {audition: false});
+    setExportSampleRate(plan.sampleRate);
     state.export.mode = renderMode;
     applyRenderModeLoopSafetyDefaults(state.export.mode);
     if (renderMode === 'Samples') state.export.value = plan.totalSamples;
@@ -7066,7 +7907,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: Writes the tempo-derived length into the shared Morph/Bulk render settings.
   function applyTempoPlan(renderMode) {
     const plan = calculatorPlan();
-    state.export.sampleRate = plan.sampleRate;
+    setExportSampleRate(plan.sampleRate);
     state.export.mode = renderMode;
     applyRenderModeLoopSafetyDefaults(state.export.mode);
     if (renderMode === 'Samples') state.export.value = plan.tempoSamples;
@@ -7241,7 +8082,7 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     morphBox.appendChild(calcSampleRate);
     const srButtons = document.createElement('div');
     srButtons.className = 'presetBar';
-    [44100, 48000, 96000, 192000].forEach(v => {
+    COMMON_SAMPLE_RATES.forEach(v => {
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = `${v} Hz`;
@@ -8132,7 +8973,9 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   }
 
   // TUTORIAL: Copies the Playground patch into START, END, or both Morph endpoints, then opens
-  // TUTORIAL: the Morph tab silently so the new endpoints are ready to audition or export.
+  // TUTORIAL: Morph and starts the appropriate destination drone. Copy → Both auditions START
+  // TUTORIAL: because START is the user's first visible endpoint and the shared-source endpoint
+  // TUTORIAL: for wavetable type / FM range when the Different START/END toggles are off.
   function copyPlaygroundPatchToMorph(target) {
     muteCurrentTabAudio();
     const beforeStart = effectiveMorphEndpointSettings(state.patches.start, 'start');
@@ -8146,9 +8989,11 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     rebuildPatchControls();
     syncExportSettingControls();
     activateTab('morph', {mute: false});
+    const auditionKey = target === 'end' ? 'end' : 'start';
+    autoAuditionPatch(auditionKey);
     const label = target === 'both' ? 'START and END' : target.toUpperCase();
     const status = $('morphStatus');
-    if (status) status.textContent = `Copied Playground settings to ${label}. Audio muted.`;
+    if (status) status.textContent = `Copied Playground settings to ${label}. Droning ${auditionKey.toUpperCase()}.`;
   }
 
 
@@ -8228,7 +9073,19 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
   // TUTORIAL: declarative and the code path from button/slider to state update is easier to trace.
   function wireUi() {
     document.querySelectorAll('.tabButton').forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
-    const escStop = ev => { if (ev.key === 'Escape' || ev.code === 'Escape') { ev.preventDefault(); ev.stopPropagation(); globalPanicStop(); releaseOrdinaryControlFocus(); } };
+    const escStop = ev => {
+      if (ev.key !== 'Escape' && ev.code !== 'Escape') return;
+      const overlay = topModalOverlay?.();
+      if (overlay && closeModalOverlayFromEscape(overlay)) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        return;
+      }
+      ev.preventDefault();
+      ev.stopPropagation();
+      globalPanicStop();
+      releaseOrdinaryControlFocus();
+    };
     document.addEventListener('keydown', escStop, {capture: true});
     window.addEventListener('keydown', escStop, {capture: true});
     document.addEventListener('keydown', releaseFocusForBrowserTabShortcut, {capture: true});
@@ -8249,9 +9106,6 @@ async function renderMorphAudioDualPath(start, end, reverse = false, progress = 
     $('randomEnd').onclick = () => { state.patches.end = randomPatch(state.patches.end, {includeDrawn: true}); rebuildPatchControls(); autoAuditionPatch('end'); };
     $('randomMorphStart').onclick = () => randomiseMorphEndpointAndPlay('start');
     $('randomMorphEnd').onclick = () => randomiseMorphEndpointAndPlay('end');
-    $('copyStartToEnd').onclick = () => { state.patches.end = clonePatch(state.patches.start); rebuildPatchControls(); autoAuditionPatch('end'); };
-    $('copyEndToStart').onclick = () => { state.patches.start = clonePatch(state.patches.end); rebuildPatchControls(); autoAuditionPatch('start'); };
-    $('swapStartEnd').onclick = () => { const t = state.patches.start; state.patches.start = state.patches.end; state.patches.end = t; rebuildPatchControls(); autoAuditionCurrentContext(); };
     $('playMorph').onclick = () => toggleMorphPlayback(false);
     $('playReverse').onclick = () => toggleMorphPlayback(true);
     $('exportForward').onclick = () => { globalPanicStop(); exportDirection('forward'); };
