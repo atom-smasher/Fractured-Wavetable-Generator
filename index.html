@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.7l
+Fractured Wavetable Generator v2.7o
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -13,6 +13,12 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
+
+Release note: v2.7o is a documentation-only update: it clarifies stopAudio() cancel semantics, explains why exclusive audition stops preserve in-progress renders, and makes the explicit panic-stop cancellation convention easier to audit.
+
+Release note: v2.7n carries standalone reverse-export cache warming through MPC Wavetable Mode and documents why combined forward+reverse export paths still avoid retaining an extra copied reverse preview buffer after ZIP packing.
+
+Release note: v2.7m tightens morph-cache signature resonance normalisation, removes literal backticks from loop-safe Bulk notice text, documents the reverse-cache slot detection, and lets standalone reverse exports warm the reverse morph-preview cache.
 
 Release note: v2.7l fixes unsigned 8-bit WAV full-scale mapping, renames loop-safe Bulk active-state helpers, documents intentionally identical cancellation-token helpers, compacts Drawn Waveform data in morph-audition cache signatures, and keeps Morph render-mode/spectral changes in the most recently used morph direction.
 
@@ -55,7 +61,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.7l</title>
+<title>Fractured Wavetable Generator v2.7o</title>
 <style>
   :root {
     --bg: #101216;
@@ -218,7 +224,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.7l</h1>
+  <h1>Fractured Wavetable Generator v2.7o</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -488,7 +494,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.7l';
+  const APP_VERSION = 'v2.7o';
   const EXPORT_SCHEMA_VERSION = 11;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 44100;
@@ -3665,7 +3671,7 @@ itself, impose GPL licensing on generated outputs.
       plan.changes.length ? `Temporary render changes: ${plan.changes.join('; ')}.` : 'No temporary length/frequency changes are needed for the current render settings.',
       'The loop-safe target is used as the clean cycle-planning target. Cycles and Samples mode snap rendered length to whole target-sized cycles; Seconds mode keeps the selected duration and chooses the nearest whole-cycle frequency.',
       'Generator Family and Wavetable Type are not forcibly flattened; otherwise Bulk would stop being useful as a random generator. They are mentioned only as sound-design context when they actually differ across START and END.',
-      'This is mainly for wavetable developers. For one-shots, drones, risers, and general sound design, it is usually fine to disable this `Phase-accurate loop-safe` feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.'
+      'This is mainly for wavetable developers. For one-shots, drones, risers, and general sound design, it is usually fine to disable this Phase-accurate loop-safe feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.'
     ];
   }
 
@@ -3761,7 +3767,7 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Plain-text explanation shown when Bulk loop-safe mode is off.
   function loopSafeBulkOffText() {
-    return 'Off: Bulk uses the visible render settings and randomises FM/PWM/Ring Mod, source/result windows, and morph-relevant patch settings. For one-shots, drones, risers, and general sound design, it is usually fine to disable this `Phase-accurate loop-safe` feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.';
+    return 'Off: Bulk uses the visible render settings and randomises FM/PWM/Ring Mod, source/result windows, and morph-relevant patch settings. For one-shots, drones, risers, and general sound design, it is usually fine to disable this Phase-accurate loop-safe feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.';
   }
 
   // TUTORIAL: HTML explanation shown when Bulk loop-safe mode is off.
@@ -5533,7 +5539,7 @@ itself, impose GPL licensing on generated outputs.
       statusEl.textContent = `Rendering ${direction}…`;
       await nextFrame();
       const rendered = await renderMorphAudio(startPatch, endPatch, reverse, p => setProgress(p), token);
-      if (!reverse && options.cache !== false) cacheRenderedMorph(rendered, morphRenderSignature(startPatch, endPatch, reverse));
+      if (options.cache !== false) cacheRenderedMorph(rendered, morphRenderSignature(startPatch, endPatch, reverse));
       setProgress(0.80);
       await nextFrame();
       throwIfCancelled(token);
@@ -5596,7 +5602,7 @@ itself, impose GPL licensing on generated outputs.
     const files = [{name: `${names.wavFolder}/format.json`, data: mpcFormatJsonText()}];
     try {
       const result = await exportDirection(direction, state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
-        download: false, zip: false, token, timestamp: stamp, cache: direction !== 'reverse', progressOffset: 0, progressScale: 0.90,
+        download: false, zip: false, token, timestamp: stamp, progressOffset: 0, progressScale: 0.90,
         baseName: `${names.fileStem}_${direction}_${stamp}`,
         wavFolder: names.wavFolder,
         jsonFolder: state.export.mpcIncludeSidecars ? names.jsonFolder : '',
@@ -5642,6 +5648,9 @@ itself, impose GPL licensing on generated outputs.
       });
       if (!forward) throwIfCancelled(token);
       files.push(...forward.files);
+      // Combined exports can render very large files. Keep the reverse preview cache
+      // opt-out here so packing a both-directions ZIP does not also retain an
+      // extra copied reverse buffer after download; standalone reverse exports cache normally.
       const reverse = await exportDirection('reverse', state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
         download: false, zip: false, token, timestamp: stamp, progressOffset: 0.43, progressScale: 0.43, cache: false,
         baseName: `${names.fileStem}_reverse_${stamp}`,
@@ -5684,6 +5693,9 @@ itself, impose GPL licensing on generated outputs.
       files.push(...forward.files);
       throwIfCancelled(token);
       statusEl.textContent = 'Rendering reverse morph for combined ZIP…';
+      // Combined exports can render very large files. Keep the reverse preview cache
+      // opt-out here so packing a both-directions ZIP does not also retain an
+      // extra copied reverse buffer after download; standalone reverse exports cache normally.
       const reverse = await exportDirection('reverse', state.patches.start, state.patches.end, prefix, statusEl, progressEl, {download: false, zip: false, token, timestamp: stamp, progressOffset: 0.45, progressScale: 0.45, cache: false});
       if (!reverse) throwIfCancelled(token);
       files.push(...reverse.files);
@@ -6442,7 +6454,8 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   // TUTORIAL: Starts or retunes a continuous audition drone for a selected patch.
   async function dronePatch(key) {
     // Any drone start, including slider-triggered auto-audition, is exclusive.
-    // Kill buffer playback, morph previews, and any other drone before starting this target.
+    // Kill buffer playback, morph previews, and any other drone before starting this target,
+    // but preserve separate in-progress renders/exports by opting out of cancellation here.
     stopAudio({cancel: false});
     const requestedSerial = state.audio.playbackSerial || 0;
     await ensureAudio();
@@ -6561,6 +6574,9 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   }
   // TUTORIAL: Audio stop/mute helpers. Leaving a tab or pressing ESC should silence audition
   // TUTORIAL: immediately without changing the patch or export settings.
+  // TUTORIAL: options.cancel defaults to true, so Stop/ESC/global panic also invalidate
+  // TUTORIAL: long render/export jobs. Pass {cancel: false} for audition-only handoffs
+  // TUTORIAL: where the current sound must stop but a separate render/export should continue.
   function stopAudio(options = {}) {
     if (options.cancel !== false) cancelCancellableWork();
     stopBufferSourceOnly();
@@ -6623,7 +6639,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       fmRangeLabel: canonicalFmRangeLabel(p.fmRangeLabel),
       filterType: FILTER_TYPES.includes(String(p.filterType || 'Off')) ? String(p.filterType || 'Off') : 'Off',
       filterCutoff: clampFloat(p.filterCutoff, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF),
-      filterResonance: clampFloat(p.filterResonance, 0, FILTER_RESONANCE_UI_MAX),
+      filterResonance: clampFloat(p.filterResonance, 0, 1),
       beforeStart: clampFloat(p.beforeStart, 0, WINDOW_STEPS),
       beforeEnd: clampFloat(p.beforeEnd, 0, WINDOW_STEPS),
       afterStart: clampFloat(p.afterStart, 0, WINDOW_STEPS),
@@ -6655,6 +6671,14 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     });
   }
 
+  // TUTORIAL: Chooses the independent morph-preview cache slot from the render signature.
+  // TUTORIAL: "reverse" is a top-level boolean key in morphRenderSignature(); no patch
+  // TUTORIAL: or export field is allowed to contribute the substring '"reverse":true',
+  // TUTORIAL: so this scan stays a cheap safe discriminator for the two cache slots.
+  function morphCacheSlotFromSignature(signature) {
+    return String(signature).includes('"reverse":true') ? 'reverse' : 'forward';
+  }
+
   // TUTORIAL: Morph-audition cache. Reusing a freshly rendered morph avoids repeatedly rebuilding
   // TUTORIAL: the same audio buffer when the user presses play without changing relevant settings.
   function cacheRenderedMorph(rendered, signature) {
@@ -6662,7 +6686,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     // TUTORIAL: The cache has two independent slots so a cached forward render is not
     // evicted when the user plays reverse (and vice versa). The slot is chosen from
     // the signature, which already encodes the reverse flag.
-    const slot = signature.includes('"reverse":true') ? 'reverse' : 'forward';
+    const slot = morphCacheSlotFromSignature(signature);
     if (!state.audio.morphCache || typeof state.audio.morphCache !== 'object') state.audio.morphCache = {forward: null, reverse: null};
     state.audio.morphCache[slot] = {
       signature,
@@ -6675,7 +6699,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   // TUTORIAL: Looks up a previously rendered morph buffer if the relevant settings have not changed.
   function cachedRenderedMorph(signature) {
     if (!state.audio.morphCache || typeof state.audio.morphCache !== 'object') return null;
-    const slot = signature.includes('"reverse":true') ? 'reverse' : 'forward';
+    const slot = morphCacheSlotFromSignature(signature);
     const cache = state.audio.morphCache[slot];
     if (!cache || cache.signature !== signature || !cache.audio || !cache.summary) return null;
     return {audio: cache.audio, summary: cache.summary, notes: cache.notes || [], fromCache: true};
@@ -6710,7 +6734,8 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
 
   // TUTORIAL: Renders or reuses a morph audition buffer, then plays it forward or reverse.
   async function playMorphBuffer(reverse = false) {
-    // Morph preview is also exclusive: stop drones and any existing preview before rendering/playing.
+    // Morph preview is also exclusive: stop drones and any existing preview before rendering/playing,
+    // without cancelling any separate in-progress render/export work.
     stopAudio({cancel: false});
     const playbackSerial = state.audio.playbackSerial || 0;
     await ensureAudio();
@@ -9195,7 +9220,8 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   }
 
   // TUTORIAL: Single stop path used by ESC and Stop buttons: cancel renders, mute audio, and report the stop
-  // TUTORIAL: in visible status fields.
+  // TUTORIAL: in visible status fields. cancel: true is redundant with stopAudio()'s default,
+  // TUTORIAL: but explicit here because this path must cancel both sound and long render/export work.
   function globalPanicStop() {
     stopAudio({hard: true, cancel: true});
     const ep = $('exportProgress'); if (ep) ep.value = 0;
