@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.7o
+Fractured Wavetable Generator v2.8l
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -13,6 +13,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
+
+Release note: v2.8l is a narrow public-release-candidate polish pass after the v2.8 safety/comment consolidation. It keeps v2.8k behaviour, standardises MPC and combined-export completion messages on textContent, removes the orphaned status-strong CSS rule, replaces one literal NUL table-safety key separator with an escaped separator so text tools no longer treat the HTML as binary, and adds short internal comments explaining the collector/held-table safety decisions.
+
+v2.8 development summary: v2.8 promotes the post-v2.7o work into one consolidated branch. The update adds the Classic Waveforms family and eight clean waveform preset buttons, groups the Morph Render Mode menu, adds the START Phase-Modulates END moving/fixed morph families, and removes temporary test labels/IDs. It also hardens generated-table safety: flat, all-DC, near-DC, invalid, or impulse-like generated tables are corrected with context-aware reporting; morph/render paths prefer scoped previous-valid tables where safe; UI warnings and JSON sidecars now summarise fallback use without per-frame spam. Documentation was tightened around Classic landmark settings, Fixed Endpoint phase-mod behaviour, loop-safety wording, MPC notes, and export/cache semantics.
 
 Release note: v2.7o is a documentation-only update: it clarifies stopAudio() cancel semantics, explains why exclusive audition stops preserve in-progress renders, and makes the explicit panic-stop cancellation convention easier to audit.
 
@@ -61,7 +65,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.7o</title>
+<title>Fractured Wavetable Generator v2.8l</title>
 <style>
   :root {
     --bg: #101216;
@@ -132,7 +136,8 @@ itself, impose GPL licensing on generated outputs.
   .tapChoiceGroup button { padding: 5px 8px; font-size: 12px; }
   .tapChoiceGroup button.active { background: #183244; border-color: var(--accent); }
   .status { white-space: pre-wrap; min-height: 24px; padding: 9px; background: #0d1118; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }
-  .status strong { color: var(--text); }
+  .tableSafetyAlert { display: none; margin: 8px 0 0; border-color: rgba(255,111,125,0.8); background: #1a0d13; color: var(--bad); }
+  .tableSafetyAlert.show { display: block; }
   .loopNotice { margin: 8px 0; border-color: #4b5567; white-space: normal; line-height: 1.35; }
   .loopNotice.safe { border-color: rgba(132,240,178,0.55); color: var(--ok); }
   .loopNotice.warn { border-color: rgba(255,211,108,0.65); color: var(--muted); }
@@ -196,6 +201,10 @@ itself, impose GPL licensing on generated outputs.
   .applyButtonRows .buttonbar { margin: 0; }
   .presetBar { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
   .presetBar button { padding: 4px 7px; font-size: 12px; }
+  .waveformPresetBlock { border: 1px solid var(--line); border-radius: 10px; padding: 8px; margin: 8px 0 2px; background: #11161d; }
+  .waveformPresetBlock label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+  .waveformPresetGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+  .waveformPresetGrid button { padding: 5px 6px; font-size: 11px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .glossaryTable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 13px; }
   .glossaryTable th, .glossaryTable td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
   .glossaryTable th { color: var(--accent); background: #11161d; }
@@ -224,7 +233,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.7o</h1>
+  <h1>Fractured Wavetable Generator v2.8l</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -283,6 +292,7 @@ itself, impose GPL licensing on generated outputs.
           </div>
         </details>
         <div class="status" id="singleStatus">Ready.</div>
+        <div class="status tableSafetyAlert" id="singleTableSafetyAlert" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -345,6 +355,7 @@ itself, impose GPL licensing on generated outputs.
         <div class="status loopNotice" id="morphLoopSafetyNotice"></div>
         <progress id="exportProgress" value="0" max="1"></progress>
         <div class="status" id="morphStatus">Ready.</div>
+        <div class="status tableSafetyAlert" id="morphTableSafetyAlert" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -432,6 +443,8 @@ itself, impose GPL licensing on generated outputs.
         <li>In Morph and Bulk, unchecked <code>Different START/END Wavetable Types</code> or <code>Different START/END FM Pitch Range</code> means START supplies the effective value used for both endpoints.</li>
         <li>The disabled END control is ignored for rendering, but its stored value is not overwritten, so it is still available when the option is checked again.</li>
         <li><code>Cycle-stepped transition</code> is shared by Morph and Bulk. It makes the morph move in per-cycle steps instead of continuously across individual samples.</li>
+        <li>In the START Phase-Modulates END modes, <strong>Moving Values</strong> keeps the START source and END carrier travelling through the morph path. <strong>Fixed Endpoints</strong> holds START as the unfiltered phase-warp source and END as the audible carrier; neither patch interpolates through the morph path, and the phase-warp effect evolves naturally as both oscillators cycle.</li>
+        <li><strong>Classic Waveforms</strong> is a predictable source family for sine/ramp-triangle/trapezoid/square-pulse material. For exact landmark waves, set Character and Symmetry/Width to centre: Topology 0 gives sine, 2048 gives triangle/saw, 3072 gives the preset trapezoid landmark, and 4095 gives square/pulse. The two rows of waveform preset buttons beneath each patch’s RAM save slots load clean Classic Waveforms recipes, reset source/result windows, modulation, and filters, and route the patch through Source A. Reset still uses the same global patch defaults as the other engines. Below the triangle/saw landmark, Symmetry/Width skews the whole curved or straight waveform. Above it, Symmetry/Width controls pulse width/falling-edge position while Topology adds clipping, flat holds, and steeper straight edges. Full-cycle Classic waves preserve their raw DC balance until the export DC stage, but source/result windowed Classic waves are DC-centred and peak-normalised after windowing so narrow selected fluctuations do not collapse into an apparent flatline. Across all generators, a source/result window or morph frame that lands on a truly flat region is treated as collapsed rather than being amplified into a constant DC rail. During a render, collapsed frames first try to hold the previous valid table from the same local branch/context; if no local valid table exists, the deterministic safety square is used. Safety substitutions are shown as compact status summaries and recorded in exported JSON as grouped frame ranges rather than repeated per-frame lines.</li>
       </ul>
 
       <h3>JSON and audio import</h3>
@@ -494,7 +507,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.7o';
+  const APP_VERSION = 'v2.8l';
   const EXPORT_SCHEMA_VERSION = 11;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 44100;
@@ -513,15 +526,12 @@ itself, impose GPL licensing on generated outputs.
   const WINDOW_STEPS = 256.0;
   const MIN_WINDOW_STEPS = 1.0;
   const EPSILON = 1e-20;
+  // TUTORIAL: Practical AC floor for table normalisation. EPSILON is a numerical
+  // TUTORIAL: divide-by-zero guard; this larger threshold prevents a perfectly flat
+  // TUTORIAL: window from turning floating-point summation residue into a fake
+  // TUTORIAL: full-scale DC table.
+  const NORMALISE_MIN_AC_PEAK = 1e-9;
   const POT_MAX_12BIT = 4095;
-  const POT_SEED_SCALE_12BIT = 2048.0;
-  // TUTORIAL: These two constants are fixed by design. SAFE_ITER2_PRODUCT controls the
-  // TUTORIAL: scaling of the iteration-2 chaotic sequence inside the Clean Chaos engine.
-  // TUTORIAL: Changing either value silently changes what every existing saved patch sounds
-  // TUTORIAL: like, because the generator is deterministic: same pot values + same constants
-  // TUTORIAL: = same table. Treat them as a file-format commitment, not a tuning parameter.
-  const SAFE_ITER2_PRODUCT = 255 * 181;
-  const SAFE_ITER2_MULTIPLIER = SAFE_ITER2_PRODUCT / (128 * 128);
   const DEFAULT_FM_RANGE_LABEL = '±1200 cents (1 octave)';
   const MAX_FM_RANGE_CENTS = 4800.0;
   const MIN_FM_PHASE_SCALE = 0.02;
@@ -533,6 +543,46 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: eviction policy: when a new entry pushes the cache above this limit, the oldest
   // TUTORIAL: key is deleted. The sound does not change; only recomputation/RAM tradeoffs do.
   const MORPH_TABLE_CACHE_LIMIT = 512;
+
+  // TUTORIAL: Generated-table safety substitution reporting is context-scoped
+  // TUTORIAL: and collector-scoped. The DSP finalisers are shared by every
+  // TUTORIAL: engine, tap route, source/result window, and morph mode, so they
+  // TUTORIAL: can catch any setting combination that collapses into unusable
+  // TUTORIAL: NaN/Inf, silence, impulse-only, or all-DC material. The context
+  // TUTORIAL: stack says where the correction happened; the active collector
+  // TUTORIAL: says which render/preview pass owns the report. This avoids one
+  // TUTORIAL: long export losing its fallback notes when visualiser refreshes
+  // TUTORIAL: run while the export is yielding to the browser.
+  const TABLE_SAFETY_EVENT_LIMIT = 64;
+  const tableSafetyContextStack = ['Generated table'];
+  const tableSafetyHoldKeyStack = [''];
+
+  // Phase-modulated END morph settings. Depth is measured in table cycles.
+  // START supplies the bipolar phase warp; END remains the audible carrier.
+  // sourceRate changes how fast the fixed START phase-warp source is read relative to END.
+  const START_PHASE_MOD_END_DEPTH = 0.25;
+  const START_PHASE_MOD_END_FIXED_SETTINGS = {
+    'START Phase-Modulates END (Fixed Source+Carrier)': {phaseDepth: 0.25, sourceRate: 1.0},
+    'START Phase-Modulates END (Fixed Source+Carrier ±180°)': {phaseDepth: 0.50, sourceRate: 1.0},
+    'START Phase-Modulates END (Fixed Source+Carrier ±360°)': {phaseDepth: 1.00, sourceRate: 1.0},
+    'START Phase-Modulates END (Fixed Source×1/5 + Carrier)': {phaseDepth: 0.25, sourceRate: 1 / 5},
+    'START Phase-Modulates END (Fixed Source×1/3 + Carrier)': {phaseDepth: 0.25, sourceRate: 1 / 3},
+    'START Phase-Modulates END (Fixed Source×1/2 + Carrier)': {phaseDepth: 0.25, sourceRate: 1 / 2},
+    'START Phase-Modulates END (Fixed Source×2 + Carrier)': {phaseDepth: 0.25, sourceRate: 2.0},
+    'START Phase-Modulates END (Fixed Source×3 + Carrier)': {phaseDepth: 0.25, sourceRate: 3.0},
+    'START Phase-Modulates END (Fixed Source×5 + Carrier)': {phaseDepth: 0.25, sourceRate: 5.0},
+  };
+  const START_PHASE_MOD_END_MOVING_SETTINGS = {
+    'START Phase-Modulates END (Moving Source+Carrier)': {phaseDepth: 0.25, sourceRate: 1.0},
+    'START Phase-Modulates END (Moving Source+Carrier ±180°)': {phaseDepth: 0.50, sourceRate: 1.0},
+    'START Phase-Modulates END (Moving Source+Carrier ±360°)': {phaseDepth: 1.00, sourceRate: 1.0},
+    'START Phase-Modulates END (Moving Source×1/5 + Carrier)': {phaseDepth: 0.25, sourceRate: 1 / 5},
+    'START Phase-Modulates END (Moving Source×1/3 + Carrier)': {phaseDepth: 0.25, sourceRate: 1 / 3},
+    'START Phase-Modulates END (Moving Source×1/2 + Carrier)': {phaseDepth: 0.25, sourceRate: 1 / 2},
+    'START Phase-Modulates END (Moving Source×2 + Carrier)': {phaseDepth: 0.25, sourceRate: 2.0},
+    'START Phase-Modulates END (Moving Source×3 + Carrier)': {phaseDepth: 0.25, sourceRate: 3.0},
+    'START Phase-Modulates END (Moving Source×5 + Carrier)': {phaseDepth: 0.25, sourceRate: 5.0},
+  };
   const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
   const VISUAL_MODES = ['Base table', 'Phase-locked FM/PWM/Ring Mod', 'Animated stable FM/PWM/Ring Mod', 'Time-domain FM/PWM/Ring Mod', 'Spectrum analyser'];
   const GLOBAL_SETTINGS_COOKIE = 'fractal_wavetable_global_settings_v1';
@@ -744,6 +794,14 @@ itself, impose GPL licensing on generated outputs.
       note: 'Primary Phase sets duty-cycle warp; Shape 1 changes edge slope and asymmetry; Shape 2 adds a second pulse/notch/sync-like offset. This is PWM-style behaviour baked into the table.',
     },
     {
+      family: 'Classic Waveforms',
+      descriptions: {
+        Smooth: 'Predictable oscillator-source family with sine, ramp/triangle, trapezoid, and square/pulse landmarks plus rounded character control.',
+        Crunchy: 'Predictable oscillator-source family with the same landmarks, plus stronger stepped, edge-residue, and digital-character options.',
+      },
+      note: 'Topology sweeps sine → triangle/saw → trapezoid → square/pulse, with the triangle/saw landmark at the exact midpoint. Symmetry/Width skews edge timing below that midpoint and controls pulse width above it. Character is neutral at centre; below centre rounds the shape, above centre brightens or digitises it.',
+    },
+    {
       family: 'Sync',
       descriptions: {
         Smooth: 'Hard-sync-style table engine with constrained reset ratios, rounded reset overshoot, and stronger independent A/B shape controls.',
@@ -816,6 +874,7 @@ itself, impose GPL licensing on generated outputs.
     'Phase Distortion': ['Distortion Depth', 'Breakpoint / Knee', 'Wave Colour / Warp'],
     'FM': ['FM Index', 'Modulator Ratio', 'Carrier Colour'],
     'Pulse Warp': ['Duty Warp', 'Edge Slope', 'Notch / Offset'],
+    'Classic Waveforms': ['Topology', 'Symmetry / Width', 'Character'],
     'Sync': ['Sync Intensity', 'Source A Shape', 'Source B Shape'],
     'Formant': ['Formant Spacing', 'Vowel Position', 'Bandwidth / Grit'],
     'Fold': ['Fold Drive', 'Fold Symmetry', 'Source / Bias'],
@@ -831,6 +890,27 @@ itself, impose GPL licensing on generated outputs.
     return {pot1: labels[0], pot2: labels[1], pot3: labels[2]};
   }
 
+  // TUTORIAL: User-facing Classic Waveforms preset recipes. These are intentionally
+  // TUTORIAL: small and explicit: two rows of four clean source waves, not a general
+  // TUTORIAL: preset browser and not a replacement for Reset. The buttons apply only
+  // TUTORIAL: patch-level sound-source settings: Classic Waveforms Smooth, Source A,
+  // TUTORIAL: full source/result windows, neutral modulation, and filter Off. Drawn
+  // TUTORIAL: Waveform data is preserved because it may contain user work even though
+  // TUTORIAL: these presets route away from Drawn.
+  // TUTORIAL: Trapezoid uses the agreed pot1/Topology landmark at 3072. Pulse-width
+  // TUTORIAL: pot2 values compensate for the Classic Waveforms 4-sample duty guard,
+  // TUTORIAL: so the labels are close to the intended audible duty cycles.
+  const CLASSIC_WAVEFORM_PRESETS = [
+    {id: 'sine', label: 'Sine', pot1: 0, pot2: 2048, pot3: 2048, title: 'Classic Waveforms: pure sine landmark'},
+    {id: 'triangle', label: 'Triangle', pot1: 2048, pot2: 2048, pot3: 2048, title: 'Classic Waveforms: centred straight triangle'},
+    {id: 'sawDown', label: 'Saw ↓', pot1: 2048, pot2: 0, pot3: 2048, title: 'Classic Waveforms: near-vertical leading/rising edge, falling ramp'},
+    {id: 'sawUp', label: 'Saw ↑', pot1: 2048, pot2: 4095, pot3: 2048, title: 'Classic Waveforms: rising ramp, near-vertical trailing/falling edge'},
+    {id: 'trapezoid', label: 'Trapezoid', pot1: 3072, pot2: 2048, pot3: 2048, title: 'Classic Waveforms: centred trapezoid landmark at pot1=3072'},
+    {id: 'square', label: 'Square 50%', pot1: 4095, pot2: 2048, pot3: 2048, title: 'Classic Waveforms: centred 50% square'},
+    {id: 'pulse25', label: 'Pulse 25%', pot1: 4095, pot2: 991, pot3: 2048, title: 'Classic Waveforms: roughly 25% duty pulse'},
+    {id: 'pulse125', label: 'Pulse 12.5%', pot1: 4095, pot2: 462, pot3: 2048, title: 'Classic Waveforms: roughly 12.5% duty pulse'},
+  ];
+
   // TUTORIAL: FM ranges are expressed in musical cents. The FM slider sets depth within the
   // TUTORIAL: selected range, and boundedFmPhaseScale converts that into a safe pitch multiplier.
   const FM_RANGES = [
@@ -845,20 +925,51 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: parameters, some blend finished audio paths, and some rebuild intermediate spectral
   // TUTORIAL: tables; the renderer dispatches from these labels through canonicalMorphRenderMode().
   const MORPH_RENDER_MODES = [
-    ['Full Interpolation (Favours Digital Noise)', 'Moves one path through intermediate settings; useful for digital fracture and noisy transitions.'],
-    ['Crossfade (Favours Analogue Warmth)', 'Renders START and END as complete endpoint sounds, then fades between them. Smooth, but can phase or beat.'],
-    ['Phase-Aligned Crossfade (Warm, Less Beating)', 'Rotates the END table toward the START phase before crossfading; warmer and usually less hollow.'],
-    ['Phase-Offset Crossfade (Analogue Phaser Motion)', 'Intentionally offsets one endpoint before crossfading; can create phaser-like cancellation and movement. Not intended for whole-file loop-closure tests.'],
-    ['Dual-Path Interpolation (Avoids Midpoint Switches)', 'Interpolates continuous controls in START-type and END-type paths, then fades between paths.'],
-    ['Hybrid Morph (Values Move, Types Fade)', 'Uses full interpolation when structures match; fades type/filter/engine changes when they do not.'],
-    ['Wavetable Morph (Blends Tables Before Audio)', 'Blends START and END tables before one oscillator path; continuous controls still move after the table blend.'],
-    ['Warm Wavetable Morph (One Oscillator, Smooth Blend)', 'Uses equal-power table blending plus light middle smoothing for a warmer one-oscillator morph.'],
-    ['Softened Morph (Rounded Middle)', 'Blends tables as one oscillator and applies the strongest smoothing near the middle of the transition.'],
-    ['Saturated Morph (Warm, Compressed)', 'Blends tables as one oscillator and applies gentle soft saturation to glue the transition.'],
-    ['Comb Wavetable Morph (Hollow Interference)', 'Blends START and END as one oscillator, then adds cyclic feed-forward phase-offset interference for hollow, flangey, metallic motion.'],
-    ['FFT Spectral Morph (Digital Tone, Less Crunchy)', 'Analyses 2, 3, 5, or 9 table states into harmonics, blends between spectral anchors, rebuilds a table, then runs the usual oscillator/output cleanup.'],
-    ['Spectral Envelope Morph (Smooth Digital Tone)', 'Blends a smoothed harmonic envelope rather than every sharp spectral detail; smoother and less crunchy.'],
-    ['Harmonic Level Morph (Stable, Less Phasey)', 'Keeps phase more stable while morphing harmonic levels; usually less swirly than full FFT morph.'],
+    ['Full Interpolation (Favours Digital Noise)', 'Moves one path through intermediate settings; useful for digital fracture and noisy transitions.', 'Direct / Parameter'],
+    ['Dual-Path Interpolation (Avoids Midpoint Switches)', 'Interpolates continuous controls in START-type and END-type paths, then fades between paths.', 'Direct / Parameter'],
+    ['Hybrid Morph (Values Move, Types Fade)', 'Uses full interpolation when structures match; fades type/filter/engine changes when they do not.', 'Direct / Parameter'],
+
+    ['Crossfade (Favours Analogue Warmth)', 'Renders START and END as complete endpoint sounds, then fades between them. Smooth, but can phase or beat.', 'Crossfade / Phase'],
+    ['Phase-Aligned Crossfade (Warm, Less Beating)', 'Rotates the END table toward the START phase before crossfading; warmer and usually less hollow.', 'Crossfade / Phase'],
+    ['Phase-Offset Crossfade (Analogue Phaser Motion)', 'Intentionally offsets one endpoint before crossfading; can create phaser-like cancellation and movement. Not intended for whole-file loop-closure tests.', 'Crossfade / Phase'],
+
+    ['Wavetable Morph (Blends Tables Before Audio)', 'Blends START and END tables before one oscillator path; continuous controls still move after the table blend.', 'Wavetable / One-Oscillator'],
+    ['Warm Wavetable Morph (One Oscillator, Smooth Blend)', 'Uses equal-power table blending plus light middle smoothing for a warmer one-oscillator morph.', 'Wavetable / One-Oscillator'],
+    ['Softened Morph (Rounded Middle)', 'Blends tables as one oscillator and applies the strongest smoothing near the middle of the transition.', 'Wavetable / One-Oscillator'],
+    ['Saturated Morph (Warm, Compressed)', 'Blends tables as one oscillator and applies gentle soft saturation to glue the transition.', 'Wavetable / One-Oscillator'],
+    ['Comb Wavetable Morph (Hollow Interference)', 'Blends START and END as one oscillator, then adds cyclic feed-forward phase-offset interference for hollow, flangey, metallic motion.', 'Wavetable / One-Oscillator'],
+
+    ['START Phase-Modulates END (Moving Source+Carrier)', 'START and END branches slide through the morph path while the START phase-warps the END carrier. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source+Carrier ±180°)', 'START and END branches slide through the morph path while the START phase-warps the END carrier at ±0.50-cycle / ±180° depth.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source+Carrier ±360°)', 'START and END branches slide through the morph path while the START phase-warps the END carrier at ±1.00-cycle / ±360° depth.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source×1/5 + Carrier)', 'START and END branches slide through the morph path while the START phase-warp source is read at one-fifth speed. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source×1/3 + Carrier)', 'START and END branches slide through the morph path while the START phase-warp source is read at one-third speed. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source×1/2 + Carrier)', 'START and END branches slide through the morph path while the START phase-warp source is read at half speed. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source×2 + Carrier)', 'START and END branches slide through the morph path while the START phase-warp source is read at 2× speed. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source×3 + Carrier)', 'START and END branches slide through the morph path while the START phase-warp source is read at 3× speed. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Moving Values'],
+    ['START Phase-Modulates END (Moving Source×5 + Carrier)', 'START and END branches slide through the morph path while the START phase-warp source is read at 5× speed. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Moving Values'],
+
+    ['START Phase-Modulates END (Fixed Source+Carrier)', 'START is held as a fixed unfiltered phase-warp source and END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source+Carrier ±180°)', 'START is held as a fixed unfiltered phase-warp source and END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. Depth is ±0.50-cycle / ±180°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source+Carrier ±360°)', 'START is held as a fixed unfiltered phase-warp source and END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. Depth is ±1.00-cycle / ±360°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source×1/5 + Carrier)', 'START is held as a fixed unfiltered phase-warp source read at one-fifth speed; END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. This creates slow sub-fifth phase-pressure motion without changing END pitch. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source×1/3 + Carrier)', 'START is held as a fixed unfiltered phase-warp source read at one-third speed; END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. This creates sub-third phase-pressure motion without changing END pitch. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source×1/2 + Carrier)', 'START is held as a fixed unfiltered phase-warp source read at half speed; END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. This creates octave-like slower phase-pressure motion without changing END pitch. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source×2 + Carrier)', 'START is held as a fixed unfiltered phase-warp source read at 2× speed; END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. This creates octave-like faster phase-pressure motion without changing END pitch. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source×3 + Carrier)', 'START is held as a fixed unfiltered phase-warp source read at 3× speed; END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. This creates triple-rate phase-pressure motion without changing END pitch. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Fixed Endpoints'],
+    ['START Phase-Modulates END (Fixed Source×5 + Carrier)', 'START is held as a fixed unfiltered phase-warp source read at 5× speed; END is held as a fixed audible carrier. No START→END parameter interpolation is applied inside either branch. This creates quintuple-rate phase-pressure motion without changing END pitch. Depth is ±0.25-cycle / ±90°.', 'Phase-Modulated END — Fixed Endpoints'],
+
+    ['FFT Spectral Morph (Digital Tone, Less Crunchy)', 'Analyses 2, 3, 5, or 9 table states into harmonics, blends between spectral anchors, rebuilds a table, then runs the usual oscillator/output cleanup.', 'Spectral / FFT'],
+    ['Spectral Envelope Morph (Smooth Digital Tone)', 'Blends a smoothed harmonic envelope rather than every sharp spectral detail; smoother and less crunchy.', 'Spectral / FFT'],
+    ['Harmonic Level Morph (Stable, Less Phasey)', 'Keeps phase more stable while morphing harmonic levels; usually less swirly than full FFT morph.', 'Spectral / FFT'],
+  ];
+  const MORPH_RENDER_MODE_GROUPS = [
+    'Direct / Parameter',
+    'Crossfade / Phase',
+    'Wavetable / One-Oscillator',
+    'Phase-Modulated END — Moving Values',
+    'Phase-Modulated END — Fixed Endpoints',
+    'Spectral / FFT',
   ];
   // TUTORIAL: Human-facing morph-mode labels may change as the UI wording gets refined.
   // TUTORIAL: JSON exports therefore store these stable IDs alongside the current label,
@@ -875,10 +986,35 @@ itself, impose GPL licensing on generated outputs.
     'Softened Morph (Rounded Middle)': 'softened_morph',
     'Saturated Morph (Warm, Compressed)': 'saturated_morph',
     'Comb Wavetable Morph (Hollow Interference)': 'comb_wavetable_morph',
+    'START Phase-Modulates END (Moving Source+Carrier)': 'start_phase_modulates_end_moving_source_carrier',
+    'START Phase-Modulates END (Moving Source+Carrier ±180°)': 'start_phase_modulates_end_moving_source_carrier_180',
+    'START Phase-Modulates END (Moving Source+Carrier ±360°)': 'start_phase_modulates_end_moving_source_carrier_360',
+    'START Phase-Modulates END (Moving Source×1/5 + Carrier)': 'start_phase_modulates_end_moving_source_fifth_carrier',
+    'START Phase-Modulates END (Moving Source×1/3 + Carrier)': 'start_phase_modulates_end_moving_source_third_carrier',
+    'START Phase-Modulates END (Moving Source×1/2 + Carrier)': 'start_phase_modulates_end_moving_source_half_carrier',
+    'START Phase-Modulates END (Moving Source×2 + Carrier)': 'start_phase_modulates_end_moving_source_2x_carrier',
+    'START Phase-Modulates END (Moving Source×3 + Carrier)': 'start_phase_modulates_end_moving_source_3x_carrier',
+    'START Phase-Modulates END (Moving Source×5 + Carrier)': 'start_phase_modulates_end_moving_source_5x_carrier',
+    'START Phase-Modulates END (Fixed Source+Carrier)': 'start_phase_modulates_end_fixed_source_carrier',
+    'START Phase-Modulates END (Fixed Source+Carrier ±180°)': 'start_phase_modulates_end_fixed_source_carrier_180',
+    'START Phase-Modulates END (Fixed Source+Carrier ±360°)': 'start_phase_modulates_end_fixed_source_carrier_360',
+    'START Phase-Modulates END (Fixed Source×1/5 + Carrier)': 'start_phase_modulates_end_fixed_source_fifth_carrier',
+    'START Phase-Modulates END (Fixed Source×1/3 + Carrier)': 'start_phase_modulates_end_fixed_source_third_carrier',
+    'START Phase-Modulates END (Fixed Source×1/2 + Carrier)': 'start_phase_modulates_end_fixed_source_half_carrier',
+    'START Phase-Modulates END (Fixed Source×2 + Carrier)': 'start_phase_modulates_end_fixed_source_2x_carrier',
+    'START Phase-Modulates END (Fixed Source×3 + Carrier)': 'start_phase_modulates_end_fixed_source_3x_carrier',
+    'START Phase-Modulates END (Fixed Source×5 + Carrier)': 'start_phase_modulates_end_fixed_source_5x_carrier',
     'FFT Spectral Morph (Digital Tone, Less Crunchy)': 'fft_spectral_morph',
     'Spectral Envelope Morph (Smooth Digital Tone)': 'spectral_envelope_morph',
     'Harmonic Level Morph (Stable, Less Phasey)': 'harmonic_level_morph',
   };
+
+  // TUTORIAL: No private test/audition aliases are retained in the public engine list.
+  // TUTORIAL: The hook stays here for future public compatibility mappings if a later
+  // TUTORIAL: release needs to accept an older shipped label or stable render-mode id.
+  const MORPH_RENDER_MODE_ALIASES = {};
+  const warnedUnknownMorphRenderModes = new Set();
+
 
   const DEFAULT_MORPH_RENDER_MODE = MORPH_RENDER_MODES[0][0];
   const SPECTRAL_STATE_OPTIONS = [
@@ -960,7 +1096,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: elements by id, nextFrame() yields back to the browser so progress bars can repaint,
   // TUTORIAL: and the cancellable-work token lets ESC/Stop interrupt long renders safely.
   const $ = id => document.getElementById(id);
-  const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+  const nextFrame = () => tableSafetySuspendAroundPromise(new Promise(resolve => requestAnimationFrame(resolve)));
 
   // TUTORIAL: Starts a render/export operation by advancing the cancellation token and returning the token
   // TUTORIAL: this job must keep checking. This intentionally has the same body as
@@ -976,8 +1112,10 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Normalises cancellation checks so catch blocks do not have to know how AbortError was created.
   function isAbortError(err) { return err && err.name === 'AbortError'; }
 
-  // TUTORIAL: Creates a complete patch object with safe defaults. New random patches and resets start from
-  // TUTORIAL: this shape so later code can assume every field exists.
+  // TUTORIAL: Creates a complete patch object with safe global defaults. New random patches and
+  // TUTORIAL: resets start from this shape so later code can assume every field exists.
+  // TUTORIAL: These are not per-engine presets: selecting or resetting a generator family should
+  // TUTORIAL: not silently move sliders to that family’s textbook landmark settings.
   function defaultPatch() {
     return {
       engine: DEFAULT_ENGINE,
@@ -1000,8 +1138,6 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Tiny readability helper for places where string/number input should be accepted only if it
   // TUTORIAL: resolves to a finite number.
   function isFiniteNumber(x) { return Number.isFinite(Number(x)); }
-  // TUTORIAL: Maps a 12-bit UI control value to the 0..roughly-2 seed scale used by the clean-room engines.
-  function potToSeed12(value) { return clampFloat(value, 0, POT_MAX_12BIT) / POT_SEED_SCALE_12BIT; }
   // TUTORIAL: Converts a user-facing FM range label into cents so modulation depth can be treated as musical
   // TUTORIAL: pitch deviation.
   function fmRangeLabelToCents(label) { return clampFloat(FM_RANGE_BY_LABEL[label] ?? 1200, 0, MAX_FM_RANGE_CENTS); }
@@ -1553,6 +1689,313 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
+  // TUTORIAL: Table safety is collected per preview/render job rather than in one
+  // TUTORIAL: global log. Exports yield to the browser during long renders, so visual
+  // TUTORIAL: refreshes must not be able to clear or mix into the export's safety
+  // TUTORIAL: metadata. Each collector owns its own event map and scoped last-good
+  // TUTORIAL: tables for held-table substitution.
+  function makeTableSafetyCollector(label = '') {
+    return {
+      label: String(label || ''),
+      events: new Map(),
+      omittedKeys: new Set(),
+      omitted_event_count: 0,
+      truncated: false,
+      lastGoodTables: new Map(),
+    };
+  }
+
+  const tableSafetyDefaultCollector = makeTableSafetyCollector('default preview collector');
+  const tableSafetyVisiblePreviewCollector = makeTableSafetyCollector('visible patch preview');
+  let tableSafetyActiveCollector = tableSafetyDefaultCollector;
+
+  function activeTableSafetyCollector() {
+    return tableSafetyActiveCollector || tableSafetyDefaultCollector;
+  }
+
+  function currentTableSafetyContext() {
+    return tableSafetyContextStack.length ? tableSafetyContextStack[tableSafetyContextStack.length - 1] : 'Generated table';
+  }
+
+  function currentTableSafetyHoldKey() {
+    return tableSafetyHoldKeyStack.length ? tableSafetyHoldKeyStack[tableSafetyHoldKeyStack.length - 1] : '';
+  }
+
+  function withTableSafetyContext(context, fn, holdKey = undefined) {
+    tableSafetyContextStack.push(String(context || 'Generated table'));
+    tableSafetyHoldKeyStack.push(holdKey === undefined ? currentTableSafetyHoldKey() : String(holdKey || ''));
+    try {
+      return fn();
+    } finally {
+      tableSafetyContextStack.pop();
+      tableSafetyHoldKeyStack.pop();
+    }
+  }
+
+  function withTableSafetyCollector(collector, fn) {
+    const previous = tableSafetyActiveCollector;
+    tableSafetyActiveCollector = collector || tableSafetyDefaultCollector;
+    try {
+      const result = fn();
+      if (result && typeof result.then === 'function') {
+        return result.finally(() => { tableSafetyActiveCollector = previous; });
+      }
+      tableSafetyActiveCollector = previous;
+      return result;
+    } catch (err) {
+      tableSafetyActiveCollector = previous;
+      throw err;
+    }
+  }
+
+  // TUTORIAL: Long renders call nextFrame() so the browser can breathe. During that
+  // TUTORIAL: yield, unrelated UI work may run. Temporarily restoring the default
+  // TUTORIAL: collector keeps preview safety messages out of the active export collector,
+  // TUTORIAL: then restores the export collector when the awaited frame resumes.
+  function tableSafetySuspendAroundPromise(promise) {
+    const active = tableSafetyActiveCollector;
+    if (!active || active === tableSafetyDefaultCollector) return promise;
+    tableSafetyActiveCollector = tableSafetyDefaultCollector;
+    return Promise.resolve(promise).finally(() => {
+      if (tableSafetyActiveCollector === tableSafetyDefaultCollector) tableSafetyActiveCollector = active;
+    });
+  }
+
+  function resetTableSafetyEvents(collector = activeTableSafetyCollector(), options = {}) {
+    const clearLastGood = options.clearLastGood !== false;
+    collector.events.clear();
+    collector.omittedKeys.clear();
+    collector.omitted_event_count = 0;
+    collector.truncated = false;
+    if (clearLastGood && collector.lastGoodTables) collector.lastGoodTables.clear();
+  }
+
+  function tableSafetyContextInfo(context) {
+    const text = String(context || 'Generated table').replace(/\s+/g, ' ').trim() || 'Generated table';
+    const match = text.match(/^(.*?)(?:\s+frame\s+)(\d+)\/(\d+)(.*)$/i);
+    if (!match) return {raw: text, base: text, frame: null, total: null};
+    const prefix = String(match[1] || '').trim();
+    const suffix = String(match[4] || '').trim();
+    const base = `${prefix} ${suffix}`.replace(/\s+/g, ' ').trim() || text;
+    return {raw: text, base, frame: Number(match[2]), total: Number(match[3])};
+  }
+
+  function tableSafetySubstitutionKeyForContext(context = currentTableSafetyContext()) {
+    const base = tableSafetyContextInfo(context).base;
+    if (/^Playground(?:\s+(?:preview|safety check|live audition))?$/i.test(base)) return 'Playground patch';
+    if (/^START(?:\s+(?:preview|safety check|live audition))?$/i.test(base)) return 'START patch';
+    if (/^END(?:\s+(?:preview|safety check|live audition))?$/i.test(base)) return 'END patch';
+    return base;
+  }
+
+  // TUTORIAL: Last-good substitution is intentionally narrow. The display/render may
+  // TUTORIAL: hold a previous valid table while a slider or window passes through a
+  // TUTORIAL: collapsed region, but the holdKey includes engine/type/tap/drawn identity
+  // TUTORIAL: so a mode switch cannot silently borrow a stale table from another core.
+  // TUTORIAL: The escaped NUL separator is used only as an internal delimiter that will
+  // TUTORIAL: not collide with ordinary labels while keeping the HTML file text-friendly.
+  function tableSafetyLastGoodKeyForContext(context = currentTableSafetyContext(), holdKey = currentTableSafetyHoldKey()) {
+    const baseKey = tableSafetySubstitutionKeyForContext(context);
+    const scopedHoldKey = String(holdKey || '');
+    return scopedHoldKey ? `${baseKey}\u0000${scopedHoldKey}` : baseKey;
+  }
+
+  function tableSafetyContextForPatchKey(key, role = 'preview') {
+    const prefix = key === 'start' ? 'START' : key === 'end' ? 'END' : 'Playground';
+    return `${prefix} ${role}`;
+  }
+
+  function tableSafetySubstituteLabel(substitute) {
+    switch (String(substitute || 'fallback_square')) {
+      case 'held_previous_valid': return 'held previous valid table';
+      case 'fallback_square_full_cycle': return 'full fallback square';
+      case 'fallback_square': return 'fallback square';
+      default: return String(substitute || 'fallback square').replace(/_/g, ' ');
+    }
+  }
+
+  function recordTableSafetyFallback(reason, substitute = 'fallback_square') {
+    const collector = activeTableSafetyCollector();
+    const context = currentTableSafetyContext();
+    const cleanReason = String(reason || 'unusable generated table');
+    const cleanSubstitute = String(substitute || 'fallback_square');
+    const key = `${context}\u0000${cleanReason}\u0000${cleanSubstitute}`;
+    const existing = collector.events.get(key);
+    if (existing) {
+      existing.count += 1;
+      return;
+    }
+    if (collector.events.size < TABLE_SAFETY_EVENT_LIMIT) {
+      collector.events.set(key, {context, reason: cleanReason, substitute: cleanSubstitute, count: 1});
+      return;
+    }
+    collector.truncated = true;
+    collector.omitted_event_count += 1;
+    collector.omittedKeys.add(key);
+  }
+
+  function rememberTableSafetyGood(table) {
+    if (!tableHasUsefulShape(table)) return;
+    const collector = activeTableSafetyCollector();
+    if (!collector.lastGoodTables) collector.lastGoodTables = new Map();
+    const key = tableSafetyLastGoodKeyForContext();
+    collector.lastGoodTables.set(key, Float32Array.from(table));
+  }
+
+  // TUTORIAL: When a requested table collapses, prefer a previous valid table from
+  // TUTORIAL: the same scoped context. That gives smooth slider/window movement and
+  // TUTORIAL: morph continuity. If no same-context table exists, use the deterministic
+  // TUTORIAL: safety square so the correction remains audible and reproducible.
+  function tableSafetySubstituteTable(reason, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS) {
+    const collector = activeTableSafetyCollector();
+    const key = tableSafetyLastGoodKeyForContext();
+    const held = collector.lastGoodTables ? collector.lastGoodTables.get(key) : null;
+    if (held && tableHasUsefulShape(held)) {
+      recordTableSafetyFallback(reason, 'held_previous_valid');
+      return Float32Array.from(held);
+    }
+    recordTableSafetyFallback(reason, 'fallback_square');
+    return windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength);
+  }
+
+  function tableSafetyEventList(collector = activeTableSafetyCollector()) {
+    return Array.from(collector.events.values()).map(ev => ({...ev}));
+  }
+
+  function tableSafetyEventCount(collector = activeTableSafetyCollector()) {
+    return tableSafetyEventList(collector).reduce((total, ev) => total + Number(ev.count || 0), 0) + Number(collector.omitted_event_count || 0);
+  }
+
+  function tableSafetyEventsForSubstitutionKey(key, collector = activeTableSafetyCollector()) {
+    return tableSafetyEventList(collector).filter(ev => tableSafetySubstitutionKeyForContext(ev.context) === key);
+  }
+
+  function tableSafetySubstituteLabelsForKey(key, collector = activeTableSafetyCollector()) {
+    return Array.from(new Set(tableSafetyEventsForSubstitutionKey(key, collector).map(ev => tableSafetySubstituteLabel(ev.substitute))));
+  }
+
+  function compactFrameRanges(frames) {
+    const sorted = Array.from(new Set(frames.filter(Number.isFinite))).sort((a, b) => a - b);
+    const ranges = [];
+    let start = null, prev = null;
+    for (const frame of sorted) {
+      if (start == null) { start = frame; prev = frame; continue; }
+      if (frame === prev + 1) { prev = frame; continue; }
+      ranges.push(start === prev ? String(start) : `${start}–${prev}`);
+      start = frame; prev = frame;
+    }
+    if (start != null) ranges.push(start === prev ? String(start) : `${start}–${prev}`);
+    return ranges;
+  }
+
+  function tableSafetyGroupedEvents(events) {
+    const groups = new Map();
+    for (const ev of events || []) {
+      const info = tableSafetyContextInfo(ev.context);
+      const totalKey = info.total == null ? '' : String(info.total);
+      const substitute = ev.substitute || 'fallback_square';
+      const key = `${info.base}\u0000${ev.reason}\u0000${substitute}\u0000${totalKey}`;
+      let group = groups.get(key);
+      if (!group) {
+        group = {
+          context: info.base,
+          reason: ev.reason,
+          substitute,
+          substitute_label: tableSafetySubstituteLabel(substitute),
+          count: 0,
+          frame_total: info.total,
+          frame_ranges: [],
+          raw_context_examples: [],
+          _frames: [],
+        };
+        groups.set(key, group);
+      }
+      group.count += Number(ev.count || 0);
+      if (info.frame != null) group._frames.push(info.frame);
+      if (group.raw_context_examples.length < 3 && !group.raw_context_examples.includes(info.raw)) group.raw_context_examples.push(info.raw);
+    }
+    return Array.from(groups.values()).map(group => {
+      group.frame_ranges = compactFrameRanges(group._frames);
+      delete group._frames;
+      if (!group.frame_ranges.length) delete group.frame_ranges;
+      if (group.frame_total == null) delete group.frame_total;
+      return group;
+    });
+  }
+
+  function tableSafetyMetadata(collector = activeTableSafetyCollector()) {
+    const rawEvents = tableSafetyEventList(collector);
+    const recordedCount = rawEvents.reduce((total, ev) => total + ev.count, 0);
+    const omittedCount = collector.omitted_event_count || 0;
+    const omittedDistinct = collector.omittedKeys ? collector.omittedKeys.size : 0;
+    const groups = tableSafetyGroupedEvents(rawEvents);
+    return {
+      fallback_used: recordedCount > 0 || omittedCount > 0,
+      event_count: recordedCount + omittedCount,
+      recorded_event_count: recordedCount,
+      recorded_distinct_count: rawEvents.length,
+      group_count: groups.length,
+      truncated: !!collector.truncated,
+      omitted_event_count: omittedCount,
+      omitted_distinct_count: omittedDistinct,
+      events_are_grouped: true,
+      events: groups,
+    };
+  }
+
+  function tableSafetyGroupLine(group) {
+    const ranges = Array.isArray(group.frame_ranges) && group.frame_ranges.length
+      ? ` frames ${group.frame_ranges.join(', ')}${group.frame_total ? `/${group.frame_total}` : ''}`
+      : '';
+    return `${group.context}${ranges}: ${group.substitute_label}; ${group.reason}.`;
+  }
+
+  function tableSafetyNoteLines(collector = activeTableSafetyCollector()) {
+    const safety = tableSafetyMetadata(collector);
+    if (!safety.fallback_used) return [];
+    const substituteLabels = Array.from(new Set((safety.events || []).map(g => g.substitute_label))).join(', ') || 'fallback substitution';
+    const lines = [`Table safety: corrected ${safety.event_count} collapsed generated table${safety.event_count === 1 ? '' : 's'} using ${substituteLabels}.`];
+    for (const group of (safety.events || []).slice(0, 2)) lines.push(tableSafetyGroupLine(group));
+    const hiddenGroups = Math.max(0, (safety.events || []).length - 2);
+    if (hiddenGroups || safety.truncated) lines.push('Table safety: additional grouped detail is recorded in the JSON sidecar.');
+    return lines;
+  }
+
+  function appendTableSafetyNotes(rendered, collector = activeTableSafetyCollector()) {
+    const safety = tableSafetyMetadata(collector);
+    rendered.tableSafety = safety;
+    if (safety.fallback_used) {
+      rendered.notes = (Array.isArray(rendered.notes) ? rendered.notes.slice() : []).concat(tableSafetyNoteLines(collector));
+    }
+    return rendered;
+  }
+
+  function tableSafetyAggregateAdd(aggregate, safety) {
+    if (!aggregate || !safety || !safety.fallback_used) return aggregate;
+    aggregate.files += 1;
+    aggregate.events += Number(safety.event_count || 0);
+    aggregate.groups += Number(safety.group_count || (Array.isArray(safety.events) ? safety.events.length : 0));
+    aggregate.truncated = aggregate.truncated || !!safety.truncated;
+    aggregate.omitted += Number(safety.omitted_event_count || 0);
+    return aggregate;
+  }
+
+  function tableSafetyStatusSuffixForAggregate(aggregate) {
+    if (!aggregate || !aggregate.events) return '';
+    const files = aggregate.files || 0;
+    const eventText = `${aggregate.events} corrected table${aggregate.events === 1 ? '' : 's'}`;
+    const fileText = `${files} rendered file${files === 1 ? '' : 's'}`;
+    const groupText = aggregate.groups ? ` in ${aggregate.groups} grouped context${aggregate.groups === 1 ? '' : 's'}` : '';
+    const truncText = aggregate.truncated ? ` Detailed collection was capped; ${aggregate.omitted} additional event${aggregate.omitted === 1 ? '' : 's'} were omitted.` : '';
+    return `\nTable safety: ${eventText}${groupText} across ${fileText}.${truncText}`;
+  }
+
+  function tableSafetyStatusSuffixForResults(results) {
+    const aggregate = {files: 0, events: 0, groups: 0, truncated: false, omitted: 0};
+    for (const result of results || []) tableSafetyAggregateAdd(aggregate, result?.rendered?.tableSafety);
+    return tableSafetyStatusSuffixForAggregate(aggregate);
+  }
+
   // TUTORIAL: Checks that a table has the expected size, finite samples, and non-zero amplitude before it is
   // TUTORIAL: trusted by audio or export code.
   function tableIsUsable(table) {
@@ -1568,22 +2011,36 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Some legal-looking tap/window/type combinations can normalise into a
   // TUTORIAL: nearly single-sample impulse or a near-DC table. Those are technically finite,
-  // TUTORIAL: but they can audition as silence or one sharp click per cycle, so the final
-  // TUTORIAL: safety gate treats them as collapsed and substitutes an audible fallback.
+  // TUTORIAL: but they can audition as silence, one sharp click per cycle, or a constant
+  // TUTORIAL: rail. The final safety gate treats them as collapsed and substitutes an
+  // TUTORIAL: audible fallback.
+  // TUTORIAL: This test must not require hard adjacent-sample edges: clean sine waves,
+  // TUTORIAL: gentle triangles, and other deliberately smooth Classic Waveforms sources
+  // TUTORIAL: are useful even when no single sample-to-sample step is large. It does,
+  // TUTORIAL: however, require actual AC movement, so all-DC tables do not pass merely
+  // TUTORIAL: because their absolute RMS is high.
   function tableHasUsefulShape(table) {
     if (!tableIsUsable(table)) return false;
-    let sumSq = 0, active = 0, edgeCount = 0;
-    let prev = Number(table[TABLE_SIZE - 1]);
+    let sum = 0, sumSq = 0, min = Infinity, max = -Infinity, active = 0;
     for (let i = 0; i < TABLE_SIZE; i++) {
       const v = Number(table[i]);
       const av = Math.abs(v);
+      sum += v;
       sumSq += v * v;
+      min = Math.min(min, v);
+      max = Math.max(max, v);
       if (av > 0.08) active += 1;
-      if (Math.abs(v - prev) > 0.025) edgeCount += 1;
-      prev = v;
+    }
+    const mean = sum / TABLE_SIZE;
+    let acSumSq = 0;
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const d = Number(table[i]) - mean;
+      acSumSq += d * d;
     }
     const rms = Math.sqrt(sumSq / TABLE_SIZE);
-    return rms >= 0.055 && active >= 3 && edgeCount >= 2;
+    const acRms = Math.sqrt(acSumSq / TABLE_SIZE);
+    const range = max - min;
+    return rms >= 0.025 && active >= 3 && range >= 0.05 && acRms >= 0.01;
   }
 
   // TUTORIAL: Reads a wavetable at continuous phase using linear interpolation, avoiding the stair-stepping
@@ -1643,7 +2100,7 @@ itself, impose GPL licensing on generated outputs.
       out[i] = v;
       peak = Math.max(peak, Math.abs(v));
     }
-    if (!Number.isFinite(peak) || peak <= EPSILON) return new Float64Array(n);
+    if (!Number.isFinite(peak) || peak <= NORMALISE_MIN_AC_PEAK) return new Float64Array(n);
     for (let i = 0; i < n; i++) out[i] /= peak;
     return out;
   }
@@ -1651,36 +2108,75 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Last safety gate for generated tables: validate, normalise, clamp, and fall back to a windowed
   // TUTORIAL: safety square when needed.
   function finaliseRawTable(arr, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS) {
-    if (!arr || arr.length !== TABLE_SIZE) return windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength);
+    if (!arr || arr.length !== TABLE_SIZE) {
+      return tableSafetySubstituteTable('missing or wrong-length raw table', beforeStart, beforeLength, afterStart, afterLength);
+    }
     const y = normaliseBipolar(arr);
     let peak = 0;
     for (let i = 0; i < TABLE_SIZE; i++) peak = Math.max(peak, Math.abs(y[i]));
-    if (!Number.isFinite(peak) || peak <= EPSILON) return windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength);
+    if (!Number.isFinite(peak) || peak <= EPSILON) {
+      return tableSafetySubstituteTable('no usable AC content after DC removal/windowing', beforeStart, beforeLength, afterStart, afterLength);
+    }
     const out = new Float32Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) out[i] = clampFloat(y[i], -1, 1);
-    return tableHasUsefulShape(out) ? out : windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength);
+    if (tableHasUsefulShape(out)) { rememberTableSafetyGood(out); return out; }
+    return tableSafetySubstituteTable('normalised table was silent, impulse-like, or near-DC', beforeStart, beforeLength, afterStart, afterLength);
   }
 
-  // TUTORIAL: Passes the fallback square through the same generation windows, so safety fallback still
+  // TUTORIAL: Passes the fallback square through the same generation windows, so safety substitution still
   // TUTORIAL: respects the user’s source/result window choices.
   function windowedSafetySquareTable(beforeStart, beforeLength, afterStart, afterLength) {
     let raw = fallbackTable();
     if (!isFullWindow(beforeStart, beforeLength)) raw = windowTableLinear(raw, beforeStart, beforeLength);
     if (!isFullWindow(afterStart, afterLength)) raw = windowTableLinear(raw, afterStart, afterLength);
     const out = finaliseRawTableNoFallback(raw);
-    return tableHasUsefulShape(out) ? out : fallbackTable();
+    if (out && tableHasUsefulShape(out)) return out;
+    recordTableSafetyFallback('windowed fallback square also collapsed; full fallback square used', 'fallback_square_full_cycle');
+    return fallbackTable();
   }
 
   // TUTORIAL: Normalises a raw table without recursively falling back; used internally while constructing a
   // TUTORIAL: safe fallback table.
   function finaliseRawTableNoFallback(arr) {
+    if (!arr || arr.length !== TABLE_SIZE) return null;
     const y = normaliseBipolar(arr);
     let peak = 0;
     for (let i = 0; i < y.length; i++) peak = Math.max(peak, Math.abs(y[i]));
     if (!Number.isFinite(peak) || peak <= EPSILON) return null;
     const out = new Float32Array(TABLE_SIZE);
     for (let i = 0; i < TABLE_SIZE; i++) out[i] = clampFloat(y[i], -1, 1);
-    return out;
+    return tableHasUsefulShape(out) ? out : null;
+  }
+
+  function finaliseRawTableWithSafety(arr, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS) {
+    const direct = finaliseRawTableNoFallback(arr);
+    if (direct) { rememberTableSafetyGood(direct); return direct; }
+    return finaliseRawTable(arr, beforeStart, beforeLength, afterStart, afterLength);
+  }
+
+  // TUTORIAL: Classic Waveforms intentionally keeps raw oscillator DC at the
+  // TUTORIAL: source-table stage. A narrow fixed-amplitude pulse really does
+  // TUTORIAL: have DC offset; the export DC mode decides whether to remove it
+  // TUTORIAL: per cycle, per file, or not at all. This finaliser therefore peak
+  // TUTORIAL: normalises without subtracting the mean, so pulse-width sweeps do
+  // TUTORIAL: not visually collapse one rail before the user-selected DC stage.
+  function finaliseRawTablePreserveDc(arr, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS) {
+    if (!arr || arr.length !== TABLE_SIZE) {
+      return tableSafetySubstituteTable('missing or wrong-length preserve-DC raw table', beforeStart, beforeLength, afterStart, afterLength);
+    }
+    const out = new Float32Array(TABLE_SIZE);
+    let peak = 0;
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const v = Number.isFinite(arr[i]) ? arr[i] : 0;
+      out[i] = v;
+      peak = Math.max(peak, Math.abs(v));
+    }
+    if (!Number.isFinite(peak) || peak <= EPSILON) {
+      return tableSafetySubstituteTable('preserve-DC table had no finite amplitude', beforeStart, beforeLength, afterStart, afterLength);
+    }
+    for (let i = 0; i < TABLE_SIZE; i++) out[i] = clampFloat(out[i] / peak, -1, 1);
+    if (tableHasUsefulShape(out)) { rememberTableSafetyGood(out); return out; }
+    return tableSafetySubstituteTable('preserve-DC table was silent, impulse-like, or near-DC', beforeStart, beforeLength, afterStart, afterLength);
   }
 
   // TUTORIAL: Converts -1..+1 floating tables into deliberately coarse unsigned values for bitwise collision modes.
@@ -2286,6 +2782,27 @@ itself, impose GPL licensing on generated outputs.
     return finaliseRawTable(raw, beforeStart, beforeLength, afterStart, afterLength);
   }
 
+
+  function finishClassicSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength) {
+    const selected = selectedSourceTables(a, b, seedMix);
+    let srcA = selected.srcA, srcB = selected.srcB;
+    const hasSourceWindow = !isFullWindow(beforeStart, beforeLength);
+    const hasResultWindow = !isFullWindow(afterStart, afterLength);
+    if (hasSourceWindow) { srcA = windowTableLinear(srcA, beforeStart, beforeLength); srcB = windowTableLinear(srcB, beforeStart, beforeLength); }
+    let raw = combineSourceTables(srcA, srcB, wtType, seedMix);
+    if (hasResultWindow) raw = windowTableLinear(raw, afterStart, afterLength);
+
+    // TUTORIAL: Full-cycle Classic Waveforms preserve DC so narrow pulse-width material
+    // TUTORIAL: keeps its intended offset until the export DC-removal stage. Once the user
+    // TUTORIAL: applies a source/result generation window, the window is acting like a
+    // TUTORIAL: microscope on a selected portion of the waveform. In that case the final
+    // TUTORIAL: stage should DC-centre and peak-normalise the windowed fluctuation, otherwise
+    // TUTORIAL: a one-step slice taken near a high or low rail can look and sound like an
+    // TUTORIAL: almost-flat DC line even though useful detail is present.
+    if (hasSourceWindow || hasResultWindow) return finaliseRawTable(raw, beforeStart, beforeLength, afterStart, afterLength);
+    return finaliseRawTablePreserveDc(raw, beforeStart, beforeLength, afterStart, afterLength);
+  }
+
   // TUTORIAL: FM generator engine. This bakes phase-modulation spectra into the generated
   // TUTORIAL: table itself, before the live/export oscillator applies its own FM/PWM/Ring Mod stage.
   function generateFmPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
@@ -2336,6 +2853,243 @@ itself, impose GPL licensing on generated outputs.
       b[i] = Math.tanh(drive * wb);
     }
     return finishGeneratedSourcePair(a, b, wtType, seedMix, beforeStart, beforeLength, afterStart, afterLength, smoothProfile ? 1 : 0);
+  }
+
+
+  // TUTORIAL: Classic Waveforms design contract.
+  // TUTORIAL: This family is meant to be predictable rather than surprising. These
+  // TUTORIAL: settings are recipes, not automatic Reset defaults:
+  // TUTORIAL:   • pot1=0,    pot2=2048, pot3=2048 gives a pure sine.
+  // TUTORIAL:   • pot1=2048, pot2=2048, pot3=2048 gives a pure triangle.
+  // TUTORIAL:   • pot1=4095, pot2=2048, pot3=2048 gives a pure square.
+  // TUTORIAL: For pot1 <= 2048, Pot 2 is skew: it changes the relative length
+  // TUTORIAL: of the whole rising/falling edges. Pot 1 changes only the curve
+  // TUTORIAL: of those same edges, from sine-like at the bottom to straight
+  // TUTORIAL: triangle/saw lines at the 2048 landmark.
+  // TUTORIAL: For pot1 > 2048, Pot 2 is pulse width / falling-edge position:
+  // TUTORIAL: it moves the whole trailing edge, while Pot 1 adds clipping,
+  // TUTORIAL: flat holds, and steeper straight edges toward square/pulse.
+  // TUTORIAL: Character is applied later and is exactly neutral at centre.
+  function centredPot(value) {
+    const v = clampFloat(value, 0, POT_MAX_12BIT);
+    if (v <= 2048) return clampFloat((v - 2048) / 2048, -1, 0);
+    return clampFloat((v - 2048) / (POT_MAX_12BIT - 2048), 0, 1);
+  }
+
+  function safeDutyFromBipolar(x) {
+    const minDuty = 4 / TABLE_SIZE;
+    return clampFloat(0.5 + 0.5 * clampFloat(x, -1, 1) * (1 - 2 * minDuty), minDuty, 1 - minDuty);
+  }
+
+  function signedWrappedPhaseDistance(phase, centre) {
+    let d = wrapPhase01(phase - centre + 0.5) - 0.5;
+    if (d < -0.5) d += 1;
+    return d;
+  }
+
+  /*
+  TUTORIAL: Inactive Classic Waveforms design sketch retained for study only.
+  TUTORIAL: Earlier experiments tried to model triangle→trapezoid→pulse as a
+  TUTORIAL: finite-slew pulse: two switching points, a controllable slew width,
+  TUTORIAL: and flat holds that grow as the slew narrows. That is a useful DSP
+  TUTORIAL: teaching model, but it is not the active Classic Waveforms render path.
+  TUTORIAL: The active design uses classicTwoEdgeValue(), which keeps Pot 2 on
+  TUTORIAL: whole-edge timing and avoids the kink/point-grab behaviour found in
+  TUTORIAL: some intermediate auditions.
+
+  function finiteSlewPulseValue(phase, duty, transitionWidth) {
+    const p = wrapPhase01(phase);
+    const d = clampFloat(duty, 4 / TABLE_SIZE, 1 - 4 / TABLE_SIZE);
+    const maxWidth = Math.max(2 / TABLE_SIZE, Math.min(d, 1 - d));
+    const w = clampFloat(transitionWidth, 2 / TABLE_SIZE, maxWidth);
+    const half = w * 0.5;
+    const rise = signedWrappedPhaseDistance(p, 0);
+    const fall = signedWrappedPhaseDistance(p, d);
+
+    if (Math.abs(rise) <= half) return clampFloat(rise / half, -1, 1);
+    if (Math.abs(fall) <= half) return clampFloat(-fall / half, -1, 1);
+    return p < d ? 1 : -1;
+  }
+  */
+
+  function classicSkewWidths(symmetry) {
+    // Pot 2 controls the relative length of the two whole edges at the
+    // sine/triangle/saw landmark. It never fades out at pot1=2048: at centre
+    // the two edges are equal (triangle), at the extremes one edge is nearly
+    // vertical and the other spans almost the whole cycle (saw/ramp).
+    const s = clampFloat(symmetry, -1, 1);
+    const minWidth = 2 / TABLE_SIZE;
+    const range = 1 - 2 * minWidth;
+    const riseWidth = clampFloat(0.5 + 0.5 * s * range, minWidth, 1 - minWidth);
+    const fallWidth = clampFloat(1 - riseWidth, minWidth, 1 - minWidth);
+    return {riseWidth, fallWidth};
+  }
+
+  function classicEdgeTransitionValue(distance, halfWidth, rising, curved) {
+    const x = clampFloat(distance / Math.max(halfWidth, 1e-9), -1, 1);
+    const y = curved ? Math.sin((Math.PI / 2) * x) : x;
+    return rising ? y : -y;
+  }
+
+  function classicTwoEdgeValue(phase, fallCentre, riseWidth, fallWidth, curved = false) {
+    // One cycle made from exactly two complete edges: a rising edge centred on
+    // the cycle boundary and a falling edge centred at fallCentre. Pot 2 moves
+    // edge timing/width by moving whole edge centres and edge lengths; it never
+    // drags an internal 180° point or bends only part of a straight edge. That
+    // rule is what keeps the saw, triangle, trapezoid, and pulse paths from
+    // developing the kinks/point-grabs found in earlier Classic attempts.
+    const p = wrapPhase01(phase);
+    const fc = clampFloat(fallCentre, 4 / TABLE_SIZE, 1 - 4 / TABLE_SIZE);
+    let rw = clampFloat(riseWidth, 1 / TABLE_SIZE, 1 - 1 / TABLE_SIZE);
+    let fw = clampFloat(fallWidth, 1 / TABLE_SIZE, 1 - 1 / TABLE_SIZE);
+
+    // Keep the two transitions from overlapping as the upper range moves the
+    // falling edge toward a narrow pulse duty. Scaling both widths preserves the
+    // selected skew ratio while making room for flat top/bottom holds.
+    const maxSum = Math.max(2 / TABLE_SIZE, 2 * Math.min(fc, 1 - fc));
+    const sum = rw + fw;
+    if (sum > maxSum) {
+      const scale = maxSum / sum;
+      rw = Math.max(1 / TABLE_SIZE, rw * scale);
+      fw = Math.max(1 / TABLE_SIZE, fw * scale);
+    }
+
+    const riseHalf = rw * 0.5;
+    const fallHalf = fw * 0.5;
+    const riseDist = signedWrappedPhaseDistance(p, 0);
+    const fallDist = signedWrappedPhaseDistance(p, fc);
+    if (Math.abs(riseDist) <= riseHalf) return classicEdgeTransitionValue(riseDist, riseHalf, true, curved);
+    if (Math.abs(fallDist) <= fallHalf) return classicEdgeTransitionValue(fallDist, fallHalf, false, curved);
+    return p < fc ? 1 : -1;
+  }
+
+  function classicLowerWaveformValue(phase, topology, symmetry, smoothProfile) {
+    // pot1 <= 2048: Pot 2 always controls the skewed two-edge timing skeleton.
+    // Pot 1 changes only curvature: sine-like curved edges at the bottom,
+    // straight triangle/saw edges at the 2048 landmark. Pot 2 therefore has
+    // full authority at pot1=2048: pot2=0 is a near-saw with a near-vertical
+    // leading edge, pot2=2048 is a triangle, and pot2=4095 is the opposite
+    // near-saw with a near-vertical trailing edge.
+    const f = smoothStep01(clampFloat(topology / 0.5, 0, 1));
+    const widths = classicSkewWidths(symmetry);
+    const curved = classicTwoEdgeValue(phase, 0.5, widths.riseWidth, widths.fallWidth, true);
+    const linear = classicTwoEdgeValue(phase, 0.5, widths.riseWidth, widths.fallWidth, false);
+    return clampFloat((1 - f) * curved + f * linear, -1, 1);
+  }
+
+  function classicUpperDutyValue(phase, squareAmount, symmetry, smoothProfile) {
+    // pot1 > 2048: start from the same straight saw/triangle skeleton used at
+    // the 2048 landmark, then clip/grow holds and move the whole falling edge
+    // toward its pulse-width duty position. Pot 2 controls duty/falling-edge
+    // position; Pot 1 controls clipping, flat top/bottom holds, and edge
+    // steepness. The rising/falling edges remain whole straight segments, so
+    // pulse-width motion changes their slope/placement without curving or
+    // kinking the line between peak/trough and rail holds.
+    const f = clampFloat(squareAmount, 0, 1);
+    const shaped = smoothStep01(f);
+    const duty = safeDutyFromBipolar(symmetry);
+    const widths = classicSkewWidths(symmetry);
+    const minWidth = smoothProfile ? (2.5 / TABLE_SIZE) : (1.25 / TABLE_SIZE);
+
+    // Move the falling edge from the triangle/saw centre toward the requested
+    // pulse duty, but only by moving the whole edge centre. No point on the edge
+    // is ever dragged independently.
+    const fallCentre = clampFloat((1 - shaped) * 0.5 + shaped * duty, 4 / TABLE_SIZE, 1 - 4 / TABLE_SIZE);
+    const riseWidth = (1 - shaped) * widths.riseWidth + shaped * minWidth;
+    const fallWidth = (1 - shaped) * widths.fallWidth + shaped * minWidth;
+    return classicTwoEdgeValue(phase, fallCentre, riseWidth, fallWidth, false);
+  }
+
+  function classicWaveformValue(phase, topology, symmetry, smoothProfile) {
+    // Tap A design contract:
+    //   pot2=2048, pot3=2048: pot1=0 sine, pot1=2048 triangle, pot1=4095 square.
+    //   pot1<2048: Pot 2 skews whole sine/triangle edges; Pot 1 only changes curvature.
+    //   pot1=2048: Pot 2 reaches true saw↔triangle↔saw straight-line endpoints.
+    //   pot1>2048: Pot 2 controls pulse width by moving the whole falling edge;
+    //               Pot 1 clips the straight skeleton into trapezoid, then pulse.
+    //   pot3=2048: no post-shape change; rising/falling edges stay smooth below
+    //               the triangle landmark and straight above it.
+    //   all sliders move through neighbouring states without kinks, 180° point-grabs,
+    //               phase jumps, or a loss of Pot 2 authority at pot1=2048.
+    const p = wrapPhase01(phase);
+    const top = clampFloat(topology, 0, 1);
+    const sym = clampFloat(symmetry, -1, 1);
+    if (top <= 0.5) return classicLowerWaveformValue(p, top, sym, smoothProfile);
+    return classicUpperDutyValue(p, (top - 0.5) / 0.5, sym, smoothProfile);
+  }
+
+  function applyClassicCharacterTable(src, character, smoothProfile) {
+    const ch = clampFloat(character, -1, 1);
+    let out = Float64Array.from(src);
+    if (Math.abs(ch) < 1e-6) return out;
+
+    if (smoothProfile) {
+      // Smooth Character bends the slopes/curves while preserving the selected
+      // Topology/Symmetry skeleton. At centre it is exactly neutral, so triangle
+      // and trapezoid edges remain straight and flat peaks remain flat. Left of
+      // centre rounds the curve; right of centre pinches/brightens it without
+      // selecting another topology.
+      const amt = Math.abs(ch);
+      const shapedAmt = amt ** 0.76;
+      const gamma = ch < 0 ? (1.0 + 2.05 * shapedAmt) : (1.0 / (1.0 + 1.82 * shapedAmt));
+      for (let i = 0; i < TABLE_SIZE; i++) {
+        const x = clampFloat(out[i], -1, 1);
+        const curved = Math.sign(x) * Math.pow(Math.abs(x), gamma);
+        out[i] = clampFloat((1 - shapedAmt) * x + shapedAmt * curved, -1.1, 1.1);
+      }
+      return out;
+    }
+
+    if (ch < 0) {
+      // Left of centre is the rounded/analogue-ish side: soften corners and
+      // suppress abrupt edge energy without changing the basic topology.
+      const amt = -ch;
+      const rounded = circularSmoothTable(lowHarmonicTable(out, 10), 2 + Math.round(amt * 6));
+      const drive = 1.15 + 1.55 * amt;
+      for (let i = 0; i < TABLE_SIZE; i++) out[i] = (1 - amt) * out[i] + amt * Math.tanh(drive * rounded[i]);
+      return out;
+    }
+
+    const amt = ch;
+    const held = sampleHoldTable(out, 1 + Math.round(amt * 7));
+    const edgeTable = derivativeTable(out, 2.0);
+    const levels = 64 - Math.round(amt * 52);
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const q = Math.round(clampFloat(held[i], -1, 1) * levels) / Math.max(1, levels);
+      out[i] = clampFloat((1 - 0.70 * amt) * out[i] + (0.70 * amt) * q + 0.16 * amt * edgeTable[i], -1.25, 1.25);
+    }
+    return out;
+  }
+
+  // TUTORIAL: Classic Waveforms generator engine. It deliberately supplies stable
+  // TUTORIAL: sound-design landmarks: sine at Topology 0, skewable triangle/saw at
+  // TUTORIAL: the exact 2048 midpoint, trapezoid across the upper range, and
+  // TUTORIAL: square/pulse at the top. Neutral landmarks keep fixed zero crossings
+  // TUTORIAL: at cycle boundaries. The exact pot1 midpoint mapping below is part
+  // TUTORIAL: of the design contract: dividing by 4095 would move 2048 into the
+  // TUTORIAL: upper branch and reintroduce the centre break from earlier test builds.
+  function generateClassicWaveformsPair(pot1, pot2, pot3, wtType, beforeStart = 0, beforeLength = WINDOW_STEPS, afterStart = 0, afterLength = WINDOW_STEPS, profile = 'crunchy') {
+    pot1 = clampInt(pot1, 0, POT_MAX_12BIT); pot2 = clampInt(pot2, 0, POT_MAX_12BIT); pot3 = clampInt(pot3, 0, POT_MAX_12BIT);
+    // Map the remembered midpoint exactly: pot1=2048 is the ramp/triangle
+    // landmark. Dividing by 4095 makes 2048 slightly above 0.5, which can move
+    // an intended neutral triangle into the upper topology branch.
+    const topology = pot1 <= 2048
+      ? 0.5 * (pot1 / 2048)
+      : 0.5 + 0.5 * ((pot1 - 2048) / (POT_MAX_12BIT - 2048));
+    const symmetry = centredPot(pot2);
+    const character = centredPot(pot3);
+    const smoothProfile = String(profile) === 'smooth';
+    const aNeutral = new Float64Array(TABLE_SIZE), bNeutral = new Float64Array(TABLE_SIZE);
+    for (let i = 0; i < TABLE_SIZE; i++) {
+      const ph = i / TABLE_SIZE;
+      aNeutral[i] = classicWaveformValue(ph, topology, symmetry, smoothProfile);
+      // Complement preserves the same topology while giving source routing an opposite
+      // symmetry/duty direction. This keeps B musically related rather than random.
+      bNeutral[i] = classicWaveformValue(ph + 0.5, topology, -symmetry, smoothProfile);
+    }
+    const a = applyClassicCharacterTable(aNeutral, character, smoothProfile);
+    const b = applyClassicCharacterTable(bNeutral, -character * 0.75, smoothProfile);
+    return finishClassicSourcePair(a, b, wtType, topology, beforeStart, beforeLength, afterStart, afterLength);
   }
 
   // TUTORIAL: Soft/hard pulse helper for the Pulse Warp engine.
@@ -2722,6 +3476,7 @@ itself, impose GPL licensing on generated outputs.
         case 'Phase Distortion': return generatePhaseDistortionPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
         case 'FM': return generateFmPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
         case 'Pulse Warp': return generatePulseWarpPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
+        case 'Classic Waveforms': return generateClassicWaveformsPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
         case 'Sync': return generateSyncPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
         case 'Formant': return generateFormantPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
         case 'Fold': return generateFoldPair(pot1, pot2, pot3, wtType, beforeStart, beforeLength, afterStart, afterLength, variant);
@@ -2773,6 +3528,8 @@ itself, impose GPL licensing on generated outputs.
         return {A: 'A: Carrier', B: 'B: Modulator', C: 'C: PM blend', D: 'D: Sidebands'};
       case 'Pulse Warp':
         return {A: 'A: Pulse body', B: 'B: Notch/offset', C: 'C: Held pulse', D: 'D: Edge residue'};
+      case 'Classic Waveforms':
+        return {A: 'A: Main Wave', B: 'B: Complement', C: 'C: Edge Map', D: 'D: Character Residue'};
       case 'Sync':
         return {A: 'A: Sync body', B: 'B: Reset colour', C: 'C: Reset blend', D: 'D: Reset edge'};
       case 'Formant':
@@ -2839,7 +3596,7 @@ itself, impose GPL licensing on generated outputs.
     return out;
   }
 
-  function sourceTapsForFamily(a, b, family, seedMix = 0.5) {
+  function sourceTapsForFamily(a, b, family, seedMix = 0.5, variant = '') {
     const an = normaliseBipolar(a);
     const bn = normaliseBipolar(b);
     const seed = clampFloat(seedMix, 0, 1);
@@ -2868,6 +3625,15 @@ itself, impose GPL licensing on generated outputs.
         c = sampleHoldTable(blend, 2 + Math.round(seed * 10));
         d = derivativeTable(bn, 2.7);
         break;
+      case 'Classic Waveforms': {
+        const crunchyTap = String(variant || '').toLowerCase() === 'crunchy';
+        c = derivativeTable(an, crunchyTap ? 3.4 : 2.2);
+        const reference = crunchyTap
+          ? sampleHoldTable(circularSmoothTable(an, 2), 2 + Math.round(seed * 10))
+          : circularSmoothTable(an, 4 + Math.round(seed * 4));
+        d = normaliseBipolar(subArrays(an, reference));
+        break;
+      }
       case 'Sync':
         c = cyclicCombTable(an, bn, seed, 0.75);
         d = derivativeTable(c, 2.2);
@@ -2918,9 +3684,11 @@ itself, impose GPL licensing on generated outputs.
     drawnSmoothing: 'Light',
   };
 
+
+
   function selectedSourceTables(a, b, seedMix = 0.5) {
     const ctx = ACTIVE_SOURCE_TAP_CONTEXT || {};
-    const taps = sourceTapsForFamily(a, b, ctx.family || DEFAULT_ENGINE_FAMILY, seedMix);
+    const taps = sourceTapsForFamily(a, b, ctx.family || DEFAULT_ENGINE_FAMILY, seedMix, ctx.variant || DEFAULT_ENGINE_VARIANT);
     if (ctx.drawnTable) taps[DRAWN_TAP_KEY] = effectiveDrawnSourceTable(ctx.drawnTable, ctx.drawnSeamMode, ctx.drawnSmoothing);
     const input1 = canonicalSourceTap(ctx.input1, 'A');
     const input2 = canonicalSourceTap(ctx.input2, 'B');
@@ -2932,14 +3700,34 @@ itself, impose GPL licensing on generated outputs.
     };
   }
 
+  // TUTORIAL: Previous-valid table substitution is intentionally scoped. Moving sliders or
+  // TUTORIAL: source/result windows can hold the last useful table from the same generator identity,
+  // TUTORIAL: but switching engine family, wavetable type, tap routing, or Drawn source data starts a
+  // TUTORIAL: new safety scope so a stale waveform is not silently borrowed from another core.
+  function tableSafetyHoldIdentityForPatch(patch, wavetableType = null) {
+    const p = patch || defaultPatch();
+    const wt = wavetableType == null ? p.wavetableType : wavetableType;
+    return JSON.stringify({
+      engine: canonicalEngineName(p.engine || DEFAULT_ENGINE),
+      wavetableType: canonicalWavetableType(wt),
+      sourceInput1: canonicalSourceTap(p.sourceInput1, 'A'),
+      sourceInput2: canonicalSourceTap(p.sourceInput2, 'B'),
+      drawnSeamMode: canonicalDrawnSeamMode(p.drawnSeamMode),
+      drawnSmoothing: canonicalDrawnSmoothing(p.drawnSmoothing),
+      drawnTableI16: drawnTableSignatureForCache(p.drawnTable),
+    });
+  }
 
   // TUTORIAL: Turns one patch object into its final generated wavetable by resolving engine, window, and type
   // TUTORIAL: settings.
-  function tableForPatch(patch, wavetableType = null) {
-    const bw = clampWindowPair(patch.beforeStart, patch.beforeEnd);
-    const aw = clampWindowPair(patch.afterStart, patch.afterEnd);
-    const wt = wavetableType == null ? patch.wavetableType : wavetableType;
-    return generateWavetable(patch.pot1, patch.pot2, patch.pot3, wt, bw.start, bw.length, aw.start, aw.length, patch.engine || DEFAULT_ENGINE, patch.sourceInput1 || 'A', patch.sourceInput2 || 'B', patch.drawnTable, patch.drawnSeamMode, patch.drawnSmoothing);
+  function tableForPatch(patch, wavetableType = null, safetyContext = null) {
+    const build = () => {
+      const bw = clampWindowPair(patch.beforeStart, patch.beforeEnd);
+      const aw = clampWindowPair(patch.afterStart, patch.afterEnd);
+      const wt = wavetableType == null ? patch.wavetableType : wavetableType;
+      return generateWavetable(patch.pot1, patch.pot2, patch.pot3, wt, bw.start, bw.length, aw.start, aw.length, patch.engine || DEFAULT_ENGINE, patch.sourceInput1 || 'A', patch.sourceInput2 || 'B', patch.drawnTable, patch.drawnSeamMode, patch.drawnSmoothing);
+    };
+    return safetyContext ? withTableSafetyContext(safetyContext, build, tableSafetyHoldIdentityForPatch(patch, wavetableType)) : build();
   }
 
   // TUTORIAL: Morph-position shaping. These helpers turn a linear progress value into a bent,
@@ -2997,7 +3785,9 @@ itself, impose GPL licensing on generated outputs.
   function canonicalMorphRenderMode(value) {
     const v = String(value || '');
     const labels = MORPH_RENDER_MODES.map(([label]) => label);
+    if (!v) return DEFAULT_MORPH_RENDER_MODE;
     if (labels.includes(v)) return v;
+    if (Object.prototype.hasOwnProperty.call(MORPH_RENDER_MODE_ALIASES, v)) return MORPH_RENDER_MODE_ALIASES[v];
     const idMatch = Object.entries(MORPH_RENDER_MODE_IDS).find(([, id]) => id === v);
     if (idMatch) return idMatch[0];
     if (v === 'Full interpolation') return 'Full Interpolation (Favours Digital Noise)';
@@ -3007,6 +3797,10 @@ itself, impose GPL licensing on generated outputs.
     if (v === 'Crossfade (Favours Analogue Creaminess)') return 'Crossfade (Favours Analogue Warmth)';
     if (v === 'Comb Morph' || v === 'Comb Wavetable Morph' || v === 'Comb Wavetable Morph (Hollow Interference)') return 'Comb Wavetable Morph (Hollow Interference)';
     if (v === 'FFT Morph' || v === 'Spectral Morph' || v === 'FFT Spectral Morph (Digital Tone, Less Crunchy)') return 'FFT Spectral Morph (Digital Tone, Less Crunchy)';
+    if (!warnedUnknownMorphRenderModes.has(v)) {
+      warnedUnknownMorphRenderModes.add(v);
+      console.warn(`Unknown Morph Render Mode "${v}"; using ${DEFAULT_MORPH_RENDER_MODE}.`);
+    }
     return DEFAULT_MORPH_RENDER_MODE;
   }
 
@@ -3231,15 +4025,6 @@ itself, impose GPL licensing on generated outputs.
     return clampFloat(st.y1, -4, 4);
   }
 
-  // TUTORIAL: Applies a biquad filter to a whole buffer, used for previews and rendered audio.
-  function applyBiquadBuffer(input, type, cutoffHz, resonance, sampleRate) {
-    const coeffs = biquadCoeffs(type, cutoffHz, resonance, sampleRate);
-    if (!coeffs) return input;
-    const st = makeBiquadState();
-    const out = new Float32Array(input.length);
-    for (let i = 0; i < input.length; i++) out[i] = clampFloat(processBiquadSample(input[i], coeffs, st), -1, 1);
-    return out;
-  }
 
   // TUTORIAL: Ring Mod stage. The earlier experimental Ring Mod Tone control is intentionally absent.
   // TUTORIAL: The old internal patch field is still named `am` so existing patch state remains
@@ -3406,10 +4191,6 @@ itself, impose GPL licensing on generated outputs.
       || (clampFloat(patch?.am || 0, 0, 255) > 0);
   }
 
-  // TUTORIAL: Detects any oscillator-stage modulation for visual/status summaries.
-  function patchUsesNonNeutralModulation(patch) {
-    return patchUsesFm(patch) || patchUsesShapeModulation(patch);
-  }
 
   // TUTORIAL: Detects subtractive filtering. Recursive filter memory can make the final
   // TUTORIAL: sample boundary depend on what happened just before the boundary.
@@ -3526,18 +4307,7 @@ itself, impose GPL licensing on generated outputs.
     return found ? found[1] : LOOP_SAFE_BULK_STRATEGIES[0][1];
   }
 
-  // TUTORIAL: Rejects samples-per-cycle targets that would force the resulting pitch outside
-  // TUTORIAL: the allowed frequency range at the selected sample rate.
-  function validSamplesPerCycleTarget(target, sampleRate) {
-    const spp = clampInt(target, 1, Math.max(1, Math.floor(sampleRate / MIN_FREQUENCY)));
-    const freq = sampleRate / spp;
-    return Number.isFinite(freq) && freq >= MIN_FREQUENCY && freq <= MAX_FREQUENCY;
-  }
 
-  // TUTORIAL: Filters the preferred table-friendly targets for the current sample rate.
-  function tableFriendlySamplesPerCycleTargets(sampleRate) {
-    return LOOP_SAFE_TABLE_FRIENDLY_SPP.filter(spp => validSamplesPerCycleTarget(spp, sampleRate));
-  }
 
   // TUTORIAL: Chooses the perceptually nearest candidate by ratio rather than absolute difference,
   // TUTORIAL: so 256→512 and 512→1024 are treated as comparable octave-like steps.
@@ -3552,20 +4322,6 @@ itself, impose GPL licensing on generated outputs.
     return best;
   }
 
-  // TUTORIAL: Finds samples-per-cycle divisors that exactly divide a requested sample count.
-  // TUTORIAL: This is useful when Samples mode should keep a stored sample length loopable.
-  function divisorsForSampleCount(sampleCount, sampleRate) {
-    const n = clampInt(sampleCount, 1, 1_000_000_000);
-    const out = [];
-    const limit = Math.floor(Math.sqrt(n));
-    for (let d = 1; d <= limit; d++) {
-      if (n % d !== 0) continue;
-      const a = d, b = n / d;
-      if (validSamplesPerCycleTarget(a, sampleRate)) out.push(a);
-      if (b !== a && validSamplesPerCycleTarget(b, sampleRate)) out.push(b);
-    }
-    return out.sort((a, b) => a - b);
-  }
 
   // TUTORIAL: Resolves the selected fixed Bulk target into a numeric samples-per-cycle value.
   function fixedLoopSafeSamplesPerCycle(strategy, sampleRate) {
@@ -3799,8 +4555,12 @@ itself, impose GPL licensing on generated outputs.
     if (sampleCount * 8 > 500_000_000) warnings.push(`large memory use likely: ${(sampleCount * 8 / 1e9).toFixed(2)} GB+ before download`);
     if (spp < 32) warnings.push(`very low cycle resolution: ${spp.toFixed(2)} samples/cycle`);
     else if (spp < 128) warnings.push(`low cycle resolution: ${spp.toFixed(2)} samples/cycle`);
-    if (canonicalMorphRenderMode(state.export.morphRenderMode) === 'Phase-Offset Crossfade (Analogue Phaser Motion)' && state.export.cycleStepped) {
+    const summaryMorphMode = canonicalMorphRenderMode(state.export.morphRenderMode);
+    if (summaryMorphMode === 'Phase-Offset Crossfade (Analogue Phaser Motion)' && state.export.cycleStepped) {
       warnings.push('Phase-Offset Crossfade deliberately shifts the END frame; sample count can be cycle-exact while the whole file is not loop-closed');
+    }
+    if (Object.prototype.hasOwnProperty.call(START_PHASE_MOD_END_MOVING_SETTINGS, summaryMorphMode) && state.export.cycleStepped) {
+      warnings.push('START Phase-Modulates END Moving Values is a phase-warp mode; cycle-stepped timing may make the warp motion intentionally abrupt');
     }
     return {requestedMode: state.export.mode, requestedValue: requested, sampleRate: sr, bitDepth: state.export.bitDepth, frequency: freq, sampleCount, durationSeconds: duration, nominalCycles: duration * freq, samplesPerCycle: spp, warnings};
   }
@@ -3819,12 +4579,12 @@ itself, impose GPL licensing on generated outputs.
         const endDiscrete = effectiveExportPatch(this.end, this.opts.differentTypes ? this.end.wavetableType : this.opts.sharedType);
         const pa = interpolatedPatchForDiscretePath(this.start, this.end, t, startDiscrete);
         const pb = interpolatedPatchForDiscretePath(this.start, this.end, t, endDiscrete);
-        const ta = tableForPatch(pa, pa.wavetableType), tb = tableForPatch(pb, pb.wavetableType);
+        const ta = tableForPatch(pa, pa.wavetableType, `Morph frame ${idx + 1}/${this.opts.frameCount} START-type path`), tb = tableForPatch(pb, pb.wavetableType, `Morph frame ${idx + 1}/${this.opts.frameCount} END-type path`);
         const mix = new Float64Array(TABLE_SIZE);
         for (let i = 0; i < TABLE_SIZE; i++) mix[i] = (1 - t) * ta[i] + t * tb[i];
-        table = finaliseRawTable(mix);
+        table = withTableSafetyContext(`Morph frame ${idx + 1}/${this.opts.frameCount} type/path blend`, () => finaliseRawTable(mix));
       } else {
-        table = tableForPatch(patch, patch.wavetableType);
+        table = tableForPatch(patch, patch.wavetableType, `Morph frame ${idx + 1}/${this.opts.frameCount}`);
       }
       const fmRangeCents = Number.isFinite(Number(patch.fmRangeCents))
         ? clampFloat(patch.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
@@ -3855,7 +4615,7 @@ itself, impose GPL licensing on generated outputs.
       const t = curveValue(rawT, this.opts.curveAmount, this.opts.curveMode);
       const discrete = this.branchName === 'end' ? this.endDiscrete : this.startDiscrete;
       const patch = interpolatedPatchForDiscretePath(this.start, this.end, t, discrete);
-      const table = tableForPatch(patch, patch.wavetableType);
+      const table = tableForPatch(patch, patch.wavetableType, `${this.branchName.toUpperCase()} branch frame ${idx + 1}/${this.opts.frameCount}`);
       const value = {
         t,
         patch,
@@ -3904,8 +4664,9 @@ itself, impose GPL licensing on generated outputs.
     return sample;
   }
 
-  // TUTORIAL: Variant of the oscillator inner loop that omits filter/output cleanup for branch-combination
-  // TUTORIAL: render modes.
+  // TUTORIAL: Variant of the oscillator inner loop for branch-combination render modes.
+  // TUTORIAL: It keeps oscillator FM, PWM, and Ring Mod active, but omits output filtering
+  // TUTORIAL: and final branch cleanup. In this file, "dry" means unfiltered, not unmodulated.
   function renderFrameSampleDry(frame, phase, baseInc) {
     const ringStage = ringModStage(frame.table, phase.value, frame.am);
     const modSignal = ringStage.modSignal;
@@ -3918,9 +4679,9 @@ itself, impose GPL licensing on generated outputs.
     return sample;
   }
 
-  // TUTORIAL: Blends two tables directly and returns null rather than hiding failure, letting the caller
-  // TUTORIAL: choose a safer fallback.
-  function tableBlendNoFallback(a, b, t, fadeLaw = 'linear') {
+  // TUTORIAL: Blends two tables directly, then runs the normal table safety gate.
+  // TUTORIAL: This helper reports and substitutes through the normal table-safety gate when the blend itself collapses.
+  function tableBlendWithFallback(a, b, t, fadeLaw = 'linear') {
     const mix = new Float64Array(TABLE_SIZE);
     const fade = clampFloat(t, 0, 1);
     let aGain = 1 - fade;
@@ -3930,7 +4691,7 @@ itself, impose GPL licensing on generated outputs.
       bGain = Math.sin(fade * Math.PI * 0.5);
     }
     for (let i = 0; i < TABLE_SIZE; i++) mix[i] = aGain * a[i] + bGain * b[i];
-    return finaliseRawTableNoFallback(mix) || finaliseRawTable(mix);
+    return finaliseRawTableWithSafety(mix);
   }
 
   // TUTORIAL: Phase-rotates a table by fractional samples using linear interpolation.
@@ -3975,7 +4736,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: away like an ordinary feedback comb filter can.
   function combMorphTable(startTable, endTable, t) {
     const fade = clampFloat(t, 0, 1);
-    const base = tableBlendNoFallback(startTable, endTable, fade, 'equal-power');
+    const base = tableBlendWithFallback(startTable, endTable, fade, 'equal-power');
     const middle = morphMiddleAmount(fade);
     const delay = clampInt(1 + fade * 63 + middle * 17, 1, TABLE_SIZE - 1);
     const secondaryDelay = clampInt(3 + (1 - fade) * 47 + middle * 29, 1, TABLE_SIZE - 1);
@@ -3988,7 +4749,7 @@ itself, impose GPL licensing on generated outputs.
       const movingComb = delayedBase - ((1 - fade) * delayedEnd + fade * delayedStart);
       raw[i] = 0.82 * base[i] + depth * movingComb;
     }
-    const smoothed = finaliseRawTableNoFallback(circularSmoothTable(raw, 1)) || finaliseRawTable(raw);
+    const smoothed = finaliseRawTableWithSafety(circularSmoothTable(raw, 1));
     return smoothed;
   }
 
@@ -4058,7 +4819,7 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Rebuilds one intermediate table from spectral data and lets the caller decide how to handle
   // TUTORIAL: invalid output.
-  function spectralMorphTableNoFallback(morpher, t, mode = 'full') {
+  function spectralMorphTableNoFallback(morpher, t, mode = 'full', safetyContext = null) {
     const fade = clampFloat(t, 0, 1);
     mode = mode === 'envelope' || mode === 'magnitude' ? mode : 'full';
     const anchorCount = Math.max(2, morpher.spectra.length);
@@ -4091,8 +4852,12 @@ itself, impose GPL licensing on generated outputs.
       }
       raw[n] = x;
     }
-    let table = finaliseRawTableNoFallback(raw) || finaliseRawTable(raw);
-    if (mode === 'envelope') table = finaliseRawTableNoFallback(softenTableForMorph(table, 0.5, 0.45)) || table;
+    const buildTable = () => finaliseRawTableWithSafety(raw);
+    let table = safetyContext ? withTableSafetyContext(safetyContext, buildTable) : buildTable();
+    if (mode === 'envelope') {
+      const soften = () => finaliseRawTableNoFallback(softenTableForMorph(table, 0.5, 0.45)) || table;
+      table = safetyContext ? withTableSafetyContext(`${safetyContext} softened envelope`, soften) : soften();
+    }
     morpher.cache.set(key, table);
     if (morpher.cache.size > MORPH_TABLE_CACHE_LIMIT) morpher.cache.delete(morpher.cache.keys().next().value);
     return table;
@@ -4109,11 +4874,11 @@ itself, impose GPL licensing on generated outputs.
       if (state.export.differentTypes || sourceInputRouteDiffers(startEff, endEff) || (startEff.engine || DEFAULT_ENGINE) !== (endEff.engine || DEFAULT_ENGINE) || startEff.wavetableType !== endEff.wavetableType) {
         const aPatch = interpolatedPatchForDiscretePath(start, end, t, startEff);
         const bPatch = interpolatedPatchForDiscretePath(start, end, t, endEff);
-        anchors.push(tableBlendNoFallback(tableForPatch(aPatch, aPatch.wavetableType), tableForPatch(bPatch, bPatch.wavetableType), t));
+        anchors.push(withTableSafetyContext(`Spectral anchor ${i + 1}/${anchorCount} blended table`, () => tableBlendWithFallback(tableForPatch(aPatch, aPatch.wavetableType, `Spectral anchor ${i + 1}/${anchorCount} START path`), tableForPatch(bPatch, bPatch.wavetableType, `Spectral anchor ${i + 1}/${anchorCount} END path`), t)));
       } else {
         const sharedType = state.export.differentTypes ? null : sharedWavetableType();
         const patch = interpolatedPatch(start, end, t, sharedType);
-        anchors.push(tableForPatch(patch, patch.wavetableType));
+        anchors.push(tableForPatch(patch, patch.wavetableType, `Spectral anchor ${i + 1}/${anchorCount}`));
       }
     }
     return anchors;
@@ -4148,14 +4913,14 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: offline render. It resolves the table plus FM, PWM, Ring Mod (`am` internally),
   // TUTORIAL: and FM range in one place so START/END drone playback and copied-START→END
   // TUTORIAL: morph rendering cannot drift apart when patch fields are renamed or added.
-  function oscillatorFrameForPatch(patch, wavetableTypeOverride = null) {
+  function oscillatorFrameForPatch(patch, wavetableTypeOverride = null, safetyContext = 'Audition/generated patch') {
     const p = patch || defaultPatch();
     const wt = wavetableTypeOverride == null ? p.wavetableType : wavetableTypeOverride;
     const fmRangeCents = Number.isFinite(Number(p.fmRangeCents))
       ? clampFloat(p.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
       : fmRangeLabelToCents(p.fmRangeLabel || DEFAULT_FM_RANGE_LABEL);
     return {
-      table: tableForPatch(p, wt),
+      table: tableForPatch(p, wt, safetyContext),
       fm: clampFloat(p.fm ?? 0, 0, 255),
       pwm: clampFloat(p.pwm ?? 0, 0, 255),
       am: clampFloat(p.am ?? 0, 0, 255),
@@ -4413,9 +5178,9 @@ itself, impose GPL licensing on generated outputs.
         const t = pos.fade;
         let table;
         if (variant === 'comb') {
-          table = combMorphTable(aFrame.table, bFrame.table, t);
+          table = withTableSafetyContext(`Wavetable morph frame ${pos.idx + 1}/${frameCount} comb table`, () => combMorphTable(aFrame.table, bFrame.table, t));
         } else {
-          table = tableBlendNoFallback(aFrame.table, bFrame.table, t, variant === 'warm' ? 'equal-power' : 'linear');
+          table = withTableSafetyContext(`Wavetable morph frame ${pos.idx + 1}/${frameCount} blended table`, () => tableBlendWithFallback(aFrame.table, bFrame.table, t, variant === 'warm' ? 'equal-power' : 'linear'));
           if (variant === 'warm') table = finaliseRawTableNoFallback(softenTableForMorph(table, t, 0.35)) || table;
           if (variant === 'soft') table = finaliseRawTableNoFallback(softenTableForMorph(table, t, 1.0)) || table;
         }
@@ -4484,6 +5249,125 @@ itself, impose GPL licensing on generated outputs.
   }
 
 
+  // TUTORIAL: Shared helper for START Phase-Modulates END morph modes.
+  // TUTORIAL: START is rendered through the oscillator stage with PWM, Ring Mod, and FM active,
+  // TUTORIAL: but without the output filter; it is used only as a bipolar phase-warp signal.
+  // TUTORIAL: END stays the audible carrier; its own PWM, Ring Mod, FM phase advance, and filter remain active.
+  function renderPhaseModulatedCarrierSample(carrierFrame, carrierPhase, baseInc, phaseWarpSignal, filterState, filterCoeffs, phaseDepth = START_PHASE_MOD_END_DEPTH) {
+    const ringStage = ringModStage(carrierFrame.table, carrierPhase.value, carrierFrame.am);
+    const modSignal = ringStage.modSignal;
+    const pwmDepth = clampFloat(carrierFrame.pwm, 0, 255) / 255 * 0.48;
+    const width = clampFloat(0.5 + pwmDepth * modSignal, 0.02, 0.98);
+    const baseReadPhase = carrierPhase.value < width ? (carrierPhase.value / width) * 0.5 : 0.5 + ((carrierPhase.value - width) / (1 - width)) * 0.5;
+    const readPhase = baseReadPhase + phaseDepth * clampFloat(phaseWarpSignal, -1, 1);
+    let sample = applyRingMod(readTableLinear(carrierFrame.table, readPhase), ringStage);
+    sample = clampFloat(processBiquadSample(sample, filterCoeffs, filterState), -1, 1);
+    carrierPhase.value += Math.min(baseInc * boundedFmPhaseScale(modSignal, carrierFrame.fm, carrierFrame.fmRangeCents), 0.49);
+    if (carrierPhase.value >= 1) carrierPhase.value -= Math.floor(carrierPhase.value);
+    return sample;
+  }
+
+  // TUTORIAL: Moving-value START Phase-Modulates END morph export path.
+  // TUTORIAL: Unlike a reset/switch sync model, this keeps the effect as phase modulation:
+  // TUTORIAL: START branch audio is a bipolar phase warp and END branch is the audible carrier.
+  async function renderMorphAudioStartPhaseModEnd(start, end, reverse = false, progress = null, token = state.cancelToken, modeLabel = 'START Phase-Modulates END (Moving Source+Carrier)', phaseDepth = START_PHASE_MOD_END_DEPTH, sourceRate = 1.0) {
+    throwIfCancelled(token);
+    const summary = renderLengthSummary();
+    const n = summary.sampleCount, sr = summary.sampleRate, freq = summary.frequency;
+    const frameCount = frameCountForSummary(summary);
+    const opts = {
+      curveAmount: state.export.curveAmount,
+      curveMode: state.export.curveMode,
+      frameCount,
+    };
+    const startCache = new BranchTableCache(start, end, summary, opts, 'start');
+    const endCache = new BranchTableCache(start, end, summary, opts, 'end');
+    const out = new Float32Array(n);
+    const baseInc = freq / sr;
+    const startPhase = {value: 0};
+    const endPhase = {value: 0};
+    const filterState = makeBiquadState();
+    let filterFrameIndex = -1;
+    let filterCoeffs = null;
+
+    for (let i = 0; i < n; i++) {
+      if ((i & 16383) === 0) {
+        throwIfCancelled(token);
+        if (progress) progress(i / Math.max(1, n) * 0.70);
+        if ((i & 65535) === 0) await nextFrame();
+      }
+      const pos = renderIndexForSample(i, n, sr, freq, reverse, frameCount);
+      const startFrame = startCache.frame(pos.idx);
+      const endFrame = endCache.frame(pos.idx);
+      if (pos.idx !== filterFrameIndex) {
+        filterFrameIndex = pos.idx;
+        filterCoeffs = biquadCoeffs(endFrame.filterType, endFrame.filterCutoff, endFrame.filterResonance, sr);
+      }
+      const phaseWarpSignal = clampFloat(renderFrameSampleDry(startFrame, startPhase, baseInc * clampFloat(sourceRate, 0.125, 8.0)), -1, 1);
+      out[i] = renderPhaseModulatedCarrierSample(endFrame, endPhase, baseInc, phaseWarpSignal, filterState, filterCoeffs, phaseDepth);
+    }
+    throwIfCancelled(token);
+    if (progress) progress(0.70);
+    await nextFrame();
+    const audio = applyDcAndNormalise(out, freq, sr, state.export.dcMode, state.export.normMode, state.export.headroomDb);
+    throwIfCancelled(token);
+    if (progress) progress(0.78);
+    const notes = summary.warnings.slice();
+    notes.push(`${modeLabel}: START was rendered with FM/PWM/Ring Mod active but without the output filter, then used as the bipolar phase-warp branch; END was rendered as the audible carrier with a fixed ±${phaseDepth.toFixed(2)}-cycle phase offset range.`);
+    notes.push(`${modeLabel}: START phase-warp source was read at ${sourceRate.toFixed(3)}× the END carrier/base rate while both branches moved through the morph path.`);
+    notes.push(`${modeLabel}: reverse export reverses morph timing only. Use Swap START/END to reverse modulator/carrier roles.`);
+    notes.push(`${modeLabel}: START supplies the phase-warp signal; END remains the audible carrier.`);
+    notes.push(...normalisationDynamicsNotes());
+    return {audio, summary, notes};
+  }
+
+
+  // TUTORIAL: Fixed-endpoint START Phase-Modulates END morph export path.
+  // TUTORIAL: Unlike earlier phase-modulation test builds, this does not interpolate START/END
+  // TUTORIAL: parameters inside either branch. START stays a fixed unfiltered phase-warp
+  // TUTORIAL: source and END stays a fixed audible carrier for the whole render.
+  async function renderMorphAudioStartPhaseModEndFixed(start, end, reverse = false, progress = null, token = state.cancelToken, modeLabel = 'START Phase-Modulates END (Fixed Source+Carrier)', phaseDepth = START_PHASE_MOD_END_DEPTH, sourceRate = 1.0) {
+    throwIfCancelled(token);
+    const summary = renderLengthSummary();
+    const n = summary.sampleCount, sr = summary.sampleRate, freq = summary.frequency;
+    const startPatch = effectiveExportPatch(start);
+    const endPatch = effectiveExportPatch(end);
+    const startFrame = oscillatorFrameForPatch(startPatch, startPatch.wavetableType, `${modeLabel} START fixed phase-warp source`);
+    const endFrame = oscillatorFrameForPatch(endPatch, endPatch.wavetableType, `${modeLabel} END fixed carrier`);
+    const out = new Float32Array(n);
+    const baseInc = freq / sr;
+    const startPhase = {value: 0};
+    const endPhase = {value: 0};
+    const filterState = makeBiquadState();
+    const filterCoeffs = biquadCoeffs(endFrame.filterType, endFrame.filterCutoff, endFrame.filterResonance, sr);
+
+    for (let i = 0; i < n; i++) {
+      if ((i & 16383) === 0) {
+        throwIfCancelled(token);
+        if (progress) progress(i / Math.max(1, n) * 0.70);
+        if ((i & 65535) === 0) await nextFrame();
+      }
+      const phaseWarpSignal = clampFloat(renderFrameSampleDry(startFrame, startPhase, baseInc * clampFloat(sourceRate, 0.125, 8.0)), -1, 1);
+      out[i] = renderPhaseModulatedCarrierSample(endFrame, endPhase, baseInc, phaseWarpSignal, filterState, filterCoeffs, phaseDepth);
+    }
+    throwIfCancelled(token);
+    if (progress) progress(0.70);
+    await nextFrame();
+    const audio = applyDcAndNormalise(out, freq, sr, state.export.dcMode, state.export.normMode, state.export.headroomDb);
+    throwIfCancelled(token);
+    if (progress) progress(0.78);
+    const notes = summary.warnings.slice();
+    notes.push(`${modeLabel}: START was held as a fixed phase-warp source with FM/PWM/Ring Mod active but without the output filter; END was held as a fixed audible carrier with a fixed ±${phaseDepth.toFixed(2)}-cycle phase offset range.`);
+    notes.push(`${modeLabel}: START phase-warp source was read at ${sourceRate.toFixed(3)}× the END carrier/base rate.`);
+    notes.push(`${modeLabel}: no START→END parameter interpolation is applied inside either branch.`);
+    notes.push(`${modeLabel}: forward and reverse exports are intentionally identical because Fixed Endpoint renders contain no START→END morph timeline to reverse.`);
+    notes.push(`${modeLabel}: reverse export does not swap modulator/carrier roles. Use Swap START/END to reverse roles.`);
+    notes.push(`${modeLabel}: START supplies the phase-warp signal; END remains the audible carrier.`);
+    notes.push(...normalisationDynamicsNotes());
+    return {audio, summary, notes};
+  }
+
+
   // TUTORIAL: Spectral morph export path. It analyses anchor tables into harmonic data, blends the
   // TUTORIAL: spectral representation, rebuilds time-domain tables, then renders them normally.
   async function renderMorphAudioSpectral(start, end, reverse = false, progress = null, token = state.cancelToken, variant = 'full') {
@@ -4522,7 +5406,7 @@ itself, impose GPL licensing on generated outputs.
           ? clampFloat(interp.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
           : morphedFmRangeCents(start, end, t);
         frame = {
-          table: spectralMorphTableNoFallback(morpher, t, variant),
+          table: spectralMorphTableNoFallback(morpher, t, variant, `Spectral morph frame ${pos.idx + 1}/${frameCount} rebuilt table`),
           fm: interp.fm,
           pwm: interp.pwm,
           am: interp.am,
@@ -4576,8 +5460,8 @@ itself, impose GPL licensing on generated outputs.
     const startPatch = effectiveExportPatch(start);
     const endPatch = effectiveExportPatch(end);
     const opts = typeof options === 'string' ? {fadeLaw: options} : (options || {});
-    const startTable = tableForPatch(startPatch, startPatch.wavetableType);
-    let endTable = tableForPatch(endPatch, endPatch.wavetableType);
+    const startTable = tableForPatch(startPatch, startPatch.wavetableType, 'Crossfade START endpoint');
+    let endTable = tableForPatch(endPatch, endPatch.wavetableType, 'Crossfade END endpoint');
     if (opts.phaseAlign || opts.phaseOffset) {
       let offset = bestPhaseOffsetSamples(startTable, endTable);
       if (opts.phaseOffset) offset = (offset + Math.round(TABLE_SIZE * 0.035)) & (TABLE_SIZE - 1);
@@ -4632,14 +5516,37 @@ itself, impose GPL licensing on generated outputs.
   }
 
 
+  // TUTORIAL: Public morph render wrapper. It gives each render its own
+  // TUTORIAL: table-safety collector, lets the selected render strategy run, then
+  // TUTORIAL: attaches any fallback events both as human notes and as structured
+  // TUTORIAL: data for JSON sidecars. Browser-yield points temporarily restore
+  // TUTORIAL: the default collector so visual refreshes cannot clobber export
+  // TUTORIAL: safety metadata.
+  async function renderMorphAudio(start, end, reverse = false, progress = null, token = state.cancelToken) {
+    const collector = makeTableSafetyCollector(reverse ? 'reverse morph render' : 'forward morph render');
+    return withTableSafetyCollector(collector, async () => {
+      resetTableSafetyEvents(collector, {clearLastGood: false});
+      const rendered = await renderMorphAudioImpl(start, end, reverse, progress, token);
+      return appendTableSafetyNotes(rendered, collector);
+    });
+  }
+
   // TUTORIAL: Main export dispatcher. It resolves shared patch routing, detects stationary
   // TUTORIAL: START/END copies, then delegates to the correct renderer for the selected morph
   // TUTORIAL: mode, applying render-length/sample-rate settings and reporting progress.
-  async function renderMorphAudio(start, end, reverse = false, progress = null, token = state.cancelToken) {
+  async function renderMorphAudioImpl(start, end, reverse = false, progress = null, token = state.cancelToken) {
     const routed = effectivePatchPairForRender(start, end);
     start = routed.start;
     end = routed.end;
     const mode = canonicalMorphRenderMode(state.export.morphRenderMode);
+    if (Object.prototype.hasOwnProperty.call(START_PHASE_MOD_END_MOVING_SETTINGS, mode)) {
+      const movingSettings = START_PHASE_MOD_END_MOVING_SETTINGS[mode];
+      return renderMorphAudioStartPhaseModEnd(start, end, reverse, progress, token, mode, movingSettings.phaseDepth, movingSettings.sourceRate);
+    }
+    if (Object.prototype.hasOwnProperty.call(START_PHASE_MOD_END_FIXED_SETTINGS, mode)) {
+      const fixedSettings = START_PHASE_MOD_END_FIXED_SETTINGS[mode];
+      return renderMorphAudioStartPhaseModEndFixed(start, end, reverse, progress, token, mode, fixedSettings.phaseDepth, fixedSettings.sourceRate);
+    }
     if (patchesEquivalentForStaticRender(start, end)) {
       return renderStaticPatchAudio(reverse ? end : start, reverse, progress, token);
     }
@@ -5194,6 +6101,7 @@ itself, impose GPL licensing on generated outputs.
         render_end: renderEndMeta,
       },
       export_writer: {mode: 'buffered-browser-blob', wav_metadata: ['LIST/INFO', 'FWID']},
+      ...(fileMeta.tableSafety && fileMeta.tableSafety.fallback_used ? {table_safety: fileMeta.tableSafety} : {}),
       notes,
     };
   }
@@ -5548,7 +6456,7 @@ itself, impose GPL licensing on generated outputs.
       const exportId = makeExportId();
       const wavFilename = `${base}.wav`;
       const jsonFilename = `${base}.json`;
-      const fileMeta = {basename: base, wavFilename, jsonFilename, exportId, exportContext: options.exportContext || {}};
+      const fileMeta = {basename: base, wavFilename, jsonFilename, exportId, exportContext: options.exportContext || {}, tableSafety: rendered.tableSafety || null};
       const wavBlob = encodeWavMono(rendered.audio, rendered.summary.sampleRate, rendered.summary.bitDepth, fileMeta);
       const meta = metadataFor(direction, rendered.summary, rendered.notes, startPatch, endPatch, fileMeta);
       const jsonBlob = new Blob([JSON.stringify(meta, null, 2)], {type: 'application/json'});
@@ -5569,7 +6477,7 @@ itself, impose GPL licensing on generated outputs.
         }
       }
       setProgress(1);
-      statusEl.innerHTML = `<strong>${shouldDownload ? 'Exported' : 'Rendered'} ${direction}</strong>\nSamples: ${rendered.summary.sampleCount}\nDuration: ${rendered.summary.durationSeconds.toFixed(6)} s\nWarnings: ${rendered.notes.length ? rendered.notes.join('; ') : 'none'}`;
+      statusEl.textContent = `${shouldDownload ? 'Exported' : 'Rendered'} ${direction}\nSamples: ${rendered.summary.sampleCount}\nDuration: ${rendered.summary.durationSeconds.toFixed(6)} s\nWarnings: ${rendered.notes.length ? rendered.notes.join('; ') : 'none'}`;
       return {wavBlob, jsonBlob, files, base, rendered};
     } catch (err) {
       if (isAbortError(err)) {
@@ -5617,7 +6525,7 @@ itself, impose GPL licensing on generated outputs.
       throwIfCancelled(token);
       downloadBlob(zipBlob, names.zipName);
       progressEl.value = 1;
-      statusEl.innerHTML = `<strong>Exported MPC Morph ${escapeHtml(direction)}</strong>\nZIP: ${escapeHtml(names.zipName)}\nMPC folder: ${escapeHtml(names.wavFolder)}\nLayout: ${escapeHtml(names.cxs)}.`;
+      statusEl.textContent = `Exported MPC Morph ${direction}\nZIP: ${names.zipName}\nMPC folder: ${names.wavFolder}\nLayout: ${names.cxs}.${tableSafetyStatusSuffixForResults([result])}`;
       return result;
     } catch (err) {
       if (isAbortError(err)) { progressEl.value = 0; statusEl.textContent = 'MPC Morph export cancelled.'; return null; }
@@ -5667,7 +6575,7 @@ itself, impose GPL licensing on generated outputs.
       throwIfCancelled(token);
       downloadBlob(zipBlob, names.zipName);
       progressEl.value = 1;
-      statusEl.innerHTML = `<strong>Exported MPC Morph forward + reverse</strong>\nZIP: ${escapeHtml(names.zipName)}\nMPC folder: ${escapeHtml(names.wavFolder)}\nLayout: ${escapeHtml(names.cxs)}.`;
+      statusEl.textContent = `Exported MPC Morph forward + reverse\nZIP: ${names.zipName}\nMPC folder: ${names.wavFolder}\nLayout: ${names.cxs}.${tableSafetyStatusSuffixForResults([forward, reverse])}`;
     } catch (err) {
       if (isAbortError(err)) { progressEl.value = 0; statusEl.textContent = 'MPC Morph export cancelled.'; return; }
       progressEl.value = 0;
@@ -5708,7 +6616,7 @@ itself, impose GPL licensing on generated outputs.
       if (forward.files) forward.files.length = 0;
       if (reverse.files) reverse.files.length = 0;
       progressEl.value = 1;
-      statusEl.innerHTML = `<strong>Exported both directions</strong>\nZIP: ${zipName}\nIncludes forward WAV+JSON and reverse WAV+JSON.`;
+      statusEl.textContent = `Exported both directions\nZIP: ${zipName}\nIncludes forward WAV+JSON and reverse WAV+JSON.${tableSafetyStatusSuffixForResults([forward, reverse])}`;
     } catch (err) {
       files.length = 0;
       if (isAbortError(err)) { progressEl.value = 0; statusEl.textContent = 'Combined export cancelled.'; return; }
@@ -5720,21 +6628,27 @@ itself, impose GPL licensing on generated outputs.
 
   // TUTORIAL: Visual drawing starts here. Time-domain views are previews of the generator output;
   // TUTORIAL: the spectrum analyser is still cyclic/synthetic, not a microphone or room analyser.
-  function drawWave(canvas, data, label) {
+  function drawWave(canvas, data, label, options = {}) {
     const ctx = canvas.getContext('2d'), w = canvas.width, h = canvas.height, pad = 20;
     ctx.clearRect(0, 0, w, h); ctx.fillStyle = '#030405'; ctx.fillRect(0, 0, w, h);
     ctx.strokeStyle = '#354052'; ctx.lineWidth = 1; ctx.strokeRect(pad, pad, w - 2 * pad, h - 2 * pad);
     ctx.strokeStyle = '#253040'; ctx.beginPath(); ctx.moveTo(pad, h / 2); ctx.lineTo(w - pad, h / 2); ctx.stroke();
-    const n = data.length, mid = h / 2, amp = (h - 2 * pad) * 0.46;
-    ctx.strokeStyle = '#73d7ff'; ctx.lineWidth = 2; ctx.beginPath();
+    const n = data.length, mid = h / 2, amp = (h - 2 * pad) * 0.50;
+    const safety = !!options.safetyFallback;
+    ctx.strokeStyle = safety ? '#ff6f7d' : '#73d7ff'; ctx.lineWidth = safety ? 2.5 : 2; ctx.beginPath();
     for (let i = 0; i < n; i++) { const x = pad + (w - 2 * pad) * (i / Math.max(1, n - 1)); const y = mid - clampFloat(data[i], -1, 1) * amp; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
     ctx.stroke();
-    ctx.fillStyle = '#aab3c2'; ctx.font = '13px system-ui, sans-serif'; ctx.fillText(label, pad, h - 8);
+    ctx.fillStyle = safety ? '#ff6f7d' : '#aab3c2'; ctx.font = '13px system-ui, sans-serif'; ctx.fillText(label, pad, h - 8);
+    if (safety) {
+      ctx.fillStyle = '#ff6f7d';
+      ctx.font = '13px system-ui, sans-serif';
+      ctx.fillText(options.safetyLabel || 'table safety substitute in use', pad, pad + 16);
+    }
   }
 
   // TUTORIAL: Spectrum display. It analyses a generated single-cycle buffer and draws relative
   // TUTORIAL: harmonic magnitudes so users can see how shaping choices affect the source material.
-  function drawSpectrum(canvas, dbBins, label) {
+  function drawSpectrum(canvas, dbBins, label, options = {}) {
     const ctx = canvas.getContext('2d'), w = canvas.width, h = canvas.height, pad = 20;
     ctx.clearRect(0, 0, w, h); ctx.fillStyle = '#030405'; ctx.fillRect(0, 0, w, h);
     ctx.strokeStyle = '#354052'; ctx.lineWidth = 1; ctx.strokeRect(pad, pad, w - 2 * pad, h - 2 * pad);
@@ -5744,7 +6658,8 @@ itself, impose GPL licensing on generated outputs.
     const n = Math.max(1, dbBins.length), plotW = w - 2 * pad, plotH = h - 2 * pad;
     const dbMin = -96;
     const barW = Math.max(1, plotW / n);
-    ctx.fillStyle = '#73d7ff';
+    const safety = !!options.safetyFallback;
+    ctx.fillStyle = safety ? '#ff6f7d' : '#73d7ff';
     for (let i = 0; i < n; i++) {
       const db = clampFloat(dbBins[i], dbMin, 0);
       const norm = (db - dbMin) / -dbMin;
@@ -5752,8 +6667,10 @@ itself, impose GPL licensing on generated outputs.
       const bh = Math.max(1, norm * plotH);
       ctx.fillRect(x, pad + plotH - bh, Math.max(1, barW - 1), bh);
     }
-    ctx.fillStyle = '#aab3c2'; ctx.font = '13px system-ui, sans-serif';
+    ctx.fillStyle = safety ? '#ff6f7d' : '#aab3c2'; ctx.font = '13px system-ui, sans-serif';
     ctx.fillText(label, pad, h - 8);
+    if (safety) ctx.fillText(options.safetyLabel || 'table safety substitute in use', pad, pad + 16);
+    ctx.fillStyle = '#aab3c2';
     ctx.fillText('0 dB', w - pad - 38, pad + 14);
     ctx.fillText('-96 dB', w - pad - 52, h - pad - 4);
   }
@@ -5803,8 +6720,9 @@ itself, impose GPL licensing on generated outputs.
     if (!canvas) return;
     if (visual.kind === 'off') { drawVisualOff(canvas, label); return; }
     restoreVisualCanvasSize(canvas);
-    if (visual.kind === 'spectrum') drawSpectrum(canvas, visual.data, label);
-    else drawWave(canvas, visual.data, label);
+    const opts = {safetyFallback: !!visual.safetyFallback, safetyLabel: visual.safetyLabel || ''};
+    if (visual.kind === 'spectrum') drawSpectrum(canvas, visual.data, label, opts);
+    else drawWave(canvas, visual.data, label, opts);
   }
 
   // TUTORIAL: Chooses a sample rate for visual filter previews.
@@ -5906,72 +6824,93 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: Visualiser data preparation. This mirrors the audio/render path closely enough that
   // TUTORIAL: the modulation-capable views show post-modulation previews while Base Table remains
   // TUTORIAL: a pre-modulation table view.
-  function visualDataForPatch(patch, mode) {
-    const table = tableForPatch(patch);
+  function visualDataForPatch(patch, mode, safetyContext = 'Visible patch preview') {
+    const collector = activeTableSafetyCollector();
+    const key = tableSafetySubstitutionKeyForContext(safetyContext);
+    const beforeCount = tableSafetyEventCount(collector);
+    const table = tableForPatch(patch, null, safetyContext);
+    const afterCount = tableSafetyEventCount(collector);
+    const localLabels = tableSafetySubstituteLabelsForKey(key, collector);
+    const safetyFallback = afterCount > beforeCount || localLabels.length > 0;
+    const safetyLabel = safetyFallback
+      ? `table safety: ${localLabels.join(', ') || 'substitute table'} shown`
+      : '';
     const fmRange = Number.isFinite(Number(patch.fmRangeCents))
       ? clampFloat(patch.fmRangeCents, 0, MAX_FM_RANGE_CENTS)
       : fmRangeLabelToCents(patch.fmRangeLabel);
     if (mode === 'Phase-locked FM/PWM/Ring Mod') {
       const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'wave', data: wave, label: `phase-locked — ${modulationCaptionSuffix()}`};
+      return {kind: 'wave', data: wave, label: `phase-locked — ${modulationCaptionSuffix()}`, safetyFallback, safetyLabel};
     }
     if (mode === 'Animated stable FM/PWM/Ring Mod') {
       const hasModulation = patchHasVisualModulation(patch);
       const depth = hasModulation ? animatedDepthScale() : 1;
       const wave = applyVisualFilter(renderPhaseLocked(table, patch.fm, patch.pwm, patch.am, fmRange, 512, depth), patch);
       const label = 'slow animation — post modulation';
-      return {kind: 'wave', data: wave, label};
+      return {kind: 'wave', data: wave, label, safetyFallback, safetyLabel};
     }
     if (mode === 'Time-domain FM/PWM/Ring Mod') {
       const wave = applyVisualFilter(renderTimeDomain(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'wave', data: wave, label: `time-domain — ${modulationCaptionSuffix()}`};
+      return {kind: 'wave', data: wave, label: `time-domain — ${modulationCaptionSuffix()}`, safetyFallback, safetyLabel};
     }
     if (mode === 'Spectrum analyser') {
       const wave = applyVisualFilter(renderTimeDomain(table, patch.fm, patch.pwm, patch.am, fmRange), patch);
-      return {kind: 'spectrum', data: spectrumForWave(wave), label: `spectrum analyser — ${modulationCaptionSuffix()}`};
+      return {kind: 'spectrum', data: spectrumForWave(wave), label: `spectrum analyser — ${modulationCaptionSuffix()}`, safetyFallback, safetyLabel};
     }
-    return {kind: 'wave', data: table, label: 'base table — post wave interpolator; pre modulation'};
+    return {kind: 'wave', data: table, label: 'base table — post wave interpolator; pre modulation', safetyFallback, safetyLabel};
   }
 
   // TUTORIAL: Redraws all relevant canvases after patch, visual mode, or animation state changes.
   function updateVisuals(updateStatus = true) {
-    const tab = activeTabId();
-    let visualError = null;
+    const collector = tableSafetyVisiblePreviewCollector;
+    return withTableSafetyCollector(collector, () => {
+      const tab = activeTabId();
+      let visualError = null;
+      resetTableSafetyEvents(collector, {clearLastGood: false});
 
-    // Live audio must keep following the patch even if the visualiser hits a bug.
-    // v2.3k exposed this: a visualiser exception stopped the rest of the patch-change
-    // handler, so generator edits appeared to have no effect while the canvas was blank.
-    if (state.audio.playing && state.audio.mode === 'single') {
-      updateLiveAudioFromPatch(effectivePatchForKey(state.audio.livePatchKey));
-    }
-
-    try {
-      if (tab === 'playground') {
-        if (playgroundVisualiserPanelIsOpen()) {
-          const visualMode = canonicalVisualMode(state.visualMode);
-          const v = visualDataForPatch(state.patches.single, visualMode);
-          drawVisual($('singleCanvas'), v);
-        }
-      } else if (tab === 'morph') {
-        const visualMode = canonicalVisualMode(state.visualMode);
-        if (patchVisualiserPanelIsOpen('start')) {
-          const v = visualDataForPatch(effectivePatchForKey('start'), visualMode);
-          drawVisual($('startCanvas'), v, 'START ');
-        }
-        if (patchVisualiserPanelIsOpen('end')) {
-          const v = visualDataForPatch(effectivePatchForKey('end'), visualMode);
-          drawVisual($('endCanvas'), v, 'END ');
-        }
+      // Live audio must keep following the patch even if the visualiser hits a bug.
+      // v2.3k exposed this: a visualiser exception stopped the rest of the patch-change
+      // handler, so generator edits appeared to have no effect while the canvas was blank.
+      if (state.audio.playing && state.audio.mode === 'single') {
+        updateLiveAudioFromPatch(effectivePatchForKey(state.audio.livePatchKey));
       }
-    } catch (err) {
-      visualError = err;
-      console.error('Visualiser update failed', err);
-      const target = tab === 'morph' ? $('morphStatus') : $('singleStatus');
-      if (target) target.textContent = `Visualiser update failed: ${err && err.message ? err.message : err}`;
-    }
 
-    if (updateStatus && !visualError) updateStatusSummaries();
-    ensureVisualAnimationLoop();
+      try {
+        if (tab === 'playground') {
+          const visualOpen = playgroundVisualiserPanelIsOpen();
+          if (visualOpen) {
+            const visualMode = canonicalVisualMode(state.visualMode);
+            const v = visualDataForPatch(state.patches.single, visualMode, tableSafetyContextForPatchKey('single', 'preview'));
+            drawVisual($('singleCanvas'), v);
+          } else {
+            tableForPatch(state.patches.single, null, tableSafetyContextForPatchKey('single', 'safety check'));
+          }
+        } else if (tab === 'morph') {
+          const visualMode = canonicalVisualMode(state.visualMode);
+          if (patchVisualiserPanelIsOpen('start')) {
+            const v = visualDataForPatch(effectivePatchForKey('start'), visualMode, tableSafetyContextForPatchKey('start', 'preview'));
+            drawVisual($('startCanvas'), v, 'START ');
+          } else {
+            tableForPatch(effectivePatchForKey('start'), null, tableSafetyContextForPatchKey('start', 'safety check'));
+          }
+          if (patchVisualiserPanelIsOpen('end')) {
+            const v = visualDataForPatch(effectivePatchForKey('end'), visualMode, tableSafetyContextForPatchKey('end', 'preview'));
+            drawVisual($('endCanvas'), v, 'END ');
+          } else {
+            tableForPatch(effectivePatchForKey('end'), null, tableSafetyContextForPatchKey('end', 'safety check'));
+          }
+        }
+      } catch (err) {
+        visualError = err;
+        console.error('Visualiser update failed', err);
+        const target = tab === 'morph' ? $('morphStatus') : $('singleStatus');
+        if (target) target.textContent = `Visualiser update failed: ${err && err.message ? err.message : err}`;
+      }
+
+      state.tableSafetyNotice = tableSafetyNoteLines(collector).join('\n');
+      if (updateStatus && !visualError) updateStatusSummaries();
+      ensureVisualAnimationLoop();
+    });
   }
 
   // TUTORIAL: Checks whether any visible visualiser currently needs animation frames.
@@ -6130,6 +7069,24 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Refreshes status text so the UI reports current settings and render assumptions.
+  function updateTableSafetyAlerts() {
+    const notice = state.tableSafetyNotice || '';
+    const tab = activeTabId();
+    const singleAlert = $('singleTableSafetyAlert');
+    const morphAlert = $('morphTableSafetyAlert');
+    if (singleAlert) {
+      const show = tab === 'playground' && !!notice;
+      singleAlert.textContent = show ? notice : '';
+      singleAlert.classList.toggle('show', show);
+    }
+    if (morphAlert) {
+      const show = tab === 'morph' && !!notice;
+      morphAlert.textContent = show ? notice : '';
+      morphAlert.classList.toggle('show', show);
+    }
+  }
+
+  // TUTORIAL: Refreshes status text so the UI reports current settings and render assumptions.
   function updateStatusSummaries() {
     const s = renderLengthSummary();
     const singleStatus = $('singleStatus');
@@ -6138,6 +7095,7 @@ itself, impose GPL licensing on generated outputs.
     if (morphStatus && !(state.audio.playing && state.audio.mode === 'morph')) {
       morphStatus.textContent = `Render: ${s.sampleCount} samples, ${s.durationSeconds.toFixed(6)} s, ${s.nominalCycles.toFixed(3)} cycles, ${s.samplesPerCycle.toFixed(2)} samples/cycle${s.warnings.length ? '\nWarnings: ' + s.warnings.join('; ') : ''}`;
     }
+    updateTableSafetyAlerts();
     updateLoopSafetyNoticesSafely();
   }
 
@@ -6392,7 +7350,8 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   // For the AudioWorklet path the frame is also posted to the processor via MessagePort so the
   // real-time thread has a consistent snapshot. The ScriptProcessor fallback still reads state directly.
   function updateLiveAudioFromPatch(patch) {
-    const frame = oscillatorFrameForPatch(patch);
+    const context = tableSafetyContextForPatchKey(state.audio.livePatchKey || 'single', 'live audition');
+    const frame = oscillatorFrameForPatch(patch, null, context);
     state.audio.frame = frame;
     state.audio.table = frame.table;
     state.audio.fm = frame.fm; state.audio.pwm = frame.pwm; state.audio.am = frame.am;
@@ -6693,6 +7652,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       audio: Float32Array.from(rendered.audio),
       summary: {...rendered.summary},
       notes: Array.isArray(rendered.notes) ? rendered.notes.slice() : [],
+      tableSafety: rendered.tableSafety ? {...rendered.tableSafety, events: Array.isArray(rendered.tableSafety.events) ? rendered.tableSafety.events.map(ev => ({...ev})) : []} : null,
     };
   }
 
@@ -6702,7 +7662,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const slot = morphCacheSlotFromSignature(signature);
     const cache = state.audio.morphCache[slot];
     if (!cache || cache.signature !== signature || !cache.audio || !cache.summary) return null;
-    return {audio: cache.audio, summary: cache.summary, notes: cache.notes || [], fromCache: true};
+    return {audio: cache.audio, summary: cache.summary, notes: cache.notes || [], tableSafety: cache.tableSafety || null, fromCache: true};
   }
 
   // TUTORIAL: Plays a pre-rendered morph buffer through Web Audio.
@@ -6747,7 +7707,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     if (cached) {
       playRenderedMorphAudio(cached, reverse ? 'morph-reverse' : 'morph-forward');
       $('exportProgress').value = 1;
-      $('morphStatus').textContent = `Replaying cached ${label}: ${cached.summary.durationSeconds.toFixed(3)} s`;
+      $('morphStatus').textContent = `Replaying cached ${label}: ${cached.summary.durationSeconds.toFixed(3)} s${cached.notes && cached.notes.length ? '\nNotes: ' + cached.notes.join('; ') : ''}`;
       return;
     }
     const token = beginCancellableWork();
@@ -6761,7 +7721,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       cacheRenderedMorph(rendered, signature);
       playRenderedMorphAudio(rendered, reverse ? 'morph-reverse' : 'morph-forward');
       $('exportProgress').value = 1;
-      $('morphStatus').textContent = `Playing rendered ${label}: ${rendered.summary.durationSeconds.toFixed(3)} s`;
+      $('morphStatus').textContent = `Playing rendered ${label}: ${rendered.summary.durationSeconds.toFixed(3)} s${rendered.notes && rendered.notes.length ? '\nNotes: ' + rendered.notes.join('; ') : ''}`;
     } catch (err) {
       if (isAbortError(err)) $('morphStatus').textContent = 'Morph playback render cancelled.';
       else { $('morphStatus').textContent = `Morph playback failed: ${err.message || err}`; throw err; }
@@ -6830,15 +7790,6 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     return holder;
   }
 
-  // TUTORIAL: Legacy single-dropdown builder retained for older experiments; the main UI now uses
-  // TUTORIAL: createEngineFamilySelect() plus createEngineVariantCheckboxes().
-  function createEngineSelect(value, onChange) {
-    const select = document.createElement('select');
-    ENGINE_INFO.forEach(([name, desc]) => { const opt = document.createElement('option'); opt.value = name; opt.textContent = `${name} — ${desc}`; select.appendChild(opt); });
-    select.value = canonicalEngineName(value);
-    select.addEventListener('change', () => onChange(select.value));
-    return select;
-  }
 
 
   function defaultModuleOpen(moduleKey, fallback = true) {
@@ -6909,12 +7860,6 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const type = String(patch.filterType || 'Off');
     if (type === 'Off') return 'Off';
     return `${type}, ${Math.round(clampFloat(patch.filterCutoff || 8000, FILTER_MIN_CUTOFF, FILTER_MAX_CUTOFF))} Hz, Res ${filterResonanceToUi(patch.filterResonance || 0)}`;
-  }
-  function setSummaryStatus(el, status = '') {
-    if (!el) return;
-    el.classList.toggle('default', status === 'default');
-    el.classList.toggle('changed', status === 'changed');
-    el.classList.toggle('bad', status === 'bad');
   }
   function initialiseStaticModulePanels() {
     document.querySelectorAll('details.modulePanel[data-module-key]').forEach(details => {
@@ -7202,7 +8147,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
 
     seamSel.addEventListener('change', () => { patch.drawnSeamMode = canonicalDrawnSeamMode(seamSel.value); update(); afterChange(); });
     smoothSel.addEventListener('change', () => { patch.drawnSmoothing = canonicalDrawnSmoothing(smoothSel.value); update(); afterChange(); });
-    copyBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = sanitiseDrawnTable(tableForPatch(patch)); commit('Copied Base Table → Drawn.'); });
+    copyBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = sanitiseDrawnTable(tableForPatch(patch, null, 'Copy Base Table to Drawn')); commit('Copied Base Table → Drawn.'); });
     resetBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = defaultDrawnTable(); commit('Reset Drawn to sine.'); });
     clearBtn.addEventListener('click', () => { pushUndo(); patch.drawnTable = new Float32Array(TABLE_SIZE); commit('Cleared Drawn waveform.'); });
     invertBtn.addEventListener('click', () => { pushUndo(); const t = sanitiseDrawnTable(patch.drawnTable); for (let i = 0; i < TABLE_SIZE; i++) t[i] = -t[i]; patch.drawnTable = t; commit('Inverted Drawn waveform.'); });
@@ -7433,14 +8378,6 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     return {row, label: lab, range, number: num};
   }
 
-  // TUTORIAL: Adds a paired slider+number control for values that need both fast dragging and exact entry.
-  function addBoundSlider(parent, label, getValue, setValue, min, max, step = 1, afterChange = updateVisuals) {
-    const holder = {value: getValue()};
-    addSlider(parent, label, holder, 'value', min, max, step, () => {
-      setValue(holder.value);
-      afterChange();
-    });
-  }
 
 
   // TUTORIAL: Adds a logarithmic Hz slider paired with a normal Hz number box.
@@ -7651,6 +8588,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     };
     patchUiRefreshers[patchKey] = refreshPatchUi;
     addPatchSaveSlots(parent, patchKey);
+    addPatchWaveformPresets(parent, patchKey);
     refreshPatchUi();
   }
 
@@ -7772,6 +8710,84 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     parent.appendChild(bar);
   }
 
+  // TUTORIAL: Builds the two-row Classic Waveforms preset block that lives beneath
+  // TUTORIAL: the four RAM-only save slots. These buttons are deliberately small,
+  // TUTORIAL: immediate patch actions: they do not save anything and they do not
+  // TUTORIAL: change pitch, volume, Drawn data, export length, or morph mode.
+  function addPatchWaveformPresets(parent, patchKey) {
+    const block = document.createElement('div');
+    block.className = 'waveformPresetBlock';
+    const lbl = document.createElement('label');
+    lbl.textContent = 'Classic waveform presets';
+    block.appendChild(lbl);
+    const grid = document.createElement('div');
+    grid.className = 'waveformPresetGrid';
+    for (const preset of CLASSIC_WAVEFORM_PRESETS) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = preset.label;
+      btn.title = preset.title || preset.label;
+      btn.onclick = () => applyClassicWaveformPreset(patchKey, preset.id);
+      grid.appendChild(btn);
+    }
+    block.appendChild(grid);
+    parent.appendChild(block);
+  }
+
+  function classicWaveformPresetById(id) {
+    return CLASSIC_WAVEFORM_PRESETS.find(preset => preset.id === id) || CLASSIC_WAVEFORM_PRESETS[0];
+  }
+
+  // TUTORIAL: Applies a clean Classic Waveforms source recipe to one patch context.
+  // TUTORIAL: The preset resets windows, FM/PWM/Ring Mod, and filter settings so the
+  // TUTORIAL: button label matches the visible/audible result. It also forces Source A
+  // TUTORIAL: routing and Wavetable Type Source A, because A/B splices or logic modes
+  // TUTORIAL: would make a button labelled “Sine” or “Square” misleading.
+  // TUTORIAL: When applying an END preset while START/END wavetable types are shared,
+  // TUTORIAL: the END wavetable type would otherwise stay dormant. In that one case
+  // TUTORIAL: the preset enables Different START/END Wavetable Types so END can actually
+  // TUTORIAL: sound like the selected waveform without silently rewriting START.
+  function applyClassicWaveformPreset(patchKey, presetId) {
+    if (!['single', 'start', 'end'].includes(patchKey)) return;
+    const preset = classicWaveformPresetById(presetId);
+    const patch = state.patches[patchKey] || defaultPatch();
+    patch.engine = engineNameFromParts('Classic Waveforms', 'Smooth');
+    patch.pot1 = preset.pot1;
+    patch.pot2 = preset.pot2;
+    patch.pot3 = preset.pot3;
+    patch.sourceInput1 = 'A';
+    patch.sourceInput2 = 'B';
+    patch.wavetableType = 0;
+    patch.fm = 0;
+    patch.pwm = 0;
+    patch.am = 0;
+    patch.fmRangeLabel = DEFAULT_FM_RANGE_LABEL;
+    patch.filterType = 'Off';
+    patch.filterCutoff = 8000;
+    patch.filterResonance = 0;
+    patch.beforeStart = 0;
+    patch.beforeEnd = WINDOW_STEPS;
+    patch.afterStart = 0;
+    patch.afterEnd = WINDOW_STEPS;
+    state.patches[patchKey] = patch;
+
+    let extra = '';
+    if (patchKey === 'start') state.export.sharedType = 0;
+    if (patchKey === 'end' && !state.export.differentTypes) {
+      state.export.differentTypes = true;
+      extra = ' Different START/END Wavetable Types enabled so END uses Source A.';
+      persistGlobalSettings();
+    }
+
+    state.audio.morphCache = null;
+    rebuildPatchControls();
+    syncExportSettingControls();
+    updateStatusSummaries();
+    updateVisuals();
+    autoAuditionPatch(patchKey);
+    setPatchStatusMessage(patchKey, `${preset.label} preset applied. Windows, modulation, and filter reset.${extra}`);
+  }
+
   function slotLabel(patch, slotIndex) {
     if (!patch) return `Slot ${slotIndex + 1}`;
     const parts = enginePartsFor(canonicalEngineName(patch.engine || DEFAULT_ENGINE));
@@ -7891,7 +8907,19 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     holder.className = 'compactSettingGroup';
     const select = document.createElement('select');
     select.dataset.exportSetting = 'morph-render-mode';
-    MORPH_RENDER_MODES.forEach(([label]) => select.append(new Option(label, label)));
+    const grouped = new Map();
+    MORPH_RENDER_MODE_GROUPS.forEach(group => grouped.set(group, []));
+    MORPH_RENDER_MODES.forEach(([label, _description, group = 'Other']) => {
+      if (!grouped.has(group)) grouped.set(group, []);
+      grouped.get(group).push(label);
+    });
+    grouped.forEach((labels, group) => {
+      if (!labels.length) return;
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = group;
+      labels.forEach(label => optgroup.append(new Option(label, label)));
+      select.append(optgroup);
+    });
     state.export.morphRenderMode = canonicalMorphRenderMode(state.export.morphRenderMode);
     select.value = state.export.morphRenderMode;
     const desc = document.createElement('div');
@@ -8369,28 +9397,6 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   }
 
 
-  // TUTORIAL: Applies an absolute samples-per-cycle planning target. The calculator does not
-  // TUTORIAL: separately multiply duration or file size; those are derived from samples/cycle,
-  // TUTORIAL: sample rate, and the selected cycle count.
-  function applyCalculatorTradeoff(value) {
-    const preset = {
-      default: TABLE_SIZE,
-      detail2: TABLE_SIZE * 2,
-      detail4: TABLE_SIZE * 4,
-      compact2: Math.max(1, TABLE_SIZE / 2),
-    }[String(value || 'default')];
-    const spc = $('calcSamplesPerCycle');
-    if (!spc || !preset) return;
-    const current = Math.max(1, calculatorNumber('calcSamplesPerCycle', TABLE_SIZE));
-    const next = Math.max(1, Math.round(preset));
-    spc.value = String(next);
-    refreshCalculatorOutputs();
-    const status = $('calculatorStatus');
-    if (status) {
-      const direction = next === TABLE_SIZE ? 'native internal table match' : next > TABLE_SIZE ? 'larger file, more exported cycle detail' : 'smaller file, less exported cycle detail';
-      status.textContent = `Set samples per cycle from ${formatCalcNumber(current, 6)} to ${formatCalcNumber(next, 6)} (${direction}). Frequency and duration are recalculated from that target.`;
-    }
-  }
 
   // TUTORIAL: Sets the bit depth used by calculator file-size estimates only. Render-tab bit depth
   // TUTORIAL: remains a separate export setting.
@@ -9199,8 +10205,6 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     updateStaticModuleSummaries();
   }
 
-  // TUTORIAL: Legacy wrapper retained for older code paths; FPS is now part of the shared visual controls.
-  function syncAnimationFpsControls() { syncVisualControls(); }
 
   // TUTORIAL: Stores the universal visual mode and updates every visual dropdown to match.
   function setVisualMode(value) {
@@ -9571,9 +10575,27 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const el = document.activeElement;
     if (!(el instanceof HTMLElement)) return;
     if (el.matches('input[type="range"], input[type="number"], input[type="checkbox"], input[type="radio"], select, button')) {
+      // Blurring alone is not enough in some Chromium builds: the original
+      // focused slider can still receive the keydown default action and step
+      // before the browser processes Ctrl/Cmd+PageUp/PageDown as a tab switch.
+      // Temporarily disabling the ordinary control prevents that value step
+      // without calling preventDefault(), so the browser-level shortcut remains
+      // available.
+      const wasDisabled = el.disabled;
+      const oldRangeValue = el instanceof HTMLInputElement && el.type === 'range' ? el.value : null;
       el.blur();
+      if (!wasDisabled) {
+        el.disabled = true;
+        setTimeout(() => {
+          el.disabled = false;
+          if (oldRangeValue !== null && el instanceof HTMLInputElement && el.type === 'range' && el.value !== oldRangeValue) {
+            el.value = oldRangeValue;
+          }
+        }, 0);
+      }
     }
   }
+
 
   // TUTORIAL: Routes P/MediaPlayPause plus Morph-tab mnemonic keys to transport actions while
   // TUTORIAL: leaving Space and modified browser/OS shortcuts alone.
@@ -9656,6 +10678,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const mpcMode = !!state.export.mpcWavetableMode;
     const zipMode = mpcMode ? true : !!state.export.zipDownloads;
     const zipEntries = [];
+    const safetyAggregate = {files: 0, events: 0, truncated: false, omitted: 0};
     const renderProgressPortion = zipMode ? 0.90 : 1.00;
     const loopSafe = !mpcMode && !!state.export.loopSafeBulk;
     const loopSafePlan = loopSafe ? loopSafeBulkPlan() : null;
@@ -9709,6 +10732,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
           });
           if (!result) throwIfCancelled(token);
           if (zipMode) zipEntries.push(...result.files);
+          tableSafetyAggregateAdd(safetyAggregate, result.rendered?.tableSafety);
           done++; $('bulkProgress').value = renderProgressPortion * (done / total); $('bulkStatus').textContent = `Bulk progress ${done}/${total}${zipMode ? ' — collecting ZIP entries' : ''}`;
           await nextFrame();
         }
@@ -9722,10 +10746,10 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
         downloadBlob(zipBlob, name);
         zipEntries.length = 0;
         $('bulkStatus').textContent = mpcMode
-          ? `MPC Bulk ZIP export complete: ${done}/${total} WAV file(s) in ${mpcNames.wavFolder}/, plus ${state.export.mpcIncludeSidecars ? 'separate FWG JSON sidecar folder' : 'no FWG sidecar folder'}.`
-          : `Bulk ZIP export complete: ${done}/${total} WAV+JSON pairs in ${name}.`;
+          ? `MPC Bulk ZIP export complete: ${done}/${total} WAV file(s) in ${mpcNames.wavFolder}/, plus ${state.export.mpcIncludeSidecars ? 'separate FWG JSON sidecar folder' : 'no FWG sidecar folder'}.${tableSafetyStatusSuffixForAggregate(safetyAggregate)}`
+          : `Bulk ZIP export complete: ${done}/${total} WAV+JSON pairs in ${name}.${tableSafetyStatusSuffixForAggregate(safetyAggregate)}`;
       } else {
-        $('bulkStatus').textContent = `Bulk export complete: ${done}/${total} WAV+JSON pairs requested.`;
+        $('bulkStatus').textContent = `Bulk export complete: ${done}/${total} WAV+JSON pairs requested.${tableSafetyStatusSuffixForAggregate(safetyAggregate)}`;
       }
       $('bulkProgress').value = 1;
     } catch (err) {
