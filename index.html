@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-Fractured Wavetable Generator v2.8l
+Fractured Wavetable Generator v2.8q
 Copyright (C) 2026 Atom Smasher
 
 This file is part of Fractured Wavetable Generator.
@@ -14,7 +14,25 @@ or FITNESS FOR A PARTICULAR PURPOSE.
 
 SPDX-License-Identifier: GPL-2.0-only
 
-Release note: v2.8l is a narrow public-release-candidate polish pass after the v2.8 safety/comment consolidation. It keeps v2.8k behaviour, standardises MPC and combined-export completion messages on textContent, removes the orphaned status-strong CSS rule, replaces one literal NUL table-safety key separator with an escaped separator so text tools no longer treat the HTML as binary, and adds short internal comments explaining the collector/held-table safety decisions.
+Release note: v2.8pe consolidates MPC Morph/Bulk naming so preview, ZIP entries, WAV files, and FWG JSON sidecars use one shared name plan; removes the second Morph filename token; tracks auto MPC file-stems explicitly instead of guessing from short text; refreshes auto run tokens at decisecond resolution while preserving optional auto-token labels; and shows the wavetable-export morph warning beside both MPC Mode and Morph Render Mode controls in Morph and Bulk contexts.
+
+Release note: v2.8q makes MPC Wavetable Mode structurally stricter: Bulk MPC export now requires the Cycle-coherent wavetable safety profile, keeps the random morph pool restricted whenever MPC or Cycle-coherent wavetable export is active, updates the Notes guidance to describe MPC Mode as frame-oriented rather than merely folder-compatible, and adds teachable comments around the linked MPC/coherent-mode decisions.
+
+Release note: v2.8pf narrows the v2.8pe warning cleanup without changing naming: wavetable-export morph warnings now use one shared notice path, keep the Bulk Random Safety notice, and show the same red message beside the relevant MPC Wavetable Mode and Morph Render Mode controls in Morph and Bulk when the selected fixed morph mode is red-listed. Per-file random morph mode continues to suppress those red notices because the selected dropdown mode is ignored.
+
+Release note: v2.8pd keeps the working v2.8pc UI/transport baseline, makes the compact MPC file-stem token refresh at export time and after successful MPC batch exports, allows trailing underscores in the MPC file-stem field, and adds an inline red Cycle-coherent random warning beside the Bulk Morph Render Mode selector when a manually selected morph mode is red-listed.
+
+Release note: v2.8pc rewinds to the working v2.8pa UI/transport baseline, expands the Cycle-coherent random morph red-list to the full poor random-batch set from the latest listening pass, adds a red Cycle-coherent warning when a manually selected Morph Render Mode is red-listed, migrates lingering old MPC file stems such as wt/wta to the compact base36 token default, and places that compact token near the front of MPC folder/ZIP names without adding a long YYYYMMDD-HHMMSS directory suffix.
+
+Release note: v2.8pa is a minor cleanup pass after the first larger Cycle-coherent random listening batch. It expands the per-file random morph red-list for Cycle-coherent Bulk to skip the obvious poor random-batch candidates — Full Interpolation, Dual-Path Interpolation, Comb Wavetable Morph, Harmonic Level Morph, and the START Phase-Modulates END moving/fixed families — while keeping all of those modes manually selectable. It also trims the MPC readiness summary spacing, renames the MPC cycle count label to Single Cycles, and replaces the old wt MPC file-stem default with a compact base36 run token so serial-first filenames are less conflict-prone.
+
+Release note: v2.8p starts the Cycle-coherent random morph red-list: when Bulk randomises Morph Render Mode per file while Cycle-coherent random is active, the START Phase-Modulates END moving/fixed morph families are skipped by default because early MPC/wavetable listening tests found them prone to skippy, noisy, static, or weakly evolving frames. The selected Morph Render Mode remains manually available; the red-list applies only to per-file random morph-mode selection in Cycle-coherent Bulk.
+
+Release note: v2.8o fixes the v2.8n MPC Bulk naming UI: the MPC folder-name field now reflects the actual generated folder stem, auto-updates when geometry, random morph mode, or Morph Render Mode changes, treats old verbose prefixes as auto-naming candidates, and stops prepending a short prefix to a second hidden generated prefix.
+
+Release note: v2.8n tightens the v2.8m Bulk/MPC naming workflow: Randomise Morph Render Mode per file now disables the Bulk Morph Render Mode selector, MPC Bulk folder names use random_morph when per-file morph randomisation is enabled, fixed-mode MPC Bulk folder names include a compact live morph-mode slug, and MPC name previews refresh as the active morph mode or random-morph option changes.
+
+Release note: v2.8m adds Bulk Random Safety choices for Wide-open versus Cycle-coherent random export, lets Cycle-coherent Bulk work inside MPC Wavetable Mode, adds a 2048 samples/cycle cycle-coherent target, keeps Morph Render Mode user-selectable with an optional per-file random morph-mode checkbox, records the selected random-safety/morph-mode behaviour in JSON sidecars, and revises MPC Bulk naming so serial numbers lead WAV filenames while folder names carry the longer batch identity.
 
 v2.8 development summary: v2.8 promotes the post-v2.7o work into one consolidated branch. The update adds the Classic Waveforms family and eight clean waveform preset buttons, groups the Morph Render Mode menu, adds the START Phase-Modulates END moving/fixed morph families, and removes temporary test labels/IDs. It also hardens generated-table safety: flat, all-DC, near-DC, invalid, or impulse-like generated tables are corrected with context-aware reporting; morph/render paths prefer scoped previous-valid tables where safe; UI warnings and JSON sidecars now summarise fallback use without per-frame spam. Documentation was tightened around Classic landmark settings, Fixed Endpoint phase-mod behaviour, loop-safety wording, MPC notes, and export/cache semantics.
 
@@ -65,7 +83,7 @@ itself, impose GPL licensing on generated outputs.
 <link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABGUlEQVR42u2ZyxHCMAxE48XQDb2lFHpLN7nAiRkONiNZWn9AOTJE0VutZAXSJV+f28IXtsWvAAiAAAiAHwPYj3Pbj5OSbCl28jzISok/7jdqXDCT//a5Na6rhViWmaaJWwFr933aMq+kfqmfph2jUmHAUKmkFKtSyxxktXEMVpkt819TLfRQiWkjrGwfE4BETY81YrkKaG2G0rbX4lWp2t59gFrgkfuNRhiwy8zuA/RsOIa90KPMzD7ArHu+VBhob2BOqCHngFdyrdVGT78y4qLXQ7WVkn4fI/YXT2Gy5QFWWA8bdV3mpMAaYTBqDR4+RlmQ2rhoCWRJ3ht8yAtNDaIFTvTr9HtaeKvnETfF/8QBEAABEAB/DfACUDl5gdnrIXMAAAAASUVORK5CYII=">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEL0lEQVR42u3dS1JUQRBGYbto2A17cynszd04wZEjguBC1yMf3xlqoN6sPPlnNd1ye7o/v/8CmjKUAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAAAABgOXclWAOv//8/fBrb68vCrOhzo/U+uYnxMw/jM8gRLwaW4E2HcxPv0aN136NBDjUxNJgbY2v1lcCHJrg0mBtXa7+OQQ42LAkOF8PAhw+GBKcPTcCoO30J0CQg+meAiefnwCaoPVzE0BTtoYAgZq/m3ARnpcAKMuVb4YRINhk6pICUZ6TAGg7/QkQdDJVT4HVz/ed91n5PADaTX0CNN+/Nb4ViIwFnuvt9eXht5UTAK0hgPWn3dpDAFJ6HgJomu7TnwCarH2NCYC2058ASaa/hJIAMGQIAOvPbFq/FWL2dyWtL1YgINUAIMDiaJ4V292TZNV/JUkA09QKpJlyTq8uNV5ZPwmguSUAQADRnGL6d7sHrK6xBLAqtRaVALACAQQQzctXGq8YxauXBLBft76oE8Bl2AqEfE1c/eXQXTVuJYD30qixBLDCgABAMwEiRbPPCMRJWQmA1ncsAsAKZDLtj2aX6Rh1kQCQAJBuXS/kBDgYzdYgAqDx9I0wEO4rCh9psnn7gxpPF+CrB/7/+1Ui3qpiBfqR7aYvuaLXYaxq/ggSEBDTBHikmTRiXdmzn61XgSABTIqzu6l7QHABMjZvx7XLkLECAQQwBfMkzunnHlUPx24OCdCQXfeAKnes4XAgARBi/bFyBRbA4UAC2IHVoFjiDYeDzmc4shlrF4cViHyeM7MAqyLUeqUWEgDEWimA/dgaJAEKT6ZKzTd7Wles8ahyOIA7gOmPjgJUTBMyBhbA4RgOVcQeDgedz8odQKpZgU42zKOTRYpAAkilFEMmYsoSwGomATRZ/SY7vSpGrfHI/FD2fzUukQAaGVYggAD7UyPD/n/q1aAONR5ZDwewAgGVBLiaAj78ImlDCeCbNXnuAfZ/KxAQV4CrP4RbCqhxKAGyrUHWNjUOuwJ9NoFc4NR4NvdsB2T656hxyzuAxrJWZPt3ehUIEgAgQJPoq7CmqbEEAAjgMuzfFVIAhwMJABDA9O/0TBlrPBQDEqC4BGSEO4DVzpAhAAk0/2YBHA4kgOb3rJ0FcDjEa58AuwvVUTqDxgpkIm+UoIJwt6f78/vOv3D1x/BMQXUOnQAaVMq0X4FWFZBcapzmDjC7kJpfjdtegjX/+tpUrfH2S/DsC5vmX1vn6vUNIcB3D0jT75GgQ51DCfDVQWl8NW4jAOASDBAAIABAAIAAAAEAAgAEAAgAEAAgAEAAgAAAAQACAAQACAAQACAAQACAACAAQACAAAABAAIABAAIABAAIABAAIAAQA3+AVA9ue7ZyNVQAAAAAElFTkSuQmCC">
 <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAMAEBAAAAAAIACgAAAANgAAACAgAAAAACAA7QAAANYAAAAwMAAAAAAgAH8BAADDAQAAiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNkZmH9z0ABYKJEM20NKLj8i6Hg8i+CclgNQNaIy5AJumz4XUAswGnABF02uC24XAc3AJczcWnC6wJChsFch2EAocAi2gX4NGGzhAlZAz7nw+TQDcdwATbb8XmDcehnJgDQ4CkpxFDFzQAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAALRJREFUeJztl0sOgCAMRIu/23g3juLdvI0b3RlApVMqIcbOzkjbl+lgouuHcaeG6loONwADICIapAV+3aLnZZ5UtWoH0qbScyIH0GGcQteaZwAGyO2ecyZ8n2amyAFJ8Dh9ZwV3QtaQsx8G4JpodAL4dXvtmhUBhCBNAaTK5QBZHQtQc/8QQG2dAJIvWypNbdYBjf1o7SOA5jZIaiMATchKa6EQ1gS7ALw5DOnl7M/IAH4PcADd7kdZR/NDrwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAAAUZJREFUeJztmMsRgzAMRCEhdENvlEJvdMMlOcEA8UeflWVmvGcQflpJ2O7fw+fbPVgv7wVo1QC81QC81QC8BQeY162b1w0dNhq7R/7IQgtfptE0LsyBWNa1buTehwBYlQxFRZpYChh771yWgygy4SMWCvVTtWOUmhg4wDKNwUxZOVWtA3fFxrEKIJVVzfznuAV1ILdoizJ6RAmlEiMGoGQTsY3IqToHuGV2Adh3e5JapWYb3QcHwD2w5/7mrFxiRCXEgbPugwOgRMPlJHEd0sRceGR5JgG8+4CSmAsA5QXLCSWRuoRQi5O6nQWwvGFAiOWA5qNcp6jP/wF4jFNNYkhnYsrhWiJEGRXdzFGBOYkJAtTwV6ZK7IAVJDduFCAVSLN4NLjLgSYGIYEj3U7v0wKdPURc6PW6h6o7E3PVALzVALzVALz1A1A5eYHJ8L+TAAAAAElFTkSuQmCC">
-<title>Fractured Wavetable Generator v2.8l</title>
+<title>Fractured Wavetable Generator v2.8q</title>
 <style>
   :root {
     --bg: #101216;
@@ -233,7 +251,7 @@ itself, impose GPL licensing on generated outputs.
 </head>
 <body>
 <header>
-  <h1>Fractured Wavetable Generator v2.8l</h1>
+  <h1>Fractured Wavetable Generator v2.8q</h1>
   <p>Browser wavetable generator: compact chaos engines, morph audition, WAV + JSON export.</p>
 </header>
 <nav>
@@ -379,10 +397,10 @@ itself, impose GPL licensing on generated outputs.
       </div>
       <div class="panel">
         <h2>Bulk export notes</h2>
-        <p class="note">Bulk randomises the generator engine, the three family-specific generator knobs, wavetable type, FM/PWM/Ring Mod, FM pitch range, source/result windows, and START/END patches. Filters are reset to Off so random batches are less likely to disappear into silence.</p>
+        <p class="note">Wide-open Bulk randomises the generator engine, the three family-specific generator knobs, wavetable type, FM/PWM/Ring Mod, FM pitch range, source/result windows, A–D source taps, and START/END patches. Filters are reset to Off so random batches are less likely to disappear into silence.</p>
         <p class="note">Bulk uses the render settings shown on this tab: START/END routing options, cycle-stepped transition, length, sample rate, bit depth, morph render mode, curve mode/amount, FFT anchor count, DC removal, normalisation, and headroom. These render settings are shared with the Morph tab so both tabs describe the same render engine. Direction and download mode are Bulk-only controls.</p>
-        <p class="note">The phase-accurate loop-safe option is aimed at wavetable developers. It temporarily neutralises modulation, filters, source/result windows, phase-offset morphing, and non-integer sample/cycle relationships during the batch. Selecting Seconds turns it off by default; selecting Cycles or Samples turns it on by default. You can still manually select or un-select the checkbox afterward. The target selector appears only when enabled. The default target is <code>256 samples/cycle</code>, matching the native internal table size; <code>512</code> and <code>1024</code> are 2× and 4× oversampling targets.</p>
-        <p class="note">Locked in bulk mode: there is no per-iteration audition, no manual START/END editing during a batch, and no per-file morph-mode variation unless you change the global Morph Render Mode before starting the batch.</p>
+        <p class="note">Cycle-coherent Bulk is aimed at wavetables. It neutralises oscillator modulation, filters, and source/result windows while keeping random engines, generator pots, wavetable types, and A–D source taps. Selecting Seconds defaults to Wide-open; selecting Cycles or Samples defaults to Cycle-coherent. The target selector appears only when Cycle-coherent is enabled outside MPC Mode. The targets include <code>256</code>, <code>512</code>, <code>1024</code>, and <code>2048 samples/cycle</code>.</p>
+        <p class="note">Locked in bulk mode: there is no per-iteration audition and no manual START/END editing during a batch. Morph Render Mode is user-selected by default; enable Randomise Morph Render Mode per file when you want a mixed morph-mode batch. In Cycle-coherent random, per-file random morph mode skips the current red-list by default: Full Interpolation, Dual-Path, Hybrid, Wavetable/Warm/Softened/Saturated, Comb, Harmonic Level, and START Phase-Modulates END moving/fixed modes.</p>
       </div>
     </div>
   </section>
@@ -461,9 +479,9 @@ itself, impose GPL licensing on generated outputs.
       <h3>Export and browser limits</h3>
       <ul class="noteList">
         <li>Morph and Bulk exports always create a WAV file and a matching JSON sidecar. There is no option to export WAV-only.</li>
-        <li>MPC Wavetable Mode is experimental. It creates MPC-style WAV folders and a minimal <code>format.json</code>, but the exact hardware display/sorting behaviour and the musical usefulness of each frame still need real MPC testing.</li>
-        <li>Bulk random export uses the shared pitch and render controls unless Phase-accurate loop-safe export is enabled.</li>
-        <li>In loop-safe Bulk mode, frequency, render length, morph mode, cycle-stepping, oscillator modulation, filters, and source/result windows may be temporarily overridden so the exported file lands on a clean cycle boundary.</li>
+        <li>MPC Wavetable Mode creates MPC-style wavetable folders with a matching <code>format.json</code>. In Bulk export, it requires the cycle-coherent wavetable safety profile so random batches are structured as wavetable frames, not just ordinary audio files in an MPC-compatible folder. Hardware display, sorting, and edge-case naming behaviour may still vary by MPC firmware and should be verified on the target device.</li>
+        <li>Bulk random export uses the shared pitch and render controls. Wide-open random is useful for pads, one-shots, drones, transitions, and resampling; Cycle-coherent random is usually better for wavetables.</li>
+        <li>In Cycle-coherent Bulk mode, frequency, render length, cycle-stepping, oscillator modulation, filters, and source/result windows may be temporarily adjusted so each wavetable frame is more likely to remain a stable single oscillator cycle. Morph Render Mode remains user-selectable unless per-file random morph modes are enabled.</li>
         <li>Very long browser renders can use a lot of RAM. For unusually long exports, smaller test renders are recommended before committing to a large file.</li>
       </ul>
 
@@ -507,7 +525,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: TABLE_SIZE is fixed at 256 samples because most of the code assumes a small,
   // TUTORIAL: power-of-two wavetable. Pitch, window, modulation, morph, and export helpers all
   // TUTORIAL: read these same limits, so changing one value here affects several subsystems.
-  const APP_VERSION = 'v2.8l';
+  const APP_VERSION = 'v2.8q';
   const EXPORT_SCHEMA_VERSION = 11;
   const TABLE_SIZE = 256;
   const DEFAULT_SAMPLE_RATE = 44100;
@@ -601,6 +619,7 @@ itself, impose GPL licensing on generated outputs.
   const MPC_MIN_CYCLES = 2;
   const MPC_MAX_CYCLES = 2048;
   const MPC_MAX_FILES_PER_FOLDER = 512;
+  let MPC_DEFAULT_FILE_STEM = compactMpcRunTokenUTC();
 
   // TUTORIAL: Wavetable mode metadata. Each mode now has an explicit internal id and
   // TUTORIAL: an explicit UI number. The internal id is what patches and JSON store; the UI
@@ -971,6 +990,28 @@ itself, impose GPL licensing on generated outputs.
     'Phase-Modulated END — Fixed Endpoints',
     'Spectral / FFT',
   ];
+  // TUTORIAL: Cycle-coherent Bulk can still use any Morph Render Mode when the
+  // TUTORIAL: user selects it deliberately. This red-list only affects per-file
+  // TUTORIAL: random morph-mode selection inside Cycle-coherent random batches.
+  // TUTORIAL: Listening tests found the phase-modulated-END families and a few
+  // TUTORIAL: direct/comb/harmonic modes prone to skippy, noisy, static, or
+  // TUTORIAL: weakly evolving wavetable frames when chosen blindly.
+  const CYCLE_COHERENT_RANDOM_MORPH_RED_GROUPS = new Set([
+    'Phase-Modulated END — Moving Values',
+    'Phase-Modulated END — Fixed Endpoints',
+  ]);
+  const CYCLE_COHERENT_RANDOM_MORPH_RED_LABELS = new Set([
+    'Full Interpolation (Favours Digital Noise)',
+    'Dual-Path Interpolation (Avoids Midpoint Switches)',
+    'Hybrid Morph (Values Move, Types Fade)',
+    'Wavetable Morph (Blends Tables Before Audio)',
+    'Warm Wavetable Morph (One Oscillator, Smooth Blend)',
+    'Softened Morph (Rounded Middle)',
+    'Saturated Morph (Warm, Compressed)',
+    'Comb Wavetable Morph (Hollow Interference)',
+    'Harmonic Level Morph (Stable, Less Phasey)',
+  ]);
+  const CYCLE_COHERENT_RANDOM_MORPH_RED_LIST_LABEL = 'Full Interpolation, Dual-Path, Hybrid, Wavetable/Warm/Softened/Saturated, Comb, Harmonic Level, and START Phase-Modulates END moving/fixed modes';
   // TUTORIAL: Human-facing morph-mode labels may change as the UI wording gets refined.
   // TUTORIAL: JSON exports therefore store these stable IDs alongside the current label,
   // TUTORIAL: similar to how wavetable modes export an internal id plus UI text.
@@ -1060,8 +1101,8 @@ itself, impose GPL licensing on generated outputs.
     export: {
       mode: 'Cycles', value: MORPH_DEFAULT_CYCLES, sampleRate: DEFAULT_SAMPLE_RATE, bitDepth: '16-bit PCM',
       morphRenderMode: DEFAULT_MORPH_RENDER_MODE, spectralStates: 3,
-      curveAmount: 0, curveMode: 'Bend', cycleStepped: false, loopSafeBulk: false, loopSafeBulkStrategy: '256',
-      mpcWavetableMode: false, mpcSamplesPerCycle: MPC_DEFAULT_SAMPLES_PER_CYCLE, mpcCycles: MPC_DEFAULT_CYCLES, mpcIncludeSidecars: true, mpcPrefix: 'fwg_',
+      curveAmount: 0, curveMode: 'Bend', cycleStepped: false, loopSafeBulk: false, loopSafeBulkStrategy: '256', bulkRandomiseMorphMode: false,
+      mpcWavetableMode: false, mpcSamplesPerCycle: MPC_DEFAULT_SAMPLES_PER_CYCLE, mpcCycles: MPC_DEFAULT_CYCLES, mpcIncludeSidecars: true, mpcPrefix: '', mpcPrefixAuto: true, mpcFileStem: '', mpcFileStemAuto: true, mpcFileStemAutoSuffix: '',
       differentTypes: false, sharedType: 3, differentFmRanges: false, sharedFmRange: DEFAULT_FM_RANGE_LABEL,
       dcMode: 'Per Cycle', normMode: 'Per Cycle Peak', headroomDb: -0.1, prefix: 'fractured_wt_morph', zipDownloads: true,
     },
@@ -1352,11 +1393,16 @@ itself, impose GPL licensing on generated outputs.
       cycleStepped: !!state.export.cycleStepped,
       loopSafeBulk: !!state.export.loopSafeBulk,
       loopSafeBulkStrategy: canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy),
+      bulkRandomiseMorphMode: !!state.export.bulkRandomiseMorphMode,
       mpcWavetableMode: !!state.export.mpcWavetableMode,
       mpcSamplesPerCycle: canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle),
       mpcCycles: canonicalMpcCycles(state.export.mpcCycles),
       mpcIncludeSidecars: !!state.export.mpcIncludeSidecars,
-      mpcPrefix: canonicalMpcPrefix(state.export.mpcPrefix),
+      mpcPrefixAuto: !!state.export.mpcPrefixAuto,
+      mpcPrefix: state.export.mpcPrefixAuto ? '' : canonicalMpcPrefix(state.export.mpcPrefix),
+      mpcFileStemAuto: !!state.export.mpcFileStemAuto,
+      mpcFileStemAutoSuffix: state.export.mpcFileStemAuto ? cleanMpcAutoStemSuffix(state.export.mpcFileStemAutoSuffix) : '',
+      mpcFileStem: state.export.mpcFileStemAuto ? '' : canonicalMpcFileStem(state.export.mpcFileStem),
       moduleOpen: Object.assign({}, state.ui?.moduleOpen || {}),
       lastOpenTab: String(state.ui?.lastOpenTab || activeTabId()),
     };
@@ -1398,11 +1444,35 @@ itself, impose GPL licensing on generated outputs.
     if (typeof saved.cycleStepped === 'boolean') state.export.cycleStepped = saved.cycleStepped;
     if (typeof saved.loopSafeBulk === 'boolean') state.export.loopSafeBulk = saved.loopSafeBulk;
     if (saved.loopSafeBulkStrategy != null) state.export.loopSafeBulkStrategy = canonicalLoopSafeBulkStrategy(saved.loopSafeBulkStrategy);
+    if (typeof saved.bulkRandomiseMorphMode === 'boolean') state.export.bulkRandomiseMorphMode = saved.bulkRandomiseMorphMode;
     if (typeof saved.mpcWavetableMode === 'boolean') state.export.mpcWavetableMode = saved.mpcWavetableMode;
     if (saved.mpcSamplesPerCycle != null) state.export.mpcSamplesPerCycle = canonicalMpcSamplesPerCycle(saved.mpcSamplesPerCycle);
     if (saved.mpcCycles != null) state.export.mpcCycles = canonicalMpcCycles(saved.mpcCycles);
     if (typeof saved.mpcIncludeSidecars === 'boolean') state.export.mpcIncludeSidecars = saved.mpcIncludeSidecars;
-    if (saved.mpcPrefix != null) state.export.mpcPrefix = migratedMpcPrefix(saved.mpcPrefix);
+    if (typeof saved.mpcPrefixAuto === 'boolean') state.export.mpcPrefixAuto = saved.mpcPrefixAuto;
+    if (saved.mpcPrefix != null) {
+      state.export.mpcPrefix = migratedMpcPrefix(saved.mpcPrefix);
+      if (!state.export.mpcPrefix || mpcPrefixLooksAutoOrLegacy(saved.mpcPrefix)) state.export.mpcPrefixAuto = true;
+    }
+    if (typeof saved.mpcFileStemAuto === 'boolean') state.export.mpcFileStemAuto = saved.mpcFileStemAuto;
+    if (saved.mpcFileStemAutoSuffix != null) state.export.mpcFileStemAutoSuffix = cleanMpcAutoStemSuffix(saved.mpcFileStemAutoSuffix);
+    if (saved.mpcFileStem != null) {
+      const savedStem = cleanMpcFileStem(saved.mpcFileStem);
+      const lowerStem = savedStem.toLowerCase();
+      if (!savedStem || lowerStem === 'wt' || lowerStem === 'wta') {
+        state.export.mpcFileStem = '';
+        state.export.mpcFileStemAuto = true;
+        state.export.mpcFileStemAutoSuffix = '';
+      } else if (state.export.mpcFileStemAuto) {
+        const parsed = parseMpcAutoStemInput(savedStem);
+        state.export.mpcFileStem = '';
+        state.export.mpcFileStemAutoSuffix = parsed.auto ? parsed.suffix : state.export.mpcFileStemAutoSuffix;
+      } else {
+        state.export.mpcFileStem = savedStem;
+        state.export.mpcFileStemAutoSuffix = '';
+      }
+    }
+    if (state.export.mpcFileStemAuto) state.export.mpcFileStem = '';
     if (saved.moduleOpen && typeof saved.moduleOpen === 'object') state.ui.moduleOpen = Object.assign({}, saved.moduleOpen);
     if (isValidTabId(saved.lastOpenTab)) state.ui.lastOpenTab = String(saved.lastOpenTab);
     state.common.midiStatus = state.common.midiChannel === 'off' ? 'MIDI input off' : `MIDI channel restored: ${state.common.midiChannel === 'omni' ? 'OMNI' : 'ch ' + state.common.midiChannel}`;
@@ -3813,6 +3883,107 @@ itself, impose GPL licensing on generated outputs.
     };
   }
 
+  function isCycleCoherentRandomMorphRedListed(value) {
+    const mode = canonicalMorphRenderMode(value);
+    const item = MORPH_RENDER_MODES.find(([label]) => label === mode);
+    const group = item ? item[2] : '';
+    return CYCLE_COHERENT_RANDOM_MORPH_RED_LABELS.has(mode) || CYCLE_COHERENT_RANDOM_MORPH_RED_GROUPS.has(group);
+  }
+
+  // TUTORIAL: Random morph selection has two different jobs. Ordinary Bulk export can
+  // TUTORIAL: choose from the full experimental morph list. Wavetable-oriented Bulk export
+  // TUTORIAL: cannot: MPC Mode and Cycle-coherent random both promise frame-like material,
+  // TUTORIAL: so random morphs are restricted to the listening-tested modes that tolerate
+  // TUTORIAL: unrelated START/END patches. The legacy cycleCoherent option is still accepted
+  // TUTORIAL: so older call sites read correctly, but wavetableSafe is the clearer concept.
+  function randomMorphRenderModeLabel(options = {}) {
+    const wavetableSafe = !!(options.wavetableSafe || options.cycleCoherent);
+    const choices = MORPH_RENDER_MODES
+      .map(([label]) => label)
+      .filter(label => !wavetableSafe || !isCycleCoherentRandomMorphRedListed(label));
+    const pool = choices.length ? choices : MORPH_RENDER_MODES.map(([label]) => label);
+    return pool[randInt(0, pool.length - 1)] || DEFAULT_MORPH_RENDER_MODE;
+  }
+
+  function wavetableMorphWarningText() {
+    return `The selected morph mode “${canonicalMorphRenderMode(state.export.morphRenderMode)}” is not recommended for wavetable exports.`;
+  }
+
+  const WAVETABLE_MORPH_SAFE_POOL_TEXT = 'Random morphs are using the recommended wavetable-safe pool.';
+
+  // TUTORIAL: MPC Wavetable Mode is not just a folder/format.json switch. In Bulk it also
+  // TUTORIAL: requires the same cycle-coherent safety profile used for dedicated wavetable
+  // TUTORIAL: batches. This keeps the mechanical MPC layout promise aligned with the musical
+  // TUTORIAL: promise that each exported file behaves like a sequence of stable frames.
+  function enforceMpcBulkCycleCoherence() {
+    if (state.export.mpcWavetableMode) state.export.loopSafeBulk = true;
+  }
+
+  function normaliseWavetableMorphWarningLocation(location = 'morph-mode') {
+    const key = String(location || 'morph-mode');
+    if (key === 'mpc' || key === 'mpc-mode') return 'mpc-mode';
+    if (key === 'safety' || key === 'bulk-random-safety') return 'bulk-random-safety';
+    return 'morph-mode';
+  }
+
+  function morphModeWavetableWarningActive(context = 'morph', location = 'morph-mode') {
+    if (!isCycleCoherentRandomMorphRedListed(state.export.morphRenderMode)) return false;
+    const ctx = String(context || 'morph');
+    const loc = normaliseWavetableMorphWarningLocation(location);
+    if (ctx === 'bulk') {
+      if (state.export.bulkRandomiseMorphMode) return false;
+      if (loc === 'mpc-mode') return !!state.export.mpcWavetableMode;
+      return !!(state.export.mpcWavetableMode || state.export.loopSafeBulk);
+    }
+    return !!state.export.mpcWavetableMode;
+  }
+
+  function morphModeWavetableNoticeState(context = 'morph', location = 'morph-mode') {
+    const ctx = String(context || 'morph');
+    const loc = normaliseWavetableMorphWarningLocation(location);
+    if (ctx === 'bulk' && loc === 'bulk-random-safety' && state.export.bulkRandomiseMorphMode && (state.export.mpcWavetableMode || state.export.loopSafeBulk)) {
+      return {text: WAVETABLE_MORPH_SAFE_POOL_TEXT, bad: false, ok: true};
+    }
+    if (morphModeWavetableWarningActive(ctx, loc)) {
+      return {text: wavetableMorphWarningText(), bad: true, ok: false};
+    }
+    return {text: '', bad: false, ok: false};
+  }
+
+  function morphModeFolderSlug(value = state.export.morphRenderMode) {
+    const mode = canonicalMorphRenderMode(value);
+    const exact = {
+      'Full Interpolation (Favours Digital Noise)': 'full_interp',
+      'Dual-Path Interpolation (Avoids Midpoint Switches)': 'dual_path',
+      'Hybrid Morph (Values Move, Types Fade)': 'hybrid',
+      'Crossfade (Favours Analogue Warmth)': 'crossfade',
+      'Phase-Aligned Crossfade (Warm, Less Beating)': 'phase_aligned_xfade',
+      'Phase-Offset Crossfade (Analogue Phaser Motion)': 'phase_offset_xfade',
+      'Wavetable Morph (Blends Tables Before Audio)': 'wt',
+      'Warm Wavetable Morph (One Oscillator, Smooth Blend)': 'warm_wt',
+      'Softened Morph (Rounded Middle)': 'softened',
+      'Saturated Morph (Warm, Compressed)': 'saturated',
+      'Comb Wavetable Morph (Hollow Interference)': 'comb_wt',
+      'FFT Spectral Morph (Digital Tone, Less Crunchy)': 'fft_spectral',
+      'Spectral Envelope Morph (Smooth Digital Tone)': 'spectral_env',
+      'Harmonic Level Morph (Stable, Less Phasey)': 'harmonic_level',
+    };
+    if (exact[mode]) return exact[mode];
+    const fixed = START_PHASE_MOD_END_FIXED_SETTINGS[mode];
+    if (fixed) {
+      const rate = fixed.sourceRate === 1 ? '' : `_x${String(fixed.sourceRate).replace('0.2', '1_5').replace('0.3333333333333333', '1_3').replace('0.5', '1_2').replace(/\./g, '_')}`;
+      const depth = fixed.phaseDepth === 0.5 ? '_180' : fixed.phaseDepth === 1 ? '_360' : '';
+      return `pm_fixed${rate}${depth}`;
+    }
+    const moving = START_PHASE_MOD_END_MOVING_SETTINGS[mode];
+    if (moving) {
+      const rate = moving.sourceRate === 1 ? '' : `_x${String(moving.sourceRate).replace('0.2', '1_5').replace('0.3333333333333333', '1_3').replace('0.5', '1_2').replace(/\./g, '_')}`;
+      const depth = moving.phaseDepth === 0.5 ? '_180' : moving.phaseDepth === 1 ? '_360' : '';
+      return `pm_moving${rate}${depth}`;
+    }
+    return safeName(mode).slice(0, 32) || 'morph';
+  }
+
   // TUTORIAL: Finds the explanatory text for the selected morph mode.
   function morphModeDescription(value) {
     const mode = canonicalMorphRenderMode(value);
@@ -4282,14 +4453,16 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Bulk loop-safe targets are frame-oriented samples-per-cycle choices.
-  // TUTORIAL: 256 matches the fixed internal table; 512 and 1024 oversample that table.
+  // TUTORIAL: 256 matches the fixed internal table; higher choices oversample that table.
+  // TUTORIAL: 2048 matches the observed MPC factory-style samples/cycle layout.
   const LOOP_SAFE_BULK_STRATEGIES = [
     ['256', '256 samples/cycle — native table match'],
     ['512', '512 samples/cycle — 2× oversampling (2× larger file size)'],
     ['1024', '1024 samples/cycle — 4× oversampling (4× larger file size)'],
+    ['2048', '2048 samples/cycle — factory-style high-resolution cycle framing'],
   ];
 
-  const LOOP_SAFE_TABLE_FRIENDLY_SPP = [256, 512, 1024];
+  const LOOP_SAFE_TABLE_FRIENDLY_SPP = [256, 512, 1024, 2048];
 
   // TUTORIAL: Migrates older/scratch loop-safe setting values into the current strategy list.
   // TUTORIAL: The temporary v2.3za 128-sample value is deliberately corrected back to 256.
@@ -4297,6 +4470,7 @@ itself, impose GPL licensing on generated outputs.
     const v = String(value || '256');
     if (v === 'preserve-duration' || v === 'native-256' || v === '128') return '256';
     if (v === '1024') return '1024';
+    if (v === '2048') return '2048';
     return LOOP_SAFE_BULK_STRATEGIES.some(([id]) => id === v) ? v : '256';
   }
 
@@ -4402,9 +4576,35 @@ itself, impose GPL licensing on generated outputs.
       changes.push(`duration target ${requestedDuration.toFixed(6)} s → ${actualDuration.toFixed(6)} s (${cycles} cycle(s), ${sampleCount} samples, ${samplesPerCycle.toFixed(6)} samples/cycle)`);
     }
     if (state.export.mode !== 'Cycles' || Math.abs(Number(state.export.value) - cycles) > 1e-9) changes.push(`temporary render unit/length → ${cycles} Cycles`);
-    if (canonicalMorphRenderMode(state.export.morphRenderMode) !== DEFAULT_MORPH_RENDER_MODE) changes.push(`morph mode → ${DEFAULT_MORPH_RENDER_MODE}`);
     if (!state.export.cycleStepped) changes.push('Cycle-stepped transition → on');
-    return {sampleRate: sr, samplesPerCycle, targetSamplesPerCycle: targetSpp, frequency: finalFreq, cycles, requestedDuration, actualDuration, durationDelta, sampleCount, changes, strategy, strategyLabel, priorityNote, originalMode: mode};
+    return {sampleRate: sr, samplesPerCycle, targetSamplesPerCycle: targetSpp, frequency: finalFreq, cycles, requestedDuration, actualDuration, durationDelta, sampleCount, changes, strategy, strategyLabel, priorityNote, originalMode: mode, mpcMode: false};
+  }
+
+  // TUTORIAL: MPC Wavetable Mode already has explicit samples/cycle and cycle-count settings.
+  // TUTORIAL: When Cycle-coherent Bulk runs inside MPC Mode, those MPC layout settings are
+  // TUTORIAL: the authoritative cycle-coherent plan so WAV length and format.json stay aligned.
+  function mpcCycleCoherentBulkPlan() {
+    const sr = clampInt(state.export.sampleRate, MPC_MIN_SAMPLE_RATE, MPC_MAX_SAMPLE_RATE);
+    const samplesPerCycle = canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle);
+    const cycles = canonicalMpcCycles(state.export.mpcCycles);
+    const originalFreq = clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY);
+    const sampleCount = cycles * samplesPerCycle;
+    const frequency = clampFloat(sr / samplesPerCycle, MIN_FREQUENCY, MAX_FREQUENCY);
+    const actualDuration = sampleCount / sr;
+    const requestedDuration = state.export.mode === 'Cycles' ? Math.max(1, Number(state.export.value) || cycles) / Math.max(originalFreq, MIN_FREQUENCY) : actualDuration;
+    const durationDelta = actualDuration - requestedDuration;
+    const strategy = String(samplesPerCycle);
+    const strategyLabel = `${samplesPerCycle} samples/cycle — MPC layout`;
+    const priorityNote = `MPC Mode: preserving the selected ${cycles} cycle(s) × ${samplesPerCycle} samples/cycle layout.`;
+    const changes = [];
+    if (Math.abs(frequency - originalFreq) > 1e-9) changes.push(`frequency ${originalFreq.toFixed(6)} Hz → ${frequency.toFixed(6)} Hz so the file matches the MPC layout`);
+    if (state.export.mode !== 'Cycles' || Math.abs(Number(state.export.value) - cycles) > 1e-9) changes.push(`temporary render unit/length → ${cycles} Cycles`);
+    if (!state.export.cycleStepped) changes.push('Cycle-stepped transition → on');
+    return {sampleRate: sr, samplesPerCycle, targetSamplesPerCycle: samplesPerCycle, frequency, cycles, requestedDuration, actualDuration, durationDelta, sampleCount, changes, strategy, strategyLabel, priorityNote, originalMode: 'Cycles', mpcMode: true};
+  }
+
+  function activeBulkCycleCoherentPlan() {
+    return state.export.mpcWavetableMode ? mpcCycleCoherentBulkPlan() : loopSafeBulkPlan();
   }
 
   // TUTORIAL: Escapes generated notice text before it is inserted as HTML paragraphs.
@@ -4416,18 +4616,19 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: This text is deliberately explicit about frequency replacement: in loop-safe
   // TUTORIAL: mode, the selected Hz value is a planning input, not the final render Hz. The
   // TUTORIAL: final Hz is derived from sample rate, samples-per-cycle target, and length.
-  function loopSafeBulkActiveLines(plan = loopSafeBulkPlan()) {
+  function loopSafeBulkActiveLines(plan = activeBulkCycleCoherentPlan()) {
     const delta = Math.abs(plan.durationDelta) > 1e-9 ? ` Duration difference: ${plan.durationDelta >= 0 ? '+' : ''}${plan.durationDelta.toFixed(6)} s.` : '';
     return [
-      'For wavetable-developer loop safety, Bulk temporarily disables or overrides oscillator FM, PWM, Ring Mod, filters, source/result windows, phase-offset morphing, continuous non-cycle-stepped morphing, and render length/frequency relationships that would not close on a whole-cycle file.',
-      `Frequency handling: selected pitch is ${clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY).toFixed(6)} Hz; loop-safe Bulk renders this batch at ${plan.frequency.toFixed(6)} Hz to hit ${plan.samplesPerCycle.toFixed(6)} samples/cycle.`,
-      `Loop-safe target: ${plan.strategyLabel}.`,
+      'Cycle-coherent Bulk keeps random engines, generator controls, wavetable types, and A–D source taps, but neutralises oscillator FM, PWM, Ring Mod, filters, and source/result windows so each wavetable frame is more likely to remain one stable oscillator cycle.',
+      `Frequency handling: selected pitch is ${clampFloat(state.common.frequency, MIN_FREQUENCY, MAX_FREQUENCY).toFixed(6)} Hz; Cycle-coherent Bulk renders this batch at ${plan.frequency.toFixed(6)} Hz to hit ${plan.samplesPerCycle.toFixed(6)} samples/cycle.`,
+      `${plan.mpcMode ? 'MPC layout' : 'Cycle-coherent target'}: ${plan.strategyLabel}.`,
       `Unit priority: ${plan.priorityNote}`,
       `Result: target ${plan.targetSamplesPerCycle || plan.samplesPerCycle} samples/cycle, effective ${plan.samplesPerCycle.toFixed(6)} samples/cycle, ${plan.frequency.toFixed(6)} Hz, ${plan.cycles} cycle(s), and ${plan.sampleCount} samples per file. Duration target ${plan.requestedDuration.toFixed(6)} s → ${plan.actualDuration.toFixed(6)} s.${delta}`,
       plan.changes.length ? `Temporary render changes: ${plan.changes.join('; ')}.` : 'No temporary length/frequency changes are needed for the current render settings.',
-      'The loop-safe target is used as the clean cycle-planning target. Cycles and Samples mode snap rendered length to whole target-sized cycles; Seconds mode keeps the selected duration and chooses the nearest whole-cycle frequency.',
-      'Generator Family and Wavetable Type are not forcibly flattened; otherwise Bulk would stop being useful as a random generator. They are mentioned only as sound-design context when they actually differ across START and END.',
-      'This is mainly for wavetable developers. For one-shots, drones, risers, and general sound design, it is usually fine to disable this Phase-accurate loop-safe feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.'
+      plan.mpcMode ? 'MPC Mode uses its own cycles and samples/cycle settings, then writes the matching format.json.' : 'The cycle-coherent target is used as the clean cycle-planning target. Cycles and Samples mode snap rendered length to whole target-sized cycles; Seconds mode keeps the selected duration and chooses the nearest whole-cycle frequency.',
+      'Generator Family, generator pots, Wavetable Type, and A–D source taps are not forcibly flattened; otherwise Bulk would stop being useful as a random wavetable generator. Drawn Waveform is excluded from Bulk random by default.',
+      'Morph Render Mode remains user-selectable. Enable Randomise Morph Render Mode per file only when you want each exported file to test a different morph strategy.',
+      `Cycle-coherent random-morph batches skip the current red-list by default: ${CYCLE_COHERENT_RANDOM_MORPH_RED_LIST_LABEL}. Select one of those modes manually when you deliberately want to test it.`
     ];
   }
 
@@ -4512,18 +4713,18 @@ itself, impose GPL licensing on generated outputs.
   }
 
   // TUTORIAL: Plain-text version of the active Bulk loop-safe explanation for export metadata.
-  function loopSafeBulkActiveText(plan = loopSafeBulkPlan()) {
+  function loopSafeBulkActiveText(plan = activeBulkCycleCoherentPlan()) {
     return loopSafeBulkActiveLines(plan).join('\n\n');
   }
 
   // TUTORIAL: HTML version of the active Bulk loop-safe explanation for the on-page status box.
-  function loopSafeBulkActiveHtml(plan = loopSafeBulkPlan()) {
+  function loopSafeBulkActiveHtml(plan = activeBulkCycleCoherentPlan()) {
     return paragraphHtml(loopSafeBulkActiveLines(plan));
   }
 
   // TUTORIAL: Plain-text explanation shown when Bulk loop-safe mode is off.
   function loopSafeBulkOffText() {
-    return 'Off: Bulk uses the visible render settings and randomises FM/PWM/Ring Mod, source/result windows, and morph-relevant patch settings. For one-shots, drones, risers, and general sound design, it is usually fine to disable this Phase-accurate loop-safe feature, and render as needed or slightly longer than needed, then trim to a zero crossing later.';
+    return 'Wide-open random: Bulk uses the visible render settings and randomises FM/PWM/Ring Mod, source/result windows, engines, wavetable types, taps, and patch values. This is useful for pads, one-shots, drones, transitions, resampling, and surprise audio. Cycle-coherent random is usually better for wavetables, where each frame should remain a stable single oscillator cycle.';
   }
 
   // TUTORIAL: HTML explanation shown when Bulk loop-safe mode is off.
@@ -4537,7 +4738,7 @@ itself, impose GPL licensing on generated outputs.
   // TUTORIAL: movement such as beating, tremolo-like motion, or slow level swells.
   function normalisationDynamicsNotes() {
     if (canonicalNormMode(state.export.normMode) !== 'Per Cycle Peak') return [];
-    return ['Per Cycle Peak normalisation can flatten cycle-to-cycle amplitude beating; use Whole File Peak or Off when that beating should be preserved.'];
+    return ['Per Cycle Peak normalisation can flatten cycle-to-cycle amplitude beating; use Whole File Peak or Off when that beating should be preserved. For wavetables, Per Cycle Peak can also be useful because each frame keeps a consistent level.'];
   }
 
   function renderLengthSummary() {
@@ -6353,6 +6554,13 @@ itself, impose GPL licensing on generated outputs.
     return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}-${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}`;
   }
 
+  // TUTORIAL: Compact base36 UTC-ish run token for MPC names. This is shorter
+  // TUTORIAL: than YYYYMMDD-HHMMSS but still changes with real time, which keeps
+  // TUTORIAL: serial-first MPC filenames and folders less collision-prone.
+  function compactMpcRunTokenUTC(date = new Date()) {
+    return Math.floor(date.getTime() / 100).toString(36).toUpperCase();
+  }
+
   const ZIP_TEXT_ENCODER = new TextEncoder();
   let ZIP_CRC_TABLE = null;
   // TUTORIAL: Builds the CRC lookup table required by the ZIP file format.
@@ -6505,13 +6713,14 @@ itself, impose GPL licensing on generated outputs.
     const statusEl = $('morphStatus');
     const progressEl = $('exportProgress');
     if (!ensureMpcExportReady(statusEl, 1)) return null;
-    const stamp = compactTimestampUTC();
+    prepareMpcFileStemForExport();
+    const stamp = compactMpcRunTokenUTC();
     const names = mpcFolderNames('morph', stamp);
     const files = [{name: `${names.wavFolder}/format.json`, data: mpcFormatJsonText()}];
     try {
       const result = await exportDirection(direction, state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
         download: false, zip: false, token, timestamp: stamp, progressOffset: 0, progressScale: 0.90,
-        baseName: `${names.fileStem}_${direction}_${stamp}`,
+        baseName: mpcMorphBaseName(names, direction),
         wavFolder: names.wavFolder,
         jsonFolder: state.export.mpcIncludeSidecars ? names.jsonFolder : '',
         includeJson: !!state.export.mpcIncludeSidecars,
@@ -6526,6 +6735,9 @@ itself, impose GPL licensing on generated outputs.
       downloadBlob(zipBlob, names.zipName);
       progressEl.value = 1;
       statusEl.textContent = `Exported MPC Morph ${direction}\nZIP: ${names.zipName}\nMPC folder: ${names.wavFolder}\nLayout: ${names.cxs}.${tableSafetyStatusSuffixForResults([result])}`;
+      refreshMpcFileStemAfterExport();
+      persistGlobalSettings();
+      syncExportSettingControls();
       return result;
     } catch (err) {
       if (isAbortError(err)) { progressEl.value = 0; statusEl.textContent = 'MPC Morph export cancelled.'; return null; }
@@ -6541,14 +6753,15 @@ itself, impose GPL licensing on generated outputs.
     const progressEl = $('exportProgress');
     const directionCount = 2;
     if (!ensureMpcExportReady(statusEl, directionCount)) return;
-    const stamp = compactTimestampUTC();
+    prepareMpcFileStemForExport();
+    const stamp = compactMpcRunTokenUTC();
     const names = mpcFolderNames('morph', stamp);
     const files = [{name: `${names.wavFolder}/format.json`, data: mpcFormatJsonText()}];
     try {
       progressEl.value = 0;
       const forward = await exportDirection('forward', state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
         download: false, zip: false, token, timestamp: stamp, progressOffset: 0.00, progressScale: 0.43,
-        baseName: `${names.fileStem}_forward_${stamp}`,
+        baseName: mpcMorphBaseName(names, 'forward'),
         wavFolder: names.wavFolder,
         jsonFolder: state.export.mpcIncludeSidecars ? names.jsonFolder : '',
         includeJson: !!state.export.mpcIncludeSidecars,
@@ -6561,7 +6774,7 @@ itself, impose GPL licensing on generated outputs.
       // extra copied reverse buffer after download; standalone reverse exports cache normally.
       const reverse = await exportDirection('reverse', state.patches.start, state.patches.end, state.export.prefix, statusEl, progressEl, {
         download: false, zip: false, token, timestamp: stamp, progressOffset: 0.43, progressScale: 0.43, cache: false,
-        baseName: `${names.fileStem}_reverse_${stamp}`,
+        baseName: mpcMorphBaseName(names, 'reverse'),
         wavFolder: names.wavFolder,
         jsonFolder: state.export.mpcIncludeSidecars ? names.jsonFolder : '',
         includeJson: !!state.export.mpcIncludeSidecars,
@@ -6576,6 +6789,9 @@ itself, impose GPL licensing on generated outputs.
       downloadBlob(zipBlob, names.zipName);
       progressEl.value = 1;
       statusEl.textContent = `Exported MPC Morph forward + reverse\nZIP: ${names.zipName}\nMPC folder: ${names.wavFolder}\nLayout: ${names.cxs}.${tableSafetyStatusSuffixForResults([forward, reverse])}`;
+      refreshMpcFileStemAfterExport();
+      persistGlobalSettings();
+      syncExportSettingControls();
     } catch (err) {
       if (isAbortError(err)) { progressEl.value = 0; statusEl.textContent = 'MPC Morph export cancelled.'; return; }
       progressEl.value = 0;
@@ -7031,10 +7247,19 @@ itself, impose GPL licensing on generated outputs.
     if (!box) return;
     const strategyRow = $('bulkLoopSafeStrategyRow');
     const strategySelect = $('bulkLoopSafeStrategy');
-    if (strategyRow) strategyRow.style.display = state.export.loopSafeBulk ? '' : 'none';
-    if (strategySelect) strategySelect.disabled = !state.export.loopSafeBulk;
+    const showStrategy = state.export.loopSafeBulk && !state.export.mpcWavetableMode;
+    if (strategyRow) strategyRow.style.display = showStrategy ? '' : 'none';
+    if (strategySelect) strategySelect.disabled = !showStrategy;
     if (state.export.loopSafeBulk) {
-      box.innerHTML = loopSafeBulkActiveHtml();
+      const lines = loopSafeBulkActiveLines(activeBulkCycleCoherentPlan());
+      if (state.export.mpcWavetableMode) {
+        lines.unshift({className: 'ok', text: 'MPC Wavetable Mode requires Cycle-coherent random so exported WAVs behave as wavetable frames, not just MPC-compatible audio files.'});
+      }
+      const morphNotice = morphModeWavetableNoticeState('bulk', 'bulk-random-safety');
+      if (morphNotice.text) {
+        lines.push({className: morphNotice.bad ? 'bad' : (morphNotice.ok ? 'ok' : ''), text: morphNotice.text});
+      }
+      box.innerHTML = paragraphHtml(lines);
     } else {
       box.innerHTML = loopSafeBulkOffHtml();
     }
@@ -8902,11 +9127,12 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   }
 
   // TUTORIAL: Builds the morph render-mode selector and explanatory text.
-  function makeMorphRenderModeControl() {
+  function makeMorphRenderModeControl(context = 'morph') {
     const holder = document.createElement('div');
     holder.className = 'compactSettingGroup';
     const select = document.createElement('select');
     select.dataset.exportSetting = 'morph-render-mode';
+    if (context === 'bulk') select.dataset.bulkMorphModeSelector = '1';
     const grouped = new Map();
     MORPH_RENDER_MODE_GROUPS.forEach(group => grouped.set(group, []));
     MORPH_RENDER_MODES.forEach(([label, _description, group = 'Other']) => {
@@ -8924,6 +9150,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     select.value = state.export.morphRenderMode;
     const desc = document.createElement('div');
     desc.className = 'small';
+    desc.dataset.bulkMorphModeDescription = context === 'bulk' ? '1' : '0';
     desc.textContent = morphModeDescription(select.value);
     select.onchange = () => {
       state.export.morphRenderMode = canonicalMorphRenderMode(select.value);
@@ -8933,7 +9160,13 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       syncExportSettingControls();
       if (activeTabId() === 'morph') playMorphBuffer(lastMorphPlaybackIsReverse());
     };
-    holder.append(select, desc);
+    const cycleNotice = document.createElement('div');
+    cycleNotice.className = 'mpcInlineWarning';
+    cycleNotice.dataset.wavetableMorphWarning = context;
+    cycleNotice.dataset.wavetableMorphWarningLocation = 'morph-mode';
+    cycleNotice.dataset.cycleCoherentMorphNotice = context;
+    cycleNotice.style.display = 'none';
+    holder.append(select, desc, cycleNotice);
     return holder;
   }
 
@@ -9168,43 +9401,186 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
   }
 
   function canonicalMpcPrefix(value = state.export.mpcPrefix) {
-    // TUTORIAL: MPC prefix is optional and includes its own separator. The default
-    // TUTORIAL: is "fwg_", but a blank prefix should produce names beginning
-    // TUTORIAL: "mpc_", not "_mpc_". Unlike safeName(), this helper must
-    // TUTORIAL: therefore allow an empty result and preserve a trailing underscore.
-    return String(value ?? '').trim().replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+/, '');
+    // TUTORIAL: The MPC folder-name field stores a folder stem, not a hidden
+    // TUTORIAL: prefix that gets combined with a second generated prefix. Blank
+    // TUTORIAL: means auto-name from current kind, CxS layout, and Bulk morph mode.
+    return String(value ?? '').trim().replace(/[^a-z0-9._-]+/gi, '_').replace(/^_+|_+$/g, '');
+  }
+
+  function cleanMpcFileStem(value = state.export.mpcFileStem) {
+    return String(value ?? '').trim().replace(/[^a-z0-9._,-]+/gi, '_').replace(/^[^a-z0-9]+/gi, '');
+  }
+
+  function cleanMpcAutoStemSuffix(value = state.export.mpcFileStemAutoSuffix) {
+    let suffix = String(value ?? '').trim().replace(/[^a-z0-9._,-]+/gi, '_');
+    if (!suffix) return '';
+    if (/^[a-z0-9]/i.test(suffix)) suffix = `_${suffix}`;
+    return suffix;
+  }
+
+  function parseMpcAutoStemInput(value) {
+    const cleaned = cleanMpcFileStem(value);
+    const token = String(MPC_DEFAULT_FILE_STEM || '').toUpperCase();
+    const upper = cleaned.toUpperCase();
+    if (!token || !cleaned) return {auto: false, suffix: ''};
+    if (upper === token) return {auto: true, suffix: ''};
+    if (upper.startsWith(token) && cleaned.length > token.length && /[^a-z0-9]/i.test(cleaned.charAt(token.length))) {
+      return {auto: true, suffix: cleanMpcAutoStemSuffix(cleaned.slice(token.length))};
+    }
+    return {auto: false, suffix: ''};
+  }
+
+  function refreshMpcDefaultFileStem() {
+    MPC_DEFAULT_FILE_STEM = compactMpcRunTokenUTC();
+    if (state.export?.mpcFileStemAuto) state.export.mpcFileStem = '';
+    return MPC_DEFAULT_FILE_STEM;
+  }
+
+  function mpcFileStemLooksAutoToken(value = state.export.mpcFileStem) {
+    return parseMpcAutoStemInput(value).auto;
+  }
+
+  function canonicalMpcFileStem(value = state.export.mpcFileStem) {
+    if (arguments.length === 0 && state.export.mpcFileStemAuto) {
+      return `${MPC_DEFAULT_FILE_STEM}${cleanMpcAutoStemSuffix(state.export.mpcFileStemAutoSuffix)}`;
+    }
+    const cleaned = cleanMpcFileStem(value);
+    const lower = cleaned.toLowerCase();
+    if (!cleaned || lower === 'wt' || lower === 'wta') return `${MPC_DEFAULT_FILE_STEM}${cleanMpcAutoStemSuffix(state.export.mpcFileStemAutoSuffix)}`;
+    return cleaned;
+  }
+
+  function setMpcFileStemFromInput(value) {
+    const cleaned = cleanMpcFileStem(value);
+    const lower = cleaned.toLowerCase();
+    if (!cleaned || lower === 'wt' || lower === 'wta') {
+      state.export.mpcFileStemAuto = true;
+      state.export.mpcFileStemAutoSuffix = '';
+      refreshMpcDefaultFileStem();
+      state.export.mpcFileStem = '';
+      return;
+    }
+    const parsed = parseMpcAutoStemInput(cleaned);
+    if (parsed.auto) {
+      state.export.mpcFileStemAuto = true;
+      state.export.mpcFileStemAutoSuffix = parsed.suffix;
+      state.export.mpcFileStem = '';
+    } else {
+      state.export.mpcFileStemAuto = false;
+      state.export.mpcFileStemAutoSuffix = '';
+      state.export.mpcFileStem = cleaned;
+    }
+  }
+
+  function prepareMpcFileStemForExport() {
+    const cleaned = cleanMpcFileStem(state.export.mpcFileStem);
+    const lower = cleaned.toLowerCase();
+    if (state.export.mpcFileStemAuto || !cleaned || lower === 'wt' || lower === 'wta') {
+      state.export.mpcFileStemAuto = true;
+      state.export.mpcFileStem = '';
+      refreshMpcDefaultFileStem();
+    }
+  }
+
+  function refreshMpcFileStemAfterExport() {
+    if (state.export.mpcFileStemAuto) refreshMpcDefaultFileStem();
+  }
+
+  function mpcKindSlug(kind) {
+    return String(kind || 'morph').replace(/[^a-z0-9_-]+/gi, '_').toLowerCase();
+  }
+
+  function generatedMpcFolderStem(kind = 'morph') {
+    const safeKind = mpcKindSlug(kind);
+    const cxs = mpcCxS();
+    const bulkMorphTag = safeKind === 'bulk' ? `_${state.export.bulkRandomiseMorphMode ? 'random_morph' : morphModeFolderSlug(state.export.morphRenderMode)}` : '';
+    return `fwg_mpc_${safeKind}_${cxs}${bulkMorphTag}`;
+  }
+
+  function mpcPrefixLooksAutoOrLegacy(value) {
+    const cleaned = canonicalMpcPrefix(value).toLowerCase();
+    if (!cleaned || cleaned === 'fwg' || cleaned === 'fwg_') return true;
+    if (/^fwg_mpc_(morph|bulk)_\d+x\d+(_[a-z0-9_]+)?$/i.test(cleaned)) return true;
+    if (/^fwg_mpc_surprise_.*\d+x\d+/i.test(cleaned)) return true;
+    if (/^fwg_mpc_.*_mpc_(morph|bulk)_\d+x\d+/i.test(cleaned)) return true;
+    return false;
   }
 
   function migratedMpcPrefix(value) {
-    // TUTORIAL: v2.7i/v2.7j saved prefixes did not include the separator because
-    // TUTORIAL: the old name builder injected "_mpc_". Add a separator when
-    // TUTORIAL: loading non-empty legacy values so "fwg" keeps producing
-    // TUTORIAL: "fwg_mpc_..." rather than "fwgmpc_...".
     const cleaned = canonicalMpcPrefix(value);
-    if (!cleaned) return '';
-    return /[._-]$/.test(cleaned) ? cleaned : `${cleaned}_`;
+    if (mpcPrefixLooksAutoOrLegacy(cleaned)) return '';
+    return cleaned;
   }
 
-  function mpcFolderNames(kind, stamp = compactTimestampUTC()) {
-    const safeKind = String(kind || 'morph').replace(/[^a-z0-9_-]+/gi, '_').toLowerCase();
-    const prefix = canonicalMpcPrefix();
+  function effectiveMpcFolderStem(kind = 'morph') {
+    const manual = canonicalMpcPrefix(state.export.mpcPrefix);
+    if (state.export.mpcPrefixAuto || !manual || mpcPrefixLooksAutoOrLegacy(manual)) return generatedMpcFolderStem(kind);
+    return manual;
+  }
+
+  function mpcFolderNameInputValue(kind = 'morph') {
+    return state.export.mpcPrefixAuto ? generatedMpcFolderStem(kind) : effectiveMpcFolderStem(kind);
+  }
+
+  function setMpcFolderNameFromInput(value) {
+    const cleaned = canonicalMpcPrefix(value);
+    if (!cleaned || mpcPrefixLooksAutoOrLegacy(cleaned)) {
+      state.export.mpcPrefix = '';
+      state.export.mpcPrefixAuto = true;
+    } else {
+      state.export.mpcPrefix = cleaned;
+      state.export.mpcPrefixAuto = false;
+    }
+  }
+
+  function mpcNameComponent(value, fallback = '') {
+    return String(value ?? fallback).trim().replace(/[^a-z0-9._,-]+/gi, '_').replace(/^[^a-z0-9]+|[^a-z0-9]+$/gi, '');
+  }
+
+  function joinMpcNameParts(...parts) {
+    const cleaned = parts.map(part => mpcNameComponent(part)).filter(Boolean);
+    return cleaned.join('_') || 'fwg';
+  }
+
+  function mpcFolderStemWithRunToken(folderStem, token) {
+    const stem = mpcNameComponent(folderStem || 'fwg_mpc', 'fwg_mpc') || 'fwg_mpc';
+    const run = mpcNameComponent(token || canonicalMpcFileStem(), MPC_DEFAULT_FILE_STEM) || MPC_DEFAULT_FILE_STEM;
+    if (/^fwg[_-]/i.test(stem)) return joinMpcNameParts('fwg', run, stem.replace(/^fwg[_-]+/i, ''));
+    if (/^fwg$/i.test(stem)) return joinMpcNameParts('fwg', run);
+    return joinMpcNameParts(run, stem);
+  }
+
+  function mpcMorphBaseName(names, direction) {
+    return joinMpcNameParts(names.fileStem, direction);
+  }
+
+  function mpcBulkBaseName(names, indexText, direction = '', directionCount = 1) {
+    return joinMpcNameParts(indexText, names.fileStem, directionCount > 1 ? direction : '');
+  }
+
+  function mpcFolderNames(kind, stamp = MPC_DEFAULT_FILE_STEM) {
     const cxs = mpcCxS();
-    const fileStem = `${prefix}mpc_${safeKind}_${cxs}`;
+    const folderStem = effectiveMpcFolderStem(kind);
+    const fileStem = canonicalMpcFileStem();
+    const folderWithToken = mpcFolderStemWithRunToken(folderStem, fileStem);
     return {
       cxs,
       stamp,
-      prefix,
+      prefix: folderStem,
+      folderStem,
       fileStem,
-      wavFolder: `${fileStem}_${stamp}`,
-      jsonFolder: `${prefix}mpc_${safeKind}_json_${cxs}_${stamp}`,
-      zipName: `${fileStem}_${stamp}.zip`,
+      wavFolder: folderWithToken,
+      jsonFolder: `${folderWithToken}_fwg_json`,
+      zipName: `${folderWithToken}.zip`,
     };
   }
 
   function mpcNamePreview(kind) {
-    const names = mpcFolderNames(kind || 'morph', 'YYYYMMDD-HHMMSS');
-    if (kind === 'bulk') return `${names.wavFolder}/\n  ${names.fileStem}_0001_YYYYMMDD-HHMMSS.wav`;
-    return `${names.wavFolder}/\n  ${names.fileStem}_forward_YYYYMMDD-HHMMSS.wav`;
+    const names = mpcFolderNames(kind || 'morph');
+    const base = kind === 'bulk' ? mpcBulkBaseName(names, '0001') : mpcMorphBaseName(names, 'forward');
+    const lines = [`${names.wavFolder}/`, `  ${base}.wav`];
+    if (state.export.mpcIncludeSidecars) lines.push(`${names.jsonFolder}/`, `  ${base}.json`);
+    return lines.join('\n');
   }
 
   function currentMpcFindings(fileCount = 1) {
@@ -9221,7 +9597,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     add('samplesPerCycle', Math.abs(summary.samplesPerCycle - targetSpp) <= 1e-6, `Current pitch/sample-rate gives ${summary.samplesPerCycle.toFixed(6)} samples/cycle; MPC Mode target is ${targetSpp}.`);
     add('sampleCount', summary.sampleCount === targetSamples, `WAV sample count should be ${targetCycles} × ${targetSpp} = ${targetSamples}; current render is ${summary.sampleCount}.`);
     add('fileCount', fileCount <= MPC_MAX_FILES_PER_FOLDER, `MPC LibraryFolder file count: ${fileCount}/${MPC_MAX_FILES_PER_FOLDER} WAV file(s).`);
-    findings.push({key: 'soundDesign', ok: true, level: 'note', text: 'MPC Mode checks file layout only; zero-crossings, phase landmarks, and useful cycle subsets are sound-design decisions.'});
+    findings.push({key: 'soundDesign', ok: true, level: 'note', text: 'MPC Mode sets the mechanical wavetable layout and, in Bulk export, requires the cycle-coherent safety profile so random files are built as wavetable frames. Manual morph choices can still be experimental sound-design decisions.'});
     return {summary, findings, ok: findings.filter(f => f.level === 'bad').every(f => f.ok), targetSpp, targetCycles, targetSamples, containerBits};
   }
 
@@ -9242,6 +9618,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     state.export.mode = 'Cycles';
     state.export.value = cycles;
     state.export.cycleStepped = true;
+    if (state.export.mpcWavetableMode) state.export.loopSafeBulk = true;
     setCommonFrequency(sr / spp, {audition: false});
     persistGlobalSettings();
     syncPitchControls();
@@ -9257,7 +9634,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       return `<div class="mpcCheckItem ${cls}"><span>${mark}</span><span>${escapeHtml(f.text)}</span></div>`;
     }).join('');
     const header = ok ? 'MPC Wavetable Mode: ready' : 'MPC Wavetable Mode: settings need attention';
-    return `<div class="mpcCheckList"><p><strong>${escapeHtml(header)}</strong></p><p class="small">format.json will declare ${targetCycles} cycle(s) × ${targetSpp} samples/cycle (${targetSamples} samples/file).</p>${rows}</div>`;
+    return `<div class="mpcCheckList"><div><strong>${escapeHtml(header)}</strong></div><div class="small">format.json will declare ${targetCycles} Single Cycle(s) × ${targetSpp} samples/cycle (${targetSamples} samples/file).</div>${rows}</div>`;
   }
 
   function updateMpcModeUi(fileCount = 1) {
@@ -9266,11 +9643,12 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     document.querySelectorAll('[data-export-setting="mpc-samples-per-cycle"]').forEach(el => { el.value = String(canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle)); });
     document.querySelectorAll('[data-export-setting="mpc-cycles"]').forEach(el => { el.value = String(canonicalMpcCycles(state.export.mpcCycles)); });
     document.querySelectorAll('[data-export-setting="mpc-include-sidecars"]').forEach(el => { el.checked = !!state.export.mpcIncludeSidecars; });
-    document.querySelectorAll('[data-export-setting="mpc-prefix"]').forEach(el => { el.value = canonicalMpcPrefix(); });
+    document.querySelectorAll('[data-export-setting="mpc-prefix"]').forEach(el => { const kind = el.dataset.mpcKind || 'morph'; el.value = mpcFolderNameInputValue(kind); el.placeholder = generatedMpcFolderStem(kind); });
+    document.querySelectorAll('[data-export-setting="mpc-file-stem"]').forEach(el => { el.value = canonicalMpcFileStem(); });
     document.querySelectorAll('[data-mpc-name-preview]').forEach(el => { el.textContent = mpcNamePreview(el.dataset.mpcNamePreview || 'morph'); });
     document.querySelectorAll('[data-export-setting="file-prefix"]').forEach(el => {
       el.disabled = enabled;
-      el.title = enabled ? 'MPC Wavetable Mode uses the dedicated MPC File Prefix below.' : '';
+      el.title = enabled ? 'MPC Wavetable Mode uses the dedicated MPC folder/file naming controls below.' : '';
     });
     document.querySelectorAll('.mpcModePanel').forEach(el => el.classList.toggle('active', enabled));
     document.querySelectorAll('[data-mpc-warning]').forEach(el => { el.classList.remove('show'); el.textContent = ''; });
@@ -9305,9 +9683,25 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     checkbox.type = 'checkbox';
     checkbox.dataset.exportSetting = 'mpc-mode';
     checkbox.checked = !!state.export.mpcWavetableMode;
-    checkbox.onchange = () => { state.export.mpcWavetableMode = checkbox.checked; persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    checkbox.onchange = () => {
+      state.export.mpcWavetableMode = checkbox.checked;
+      // TUTORIAL: Enabling MPC Mode also enables Bulk's cycle-coherent profile.
+      // TUTORIAL: Otherwise the app could make an MPC-shaped folder whose random WAVs
+      // TUTORIAL: do not behave like stable wavetable frames.
+      enforceMpcBulkCycleCoherence();
+      persistGlobalSettings();
+      syncExportSettingControls();
+      updateBulkLoopSafeNotice();
+      updateStatusSummaries();
+    };
     label.append(checkbox, ' MPC Wavetable Mode');
-    box.appendChild(label);
+    const mpcMorphNotice = document.createElement('div');
+    mpcMorphNotice.className = 'mpcInlineWarning';
+    mpcMorphNotice.dataset.wavetableMorphWarning = kind;
+    mpcMorphNotice.dataset.wavetableMorphWarningLocation = 'mpc-mode';
+    mpcMorphNotice.dataset.mpcMorphModeNotice = kind;
+    mpcMorphNotice.style.display = 'none';
+    box.append(label, mpcMorphNotice);
 
     const panel = document.createElement('div');
     panel.className = 'mpcModePanel';
@@ -9315,18 +9709,36 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const prefixRow = document.createElement('div');
     prefixRow.className = 'row wide';
     const prefixLabel = document.createElement('label');
-    prefixLabel.textContent = 'MPC filename prefix';
+    prefixLabel.textContent = 'MPC folder name';
     const prefixInput = document.createElement('input');
     prefixInput.type = 'text';
     prefixInput.dataset.exportSetting = 'mpc-prefix';
-    prefixInput.value = canonicalMpcPrefix();
-    prefixInput.oninput = () => { state.export.mpcPrefix = canonicalMpcPrefix(prefixInput.value); syncExportSettingControls(); updateStatusSummaries(); };
-    prefixInput.onchange = () => { state.export.mpcPrefix = canonicalMpcPrefix(prefixInput.value); persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    prefixInput.dataset.mpcKind = kind;
+    prefixInput.value = mpcFolderNameInputValue(kind);
+    prefixInput.placeholder = generatedMpcFolderStem(kind);
+    prefixInput.oninput = () => { setMpcFolderNameFromInput(prefixInput.value); syncExportSettingControls(); updateStatusSummaries(); };
+    prefixInput.onchange = () => { setMpcFolderNameFromInput(prefixInput.value); persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
     prefixRow.append(prefixLabel, prefixInput);
 
     const prefixNote = document.createElement('div');
     prefixNote.className = 'small';
-    prefixNote.textContent = 'Optional. Default is fwg_. Leave blank for names starting mpc_.';
+    prefixNote.textContent = 'Folder stem. Leave blank, or use an auto-style fwg_mpc… name, to let it update from the current layout and Bulk morph mode.';
+
+    const fileStemRow = document.createElement('div');
+    fileStemRow.className = 'row wide';
+    const fileStemLabel = document.createElement('label');
+    fileStemLabel.textContent = 'MPC file stem';
+    const fileStemInput = document.createElement('input');
+    fileStemInput.type = 'text';
+    fileStemInput.dataset.exportSetting = 'mpc-file-stem';
+    fileStemInput.value = canonicalMpcFileStem();
+    fileStemInput.oninput = () => { setMpcFileStemFromInput(fileStemInput.value); syncExportSettingControls(); updateStatusSummaries(); };
+    fileStemInput.onchange = () => { setMpcFileStemFromInput(fileStemInput.value); persistGlobalSettings(); syncExportSettingControls(); updateStatusSummaries(); };
+    fileStemRow.append(fileStemLabel, fileStemInput);
+
+    const fileStemNote = document.createElement('div');
+    fileStemNote.className = 'small';
+    fileStemNote.textContent = kind === 'bulk' ? 'Bulk MPC WAV/JSON names start with the serial number, e.g. 0001_THJ7LL.wav and 0001_THJ7LL.json. The default stem is a compact base36 run token; append a delimiter plus label, e.g. THJ7LL_test, to keep the token and add context.' : 'Short stem used inside the MPC folder for exported WAV/JSON names. The default is a compact base36 token; append a delimiter plus label, e.g. THJ7LL_test, to keep the token and add context.';
 
     const preview = document.createElement('div');
     preview.className = 'status small';
@@ -9347,7 +9759,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const cyclesRow = document.createElement('div');
     cyclesRow.className = 'row wide';
     const cyclesLabel = document.createElement('label');
-    cyclesLabel.textContent = 'MPC cycles / frames';
+    cyclesLabel.textContent = 'Single Cycles';
     const cycles = document.createElement('input');
     cycles.type = 'number'; cycles.min = MPC_MIN_CYCLES; cycles.max = MPC_MAX_CYCLES; cycles.step = 1;
     cycles.dataset.exportSetting = 'mpc-cycles';
@@ -9378,11 +9790,11 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const hint = document.createElement('div');
     hint.className = 'small';
     hint.textContent = kind === 'bulk'
-      ? 'Bulk MPC ZIPs put WAVs + format.json in one MPC-ready folder, with optional FWG sidecars in a separate sibling folder. The MPC filename prefix controls the folder, ZIP, WAV, and sidecar names.'
-      : 'Morph MPC ZIPs put exported WAVs + format.json in one MPC-ready folder, with optional FWG sidecars in a separate sibling folder. The MPC filename prefix controls the folder, ZIP, WAV, and sidecar names.';
+      ? 'Bulk MPC ZIPs put WAVs + format.json in one MPC-ready folder, with optional FWG sidecars in a separate sibling folder. Folder naming carries the long batch identity; WAV filenames start with serial numbers.'
+      : 'Morph MPC ZIPs put exported WAVs + format.json in one MPC-ready folder, with optional FWG sidecars in a separate sibling folder. Folder naming carries the long batch identity; file stem controls the inner WAV/JSON names.';
     const summary = document.createElement('div');
     summary.dataset.mpcSummary = kind;
-    panel.append(prefixRow, prefixNote, preview, sppRow, cyclesRow, sidecarLabel, buttons, hint, summary);
+    panel.append(prefixRow, prefixNote, fileStemRow, fileStemNote, preview, sppRow, cyclesRow, sidecarLabel, buttons, hint, summary);
     box.appendChild(panel);
     return box;
   }
@@ -9752,11 +10164,33 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
 
   // TUTORIAL: Pushes shared export settings into duplicate controls across Morph and Bulk tabs.
   function syncExportSettingControls() {
+    enforceMpcBulkCycleCoherence();
     document.querySelectorAll('[data-export-setting="render-mode"]').forEach(el => el.value = state.export.mode);
     document.querySelectorAll('[data-export-setting="render-value"]').forEach(el => el.value = state.export.value);
     document.querySelectorAll('[data-export-setting="sample-rate"]').forEach(el => el.value = String(state.export.sampleRate));
     document.querySelectorAll('[data-export-setting="bit-depth"]').forEach(el => el.value = state.export.bitDepth);
-    document.querySelectorAll('[data-export-setting="morph-render-mode"]').forEach(el => el.value = canonicalMorphRenderMode(state.export.morphRenderMode));
+    document.querySelectorAll('[data-export-setting="morph-render-mode"]').forEach(el => {
+      el.value = canonicalMorphRenderMode(state.export.morphRenderMode);
+      if (el.dataset.bulkMorphModeSelector) {
+        el.disabled = !!state.export.bulkRandomiseMorphMode;
+        el.title = state.export.bulkRandomiseMorphMode ? 'Ignored while Randomise Morph Render Mode per file is enabled for Bulk export.' : '';
+      }
+    });
+    document.querySelectorAll('[data-bulk-morph-mode-description="1"]').forEach(el => {
+      el.textContent = state.export.bulkRandomiseMorphMode
+        ? 'Ignored for Bulk export while Randomise Morph Render Mode per file is enabled.'
+        : morphModeDescription(state.export.morphRenderMode);
+    });
+    document.querySelectorAll('[data-wavetable-morph-warning], [data-cycle-coherent-morph-notice], [data-mpc-morph-mode-notice]').forEach(el => {
+      const context = el.dataset.wavetableMorphWarning || el.dataset.cycleCoherentMorphNotice || el.dataset.mpcMorphModeNotice || 'morph';
+      const location = el.dataset.wavetableMorphWarningLocation || (el.dataset.mpcMorphModeNotice ? 'mpc-mode' : 'morph-mode');
+      const notice = morphModeWavetableNoticeState(context, location);
+      el.textContent = notice.text;
+      el.style.display = notice.text ? '' : 'none';
+      el.classList.toggle('show', !!notice.text);
+      el.classList.toggle('bad', !!notice.bad);
+      el.classList.toggle('ok', !!notice.ok);
+    });
     document.querySelectorAll('[data-export-setting="spectral-states"]').forEach(el => el.value = String(normaliseSpectralStates(state.export.spectralStates || 3)));
     document.querySelectorAll('[data-export-setting="curve-amount"]').forEach(el => el.value = String(clampInt(state.export.curveAmount, -127, 127)));
     document.querySelectorAll('[data-export-setting="curve-mode"]').forEach(el => el.value = state.export.curveMode || 'Bend');
@@ -9785,7 +10219,9 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       el.disabled = (key === 'end') && !state.export.differentFmRanges;
       el.value = storedFmRangeLabelForPatch(patch);
     });
-    const bulkLoopSafe = $('bulkLoopSafe'); if (bulkLoopSafe) bulkLoopSafe.checked = !!state.export.loopSafeBulk;
+    const bulkSafetyWide = $('bulkSafetyWide'); if (bulkSafetyWide) { bulkSafetyWide.checked = !state.export.loopSafeBulk; bulkSafetyWide.disabled = !!state.export.mpcWavetableMode; bulkSafetyWide.title = state.export.mpcWavetableMode ? 'MPC Wavetable Mode requires Cycle-coherent random.' : ''; }
+    const bulkSafetyCycle = $('bulkSafetyCycle'); if (bulkSafetyCycle) { bulkSafetyCycle.checked = !!state.export.loopSafeBulk; bulkSafetyCycle.disabled = !!state.export.mpcWavetableMode; bulkSafetyCycle.title = state.export.mpcWavetableMode ? 'Cycle-coherent random is required by MPC Wavetable Mode.' : ''; }
+    const bulkRandomMorphMode = $('bulkRandomMorphMode'); if (bulkRandomMorphMode) bulkRandomMorphMode.checked = !!state.export.bulkRandomiseMorphMode;
     document.querySelectorAll('[data-export-setting="loop-safe-bulk-strategy"]').forEach(el => el.value = canonicalLoopSafeBulkStrategy(state.export.loopSafeBulkStrategy));
     updateMpcModeUi();
     syncDownloadModeControls();
@@ -10115,7 +10551,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     row('Bit Depth', withMpcWarning(makeBitDepthControl(), 'bit-depth'), fileRenderBox);
     fileRenderBox.appendChild(makeMpcWavetableModeControls('morph'));
 
-    row('Morph Render Mode', makeMorphRenderModeControl());
+    row('Morph Render Mode', makeMorphRenderModeControl('morph'));
     row('FFT Anchor States / CPU', makeSpectralStatesControl());
 
     const volumeRow = document.createElement('div'); volumeRow.className = 'row';
@@ -10147,12 +10583,19 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     parent.appendChild(h);
     const loopSafeHolder = document.createElement('div');
     loopSafeHolder.className = 'compactSettingGroup';
-    loopSafeHolder.innerHTML = `<label><input id="bulkLoopSafe" type="checkbox"> Phase-accurate loop-safe exports for wavetable developers</label>`;
+    loopSafeHolder.innerHTML = `
+      <h3>Bulk Random Safety</h3>
+      <label><input id="bulkSafetyWide" type="radio" name="bulkRandomSafety" value="wide-open"> Wide-open random</label>
+      <div class="small">Good for pads, one-shots, drones, transitions, resampling, and surprise audio.</div>
+      <label><input id="bulkSafetyCycle" type="radio" name="bulkRandomSafety" value="cycle-coherent"> Cycle-coherent random</label>
+      <div class="small">Better for wavetables, where each frame should remain a stable single oscillator cycle.</div>
+      <label><input id="bulkRandomMorphMode" type="checkbox"> Randomise Morph Render Mode per file <span class="small">(Cycle-coherent or MPC Mode skips red-listed modes)</span></label>
+    `;
     const strategyRow = document.createElement('div');
     strategyRow.className = 'row wide';
     strategyRow.id = 'bulkLoopSafeStrategyRow';
     const strategyLabel = document.createElement('label');
-    strategyLabel.textContent = 'Loop-safe target';
+    strategyLabel.textContent = 'Cycle-coherent target';
     const strategySelect = document.createElement('select');
     strategySelect.id = 'bulkLoopSafeStrategy';
     strategySelect.dataset.exportSetting = 'loop-safe-bulk-strategy';
@@ -10165,16 +10608,26 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     detailBox.id = 'bulkLoopSafeDetails';
     loopSafeHolder.appendChild(detailBox);
     parent.appendChild(loopSafeHolder);
-    const loopSafeInput = loopSafeHolder.querySelector('#bulkLoopSafe');
-    loopSafeInput.checked = !!state.export.loopSafeBulk;
-    loopSafeInput.onchange = () => { state.export.loopSafeBulk = loopSafeInput.checked; persistGlobalSettings(); updateBulkLoopSafeNotice(); updateStatusSummaries(); };
+    const safetyWide = loopSafeHolder.querySelector('#bulkSafetyWide');
+    const safetyCycle = loopSafeHolder.querySelector('#bulkSafetyCycle');
+    const randomMorphMode = loopSafeHolder.querySelector('#bulkRandomMorphMode');
+    safetyWide.checked = !state.export.loopSafeBulk;
+    safetyCycle.checked = !!state.export.loopSafeBulk;
+    safetyWide.disabled = !!state.export.mpcWavetableMode;
+    safetyCycle.disabled = !!state.export.mpcWavetableMode;
+    safetyWide.title = state.export.mpcWavetableMode ? 'MPC Wavetable Mode requires Cycle-coherent random.' : '';
+    safetyCycle.title = state.export.mpcWavetableMode ? 'Cycle-coherent random is required by MPC Wavetable Mode.' : '';
+    randomMorphMode.checked = !!state.export.bulkRandomiseMorphMode;
+    safetyWide.onchange = () => { if (safetyWide.checked) { if (state.export.mpcWavetableMode) { state.export.loopSafeBulk = true; } else { state.export.loopSafeBulk = false; } persistGlobalSettings(); syncExportSettingControls(); updateBulkLoopSafeNotice(); updateStatusSummaries(); } };
+    safetyCycle.onchange = () => { if (safetyCycle.checked) { state.export.loopSafeBulk = true; persistGlobalSettings(); syncExportSettingControls(); updateBulkLoopSafeNotice(); updateStatusSummaries(); } };
+    randomMorphMode.onchange = () => { state.export.bulkRandomiseMorphMode = !!randomMorphMode.checked; persistGlobalSettings(); syncExportSettingControls(); updateBulkLoopSafeNotice(); updateStatusSummaries(); };
     strategySelect.onchange = () => { state.export.loopSafeBulkStrategy = canonicalLoopSafeBulkStrategy(strategySelect.value); persistGlobalSettings(); updateBulkLoopSafeNotice(); updateStatusSummaries(); };
     updateBulkLoopSafeNotice();
     makeRow(parent, 'Render unit / length', withMpcWarning(makeRenderLengthControl(), 'render'));
     makeRow(parent, 'Sample Rate', withMpcWarning(makeSampleRateControl(), 'sample-rate'));
     makeRow(parent, 'Bit Depth', withMpcWarning(makeBitDepthControl(), 'bit-depth'));
     parent.appendChild(makeMpcWavetableModeControls('bulk'));
-    makeRow(parent, 'Morph Render Mode', makeMorphRenderModeControl());
+    makeRow(parent, 'Morph Render Mode', makeMorphRenderModeControl('bulk'));
     makeRow(parent, 'FFT Anchor States / CPU', makeSpectralStatesControl());
     makeRow(parent, 'START/END options', makeEndpointRelationControls('bulk'));
     makeRow(parent, 'Curve Mode', makeCurveModeControl());
@@ -10680,32 +11133,55 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     const zipEntries = [];
     const safetyAggregate = {files: 0, events: 0, truncated: false, omitted: 0};
     const renderProgressPortion = zipMode ? 0.90 : 1.00;
-    const loopSafe = !mpcMode && !!state.export.loopSafeBulk;
-    const loopSafePlan = loopSafe ? loopSafeBulkPlan() : null;
-    const mpcNames = mpcMode ? mpcFolderNames('bulk', compactTimestampUTC()) : null;
-    const originalRender = loopSafe ? {
+    // TUTORIAL: Bulk MPC export must use the cycle-coherent profile even if an older
+    // TUTORIAL: saved session somehow says otherwise. This makes the export loop robust
+    // TUTORIAL: against stale localStorage and keeps format.json, WAV length, pitch, and
+    // TUTORIAL: random sound-design restrictions in one coherent wavetable plan.
+    if (mpcMode) enforceMpcBulkCycleCoherence();
+    const loopSafe = !!state.export.loopSafeBulk;
+    const loopSafePlan = loopSafe ? activeBulkCycleCoherentPlan() : null;
+    const randomMorphModes = !!state.export.bulkRandomiseMorphMode;
+    const wavetableSafeRandomMorphPool = !!(loopSafe || mpcMode);
+    if (mpcMode) prepareMpcFileStemForExport();
+    const mpcNames = mpcMode ? mpcFolderNames('bulk', compactMpcRunTokenUTC()) : null;
+    const originalRender = (loopSafe || randomMorphModes) ? {
       frequency: state.common.frequency,
+      sampleRate: state.export.sampleRate,
       mode: state.export.mode,
       value: state.export.value,
       morphRenderMode: state.export.morphRenderMode,
       cycleStepped: state.export.cycleStepped,
     } : null;
-    if (mpcMode && !ensureMpcExportReady($('bulkStatus'), total)) return;
-    if (mpcMode) {
-      zipEntries.push({name: `${mpcNames.wavFolder}/format.json`, data: mpcFormatJsonText()});
-    }
     if (loopSafe) {
       state.common.frequency = loopSafePlan.frequency;
+      setExportSampleRate(loopSafePlan.sampleRate);
       state.export.mode = 'Cycles';
       state.export.value = loopSafePlan.cycles;
-      state.export.morphRenderMode = DEFAULT_MORPH_RENDER_MODE;
       state.export.cycleStepped = true;
       syncPitchControls();
       syncExportSettingControls();
     }
+    if (mpcMode && !ensureMpcExportReady($('bulkStatus'), total)) {
+      if (originalRender) {
+        state.common.frequency = originalRender.frequency;
+        setExportSampleRate(originalRender.sampleRate);
+        state.export.mode = originalRender.mode;
+        state.export.value = originalRender.value;
+        state.export.morphRenderMode = originalRender.morphRenderMode;
+        state.export.cycleStepped = originalRender.cycleStepped;
+        syncPitchControls();
+        syncExportSettingControls();
+        updateStatusSummaries();
+      }
+      return;
+    }
+    if (mpcMode) {
+      zipEntries.push({name: `${mpcNames.wavFolder}/format.json`, data: mpcFormatJsonText(loopSafePlan.samplesPerCycle, loopSafePlan.cycles)});
+    }
+    const randomMorphRedListStatus = (wavetableSafeRandomMorphPool && randomMorphModes) ? `\nRandom morph red-list active: skipping ${CYCLE_COHERENT_RANDOM_MORPH_RED_LIST_LABEL}.` : '';
     $('bulkProgress').value = 0; $('bulkStatus').textContent = mpcMode
-      ? `Bulk rendering ${count} MPC iteration(s), ${total} WAV file(s) into ${mpcNames.wavFolder}/`
-      : `Bulk rendering ${count} random iteration(s), ${total} direction render(s)${zipMode ? ' into one ZIP' : ''}${loopSafe ? '\nLoop-safe mode: ' + loopSafeBulkActiveText(loopSafePlan) : ''}`;
+      ? `Bulk rendering ${count} MPC iteration(s), ${total} WAV file(s) into ${mpcNames.wavFolder}/${loopSafe ? '\nCycle-coherent random: ' + loopSafeBulkActiveText(loopSafePlan) : ''}${randomMorphRedListStatus}`
+      : `Bulk rendering ${count} random iteration(s), ${total} direction render(s)${zipMode ? ' into one ZIP' : ''}${loopSafe ? '\nCycle-coherent random: ' + loopSafeBulkActiveText(loopSafePlan) : ''}${randomMorphRedListStatus}`;
     try {
       for (let i = 0; i < count; i++) {
         throwIfCancelled(token);
@@ -10715,19 +11191,21 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
         for (const dir of dirs) {
           throwIfCancelled(token);
           const indexText = String(i + 1).padStart(4, '0');
+          const chosenMorphMode = randomMorphModes ? randomMorphRenderModeLabel({wavetableSafe: wavetableSafeRandomMorphPool}) : canonicalMorphRenderMode(state.export.morphRenderMode);
+          if (randomMorphModes) state.export.morphRenderMode = chosenMorphMode;
           const prefix = mpcMode
-            ? `${mpcNames.fileStem}_${indexText}${dirs.length > 1 ? '_' + dir : ''}`
+            ? mpcBulkBaseName(mpcNames, indexText, dir, dirs.length)
             : `${safeName($('bulkPrefix').value)}_${String(i + 1).padStart(3, '0')}`;
           const offset = renderProgressPortion * (done / total);
           const scale = renderProgressPortion / total;
           const result = await exportDirection(dir, start, end, prefix, $('bulkStatus'), $('bulkProgress'), {
             download: !zipMode, zip: false, token, cache: false, progressOffset: offset, progressScale: scale,
             timestamp: mpcMode ? mpcNames.stamp : undefined,
-            baseName: mpcMode ? `${prefix}_${mpcNames.stamp}` : undefined,
+            baseName: mpcMode ? prefix : undefined,
             wavFolder: mpcMode ? mpcNames.wavFolder : '',
             jsonFolder: (mpcMode && state.export.mpcIncludeSidecars) ? mpcNames.jsonFolder : '',
             includeJson: mpcMode ? !!state.export.mpcIncludeSidecars : true,
-            exportContext: {kind: mpcMode ? 'mpc_bulk' : 'bulk', source_tab: 'Bulk Random Export', batch_index: i + 1, batch_count: count, mpc_wavetable_mode: mpcMode, mpc_layout: mpcMode ? {cycles: canonicalMpcCycles(state.export.mpcCycles), samples_per_cycle: canonicalMpcSamplesPerCycle(state.export.mpcSamplesPerCycle)} : undefined},
+            exportContext: {kind: mpcMode ? 'mpc_bulk' : 'bulk', source_tab: 'Bulk Random Export', batch_index: i + 1, batch_count: count, bulk_random_safety: loopSafe ? 'cycle_coherent' : 'wide_open', cycle_coherent_neutralisation: !!loopSafe, random_morph_modes: randomMorphModes, cycle_coherent_random_morph_red_list_applied: !!(wavetableSafeRandomMorphPool && randomMorphModes), cycle_coherent_random_morph_red_list: (wavetableSafeRandomMorphPool && randomMorphModes) ? CYCLE_COHERENT_RANDOM_MORPH_RED_LIST_LABEL : undefined, morph_render_mode: morphRenderModeMetadata(chosenMorphMode), mpc_wavetable_mode: mpcMode, mpc_layout: mpcMode ? {cycles: canonicalMpcCycles(loopSafePlan?.cycles ?? state.export.mpcCycles), samples_per_cycle: canonicalMpcSamplesPerCycle(loopSafePlan?.samplesPerCycle ?? state.export.mpcSamplesPerCycle)} : undefined},
             onProgress: (_local, global) => { $('bulkStatus').textContent = `Bulk rendering iteration ${i + 1}/${count}, ${dir} (${Math.round(global * 100)}%)…`; }
           });
           if (!result) throwIfCancelled(token);
@@ -10751,6 +11229,11 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
       } else {
         $('bulkStatus').textContent = `Bulk export complete: ${done}/${total} WAV+JSON pairs requested.${tableSafetyStatusSuffixForAggregate(safetyAggregate)}`;
       }
+      if (mpcMode) {
+        refreshMpcFileStemAfterExport();
+        persistGlobalSettings();
+        syncExportSettingControls();
+      }
       $('bulkProgress').value = 1;
     } catch (err) {
       if (isAbortError(err)) { $('bulkProgress').value = 0; $('bulkStatus').textContent = `Bulk export cancelled at ${done}/${total}.`; return; }
@@ -10758,6 +11241,7 @@ registerProcessor('fractured-oscillator',FracturedOscillatorProcessor);
     } finally {
       if (originalRender) {
         state.common.frequency = originalRender.frequency;
+        setExportSampleRate(originalRender.sampleRate);
         state.export.mode = originalRender.mode;
         state.export.value = originalRender.value;
         state.export.morphRenderMode = originalRender.morphRenderMode;
